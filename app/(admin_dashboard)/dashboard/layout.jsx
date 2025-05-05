@@ -17,7 +17,7 @@ function AdminLayoutContent({ children }) {
     : "lg:ml-[90px]";
 
   return (
-    <div className="min-h-screen xl:flex">
+    <div className="min-h-screen xl:flex bg-gray-200 dark:bg-gray-900">
       <AppSidebar />
       <Backdrop />
       <div

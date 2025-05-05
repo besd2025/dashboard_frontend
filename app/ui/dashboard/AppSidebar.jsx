@@ -7,26 +7,14 @@ import { useSidebar } from "../context/SidebarContext";
 import {
   AlertIcon,
   BoxCubeIcon,
+  ChevronDownIcon,
   DollarLine,
   GridIcon,
+  HorizontaLDots,
   PieChartIcon,
   PlugInIcon,
   UserCircleIcon,
 } from "../icons";
-// import {
-//   AlertIcon,
-//   BoxCubeIcon,
-//   CalenderIcon,
-//   ChevronDownIcon,
-//   GridIcon,
-//   HorizontaLDots,
-//   ListIcon,
-//   PageIcon,
-//   PieChartIcon,
-//   PlugInIcon,
-//   TableIcon,
-//   UserCircleIcon,
-// } from "../icons";
 
 const navItems = [
   {
@@ -122,16 +110,16 @@ const AppSidebar = () => {
               {(isExpanded || isHovered || isMobileOpen) && (
                 <span className="menu-item-text">{nav.name}</span>
               )}
-              {/* {(isExpanded || isHovered || isMobileOpen) && (
+              {(isExpanded || isHovered || isMobileOpen) && (
                 <ChevronDownIcon
-                  className={`ml-auto w-5 h-5 transition-transform duration-200 ${
+                  className={`ml-auto w-5 h-5 transition-transform duration-200  ${
                     openSubmenu?.type === menuType &&
                     openSubmenu?.index === index
                       ? "rotate-180 text-brand-500"
                       : ""
                   }`}
                 />
-              )} */}
+              )}
             </button>
           ) : (
             nav.path && (
@@ -267,16 +255,16 @@ const AppSidebar = () => {
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <Image
-                className="dark:hidden"
-                src="/img/logo_example1.jpg"
+                className="hidden lg:block dark:hidden"
+                src="/img/logo_example2.jpg"
                 alt="Logo"
                 width={150}
                 height={40}
               />
               <Image
                 //for dark mode
-                className="hidden dark:block"
-                src="/img/logo_example1.jpg"
+                className="hidden dark:lg:block"
+                src="/img/logo_example2.jpg"
                 alt="Logo"
                 width={150}
                 height={40}
@@ -284,7 +272,7 @@ const AppSidebar = () => {
             </>
           ) : (
             <Image
-              src="/img/logo_example1.jpg"
+              src="/img/logo_example2.jpg"
               alt="Logo"
               width={32}
               height={32}
@@ -303,11 +291,11 @@ const AppSidebar = () => {
                     : "justify-start"
                 }`}
               >
-                {/* {isExpanded || isHovered || isMobileOpen ? (
+                {isExpanded || isHovered || isMobileOpen ? (
                   "Menu"
                 ) : (
                   <HorizontaLDots />
-                )} */}
+                )}
               </h2>
               {renderMenuItems(navItems, "main")}
             </div>
