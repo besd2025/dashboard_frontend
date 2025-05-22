@@ -10,6 +10,7 @@ import {
   ChevronDownIcon,
   DollarLine,
   GridIcon,
+  HangarIcon,
   HorizontaLDots,
   PieChartIcon,
   PlugInIcon,
@@ -31,6 +32,11 @@ const navItems = [
   {
     icon: <BoxCubeIcon />,
     name: "Stock",
+    path: "/dashboard/stocks",
+  },
+  {
+    icon: <HangarIcon />,
+    name: "Hangars",
     path: "/dashboard/stocks",
   },
   {

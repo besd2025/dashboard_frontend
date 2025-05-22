@@ -16,7 +16,7 @@ const ChartTab = () => {
           "optionOne"
         )}`}
       >
-        Monthly
+        jours
       </button>
 
       <button
@@ -25,7 +25,7 @@ const ChartTab = () => {
           "optionTwo"
         )}`}
       >
-        Quarterly
+        mois
       </button>
 
       <button
@@ -34,7 +34,15 @@ const ChartTab = () => {
           "optionThree"
         )}`}
       >
-        Annually
+        semaines
+      </button>
+      <button
+        onClick={() => setSelected("optionFour")}
+        className={`px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900 dark:hover:text-white ${getButtonClass(
+          "optionFour"
+        )}`}
+      >
+        années
       </button>
     </div>
   );
