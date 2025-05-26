@@ -14,12 +14,12 @@ function StocksChart() {
   const [state, setState] = React.useState({
     series: [
       {
-        name: "TEAM A",
+        name: "stock",
         type: "column",
         data: [100, 220, 258, 354, 400, 500, 800, 956, 1000, 2000],
       },
       {
-        name: "TEAM B",
+        name: "Moyenne",
         type: "area",
         data: [15, 27, 30, 40, 115, 205, 405, 500, 950, 1050],
       },

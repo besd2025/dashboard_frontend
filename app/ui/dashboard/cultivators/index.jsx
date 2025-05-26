@@ -1,0 +1,40 @@
+import React from "react";
+import TotalCultivators from "../../charts/home/cultuvators/total_cultivators";
+import GenderChart from "../../charts/home/cultuvators/gender";
+import Cultuvators from "../../charts/home/cultuvators/cultuvators";
+import NewCultivatorsCharts from "./new_cultivators";
+import BasicTableOne from "../../ui_elements/tables/BasicTableOne";
+import RecentCultivatorsList from "../../ui_elements/tables/cultivators/recent_list_cultivators";
+import ActifCultivators from "./actif_cultivators";
+
+function CultivatorsHome() {
+  return (
+    <div className="grid grid-cols-12 gap-4 md:gap-6">
+      <div className=" col-span-12 space-y-6 lg:col-span-3">
+        <TotalCultivators />
+      </div>
+      <div className=" col-span-12 space-y-6 lg:col-span-2">
+        <ActifCultivators />
+      </div>
+
+      <div className="col-span-12 space-y-6 xl:col-spa/n-5">
+        <div className="grid grid-cols-12 gap-4 ">
+          <div className=" col-span-12 space-y-6 lg:col-span-8">
+            <Cultuvators />
+          </div>
+          <div className=" col-span-12 lg:col-span-4 space-y-6">
+            <GenderChart />
+          </div>
+        </div>
+      </div>
+      <div className=" col-span-12 space-y-6 lg:col-span-12">
+        <NewCultivatorsCharts />
+      </div>
+      <div className=" col-span-12 space-y-6 lg:col-span-12">
+        <RecentCultivatorsList />
+      </div>
+    </div>
+  );
+}
+
+export default CultivatorsHome;

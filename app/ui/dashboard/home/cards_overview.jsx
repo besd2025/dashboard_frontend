@@ -19,8 +19,8 @@ export default function CardsOverview() {
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
+            stroke="currentColor "
+            className="size-6 text-gray-800  dark:text-white/90"
           >
             <path
               strokeLinecap="round"
@@ -35,14 +35,14 @@ export default function CardsOverview() {
             <span className="text-sm text-gray-500 dark:text-gray-400">
               Qté Collectée
             </span>
-            <h4 className="mt-2 font-semibold text-gray-800 text-title-sm dark:text-white/90">
-              500,452 Kg
+            <h4 className="mt-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
+              500,452 <span className="text-sm">KG</span>
             </h4>
           </div>
-          <Badge color="success">
+          {/* <Badge color="success">
             <ArrowUpIcon />
             2.0%
-          </Badge>
+          </Badge> */}
         </div>
       </div>
       {/* <!-- Metric Item End --> */}
@@ -56,7 +56,7 @@ export default function CardsOverview() {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6"
+            className="size-6 text-gray-800  dark:text-white/90"
           >
             <path
               strokeLinecap="round"
@@ -71,14 +71,14 @@ export default function CardsOverview() {
             <span className="text-sm text-gray-500 dark:text-gray-400">
               Qté Vendue
             </span>
-            <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              30,782 Kg
+            <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
+              30,782 <span className="text-sm">KG</span>
             </h4>
           </div>
-          <Badge color="success">
+          {/* <Badge color="success">
             <ArrowUpIcon />
             2.0%
-          </Badge>
+          </Badge> */}
         </div>
       </div>
       {/* <!-- Metric Item End --> */}
@@ -92,7 +92,7 @@ export default function CardsOverview() {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6 text-black"
+            className="size-6 text-gray-800  dark:text-white/90"
           >
             <path
               strokeLinecap="round"
@@ -107,14 +107,14 @@ export default function CardsOverview() {
             <span className="text-sm text-gray-500 dark:text-gray-400">
               Revenue
             </span>
-            <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              300 M Fbu
+            <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
+              300 M <span className="text-sm">FBU</span>
             </h4>
           </div>
-          <Badge color="success">
+          {/* <Badge color="success">
             <ArrowUpIcon />
             2.0%
-          </Badge>
+          </Badge> */}
         </div>
       </div>
       {/* <!-- Metric Item End --> */}
@@ -129,7 +129,7 @@ export default function CardsOverview() {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6"
+            className="size-6 text-gray-800  dark:text-white/90"
           >
             <path
               strokeLinecap="round"
@@ -141,8 +141,8 @@ export default function CardsOverview() {
         <div className="flex items-end justify-between mt-5">
           <div>
             <span className="text-sm text-red-500">GAP</span>
-            <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              5,359 Kg
+            <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
+              5,359 <span className="text-sm">KG</span>
             </h4>
           </div>
 

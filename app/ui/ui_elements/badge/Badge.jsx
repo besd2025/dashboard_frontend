@@ -9,11 +9,11 @@ const Badge = ({
   children,
 }) => {
   const baseStyles =
-    "inline-flex items-center px-2.5 py-0.5 justify-center gap-1 rounded-full font-medium";
+    "inline-flex items-center px-1 py-0.5 justify-center gap-1 rounded-full font-medium text-xs dark:bg-white/90";
 
   const sizeStyles = {
-    sm: "text-theme-xs",
-    md: "text-sm",
+    // sm: "text-theme-xs",
+    // md: "text-sm",
   };
 
   const variants = {
@@ -45,10 +45,10 @@ const Badge = ({
   const colorStyles = variants[variant][color];
 
   return (
-    <span className={`${baseStyles} ${sizeClass} ${colorStyles}`}>
-      {startIcon && <span className="mr-1">{startIcon}</span>}
+    <span className={`${baseStyles}  ${colorStyles}`}>
+      {/* {startIcon && <span className="mr-1">{startIcon}</span>} */}
       {children}
-      {endIcon && <span className="ml-1">{endIcon}</span>}
+      {/* {endIcon && <span className="ml-1">{endIcon}</span>} */}
     </span>
   );
 };

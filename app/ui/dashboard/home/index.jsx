@@ -9,6 +9,9 @@ import StocksChart from "../../charts/home/stocks/stocks";
 import TotalCultivators from "../../charts/home/cultuvators/total_cultivators";
 import TotalStocks from "../../charts/home/stocks/total_stocks";
 import TotalHangars from "../../charts/home/stocks/total_hangars";
+import MargeBrut from "../../charts/home/marge_brut";
+import BuyPrice from "../../charts/home/buy_price";
+import SellPrice from "../../charts/home/sell_price";
 function Home_dashboard() {
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">
@@ -18,10 +21,23 @@ function Home_dashboard() {
       <div className=" col-span-12 space-y-6 lg:col-span-7">
         <SalePurchage />
       </div>
-      <div className=" col-span-12 lg:col-span-5 space-y-6 xl:col-spa/n-5">
-        <BenefitsChart />
-        <Loss />
+      <div className="col-span-12 lg:col-span-5 space-y-6 xl:col-spa/n-5">
+        <div className="grid grid-cols-4 gap-4 ">
+          <div className="col-span-4 lg:col-span-4 space-y-/6">
+            <BenefitsChart />
+          </div>
+          <div className="col-span-4 lg:col-span-2 space-y-/6">
+            <MargeBrut />
+          </div>
+          <div className="col-span-4 lg:col-span-2 space-y-/6">
+            <BuyPrice />
+          </div>
+          <div className="col-span-4 lg:col-span-2 space-y-/6">
+            <SellPrice />
+          </div>
+        </div>
       </div>
+
       <div className=" col-span-12 space-y-6 lg:col-span-8">
         <Cultuvators />
       </div>
@@ -33,7 +49,9 @@ function Home_dashboard() {
       <div className=" col-span-12 lg:col-span-3 space-y-6">
         <TotalStocks />
         <TotalHangars />
+        <Loss />
       </div>
+
       <div className=" col-span-12 lg:col-span-9 space-y-6">
         <StocksChart />
       </div>

@@ -5,7 +5,7 @@ import Badge from "./../../../ui_elements/badge/Badge";
 function TotalHangars() {
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-      <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
+      <div className="flex items-center justify-c/enter  bg-gr/ay-100 rounded-xl dark:bg-gr/ay-800">
         {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -19,16 +19,16 @@ function TotalHangars() {
             clipRule="evenodd"
           />
         </svg>
+        <h4 className="ml-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
+          800
+        </h4>
       </div>
 
       <div className="flex items-end justify-between mt-2">
-        <div>
+        <div className="flex flex-row justify-center items-center">
           <span className="text-sm text-gray-500 dark:text-gray-400">
             Total des Hangars
           </span>
-          <h4 className="mt-2 font-semibold text-gray-800 text-title-sm dark:text-white/90">
-            800
-          </h4>
         </div>
         {/* <Badge color="success">
           <ArrowUpIcon />

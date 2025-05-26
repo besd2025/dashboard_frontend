@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { ApexOptions } from "apexcharts";
 import ChartTab from "../../common/ChartTab";
 import dynamic from "next/dynamic";
+import SalePurchaseTimePeriod from "../../common/home/sale_purchase_period";
 
 // Dynamically import to avoid SSR errors
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
@@ -11,24 +12,92 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 });
 
 function SalePurchage() {
+  const [timePeriod, setTimePeriod] = useState("months");
+
+  const getChartData = (period) => {
+    switch (period) {
+      case "days":
+        return {
+          categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+          achats: [120, 150, 180, 90, 160, 200, 170],
+          ventes: [80, 100, 120, 70, 110, 150, 130],
+        };
+      case "weeks":
+        return {
+          categories: ["Week 1", "Week 2", "Week 3", "Week 4"],
+          achats: [800, 950, 1100, 900],
+          ventes: [600, 750, 850, 700],
+        };
+      case "months":
+        return {
+          categories: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ],
+          achats: [180, 190, 170, 160, 175, 165, 170, 205, 40, 210, 240, 235],
+          ventes: [40, 30, 50, 40, 55, 40, 70, 100, 110, 120, 150, 140],
+        };
+      case "years":
+        return {
+          categories: ["2020", "2021", "2022", "2023", "2024"],
+          achats: [1500, 1800, 2100, 2400, 2700],
+          ventes: [1000, 1200, 1500, 1800, 2100],
+        };
+      default:
+        return {
+          categories: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ],
+          achats: [180, 190, 170, 160, 175, 165, 170, 205, 40, 210, 240, 235],
+          ventes: [40, 30, 50, 40, 55, 40, 70, 100, 110, 120, 150, 140],
+        };
+    }
+  };
+
+  const chartData = getChartData(timePeriod);
+
   const [state, setState] = useState({
     series: [
       {
         name: "Achats",
-        data: [180, 190, 170, 160, 175, 165, 170, 205, 40, 210, 240, 235],
+        data: chartData.achats,
       },
       {
         name: "Ventes",
-        data: [40, 30, 50, 40, 55, 40, 70, 100, 110, 120, 150, 140],
+        data: chartData.ventes,
       },
     ],
     options: {
       chart: {
         fontFamily: "Outfit, sans-serif",
         height: 310,
-        type: "area", // Set the chart type to 'line'
+        type: "area",
         toolbar: {
-          show: false, // Hide chart toolbar
+          show: false,
+        },
+        zoom: {
+          enabled: false,
         },
       },
       // colors: ["#465FFF", "#9CB9FF"], // Define line colors
@@ -39,11 +108,11 @@ function SalePurchage() {
           opacityTo: 0,
         },
         markers: {
-          size: 0, // Size of the marker points
-          strokeColors: "#fff", // Marker border color
+          size: 0,
+          strokeColors: "#fff",
           strokeWidth: 2,
           hover: {
-            size: 6, // Marker size on hover
+            size: 6,
           },
         },
       },
@@ -51,73 +120,84 @@ function SalePurchage() {
         enabled: false,
       },
       stroke: {
-        curve: "smooth", // Define the line style (straight, smooth, or step)
-        width: [3, 3], // Line width for each dataset
+        curve: "smooth",
+        width: [3, 3],
       },
       grid: {
         xaxis: {
           lines: {
-            show: false, // Hide grid lines on x-axis
+            show: false,
           },
         },
         yaxis: {
           lines: {
-            show: true, // Show grid lines on y-axis
+            show: true,
           },
         },
       },
-
       xaxis: {
         type: "category",
-        categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
-        ],
+        categories: chartData.categories,
         axisBorder: {
-          show: false, // Hide x-axis border
+          show: false,
         },
         axisTicks: {
-          show: false, // Hide x-axis ticks
+          show: false,
         },
         tooltip: {
-          enabled: false, // Disable tooltip for x-axis points
+          enabled: false,
         },
       },
       yaxis: {
         labels: {
           style: {
-            fontSize: "12px", // Adjust font size for y-axis labels
-            colors: ["#6B7280"], // Color of the labels
+            fontSize: "12px",
+            colors: ["#6B7280"],
           },
         },
         title: {
-          text: "", // Remove y-axis title
+          text: "",
           style: {
             fontSize: "0px",
           },
         },
       },
       tooltip: {
-        enabled: true, // Enable tooltip
+        enabled: true,
         x: {
-          format: "dd MMM yyyy", // Format for x-axis tooltip
+          format: "dd MMM yyyy",
         },
       },
     },
   });
 
+  const handleTimePeriodChange = (period) => {
+    setTimePeriod(period);
+    const newData = getChartData(period);
+    setState((prevState) => ({
+      ...prevState,
+      series: [
+        {
+          name: "Achats",
+          data: newData.achats,
+        },
+        {
+          name: "Ventes",
+          data: newData.ventes,
+        },
+      ],
+      options: {
+        ...prevState.options,
+        xaxis: {
+          ...prevState.options.xaxis,
+          categories: newData.categories,
+        },
+      },
+    }));
+  };
+
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white px-5 pb-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
+    <div className="rounded-2xl border border-gray-200 bg-white px-3 pb-2 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-4 sm:pt-4">
       <div className="flex flex-col gap-5 mb-6 sm:flex-row sm:justify-between">
         <div className="w-full">
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
@@ -128,7 +208,51 @@ function SalePurchage() {
           </p>
         </div>
         <div className="flex items-start w-full gap-3 sm:justify-end">
-          <ChartTab />
+          {/* <div className="flex gap-2">
+            <button
+              onClick={() => handleTimePeriodChange("days")}
+              className={`px-3 py-1 rounded-md text-sm ${
+                timePeriod === "days"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              Jours
+            </button>
+            <button
+              onClick={() => handleTimePeriodChange("weeks")}
+              className={`px-3 py-1 rounded-md text-sm ${
+                timePeriod === "weeks"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              Semaines
+            </button>
+            <button
+              onClick={() => handleTimePeriodChange("months")}
+              className={`px-3 py-1 rounded-md text-sm ${
+                timePeriod === "months"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              Mois
+            </button>
+            <button
+              onClick={() => handleTimePeriodChange("years")}
+              className={`px-3 py-1 rounded-md text-sm ${
+                timePeriod === "years"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              Années
+            </button>
+          </div> */}
+          <SalePurchaseTimePeriod
+            handleTimePeriodChange={handleTimePeriodChange}
+          />
         </div>
       </div>
 

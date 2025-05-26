@@ -7,7 +7,7 @@ function GenderChart() {
     series: [4000, 1000],
     options: {
       chart: {
-        width: 380,
+        width: 300,
         type: "pie",
         fontFamily: "Outfit, sans-serif",
         toolbar: {
@@ -31,7 +31,7 @@ function GenderChart() {
           breakpoint: 480,
           options: {
             chart: {
-              width: 200,
+              width: 280,
             },
             legend: {
               position: "bottom",
@@ -49,12 +49,11 @@ function GenderChart() {
         </h3>
       </div>
       <div className="max-w-full   overflow-x-auto custom-scrollbar">
-        <div className="-ml-5 min-w-[650px] xl:min-w-full pl-2 flex justify-center items-center">
+        <div className="-ml-5 min-w-[650px] xl:min-w-full pl-2 ">
           <ReactApexChart
             options={state.options}
             series={state.series}
             type="pie"
-            width={380}
           />
         </div>
       </div>

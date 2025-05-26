@@ -130,15 +130,15 @@ function Loss() {
 
   return (
     <div id="chart">
-      <div className="rounded-2xl border border-gray-200 bg-white px-5 pb-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
+      <div className="rounded-2xl border border-gray-200 bg-white px-5 pb-0 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-4 sm:pt-4">
         <div className="flex flex-col gap-5  sm:flex-row sm:justify-between">
           <div className="w-full">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
+            <h3 className="text-md font-semibold text-gray-800 dark:text-white/90">
               Perte/GAP
             </h3>
           </div>
           <div className="flex items-start w-full gap-3 sm:justify-end">
-            <ChartTab />
+            {/* <ChartTab /> */}
           </div>
         </div>
 
@@ -148,7 +148,7 @@ function Loss() {
               options={state.options}
               series={state.series}
               type="area"
-              height={190}
+              height={150}
             />
           </div>
         </div>

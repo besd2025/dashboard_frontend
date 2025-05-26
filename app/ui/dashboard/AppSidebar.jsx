@@ -14,6 +14,7 @@ import {
   HorizontaLDots,
   PieChartIcon,
   PlugInIcon,
+  SettingsIcon,
   UserCircleIcon,
 } from "../icons";
 
@@ -21,13 +22,21 @@ const navItems = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [{ name: "Home", path: "/dashboard/home", pro: false }],
+    path: "/dashboard/home",
+    // subItems: [{ name: "Home", path: "/dashboard/home", pro: false }],
   },
 
   {
     icon: <UserCircleIcon />,
     name: "Cultivateurs",
-    path: "/dashboard/cultivators",
+
+    subItems: [
+      { name: "", path: "/dashboard/cultivators", pro: false },
+      {
+        name: "Details",
+        path: "/dashboard/cultivators/list",
+      },
+    ],
   },
   {
     icon: <BoxCubeIcon />,
@@ -37,37 +46,42 @@ const navItems = [
   {
     icon: <HangarIcon />,
     name: "Hangars",
-    path: "/dashboard/stocks",
+    path: "/dashboard/hangars",
   },
   {
-    icon: <PieChartIcon />,
-    name: "Charts",
-    subItems: [
-      { name: "Line Chart", path: "/line-chart", pro: false },
-      { name: "Bar Chart", path: "/bar-chart", pro: false },
-    ],
+    icon: <SettingsIcon />,
+    name: "Settings",
+    path: "/dashboard/settings",
   },
-  {
-    icon: <DollarLine />,
-    name: "Transactions",
-    path: "/dashboard/transactions",
-  },
+  // {
+  //   icon: <PieChartIcon />,
+  //   name: "Charts",
+  //   subItems: [
+  //     { name: "Line Chart", path: "/line-chart", pro: false },
+  //     { name: "Bar Chart", path: "/bar-chart", pro: false },
+  //   ],
+  // },
+  // {
+  //   icon: <DollarLine />,
+  //   name: "Transactions",
+  //   path: "/dashboard/transactions",
+  // },
 ];
 
 const othersItems = [
-  {
-    icon: <AlertIcon />,
-    name: "Alertes",
-    path: "/dashboard/alerts",
-  },
-  {
-    icon: <PlugInIcon />,
-    name: "Authentication",
-    subItems: [
-      { name: "Sign In", path: "/signin", pro: false },
-      { name: "Sign Up", path: "/signup", pro: false },
-    ],
-  },
+  // {
+  //   icon: <AlertIcon />,
+  //   name: "Alertes",
+  //   path: "/dashboard/alerts",
+  // },
+  // {
+  //   icon: <PlugInIcon />,
+  //   name: "Authentication",
+  //   subItems: [
+  //     { name: "Sign In", path: "/signin", pro: false },
+  //     { name: "Sign Up", path: "/signup", pro: false },
+  //   ],
+  // },
 ];
 
 const AppSidebar = () => {
@@ -185,17 +199,6 @@ const AppSidebar = () => {
                             } menu-dropdown-badge`}
                           >
                             new
-                          </span>
-                        )}
-                        {subItem.pro && (
-                          <span
-                            className={`ml-auto ${
-                              isActive(subItem.path)
-                                ? "menu-dropdown-badge-active"
-                                : "menu-dropdown-badge-inactive"
-                            } menu-dropdown-badge`}
-                          >
-                            pro
                           </span>
                         )}
                       </span>

@@ -25,7 +25,7 @@ const ChartTab = () => {
           "optionTwo"
         )}`}
       >
-        mois
+        semaines
       </button>
 
       <button
@@ -34,7 +34,7 @@ const ChartTab = () => {
           "optionThree"
         )}`}
       >
-        semaines
+        mois
       </button>
       <button
         onClick={() => setSelected("optionFour")}
