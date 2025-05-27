@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState, useCallback } from "react";
 
 export const useModal = (initialState = false) => {
   const [isOpen, setIsOpen] = useState(initialState);

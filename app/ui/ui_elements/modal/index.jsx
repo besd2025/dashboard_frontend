@@ -1,14 +1,15 @@
 "use client";
-import { useRef, useEffect } from "react";
 
-export default function Modal({
+import React, { useRef, useEffect } from "react";
+
+const Modal = ({
   isOpen,
   onClose,
   children,
   className,
   showCloseButton = true,
   isFullscreen = false,
-}) {
+}) => {
   const modalRef = useRef(null);
 
   useEffect(() => {
@@ -49,7 +50,7 @@ export default function Modal({
     <div className="fixed inset-0 flex items-center justify-center overflow-y-auto modal z-99999">
       {!isFullscreen && (
         <div
-          className="fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[32px]"
+          className="fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[2px]"
           onClick={onClose}
         ></div>
       )}
@@ -61,7 +62,7 @@ export default function Modal({
         {showCloseButton && (
           <button
             onClick={onClose}
-            className="absolute right-3 top-3 z-999 flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white sm:right-6 sm:top-6 sm:h-11 sm:w-11"
+            className="absolute right-3 top-3 z-999 flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white sm:right-6 sm:top-6 sm:h-8 sm:w-8"
           >
             <svg
               width="24"
@@ -83,4 +84,5 @@ export default function Modal({
       </div>
     </div>
   );
-}
+};
+export default Modal;

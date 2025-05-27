@@ -12,6 +12,7 @@ import Image from "next/image";
 import { MoreDotIcon } from "../../../icons";
 import DropdownItem from "../../dropdown/DropdownItem";
 import { Dropdown } from "../../dropdown/dropdown_cultvators";
+import Link from "next/link";
 
 // Define the table data
 const tableData = [
@@ -80,19 +81,6 @@ const tableData = [
     budget: "3.9K",
     status: "Active",
   },
-  {
-    id: 6,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Active",
-  },
 ];
 
 export default function RecentCultivatorsList() {
@@ -117,14 +105,20 @@ export default function RecentCultivatorsList() {
     }));
   }
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6 z-">
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
           Cultivateurs recents
         </h3>
-        <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+        <Link
+          href=""
+          className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+        >
           See all
-        </button>
+        </Link>
+        {/* <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+          See all
+        </button> */}
       </div>
       <div className="max-w-full overflow-x-auto">
         <div className="min-w-[1102px] ">
@@ -132,7 +126,7 @@ export default function RecentCultivatorsList() {
             {/* Table Header */}
             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05] shadow-sm ">
               <TableRow>
-                <div></div>
+                <th></th>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase "
