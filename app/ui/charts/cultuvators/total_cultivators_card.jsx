@@ -1,5 +1,5 @@
-import { ArrowUpIcon } from "./../../../icons";
-import Badge from "./../../../ui_elements/badge/Badge";
+import { ArrowUpIcon } from "../../icons";
+import Badge from "../../ui_elements/badge/Badge";
 import React from "react";
 
 function TotalCultivators() {

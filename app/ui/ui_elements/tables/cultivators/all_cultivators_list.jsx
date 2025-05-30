@@ -22,6 +22,8 @@ import Button from "../../button/Button";
 import Label from "../../form/Label";
 import { DropdownFilter } from "../../dropdown/dropdown_filtre";
 import Pagination from "../Pagination";
+import EditUserProfile from "../../../dashboard/cultivators/profile/edit_user_profile";
+import FilterUserProfile from "../../../dashboard/cultivators/profile/filter_user_profile";
 
 // Define the table data
 const tableData = [
@@ -156,20 +158,11 @@ function AllCultivatorsList() {
   }, []);
 
   const { isOpen, openModal, closeModal } = useModal();
-  const handleSave = () => {
-    // Handle save logic here
-    console.log("Saving changes...");
-    closeModal();
-  };
-
-  const [isOpenDropdown, setIsOpenDropdown] = useState(false);
-  function toggleDropdownFilter() {
-    setIsOpenDropdown(!isOpenDropdown);
-  }
-
-  function closeDropdownFilter() {
-    setIsOpenDropdown(false);
-  }
+  const {
+    isOpen: isOpenFilter,
+    openModal: openModalFilter,
+    closeModal: closeModalFilter,
+  } = useModal();
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
@@ -177,7 +170,7 @@ function AllCultivatorsList() {
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
           Liste des cultivateurs
         </h3>
-
+        {/* search */}
         <div className="hidden lg:block">
           <form>
             <div className="relative ">
@@ -208,7 +201,7 @@ function AllCultivatorsList() {
 
         <div className="flex items-center gap-3">
           <button
-            onClick={() => openModal()}
+            onClick={() => openModalFilter()}
             className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
           >
             <svg
@@ -356,10 +349,13 @@ function AllCultivatorsList() {
                           href={"/dashboard/cultivators/profile"}
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
-                          Details
+                          Profile
                         </DropdownItem>
                         <DropdownItem
-                          onItemClick={() => closeDropdown(order.id)}
+                          onItemClick={() => {
+                            closeDropdown(order.id);
+                            openModal();
+                          }}
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
                           Modifier
@@ -421,74 +417,16 @@ function AllCultivatorsList() {
 
       {/* filtres */}
 
+      <Modal
+        isOpen={isOpenFilter}
+        onClose={closeModalFilter}
+        className="max-w-[700px] m-4"
+      >
+        <FilterUserProfile />
+      </Modal>
+
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-xl bg-white p-4 dark:bg-gray-900 lg:p-11">
-          <div className="px-2 pr-14">
-            <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-              Filtrage
-            </h4>
-            {/* <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
-              Update your details to keep your profile up-to-date.
-            </p> */}
-          </div>
-          <form className="flex flex-col">
-            <div className="custom-scrollbar h-max overflow-y-auto px-2 pb-3">
-              <div className="mt-7">
-                {/* <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
-                  Modifier le prix de vente
-                </h5> */}
-
-                <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
-                  <div className="col-span-2 lg:col-span-1">
-                    <Label onClick={() => toggleDropdownFilter()}>
-                      Province
-                    </Label>
-                    <Input
-                      type="text"
-                      placeholder="selectionner province"
-                      onClick={() => toggleDropdownFilter()}
-                    />
-
-                    <DropdownFilter
-                      isOpen={isOpenDropdown}
-                      onClose={closeDropdownFilter}
-                      className="w-40 p-2"
-                    >
-                      <DropdownItem
-                        onItemClick={closeDropdownFilter}
-                        className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                      >
-                        View More
-                      </DropdownItem>
-                      <DropdownItem
-                        onItemClick={closeDropdownFilter}
-                        className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                      >
-                        Delete
-                      </DropdownItem>
-                    </DropdownFilter>
-                  </div>
-                  <div className="col-span-2 lg:col-span-1">
-                    <Label>Commune</Label>
-                    <Input type="text" placeholder="selectionner commune" />
-                  </div>
-                  <div className="col-span-2 lg:col-span-1">
-                    <Label>Status</Label>
-                    <Input type="text" placeholder="selectionner status" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 px-2 mt-6 ">
-              <Button size="sm" variant="outline" onClick={closeModal}>
-                Fermer
-              </Button>
-              <Button size="sm" onClick={handleSave} className="bg-yellow-500">
-                rechercher
-              </Button>
-            </div>
-          </form>
-        </div>
+        <EditUserProfile />
       </Modal>
     </div>
   );

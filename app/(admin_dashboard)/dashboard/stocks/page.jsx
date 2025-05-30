@@ -1,7 +1,8 @@
+import Stocks from "../../../ui/dashboard/stocks";
 import React from "react";
 
 function page() {
-  return <div>Stocks page</div>;
+  return <Stocks />;
 }
 
 export default page;

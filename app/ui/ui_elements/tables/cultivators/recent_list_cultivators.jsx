@@ -13,6 +13,7 @@ import { MoreDotIcon } from "../../../icons";
 import DropdownItem from "../../dropdown/DropdownItem";
 import { Dropdown } from "../../dropdown/dropdown_cultvators";
 import Link from "next/link";
+import { useModal } from "../../hooks/useModal";
 
 // Define the table data
 const tableData = [
@@ -104,6 +105,9 @@ export default function RecentCultivatorsList() {
       [rowId]: false,
     }));
   }
+
+  const { isOpen, openModal, closeModal } = useModal();
+
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
       <div className="flex items-center justify-between mb-4">
@@ -111,7 +115,7 @@ export default function RecentCultivatorsList() {
           Cultivateurs recents
         </h3>
         <Link
-          href=""
+          href="/dashboard/cultivators/list"
           className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
         >
           See all
@@ -172,7 +176,9 @@ export default function RecentCultivatorsList() {
                           Details
                         </DropdownItem>
                         <DropdownItem
-                          onItemClick={() => closeDropdown(order.id)}
+                          onItemClick={() => {
+                            closeDropdown(order.id);
+                          }}
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
                           Modifier

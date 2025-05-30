@@ -1,6 +1,6 @@
 import React from "react";
-import { ArrowUpIcon } from "./../../../icons";
-import Badge from "./../../../ui_elements/badge/Badge";
+import { ArrowUpIcon } from "../../icons";
+import Badge from "../../ui_elements/badge/Badge";
 
 function TotalHangars() {
   return (

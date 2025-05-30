@@ -1,6 +1,6 @@
 import React from "react";
-import { ArrowUpIcon } from "./../../../icons";
-import Badge from "./../../../ui_elements/badge/Badge";
+import { ArrowUpIcon } from "../../icons";
+import Badge from "../../ui_elements/badge/Badge";
 
 function TotalStocks() {
   return (
@@ -11,7 +11,7 @@ function TotalStocks() {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
-          className="size-6"
+          className="size-6 text-gray-800  dark:text-white/90"
         >
           <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
           <path

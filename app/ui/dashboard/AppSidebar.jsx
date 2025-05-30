@@ -31,9 +31,9 @@ const navItems = [
     name: "Cultivateurs",
 
     subItems: [
-      { name: "", path: "/dashboard/cultivators", pro: false },
+      { name: "Details", path: "/dashboard/cultivators" },
       {
-        name: "Details",
+        name: "Liste",
         path: "/dashboard/cultivators/list",
       },
     ],
@@ -135,7 +135,7 @@ const AppSidebar = () => {
                   className={`ml-auto w-5 h-5 transition-transform duration-200  ${
                     openSubmenu?.type === menuType &&
                     openSubmenu?.index === index
-                      ? "rotate-180 text-brand-500"
+                      ? "rotate-180 text-green-500"
                       : ""
                   }`}
                 />
@@ -169,7 +169,7 @@ const AppSidebar = () => {
               ref={(el) => {
                 subMenuRefs.current[`${menuType}-${index}`] = el;
               }}
-              className="overflow-hidden transition-all duration-300"
+              className="overflow-hidden transition-all duration-300 "
               style={{
                 height:
                   openSubmenu?.type === menuType && openSubmenu?.index === index
@@ -177,7 +177,7 @@ const AppSidebar = () => {
                     : "0px",
               }}
             >
-              <ul className="mt-2 space-y-1 ml-9">
+              <ul className="mt-2 space-y-1 ml-9  p-2 rounded">
                 {nav.subItems.map((subItem) => (
                   <li key={subItem.name}>
                     <Link

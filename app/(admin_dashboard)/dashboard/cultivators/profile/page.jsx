@@ -1,4 +1,4 @@
-import UserAddressCard from "../../../../ui/dashboard/cultivators/profile/user-profile/UserMetaCard";
+import UserAddressCard from "../../../../ui/dashboard/cultivators/profile/user-profile/UserAddressCard";
 import UserInfoCard from "../../../../ui/dashboard/cultivators/profile/user-profile/UserInfoCard";
 import UserMetaCard from "../../../../ui/dashboard/cultivators/profile/user-profile/UserMetaCard";
 import React from "react";
