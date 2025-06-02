@@ -33,7 +33,11 @@ function StocksChart() {
         toolbar: {
           show: false, // Hide chart toolbar
         },
+        zoom: {
+          enabled: false,
+        },
       },
+
       stroke: {
         width: [0, 2, 5],
         curve: "smooth",

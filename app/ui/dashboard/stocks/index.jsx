@@ -7,12 +7,16 @@ import Loss from "../../charts/home/loss";
 import StocksChart from "../../charts/stocks/stocks";
 import BenefitsChart from "../../charts/home/benefits";
 import StocksFilter from "./stocks_filter";
+import OutStocks from "../../charts/stocks/out_stocks";
 
 function Stocks() {
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">
       <div className=" col-span-12 space-y-6 lg:col-span-3">
         <TotalStocks />
+      </div>
+      <div className=" col-span-12 space-y-6 lg:col-span-3">
+        <OutStocks />
       </div>
       <div className=" col-span-12 space-y-6 lg:col-span-3">
         <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">

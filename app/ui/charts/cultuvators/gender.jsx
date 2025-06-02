@@ -1,6 +1,11 @@
 "use client";
 import React from "react";
-import ReactApexChart from "react-apexcharts";
+import dynamic from "next/dynamic";
+
+// Dynamically import to avoid SSR errors
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 
 function GenderChart() {
   const [state, setState] = React.useState({

@@ -42,11 +42,22 @@ const navItems = [
     icon: <BoxCubeIcon />,
     name: "Stock",
     path: "/dashboard/stocks",
+    subItems: [
+      { name: "Details", path: "/dashboard/stocks" },
+      { name: "Achats", path: "/dashboard/stocks/achats" },
+      {
+        name: "Sorties",
+        path: "/dashboard/stocks/sold_out",
+      },
+    ],
   },
   {
     icon: <HangarIcon />,
     name: "Hangars",
-    path: "/dashboard/hangars",
+    subItems: [
+      { name: "Details", path: "/dashboard/hangars" },
+      { name: "Sechage", path: "/dashboard/hangars/sechage" },
+    ],
   },
   {
     icon: <SettingsIcon />,

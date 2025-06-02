@@ -6,14 +6,14 @@ import {
   TableCell,
   TableHeader,
   TableRow,
-} from "../table_elemets";
+} from "../../table_elemets";
 
 import Image from "next/image";
-import { MoreDotIcon } from "../../../icons";
-import DropdownItem from "../../dropdown/DropdownItem";
-import { Dropdown } from "../../dropdown/dropdown_cultvators";
+import DropdownItem from "../../../dropdown/DropdownItem";
+import { Dropdown } from "../../../dropdown/dropdown_cultvators";
 import Link from "next/link";
-import { useModal } from "../../hooks/useModal";
+import { useModal } from "../../../hooks/useModal";
+import { MoreDotIcon } from "../../../../icons";
 
 // Define the table data
 const tableData = [
@@ -24,6 +24,7 @@ const tableData = [
       name_cultivator: "MPAWENAYO Charles",
       id_cultivator: "id54254Hkhjk6",
     },
+    Qte: "50 T",
     Province: "Kayanza",
     Commune: "Butanganzwa",
 
@@ -37,6 +38,7 @@ const tableData = [
       name_cultivator: "MPAWENAYO Charles",
       id_cultivator: "id54254Hkhjk6",
     },
+    Qte: "50 T",
     Province: "Kayanza",
     Commune: "Butanganzwa",
 
@@ -50,6 +52,7 @@ const tableData = [
       name_cultivator: "MPAWENAYO Charles",
       id_cultivator: "id54254Hkhjk6",
     },
+    Qte: "50 T",
     Province: "Kayanza",
     Commune: "Butanganzwa",
 
@@ -63,6 +66,7 @@ const tableData = [
       name_cultivator: "MPAWENAYO Charles",
       id_cultivator: "id54254Hkhjk6",
     },
+    Qte: "50 T",
     Province: "Kayanza",
     Commune: "Butanganzwa",
 
@@ -76,6 +80,7 @@ const tableData = [
       name_cultivator: "MPAWENAYO Charles",
       id_cultivator: "id54254Hkhjk6",
     },
+    Qte: "50 T",
     Province: "Kayanza",
     Commune: "Butanganzwa",
 
@@ -84,7 +89,7 @@ const tableData = [
   },
 ];
 
-export default function RecentCultivatorsList() {
+export default function TopCultivateurs() {
   const [openDropdowns, setOpenDropdowns] = useState({});
 
   function toggleDropdown(rowId) {
@@ -112,14 +117,14 @@ export default function RecentCultivatorsList() {
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-          Cultivateurs recents
+          Top cultivateurs
         </h3>
-        <Link
+        {/* <Link
           href="/dashboard/cultivators/list"
           className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
         >
           See all
-        </Link>
+        </Link> */}
         {/* <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
           See all
         </button> */}
@@ -136,6 +141,12 @@ export default function RecentCultivatorsList() {
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase "
                 >
                   Cultivateur
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Qte vendue
                 </TableCell>
                 <TableCell
                   isHeader
@@ -181,14 +192,6 @@ export default function RecentCultivatorsList() {
                         >
                           Details
                         </DropdownItem>
-                        <DropdownItem
-                          onItemClick={() => {
-                            closeDropdown(order.id);
-                          }}
-                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                        >
-                          Modifier
-                        </DropdownItem>
                       </Dropdown>
                     </div>
                   </TableCell>
@@ -212,6 +215,9 @@ export default function RecentCultivatorsList() {
                         </span>
                       </div>
                     </div>
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {order.Qte}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {order.Province}
