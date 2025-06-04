@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import ComponentCard from "../../common/ComponentCard";
+import ComponentCard from "../../../common/ComponentCard.jsx";
 import Checkbox from "../input/Checkbox";
 
 export default function CheckboxComponents() {
@@ -11,7 +11,12 @@ export default function CheckboxComponents() {
     <ComponentCard title="Checkbox">
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-3">
-          <Checkbox checked={isChecked} onChange={setIsChecked} />
+          <Checkbox
+            checked={isChecked}
+            onChange={setIsChecked}
+            id="default-checkbox"
+            label="Default"
+          />
           <span className="block text-sm font-medium text-gray-700 dark:text-gray-400">
             Default
           </span>
@@ -21,6 +26,7 @@ export default function CheckboxComponents() {
             checked={isCheckedTwo}
             onChange={setIsCheckedTwo}
             label="Checked"
+            id="checked-checkbox"
           />
         </div>
         <div className="flex items-center gap-3">
@@ -29,6 +35,7 @@ export default function CheckboxComponents() {
             onChange={setIsCheckedDisabled}
             disabled
             label="Disabled"
+            id="disabled-checkbox"
           />
         </div>
       </div>

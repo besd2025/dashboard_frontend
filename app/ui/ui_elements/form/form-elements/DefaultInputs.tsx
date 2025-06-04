@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import ComponentCard from "../../common/ComponentCard";
 import Label from "../Label";
 import Input from "../input/InputField";
 import Select from "../Select";
@@ -10,7 +9,8 @@ import {
   EyeIcon,
   TimeIcon,
 } from "../../../icons";
-import DatePicker from "@/components/form/date-picker";
+import DatePicker from "../../../ui_elements/form/date-picker";
+import ComponentCard from "../../../common/ComponentCard";
 
 const DefaultInputs = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,15 +28,52 @@ const DefaultInputs = () => {
     <ComponentCard title="Default Inputs">
       <div className="space-y-6">
         <div>
-          <Label>Input</Label>
-          <Input type="text" />
+          <Label
+            htmlFor="input"
+            className="text-sm font-medium text-gray-700 dark:text-gray-400"
+          >
+            Input
+          </Label>
+          <Input
+            type="text"
+            id="input"
+            name="input"
+            placeholder=""
+            defaultValue=""
+            onChange={() => {}}
+            min=""
+            max=""
+            step=""
+            hint=""
+          />
         </div>
         <div>
-          <Label>Input with Placeholder</Label>
-          <Input type="text" placeholder="info@gmail.com" />
+          <Label
+            htmlFor="input-placeholder"
+            className="text-sm font-medium text-gray-700 dark:text-gray-400"
+          >
+            Input with Placeholder
+          </Label>
+          <Input
+            type="text"
+            id="input-placeholder"
+            name="input-placeholder"
+            placeholder="info@gmail.com"
+            defaultValue=""
+            onChange={() => {}}
+            min=""
+            max=""
+            step=""
+            hint=""
+          />
         </div>
         <div>
-          <Label>Select Input</Label>
+          <Label
+            htmlFor="select"
+            className="text-sm font-medium text-gray-700 dark:text-gray-400"
+          >
+            Select Input
+          </Label>
           <div className="relative">
             <Select
               options={options}
@@ -50,11 +87,24 @@ const DefaultInputs = () => {
           </div>
         </div>
         <div>
-          <Label>Password Input</Label>
+          <Label
+            htmlFor="password"
+            className="text-sm font-medium text-gray-700 dark:text-gray-400"
+          >
+            Password Input
+          </Label>
           <div className="relative">
             <Input
               type={showPassword ? "text" : "password"}
+              id="password"
+              name="password"
               placeholder="Enter your password"
+              defaultValue=""
+              onChange={() => {}}
+              min=""
+              max=""
+              step=""
+              hint=""
             />
             <button
               onClick={() => setShowPassword(!showPassword)}
@@ -74,6 +124,8 @@ const DefaultInputs = () => {
             id="date-picker"
             label="Date Picker Input"
             placeholder="Select a date"
+            mode="single"
+            defaultDate={new Date()}
             onChange={(dates, currentDateString) => {
               console.log({ dates, currentDateString });
             }}
@@ -81,13 +133,24 @@ const DefaultInputs = () => {
         </div>
 
         <div>
-          <Label htmlFor="tm">Time Picker Input</Label>
+          <Label
+            htmlFor="tm"
+            className="text-sm font-medium text-gray-700 dark:text-gray-400"
+          >
+            Time Picker Input
+          </Label>
           <div className="relative">
             <Input
               type="time"
               id="tm"
               name="tm"
+              placeholder=""
+              defaultValue=""
               onChange={(e) => console.log(e.target.value)}
+              min=""
+              max=""
+              step=""
+              hint=""
             />
             <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
               <TimeIcon />
@@ -95,11 +158,24 @@ const DefaultInputs = () => {
           </div>
         </div>
         <div>
-          <Label htmlFor="tm">Input with Payment</Label>
+          <Label
+            htmlFor="payment"
+            className="text-sm font-medium text-gray-700 dark:text-gray-400"
+          >
+            Input with Payment
+          </Label>
           <div className="relative">
             <Input
               type="text"
+              id="payment"
+              name="payment"
               placeholder="Card number"
+              defaultValue=""
+              onChange={() => {}}
+              min=""
+              max=""
+              step=""
+              hint=""
               className="pl-[62px]"
             />
             <span className="absolute left-0 top-1/2 flex h-11 w-[46px] -translate-y-1/2 items-center justify-center border-r border-gray-200 dark:border-gray-800">

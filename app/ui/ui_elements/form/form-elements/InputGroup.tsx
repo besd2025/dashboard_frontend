@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import ComponentCard from "../../common/ComponentCard";
+import ComponentCard from "../../../common/ComponentCard";
 import Label from "../Label";
 import Input from "../input/InputField";
 import { EnvelopeIcon } from "../../../icons";
@@ -20,11 +20,24 @@ export default function InputGroup() {
     <ComponentCard title="Input Group">
       <div className="space-y-6">
         <div>
-          <Label>Email</Label>
+          <Label
+            htmlFor="email-group"
+            className="text-sm font-medium text-gray-700 dark:text-gray-400"
+          >
+            Email
+          </Label>
           <div className="relative">
             <Input
               placeholder="info@gmail.com"
               type="text"
+              id="email-group"
+              name="email-group"
+              defaultValue=""
+              onChange={() => {}}
+              min=""
+              max=""
+              step=""
+              hint=""
               className="pl-[62px]"
             />
             <span className="absolute left-0 top-1/2 -translate-y-1/2 border-r border-gray-200 px-3.5 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
@@ -33,16 +46,26 @@ export default function InputGroup() {
           </div>
         </div>
         <div>
-          <Label>Phone</Label>
+          <Label
+            htmlFor="phone-start"
+            className="text-sm font-medium text-gray-700 dark:text-gray-400"
+          >
+            Phone
+          </Label>
           <PhoneInput
             selectPosition="start"
             countries={countries}
             placeholder="+1 (555) 000-0000"
             onChange={handlePhoneNumberChange}
           />
-        </div>{" "}
+        </div>
         <div>
-          <Label>Phone</Label>
+          <Label
+            htmlFor="phone-end"
+            className="text-sm font-medium text-gray-700 dark:text-gray-400"
+          >
+            Phone
+          </Label>
           <PhoneInput
             selectPosition="end"
             countries={countries}

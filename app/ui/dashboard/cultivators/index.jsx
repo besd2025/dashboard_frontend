@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import TotalCultivators from "../../charts/cultuvators/total_cultivators_card";
 import GenderChart from "../../charts/cultuvators/gender";

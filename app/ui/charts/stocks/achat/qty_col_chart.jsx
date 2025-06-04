@@ -1,7 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import ReactApexChart from "react-apexcharts";
+import dynamic from "next/dynamic";
 import PeriodTab from "../../../common/period_tab";
+
+// Dynamically import to avoid SSR errors
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
+
 function QtyColChart() {
   const [state, setState] = useState({
     series: [

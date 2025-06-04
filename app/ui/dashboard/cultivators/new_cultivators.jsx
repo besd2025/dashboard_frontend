@@ -1,7 +1,12 @@
 "use client";
 import React, { useState } from "react";
-import ReactApexChart from "react-apexcharts";
+import dynamic from "next/dynamic";
 import SalePurchaseTimePeriod from "../../common/home/sale_purchase_period";
+
+// Dynamically import to avoid SSR errors
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 
 function NewCultivatorsCharts() {
   const [state, setState] = React.useState({

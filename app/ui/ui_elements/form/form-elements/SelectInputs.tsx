@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import ComponentCard from "../../common/ComponentCard";
 import Label from "../Label";
 import Select from "../Select";
 import MultiSelect from "../MultiSelect";
-import { ChevronDownIcon } from "@/icons";
+import { ChevronDownIcon } from "../../../icons";
+import ComponentCard from "../../../common/ComponentCard";
 
 const SelectInputs = () => {
   const options = [
@@ -31,7 +31,12 @@ const SelectInputs = () => {
     <ComponentCard title="Select Inputs">
       <div className="space-y-6">
         <div>
-          <Label>Select Input</Label>
+          <Label
+            htmlFor="select-input"
+            className="text-sm font-medium text-gray-700 dark:text-gray-400"
+          >
+            Select Input
+          </Label>
           <div className="relative">
             <Select
               options={options}

@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import ComponentCard from "../../common/ComponentCard";
 import FileInput from "../input/FileInput";
 import Label from "../Label";
+import ComponentCard from "../../../common/ComponentCard";
 
 const FileInputExample = () => {
   const handleFileChange = (event) => {
@@ -15,7 +15,12 @@ const FileInputExample = () => {
   return (
     <ComponentCard title="File Input">
       <div>
-        <Label>Upload file</Label>
+        <Label
+          htmlFor="file-upload"
+          className="text-sm font-medium text-gray-700 dark:text-gray-400"
+        >
+          Upload file
+        </Label>
         <FileInput onChange={handleFileChange} className="custom-class" />
       </div>
     </ComponentCard>
