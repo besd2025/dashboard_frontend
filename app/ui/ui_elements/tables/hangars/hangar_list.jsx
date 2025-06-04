@@ -6,21 +6,20 @@ import {
   TableCell,
   TableHeader,
   TableRow,
-} from "../../ui_elements/tables/table_elemets";
+} from "../table_elemets";
 
 import Image from "next/image";
-// import { useSidebar } from "../../../context/SidebarContext";
-import EditUserProfile from "../../dashboard/cultivators/profile/edit_user_profile";
-import FilterUserProfile from "../../dashboard/cultivators/profile/filter_user_profile";
-import Pagination from "../../ui_elements/tables/Pagination";
-import Modal from "../../ui_elements/modal";
-import { useModal } from "../../ui_elements/hooks/useModal";
-import { useSidebar } from "../../context/SidebarContext";
-import { MoreDotIcon } from "../../icons";
-import { Dropdown } from "../../ui_elements/dropdown/Dropdown";
-import DropdownItem from "../../ui_elements/dropdown/DropdownItem";
-import Badge from "../../ui_elements/badge/Badge";
-import FilterHangarList from "./filter_hangar_list";
+import { MoreDotIcon } from "../../../icons";
+import DropdownItem from "../../dropdown/DropdownItem";
+import { Dropdown } from "../../dropdown/dropdown_cultvators";
+import Badge from "../../badge/Badge";
+import { useSidebar } from "../../../context/SidebarContext";
+import Modal from "../../modal";
+import { useModal } from "../../hooks/useModal";
+import Pagination from "../Pagination";
+import EditUserProfile from "../../../dashboard/cultivators/profile/edit_user_profile";
+import FilterUserProfile from "../../../dashboard/cultivators/profile/filter_user_profile";
+import FilterHangarList from "../../../dashboard/hangars/filter_hangar_list";
 
 // Define the table data
 const tableData = [
@@ -81,7 +80,7 @@ const tableData = [
   },
 ];
 
-function HangarList() {
+function AllCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
 
   function toggleDropdown(rowId) {
@@ -269,7 +268,7 @@ function HangarList() {
         <div className="min-w-[1102px] ">
           <Table>
             {/* Table Header */}
-            <TableHeader className="border-b border-gray-100 dark:border-white/[0.05] shadow-sm ">
+            <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]  shadow-theme-xs ">
               <TableRow>
                 <th></th>
                 <TableCell
@@ -324,6 +323,8 @@ function HangarList() {
                       >
                         <DropdownItem
                           onItemClick={() => closeDropdown(order.id)}
+                          tag="a"
+                          href="/dashboard/hangars/details"
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
                           Details
@@ -396,4 +397,4 @@ function HangarList() {
   );
 }
 
-export default HangarList;
+export default AllCultivatorsList;
