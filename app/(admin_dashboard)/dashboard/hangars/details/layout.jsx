@@ -11,14 +11,18 @@ function layout({ children }) {
   useEffect(() => {
     if (pathname.includes("/cultivator")) {
       setActiveTab("cultivateurs");
-    } else {
+    }
+    if (pathname.includes("/achats")) {
       setActiveTab("achats");
+    }
+    if (pathname.includes("/sechage")) {
+      setActiveTab("sechage");
     }
   }, [pathname]);
   return (
     <div>
       <Profile />;
-      <div className="bg-white mt-2 rounded-2xl mb-1">
+      <div className="bg-white dark:bg-white/[0.03]  mt-2 rounded-2xl mb-1">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="w-full">
             <div className="sm:hidden">
@@ -30,10 +34,11 @@ function layout({ children }) {
               >
                 <option value="cultivateurs">Cultivateurs</option>
                 <option value="achats">Achats</option>
+                <option value="achats">Sechage</option>
               </select>
             </div>
-            <div className="hidden sm:block">
-              <div className="border-b border-gray-200">
+            <div className="hidden sm:block ">
+              <div className="">
                 <nav
                   aria-label="Tabs"
                   className="-mb-px flex items-end gap-x-8"
@@ -60,12 +65,23 @@ function layout({ children }) {
                   >
                     Achats
                   </Link>
+                  <Link
+                    href="/dashboard/hangars/details/sechage"
+                    onClick={() => setActiveTab("sechage")}
+                    className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold ${
+                      activeTab === "sechage"
+                        ? "border-yellow-500 text-yellow-500"
+                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    }`}
+                  >
+                    Sechage
+                  </Link>
                 </nav>
               </div>
             </div>
           </div>
         </div>
-        {children}
+        <div className="shadow-xl">{children}</div>
       </div>
     </div>
   );

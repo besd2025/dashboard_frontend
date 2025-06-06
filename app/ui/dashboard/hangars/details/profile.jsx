@@ -17,11 +17,8 @@ function Profile() {
         <div className="space-y-6">
           <HangarMetaCard />
           <CardsOverview />
-          {/* <HangarInfoCard /> */}
-          {/* <HangarAddressCard /> */}
         </div>
       </div>
-      {/* toggle tabs */}
     </div>
   );
 }
