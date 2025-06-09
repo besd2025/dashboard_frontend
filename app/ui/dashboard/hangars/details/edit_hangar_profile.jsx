@@ -33,7 +33,7 @@ function EditHangarProfile({ closeModal }) {
             <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
               ID
             </h5>
-            <Input type="text" defaultValue="id54254Hkhjk6" />
+            <Input type="text" defaultValue="id54254Hkhjk6" disabled />
           </div>
           <div className="mt-7">
             <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">

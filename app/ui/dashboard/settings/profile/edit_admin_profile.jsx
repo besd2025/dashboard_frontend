@@ -5,7 +5,7 @@ import Label from "../../../ui_elements/form/Label";
 import Button from "../../../ui_elements/button/Button";
 import Radio from "../../../ui_elements/form/input/Radio";
 
-function EditUserProfile({ closeModal }) {
+function EditAdminProfile({ closeModal }) {
   const [selectedStatus, setSelectedStatus] = useState("option2");
 
   const handleRadioChangeStatus = (value) => {
@@ -95,4 +95,4 @@ function EditUserProfile({ closeModal }) {
   );
 }
 
-export default EditUserProfile;
+export default EditAdminProfile;
