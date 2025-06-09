@@ -6,26 +6,66 @@ import {
   TableCell,
   TableHeader,
   TableRow,
-} from "../table_elemets";
+} from "../../table_elemets";
 
 import Image from "next/image";
-import { MoreDotIcon } from "../../../icons";
-import DropdownItem from "../../dropdown/DropdownItem";
-import { Dropdown } from "../../dropdown/dropdown_cultvators";
-import Badge from "../../badge/Badge";
-import { useSidebar } from "../../../context/SidebarContext";
-import Modal from "../../modal";
-import { useModal } from "../../hooks/useModal";
-import Pagination from "../Pagination";
-import EditUserProfile from "../../../dashboard/cultivators/profile/edit_user_profile";
-import FilterUserProfile from "../../../dashboard/cultivators/profile/filter_user_profile";
-import FilterHangarList from "../../../dashboard/hangars/filter_hangar_list";
-import { fetchData } from "../../../../_utils/api";
+import { MoreDotIcon } from "../../../../icons";
+import DropdownItem from "../../../dropdown/DropdownItem";
+import { Dropdown } from "../../../dropdown/dropdown_cultvators";
+import Badge from "../../../badge/Badge";
+import Modal from "../../../modal";
+import { useModal } from "../../../hooks/useModal";
+import Pagination from "../../Pagination";
+import EditUserProfile from "../../../../dashboard/cultivators/profile/edit_user_profile";
+import FilterUserProfile from "../../../../dashboard/cultivators/profile/filter_user_profile";
 
-function AllCultivatorsList() {
+// Define the table data
+const tableData = [
+  {
+    id: 1,
+    sacs: "100",
+    av_sechage: "5000",
+    ap_sechage: "4500",
+    gap: "500",
+    date: "6/6/2025",
+  },
+  {
+    id: 2,
+    sacs: "100",
+    av_sechage: "5000",
+    ap_sechage: "4500",
+    gap: "500",
+    date: "6/6/2025",
+  },
+  {
+    id: 3,
+    sacs: "100",
+    av_sechage: "5000",
+    ap_sechage: "4500",
+    gap: "500",
+    date: "6/6/2025",
+  },
+  {
+    id: 4,
+    sacs: "100",
+    av_sechage: "5000",
+    ap_sechage: "4500",
+    gap: "500",
+    date: "6/6/2025",
+  },
+  {
+    id: 5,
+    sacs: "100",
+    av_sechage: "5000",
+    ap_sechage: "4500",
+    gap: "500",
+    date: "6/6/2025",
+  },
+];
+
+function SechageList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
-      const [data, setData] = useState([]);
-        const [error, setError] = useState(null);
+
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -45,7 +85,6 @@ function AllCultivatorsList() {
     }));
   }
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
-  const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
   const inputRef = useRef(null);
 
   const handleToggle = () => {
@@ -79,30 +118,11 @@ function AllCultivatorsList() {
     closeModal: closeModalFilter,
   } = useModal();
 
-        useEffect(() => {
-          async function getData() {
-            try {
-              const results = await fetchData('get', 'hangars/cinq_recents/', {
-                params: {},
-                additionalHeaders: {},
-                body: {}
-              });
-              setData(results);
-              console.log(results);
-            } catch (error) {
-              setError(error);
-              console.error(error);
-            }
-          }
-          getData();
-        }, []);
-      
-
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-          Liste des hangars
+          Historique de sechage
         </h3>
         {/* search */}
         <div className="hidden lg:block">
@@ -237,38 +257,38 @@ function AllCultivatorsList() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase "
                 >
-                  Hangar
+                  Sacs
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Qte
+                  Avant sechage
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Prix
+                  Apres sechage
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Province
+                  Gap
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Commune
+                  Date
                 </TableCell>
               </TableRow>
             </TableHeader>
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {data.map((order) => (
+              {tableData.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <div className="relative inline-block">
@@ -286,50 +306,38 @@ function AllCultivatorsList() {
                         <DropdownItem
                           onItemClick={() => closeDropdown(order.id)}
                           tag="a"
-                          href="/dashboard/hangars/details/cultivator"
+                          href={"/dashboard/cultivators/profile"}
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
-                          Details
+                          Profile
+                        </DropdownItem>
+                        <DropdownItem
+                          onItemClick={() => {
+                            closeDropdown(order.id);
+                            openModal();
+                          }}
+                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                        >
+                          Modifier
                         </DropdownItem>
                       </Dropdown>
                     </div>
                   </TableCell>
 
-                  <TableCell className="px-5 py-4 sm:px-6 text-start">
-                    <div className="flex items-center gap-3">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="size-6 text-gray-600  dark:text-white/90"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M4.5 2.25a.75.75 0 0 0 0 1.5v16.5h-.75a.75.75 0 0 0 0 1.5h16.5a.75.75 0 0 0 0-1.5h-.75V3.75a.75.75 0 0 0 0-1.5h-15ZM9 6a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5H9Zm-.75 3.75A.75.75 0 0 1 9 9h1.5a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75ZM9 12a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5H9Zm3.75-5.25A.75.75 0 0 1 13.5 6H15a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75ZM13.5 9a.75.75 0 0 0 0 1.5H15A.75.75 0 0 0 15 9h-1.5Zm-.75 3.75a.75.75 0 0 1 .75-.75H15a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75ZM9 19.5v-2.25a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 9 19.5Z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <div>
-                        <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order.hangar_name}
-                        </span>
-                        <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order.hangar_code}
-                        </span>
-                      </div>
-                    </div>
-                  </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Qte}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Prix}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    BUJUMBURA
+                    {order.sacs}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    BUBANZA
+                    {order.av_sechage}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order.ap_sechage}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order.gap}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order.date}
                   </TableCell>
                 </TableRow>
               ))}
@@ -349,7 +357,7 @@ function AllCultivatorsList() {
         onClose={closeModalFilter}
         className="max-w-[700px] m-4"
       >
-        <FilterHangarList />
+        <FilterUserProfile />
       </Modal>
 
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
@@ -359,4 +367,4 @@ function AllCultivatorsList() {
   );
 }
 
-export default AllCultivatorsList;
+export default SechageList;

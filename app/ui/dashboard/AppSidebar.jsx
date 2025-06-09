@@ -27,7 +27,22 @@ const navItems = [
   },
 
   {
-    icon: <UserCircleIcon />,
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="size-6 text-gray-600  dark:text-white/70"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"
+        />
+      </svg>
+    ),
     name: "Cultivateurs",
 
     subItems: [
@@ -54,29 +69,27 @@ const navItems = [
   {
     icon: <HangarIcon />,
     name: "Hangars",
-    subItems: [
-      { name: "Details", path: "/dashboard/hangars" },
-      { name: "Sechage", path: "/dashboard/hangars/sechage" },
+    path: "/dashboard/hangars",
+    subPath: [
+      "/dashboard/hangars/details/cultivator",
+      "/dashboard/hangars/details/achats",
     ],
+    // subItems: [
+    //   {
+    //     name: "Details",
+    //     path: "/dashboard/hangars",
+    //     subPath: [
+    //       "/dashboard/hangars/details/cultivator",
+    //       "/dashboard/hangars/details/achats",
+    //     ],
+    //   },
+    // ],
   },
   {
     icon: <SettingsIcon />,
     name: "Settings",
     path: "/dashboard/settings",
   },
-  // {
-  //   icon: <PieChartIcon />,
-  //   name: "Charts",
-  //   subItems: [
-  //     { name: "Line Chart", path: "/line-chart", pro: false },
-  //     { name: "Bar Chart", path: "/bar-chart", pro: false },
-  //   ],
-  // },
-  // {
-  //   icon: <DollarLine />,
-  //   name: "Transactions",
-  //   path: "/dashboard/transactions",
-  // },
 ];
 
 const othersItems = [
@@ -104,6 +117,16 @@ const AppSidebar = () => {
 
   const isActive = useCallback((path) => path === pathname, [pathname]);
 
+  const isPathActive = useCallback(
+    (item) => {
+      if (isActive(item.path)) return true;
+      if (item.subPath && item.subPath.some((path) => isActive(path)))
+        return true;
+      return false;
+    },
+    [isActive]
+  );
+
   const handleSubmenuToggle = (index, menuType) => {
     setOpenSubmenu((prev) =>
       prev && prev.type === menuType && prev.index === index
@@ -120,7 +143,9 @@ const AppSidebar = () => {
             <button
               onClick={() => handleSubmenuToggle(index, menuType)}
               className={`menu-item group ${
-                openSubmenu?.type === menuType && openSubmenu?.index === index
+                (openSubmenu?.type === menuType &&
+                  openSubmenu?.index === index) ||
+                isPathActive(nav)
                   ? "menu-item-active"
                   : "menu-item-inactive"
               } cursor-pointer ${
@@ -131,7 +156,9 @@ const AppSidebar = () => {
             >
               <span
                 className={`${
-                  openSubmenu?.type === menuType && openSubmenu?.index === index
+                  (openSubmenu?.type === menuType &&
+                    openSubmenu?.index === index) ||
+                  isPathActive(nav)
                     ? "menu-item-icon-active"
                     : "menu-item-icon-inactive"
                 }`}
@@ -157,12 +184,12 @@ const AppSidebar = () => {
               <Link
                 href={nav.path}
                 className={`menu-item group ${
-                  isActive(nav.path) ? "menu-item-active" : "menu-item-inactive"
+                  isPathActive(nav) ? "menu-item-active" : "menu-item-inactive"
                 }`}
               >
                 <span
                   className={`${
-                    isActive(nav.path)
+                    isPathActive(nav)
                       ? "menu-item-icon-active"
                       : "menu-item-icon-inactive"
                   }`}
@@ -194,25 +221,12 @@ const AppSidebar = () => {
                     <Link
                       href={subItem.path}
                       className={`menu-dropdown-item ${
-                        isActive(subItem.path)
+                        isPathActive(subItem)
                           ? "menu-dropdown-item-active"
                           : "menu-dropdown-item-inactive"
                       }`}
                     >
                       {subItem.name}
-                      <span className="flex items-center gap-1 ml-auto">
-                        {subItem.new && (
-                          <span
-                            className={`ml-auto ${
-                              isActive(subItem.path)
-                                ? "menu-dropdown-badge-active"
-                                : "menu-dropdown-badge-inactive"
-                            } menu-dropdown-badge`}
-                          >
-                            new
-                          </span>
-                        )}
-                      </span>
                     </Link>
                   </li>
                 ))}
@@ -229,14 +243,17 @@ const AppSidebar = () => {
     ["main", "others"].forEach((type) => {
       const items = type === "main" ? navItems : othersItems;
       items.forEach((nav, index) => {
-        if (nav.subItems?.some((s) => isActive(s.path))) {
+        if (
+          isPathActive(nav) ||
+          nav.subItems?.some((subItem) => isPathActive(subItem))
+        ) {
           setOpenSubmenu({ type, index });
           matched = true;
         }
       });
     });
     if (!matched) setOpenSubmenu(null);
-  }, [pathname, isActive]);
+  }, [pathname, isPathActive]);
 
   useEffect(() => {
     if (openSubmenu !== null) {
@@ -253,7 +270,7 @@ const AppSidebar = () => {
 
   return (
     <aside
-      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
+      className={`fixed  mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
         ${
           isExpanded || isMobileOpen
             ? "w-[290px]"
@@ -275,7 +292,7 @@ const AppSidebar = () => {
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <Image
-                className="hidden lg:block dark:hidden"
+                className="hidden lg:block dark:hidden rounded-2xl"
                 src="/img/logo_example2.jpg"
                 alt="Logo"
                 width={150}
@@ -292,6 +309,7 @@ const AppSidebar = () => {
             </>
           ) : (
             <Image
+              className="rounded-xl"
               src="/img/logo_example2.jpg"
               alt="Logo"
               width={32}

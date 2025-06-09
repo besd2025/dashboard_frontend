@@ -17,13 +17,19 @@ const TableBody = ({ children, className }) => {
 
 // TableRow Component
 const TableRow = ({ children, className }) => {
-  return <tr className={className}>{children}</tr>;
+  return (
+    <tr
+      className={`${className} cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.05] rounded-2xl`}
+    >
+      {children}
+    </tr>
+  );
 };
 
 // TableCell Component
 const TableCell = ({ children, isHeader = false, className }) => {
   const CellTag = isHeader ? "th" : "td";
-  return <CellTag className={` ${className}`}>{children}</CellTag>;
+  return <CellTag className={` ${className} `}>{children}</CellTag>;
 };
 
 export { Table, TableHeader, TableBody, TableRow, TableCell };
