@@ -1,4 +1,5 @@
-import React from "react";
+"use client"
+import React,{useState, useEffect}from "react";
 import CardsOverview from "./cards_overview";
 import SalePurchage from "../../charts/home/SalePurchage";
 import BenefitsChart from "../../charts/home/benefits";
@@ -12,7 +13,9 @@ import TotalHangars from "../../charts/stocks/total_hangars";
 import MargeBrut from "../../charts/home/marge_brut";
 import BuyPrice from "../../charts/home/buy_price";
 import SellPrice from "../../charts/home/sell_price";
+
 function Home_dashboard() {
+
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">
       <div className="col-span-12 space-y-6 xl:col-spa/n-4">

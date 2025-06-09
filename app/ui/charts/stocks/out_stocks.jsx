@@ -1,8 +1,31 @@
-import React from "react";
+"use client"
+import React,{useEffect,useState} from "react";
 import { ArrowUpIcon } from "../../icons";
 import Badge from "../../ui_elements/badge/Badge";
-
+import { fetchData } from "../../../_utils/api";
 function OutStocks() {
+  const [data, setData] = useState([]);
+          const [error, setError] = useState(null);
+  
+           useEffect(() => {
+            async function getData() {
+              try {
+        
+                const results = await fetchData('get', 'sorties/somme_totale_sorties/', {
+                  params: {},
+                  additionalHeaders: {},
+                  body: {}
+                });
+        
+                setData(results);
+             
+              } catch (error) {
+                setError(error);
+                console.error(error);
+              }
+            }
+            getData();
+          }, []);
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
       <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
@@ -24,7 +47,7 @@ function OutStocks() {
             Sorties
           </span>
           <h4 className="mt-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
-            500 T
+            {data.somme_quantite_sortie ||0}
           </h4>
         </div>
         {/* <Badge color="success">

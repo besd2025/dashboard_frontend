@@ -1,16 +1,40 @@
 "use client";
 import dynamic from "next/dynamic";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import { fetchData } from "../../../_utils/api";
 // Dynamically import to avoid SSR errors
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
 function Cultuvators() {
+      const [data, setData] = useState([]);
+        const [error, setError] = useState(null);
+
+         useEffect(() => {
+          async function getData() {
+            try {
+      
+              const results = await fetchData('get', 'cultivators/classement_par_province/', {
+                params: {},
+                additionalHeaders: {},
+                body: {}
+              });
+      
+              setData(results.classement_par_province);
+               console.log(results.classement_par_province)
+              
+            } catch (error) {
+              setError(error);
+              console.error(error);
+            }
+          }
+          getData();
+        }, []);
   const [state, setState] = useState({
     series: [
       {
-        data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380],
+        data: [34,23,45,89,0],
       },
     ],
     options: {
@@ -61,18 +85,13 @@ function Cultuvators() {
         colors: ["#fff"],
       },
       xaxis: {
-        categories: [
-          "Makamba",
-          "Ruyigi",
-          "Karusi",
-          "Kirundo",
-          "Muyinga",
-          "Muramvya",
-          "Gitega",
-          "Mwaro",
-          "Kayanza",
-          "Bujumbura",
-        ],
+        categories:[
+          "BUJUMBURA", 
+          "BUTANYERERA",
+          "BURUNGA",
+          "GITEGA",
+          "BUYENZI",
+        ] ,
         axisBorder: {
           show: false, // Hide x-axis border
         },
@@ -104,6 +123,8 @@ function Cultuvators() {
       },
     },
   });
+
+       
   return (
     <div id="chart">
       <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">

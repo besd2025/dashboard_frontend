@@ -1,4 +1,5 @@
-import React from "react";
+
+import React,{useEffect, useState} from "react";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -6,8 +7,38 @@ import {
   GroupIcon,
 } from "../../icons";
 import Badge from "../../ui_elements/badge/Badge";
-
+import { fetchData } from "../../../_utils/api";
 export default function CardsOverview() {
+
+  const [data, setData] = useState([]);
+   const [quantite_vendu, setQuantite] = useState([]);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    async function getData() {
+      try {
+
+        const results = await fetchData('get', 'achats/quantite_totale/', {
+          params: {},
+          additionalHeaders: {},
+          body: {}
+        });
+
+        const quantite_vendu = await fetchData('get', 'sorties/somme_totale_sorties/', {
+          params: {},
+          additionalHeaders: {},
+          body: {}
+        });
+        setData(results);
+        setQuantite(quantite_vendu)
+        
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
+
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 md:gap-6">
       {/* <!-- Metric Item Start quantity collected --> */}
@@ -36,7 +67,7 @@ export default function CardsOverview() {
               Qté Collectée
             </span>
             <h4 className="mt-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
-              500,452 <span className="text-sm">KG</span>
+              {data.quantite_totale} <span className="text-sm">KG</span>
             </h4>
           </div>
           {/* <Badge color="success">
@@ -72,7 +103,7 @@ export default function CardsOverview() {
               Qté Vendue
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
-              30,782 <span className="text-sm">KG</span>
+             {quantite_vendu.somme_quantite_sortie} <span className="text-sm">KG</span>
             </h4>
           </div>
           {/* <Badge color="success">
@@ -108,7 +139,7 @@ export default function CardsOverview() {
               Revenue
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
-              300 M <span className="text-sm">FBU</span>
+              {quantite_vendu.somme_total_price} <span className="text-sm">FBU</span>
             </h4>
           </div>
           {/* <Badge color="success">
