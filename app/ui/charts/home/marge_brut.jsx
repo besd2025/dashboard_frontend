@@ -30,10 +30,6 @@ function MargeBrut() {
             Marge Brute
           </span>
         </div>
-        {/* <Badge color="success">
-          <ArrowUpIcon />
-          2.0%
-        </Badge> */}
       </div>
     </div>
   );

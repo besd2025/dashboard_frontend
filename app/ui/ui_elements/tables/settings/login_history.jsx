@@ -24,6 +24,18 @@ const tableData = [
     ip: "192.168.1.1",
     device: "Chrome on Windows",
   },
+  {
+    id: 2,
+    date: "2024-03-20 14:30:45",
+    ip: "192.168.1.1",
+    device: "Chrome on Windows",
+  },
+  {
+    id: 3,
+    date: "2024-03-20 14:30:45",
+    ip: "192.168.1.1",
+    device: "Chrome on Windows",
+  },
 ];
 
 export default function LoginHistory() {
@@ -58,7 +70,7 @@ export default function LoginHistory() {
         </h3>
       </div>
       <div className="max-w-full overflow-x-auto">
-        <div className="min-w-[1102px] ">
+        <div className="min-w-max ">
           <Table>
             {/* Table Header */}
             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05] shadow-sm ">

@@ -12,7 +12,7 @@ function SecurityPage() {
         <div className="space-y-4">
           <Link
             href="/dashboard/settings/security/change_password"
-            className="flex flex-row justify-between bg-gray-100 p-3 rounded-md dark:bg-white/[0.03] text-blue-500"
+            className="flex flex-row justify-between hover:bg-gray-100 p-3 rounded-md dark:bg-white/[0.03] text-blue-500"
           >
             <span className="text-sm tracking-wide truncate">
               Réinitialisation du mot de passe
@@ -32,10 +32,12 @@ function SecurityPage() {
               />
             </svg>
           </Link>
-          <div className="text-sm text-gray-500 dark:text-gray-400">
+          <div className="text-sm text-gray-500 dark:text-gray-400 px-3">
             <span>Dernière connexion : 2024-03-20 14:30:45</span>
           </div>
-          <LoginHistory />
+          <div className="w-full">
+            <LoginHistory />
+          </div>
         </div>
       </div>
     </div>

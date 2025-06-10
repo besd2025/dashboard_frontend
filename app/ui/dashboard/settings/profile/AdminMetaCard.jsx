@@ -20,7 +20,7 @@ export default function AdminMetaCard() {
               <Image
                 width={80}
                 height={80}
-                src="/img/users/user-17.jpg"
+                src="/img/user_example1.png"
                 alt="user"
               />
             </div>

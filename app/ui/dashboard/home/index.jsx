@@ -26,9 +26,7 @@ function Home_dashboard() {
           <div className="col-span-4 lg:col-span-4 space-y-/6">
             <BenefitsChart />
           </div>
-          <div className="col-span-4 lg:col-span-2 space-y-/6">
-            <MargeBrut />
-          </div>
+
           <div className="col-span-4 lg:col-span-2 space-y-/6">
             <BuyPrice />
           </div>

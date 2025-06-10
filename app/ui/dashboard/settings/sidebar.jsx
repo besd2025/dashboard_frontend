@@ -7,14 +7,14 @@ function Sidebar() {
   const pathname = usePathname();
 
   const isActive = (path) => {
-    return pathname === path;
+    return pathname.startsWith(path);
   };
 
   return (
-    <div className="flex flex-col top-0 left-0  w-14 hover:w-64 md:w-64   mt-4  lg:mt-0   bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 transition-all duration-300 ease-in-out z-50 border rounded-xl border-gray-200">
-      <div className="overflow-y-auto overflow-x-hidden flex flex-col justify-between flex-grow">
-        <ul className="flex flex-col py-4 space-y-1">
-          <div className="px-5 hidden md:block">
+    <div className="flex flex-col top-0 left-0  w-full lg:w-64   mt-4  lg:mt-0   bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 transition-all duration-300 ease-in-out z-50 border rounded-xl border-gray-200">
+      <div className="overflow-y-auto overflow-x-auto lg:overflow-x-hidden flex flex-col justify-between flex-grow">
+        <ul className="flex flex-row lg:flex-col py-4 space-y-1">
+          <div className="px-5 hidden lg:block">
             <div className="flex flex-row items-center h-8">
               <div className="text-sm font-light tracking-wide text-gray-400 uppercase">
                 Parametre
@@ -83,9 +83,9 @@ function Sidebar() {
           </li>
           <li>
             <Link
-              href="/dashboard/settings/users"
+              href="/dashboard/settings/roles_manager"
               className={`relative flex flex-row items-center h-11 focus:outline-none ${
-                isActive("/dashboard/settings/users")
+                isActive("/dashboard/settings/roles_manager")
                   ? "bg-brand-50 dark:bg-gray-600 border-l-4 border-green-300 dark:border-green-500"
                   : "hover:bg-brand-50 dark:hover:bg-gray-600 border-l-4 border-transparent hover:border-green-300 dark:hover:border-gray-800"
               } pr-6`}
@@ -107,7 +107,7 @@ function Sidebar() {
                 </svg>
               </span>
               <span className="ml-2 text-sm text-gray-500 dark:text-gray-400 tracking-wide truncate">
-                Gestion des utilisateurs
+                Gestion des roles
               </span>
             </Link>
           </li>

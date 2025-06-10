@@ -7,6 +7,7 @@ import { useModal } from "../../../../ui_elements/hooks/useModal";
 
 import Image from "next/image";
 import EditUserProfile from "../edit_user_profile";
+import CardsOverview from "./cards_overview";
 
 export default function UserMetaCard() {
   const { isOpen, openModal, closeModal } = useModal();
@@ -14,7 +15,7 @@ export default function UserMetaCard() {
   return (
     <>
       <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
-        <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
+        <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between mb-4">
           <div className="flex flex-col items-center w-full gap-6 xl:flex-row">
             <div className="w-20 h-20 overflow-hidden border border-gray-200 rounded-full dark:border-gray-800">
               <Image
@@ -64,6 +65,7 @@ export default function UserMetaCard() {
             Edit
           </button>
         </div>
+        <CardsOverview />
       </div>
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
         <EditUserProfile closeModal={closeModal} />
