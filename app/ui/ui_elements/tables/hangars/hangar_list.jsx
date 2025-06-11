@@ -286,7 +286,7 @@ function AllCultivatorsList() {
                         <DropdownItem
                           onItemClick={() => closeDropdown(order.id)}
                           tag="a"
-                          href="/dashboard/hangars/details/cultivator"
+                          href={`/dashboard/hangars/details/cultivator?hangar_id=${order.id}`}
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
                           Details
@@ -326,10 +326,10 @@ function AllCultivatorsList() {
                     {order.Prix}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    BUJUMBURA
+                   {order?.hangar_adress?.zone_code?.commune_code?.province_code?.province_name}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    BUBANZA
+                    {order?.hangar_adress?.zone_code?.commune_code?.commune_name}
                   </TableCell>
                 </TableRow>
               ))}

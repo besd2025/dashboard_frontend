@@ -1,22 +1,77 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Input from "../../../ui_elements/form/input/InputField";
 import Label from "../../../ui_elements/form/Label";
 import Button from "../../../ui_elements/button/Button";
 import Radio from "../../../ui_elements/form/input/Radio";
+import { fetchData } from "../../../../_utils/api";
 
-function EditUserProfile({ closeModal }) {
+function EditUserProfile({ closeModal, cultivateur_id }) {
   const [selectedStatus, setSelectedStatus] = useState("option2");
+  const [data, setData] = useState({});
+  const [error, setError] = useState("");
+  const [code, setCode] = useState("");
+  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [cullivator_cni, setCNI] = useState("");
 
   const handleRadioChangeStatus = (value) => {
     setSelectedStatus(value);
   };
 
-  const handleSave = () => {
-    // Handle save logic here
-    console.log("Saving changes...");
-    closeModal();
+  const handleSave = async (e) => {
+    e.preventDefault();
+    const formData = {
+      // cultivator_code: code,
+      cultivator_first_name: firstName,
+      cultivator_last_name: name,
+      cultivator_cni: cullivator_cni,
+    };
+
+    try {
+      const results= await fetchData("patch", `/cultivators/${cultivateur_id}/`, {
+        params: {},
+        additionalHeaders: {},
+        body: formData,
+      });
+    
+      if(results==200){
+        closeModal();
+      }
+      else{
+        console.log("error")
+      }
+    } catch (error) {
+      setError(error);
+      console.error(error);
+    }
   };
+
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData("get", `/cultivators/${cultivateur_id}/`, {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+        setData(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, [cultivateur_id]);
+
+  // Met à jour les champs quand data change
+  useEffect(() => {
+    setCode(data?.cultivator_code || "");
+    setName(data?.cultivator_last_name || "");
+    setFirstName(data?.cultivator_first_name || "");
+    setCNI(data?.cultivator_cni || "");
+  }, [data]);
+
   return (
     <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
       <div className="px-2 pr-14">
@@ -33,32 +88,45 @@ function EditUserProfile({ closeModal }) {
             <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
               ID
             </h5>
-            <Input type="text" defaultValue="id54254Hkhjk6" />
+            <Input
+              type="text"
+              defaultValue={code}
+              onChange={e => setCode(e.target.value)}
+              disabled 
+            />
           </div>
           <div className="mt-7">
             <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
               Personal Information
             </h5>
-
             <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
               <div className="col-span-2 lg:col-span-1">
                 <Label>Nom</Label>
-                <Input type="text" defaultValue="Musharof" />
+                <Input
+                  type="text"
+                  defaultValue={name}
+                  onChange={e => setName(e.target.value)}
+                />
               </div>
-
               <div className="col-span-2 lg:col-span-1">
                 <Label>Prenom</Label>
-                <Input type="text" defaultValue="Chowdhury" />
+                <Input
+                  type="text"
+                  defaultValue={firstName}
+                  onChange={e => setFirstName(e.target.value)}
+                />
               </div>
-
               <div className="col-span-2 lg:col-span-1">
-                <Label>Email Address</Label>
-                <Input type="text" defaultValue="randomuser@pimjo.com" />
+                <Label>CNI</Label>
+                <Input
+                  type="text"
+                  defaultValue={cullivator_cni}
+                  onChange={e => setCNI(e.target.value)}
+                />
               </div>
-
               <div className="col-span-2 lg:col-span-1">
                 <Label>Phone</Label>
-                <Input type="text" defaultValue="+09 363 398 46" />
+                <Input type="text" value={data?.cultivator_phone || ""} readOnly />
               </div>
             </div>
           </div>

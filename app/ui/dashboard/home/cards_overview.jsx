@@ -1,4 +1,4 @@
-
+"use client"
 import React,{useEffect, useState} from "react";
 import {
   ArrowDownIcon,
@@ -106,17 +106,11 @@ export default function CardsOverview() {
              {quantite_vendu.somme_quantite_sortie} <span className="text-sm">KG</span>
             </h4>
           </div>
-          {/* <Badge color="success">
-            <ArrowUpIcon />
-            2.0%
-          </Badge> */}
+         
         </div>
       </div>
-      {/* <!-- Metric Item End --> */}
-      {/* <!-- Metric Item Start --> */}
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
-          {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -142,10 +136,6 @@ export default function CardsOverview() {
               {quantite_vendu.somme_total_price} <span className="text-sm">FBU</span>
             </h4>
           </div>
-          {/* <Badge color="success">
-            <ArrowUpIcon />
-            2.0%
-          </Badge> */}
         </div>
       </div>
       {/* <!-- Metric Item End --> */}

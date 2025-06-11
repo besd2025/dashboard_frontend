@@ -1,7 +1,5 @@
 "use client"
 import React,{useState,useEffect} from "react";
-import { ArrowUpIcon } from "../../icons";
-import Badge from "../../ui_elements/badge/Badge";
 import { fetchData } from "../../../_utils/api";
 function TotalHangars() {
     const [data, setData] = useState([]);

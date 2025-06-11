@@ -1,14 +1,17 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import dynamic from "next/dynamic";
 import SalePurchaseTimePeriod from "../../common/home/sale_purchase_period";
-
+import { fetchData } from "../../../_utils/api";
 // Dynamically import to avoid SSR errors
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
 function NewCultivatorsCharts() {
+        const [data, setData] = useState([]);
+          const [error, setError] = useState(null);
+
   const [state, setState] = React.useState({
     series: [
       {
@@ -102,6 +105,26 @@ function NewCultivatorsCharts() {
       },
     }));
   };
+             useEffect(() => {
+            async function getData() {
+              try {
+        
+                const results = await fetchData('get', 'cultivators/statistiques_par_temps/', {
+                  params: {},
+                  additionalHeaders: {},
+                  body: {}
+                });
+        
+                setData(results);
+                 console.log(results)
+                
+              } catch (error) {
+                setError(error);
+                console.error(error);
+              }
+            }
+            getData();
+          }, []);
   return (
     <div className="rounded-2xl border border-gray-200 bg-white px-3 pb-2 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-4 sm:pt-4">
       <div className="flex flex-col gap-5 mb-6 sm:flex-row sm:justify-between">

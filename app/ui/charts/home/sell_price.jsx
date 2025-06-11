@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Badge from "../../ui_elements/badge/Badge";
 import { ArrowUpIcon, MoreDotIcon } from "../../icons";
 import { Dropdown } from "../../ui_elements/dropdown/Dropdown";
@@ -8,10 +8,30 @@ import Modal from "../../ui_elements/modal";
 import { useModal } from "../../ui_elements/hooks/useModal";
 import Input from "../../ui_elements/form/input/InputField";
 import Button from "../../ui_elements/button/Button";
-
+import { fetchData } from "../../../_utils/api";
 function SellPrice() {
   const [isOpen, setIsOpen] = useState(false);
+      const [data, setData] = useState([]);
+      const [error, setError] = useState(null);
+  useEffect(() => {
+          async function getData() {
+            try {
+              const results = await fetchData('get', 'admin/prices/get_prix_vente/', {
+                params: {},
+                additionalHeaders: {},
+                body: {}
+              });
+               
+              setData(results)
 
+      
+            } catch (error) {
+              setError(error);
+              console.error(error);
+            }
+          }
+          getData();
+        }, []);
   function toggleDropdown() {
     setIsOpen(!isOpen);
   }
@@ -47,7 +67,7 @@ function SellPrice() {
           </svg>
 
           <h4 className="ml-2 font-semibold  text-2xl dark:text-white/90">
-            3.000 <span className="text-sm">FBU/kg</span>
+            {data?.prix_achat} <span className="text-sm">FBU/kg</span>
           </h4>
         </div>
 
@@ -60,10 +80,7 @@ function SellPrice() {
               Prix de Vente
             </span>
           </div>
-          <Badge color="success">
-            <ArrowUpIcon />
-            2.0%
-          </Badge>
+          
           <div className="relative inline-block">
             <button onClick={toggleDropdown} className="dropdown-toggle">
               <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />

@@ -3,7 +3,8 @@ import UserInfoCard from "../../../../ui/dashboard/cultivators/profile/user-prof
 import UserMetaCard from "../../../../ui/dashboard/cultivators/profile/user-profile/UserMetaCard";
 import React from "react";
 
-function page() {
+function Page({ searchParams }) {
+  const cultId= searchParams?.cult_id;
   return (
     <div>
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
@@ -11,13 +12,13 @@ function page() {
           Profile
         </h3>
         <div className="space-y-6">
-          <UserMetaCard />
-          <UserInfoCard />
-          <UserAddressCard />
+          <UserMetaCard cultivateur_id={cultId} />
+          <UserInfoCard cultivateur_id={cultId} />
+          <UserAddressCard cultivateur_id={cultId} />
         </div>
       </div>
     </div>
   );
 }
 
-export default page;
+export default Page;

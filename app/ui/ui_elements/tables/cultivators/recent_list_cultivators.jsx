@@ -169,13 +169,13 @@ export default function RecentCultivatorsList() {
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    BUJUMBURA
+                     {order?.cultivator_adress?.zone_code?.commune_code?.province_code?.province_name}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                   BUBANZA
+                                {order?.cultivator_adress?.zone_code?.commune_code?.commune_name}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    BUBANZA
+                   {order.colletor.hangar.hangar_name}
                   </TableCell>
                 </TableRow>
               ))}

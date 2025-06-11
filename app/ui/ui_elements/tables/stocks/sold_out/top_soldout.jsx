@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -8,73 +8,37 @@ import {
   TableRow,
 } from "../../table_elemets";
 
-import Image from "next/image";
 import DropdownItem from "../../../dropdown/DropdownItem";
 import { Dropdown } from "../../../dropdown/dropdown_cultvators";
 import Link from "next/link";
 import { useModal } from "../../../hooks/useModal";
 import { MoreDotIcon } from "../../../../icons";
-
+import { fetchData } from "../../../../../_utils/api";
 // Define the table data
-const tableData = [
-  {
-    id: 1,
-    user: {
-      name_hangar: "Hangar 1",
-      id_hangar: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-    Qte: "65 000 T",
-    Prix: "100 M",
-  },
-  {
-    id: 2,
-    user: {
-      name_hangar: "Hangar 1",
-      id_hangar: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-    Qte: "65 000 T",
-    Prix: "100 M",
-  },
-  {
-    id: 3,
-    user: {
-      name_hangar: "Hangar 1",
-      id_hangar: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-    Qte: "65 000 T",
-    Prix: "100 M",
-  },
-  {
-    id: 4,
-    user: {
-      name_hangar: "Hangar 1",
-      id_hangar: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-    Qte: "65 000 T",
-    Prix: "100 M",
-  },
-  {
-    id: 5,
-    user: {
-      name_hangar: "Hangar 1",
-      id_hangar: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-    Qte: "65 000 T",
-    Prix: "100 M",
-  },
-];
 
 export default function TopSoldOut() {
+   const [data, setData] = useState([]);
+    const [error, setError] = useState(null);
+  
+           useEffect(() => {
+            async function getData() {
+              try {
+        
+                const results = await fetchData('get', 'hangars/cinq_plus_vendus/', {
+                  params: {},
+                  additionalHeaders: {},
+                  body: {}
+                });
+        
+                setData(results);
+               console.log(results)
+              } catch (error) {
+                setError(error);
+                console.error(error);
+              }
+            }
+            getData();
+          }, []);
   const [openDropdowns, setOpenDropdowns] = useState({});
 
   function toggleDropdown(rowId) {
@@ -156,7 +120,7 @@ export default function TopSoldOut() {
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {tableData.map((order) => (
+              {data.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <div className="relative inline-block">
@@ -197,16 +161,16 @@ export default function TopSoldOut() {
                       </svg>
                       <div>
                         <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order.user.name_hangar}
+                          {order.hangar}
                         </span>
                         <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order.user.id_hangar}
+                           test
                         </span>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Qte}
+                    {order.kg}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {order.Prix}

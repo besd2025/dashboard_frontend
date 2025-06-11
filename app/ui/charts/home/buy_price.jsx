@@ -1,12 +1,33 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Badge from "../../ui_elements/badge/Badge";
 import { ArrowUpIcon, MoreDotIcon } from "../../icons";
 import DropdownItem from "../../ui_elements/dropdown/DropdownItem";
 import { Dropdown } from "../../ui_elements/dropdown/Dropdown";
-
+import { fetchData } from "../../../_utils/api";
 function BuyPrice() {
   const [isOpen, setIsOpen] = useState(false);
+      const [data, setData] = useState([]);
+      const [error, setError] = useState(null);
+  useEffect(() => {
+          async function getData() {
+            try {
+              const results = await fetchData('get', 'admin/prices/get_prix_achat/', {
+                params: {},
+                additionalHeaders: {},
+                body: {}
+              });
+               
+              setData(results)
+
+      
+            } catch (error) {
+              setError(error);
+              console.error(error);
+            }
+          }
+          getData();
+        }, []);
 
   function toggleDropdown() {
     setIsOpen(!isOpen);
@@ -35,35 +56,9 @@ function BuyPrice() {
         </svg>
 
         <h4 className="ml-2 font-semibold  text-2xl dark:text-white/90">
-          2.000 <span className="text-sm">FBU/kg</span>
+          {data?.prix_achat} <span className="text-sm">FBU/kg</span>
         </h4>
       </div>
-
-      {/* <div className="flex items-center justify-between">
-        <div className="relative inline-block">
-          <button onClick={toggleDropdown} className="dropdown-toggle">
-            <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
-          </button>
-          <Dropdown
-            isOpen={isOpen}
-            onClose={closeDropdown}
-            className="w-40 p-2"
-          >
-            <DropdownItem
-              onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-            >
-              View More
-            </DropdownItem>
-            <DropdownItem
-              onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-            >
-              Delete
-            </DropdownItem>
-          </Dropdown>
-        </div>
-      </div> */}
 
       <div className="flex items-center justify-between mt-2 ">
         <div>
@@ -71,10 +66,7 @@ function BuyPrice() {
             Prix d'Achat
           </span>
         </div>
-        <Badge color="success">
-          <ArrowUpIcon />
-          2.0%
-        </Badge>
+        
         <div className="relative inline-block">
           <button onClick={toggleDropdown} className="dropdown-toggle">
             <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />

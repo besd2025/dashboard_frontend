@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { fetchData } from "../../../_utils/api";
 // Dynamically import to avoid SSR errors
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
@@ -8,33 +8,12 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 });
 
 function Cultuvators() {
-      const [data, setData] = useState([]);
-        const [error, setError] = useState(null);
+  const [error, setError] = useState(null);
 
-         useEffect(() => {
-          async function getData() {
-            try {
-      
-              const results = await fetchData('get', 'cultivators/classement_par_province/', {
-                params: {},
-                additionalHeaders: {},
-                body: {}
-              });
-      
-              setData(results.classement_par_province);
-               console.log(results.classement_par_province)
-              
-            } catch (error) {
-              setError(error);
-              console.error(error);
-            }
-          }
-          getData();
-        }, []);
   const [state, setState] = useState({
     series: [
       {
-        data: [34,23,45,89,0],
+        data: [],
       },
     ],
     options: {
@@ -85,13 +64,7 @@ function Cultuvators() {
         colors: ["#fff"],
       },
       xaxis: {
-        categories:[
-          "BUJUMBURA", 
-          "BUTANYERERA",
-          "BURUNGA",
-          "GITEGA",
-          "BUYENZI",
-        ] ,
+        categories: [],
         axisBorder: {
           show: false, // Hide x-axis border
         },
@@ -123,8 +96,44 @@ function Cultuvators() {
       },
     },
   });
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData(
+          "get",
+          "cultivators/classement_par_province/",
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
 
-       
+        const data = results.classement_par_province;
+
+        const categories = data.map((item) => item.province);
+        const values = data.map((item) => item.nombre);
+        console.log(categories);
+        // Mettre à jour le graphique avec les vraies données
+        setState((prev) => ({
+          ...prev,
+          series: [{ data: values }],
+          options: {
+            ...prev.options,
+            xaxis: {
+              ...prev.options.xaxis,
+              categories: categories,
+            },
+          },
+        }));
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
+
   return (
     <div id="chart">
       <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">

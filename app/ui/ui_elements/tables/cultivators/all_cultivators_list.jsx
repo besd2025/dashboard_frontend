@@ -20,89 +20,6 @@ import Pagination from "../Pagination";
 import EditUserProfile from "../../../dashboard/cultivators/profile/edit_user_profile";
 import FilterUserProfile from "../../../dashboard/cultivators/profile/filter_user_profile";
 import { fetchData } from "../../../../_utils/api";
-// Define the table data
-const tableData = [
-  {
-    id: 1,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Active",
-  },
-  {
-    id: 2,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Pending",
-  },
-  {
-    id: 3,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Active",
-  },
-
-  {
-    id: 4,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Active",
-  },
-  {
-    id: 5,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Active",
-  },
-  {
-    id: 6,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Active",
-  },
-];
-
 function AllCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
     const [data, setData] = useState([]);
@@ -334,43 +251,38 @@ function AllCultivatorsList() {
                 >
                   Commmune
                 </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
-                  Status
-                </TableCell>
+
               </TableRow>
             </TableHeader>
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {data.map((order) => (
-                <TableRow key={order.cultivator_code}>
+                <TableRow key={order.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <div className="relative inline-block">
                       <button
-                        onClick={() => toggleDropdown(order.cultivator_code)}
+                        onClick={() => toggleDropdown(order.id)}
                         className="dropdown-toggle"
                       >
                         <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
                       </button>
                       <Dropdown
-                        isOpen={openDropdowns[order.cultivator_code]}
-                        onClose={() => closeDropdown(order.cultivator_code)}
+                        isOpen={openDropdowns[order.id]}
+                        onClose={() => closeDropdown(order.id)}
                         className="w-40 p-2"
                       >
                         <DropdownItem
-                          onItemClick={() => closeDropdown(order.cultivator_code)}
+                          onItemClick={() => closeDropdown(order.id)}
                           tag="a"
-                          href={"/dashboard/cultivators/profile"}
+                          href={`/dashboard/cultivators/profile?cult_id=${order?.id}`}
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
                           Profile
                         </DropdownItem>
                         <DropdownItem
                           onItemClick={() => {
-                            closeDropdown(order.cultivator_code);
+                            closeDropdown(order.id);
                             openModal();
                           }}
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
@@ -402,25 +314,12 @@ function AllCultivatorsList() {
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    BUJUMBURA
+                   {order?.cultivator_adress?.zone_code?.commune_code?.province_code?.province_name}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    BUBANZA
+                    {order?.cultivator_adress?.zone_code?.commune_code?.commune_name}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <Badge
-                      size="sm"
-                      color={
-                        order.status === "Active"
-                          ? "success"
-                          : order.status === "Pending"
-                          ? "warning"
-                          : "error"
-                      }
-                    >
-                      {order.status}
-                    </Badge>
-                  </TableCell>
+
                 </TableRow>
               ))}
             </TableBody>
