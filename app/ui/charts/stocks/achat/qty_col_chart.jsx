@@ -1,14 +1,36 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import dynamic from "next/dynamic";
 import PeriodTab from "../../../common/period_tab";
-
+import { fetchData } from "../../../../_utils/api";
 // Dynamically import to avoid SSR errors
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
 function QtyColChart() {
+    const [data, setData] = useState([]);
+            const [error, setError] = useState(null);
+    
+             useEffect(() => {
+              async function getData() {
+                try {
+          
+                  const results = await fetchData('get', 'achats/stats_achats_recents/', {
+                    params: {},
+                    additionalHeaders: {},
+                    body: {}
+                  });
+          
+                  setData(results);
+               
+                } catch (error) {
+                  setError(error);
+                  console.error(error);
+                }
+              }
+              getData();
+            }, []);
   const [state, setState] = useState({
     series: [
       {

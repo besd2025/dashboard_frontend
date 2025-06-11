@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 
 import Modal from "../../../../ui_elements/modal";
 
@@ -8,9 +8,30 @@ import { useModal } from "../../../../ui_elements/hooks/useModal";
 import Image from "next/image";
 import EditUserProfile from "../edit_user_profile";
 import CardsOverview from "./cards_overview";
+import { fetchData } from "../../../../../_utils/api";
+export default function UserMetaCard({cultivateur_id}) {
 
-export default function UserMetaCard() {
   const { isOpen, openModal, closeModal } = useModal();
+   const [data,setData]=useState([])
+useEffect(() => {
+      async function getData() {
+        try {
+          const results = await fetchData('get', `/cultivators/${cultivateur_id}`, {
+            params: {},
+            additionalHeaders: {},
+            body: {}
+          });
+          setData(results);
+           console.log(results)
+        } catch (error) {
+          setError(error);
+          console.error(error);
+        }
+      }
+      getData();
+    }, []);
+  
+
 
   return (
     <>
@@ -21,24 +42,24 @@ export default function UserMetaCard() {
               <Image
                 width={80}
                 height={80}
-                src="/img/users/user-17.jpg"
+                src={data?.cultivator_cni_photo}
                 alt="user"
               />
             </div>
             <div className="order-3 xl:order-2">
               <h4 className="mb-2 text-lg font-semibold text-center text-gray-800 dark:text-white/90 xl:text-left">
-                MPAWENAYO Charles
+                {data?.cultivator_last_name}  {data?.cultivator_first_name}
               </h4>
               <div className="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
                 <p className="text-sm text-gray-500 dark:text-gray-400 font-semibold">
                   cultivateur
                 </p>
                 <p className="text-sm text-green-500 dark:text-gray-400">
-                  id54254Hkhjk6
+                  {data?.cultivator_code}  
                 </p>
                 <div className="hidden h-3.5 w-px bg-gray-300 dark:bg-gray-700 xl:block"></div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Kayanza, Rango
+                {data?.cultivator_adress?.zone_code?.commune_code?.province_code?.province_name}/{data?.cultivator_adress?.zone_code?.commune_code?.commune_name}  
                 </p>
               </div>
             </div>
@@ -68,7 +89,7 @@ export default function UserMetaCard() {
         <CardsOverview />
       </div>
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <EditUserProfile closeModal={closeModal} />
+        <EditUserProfile closeModal={closeModal} cultivateur_id={data.id}/>
       </Modal>
     </>
   );

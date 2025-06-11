@@ -20,69 +20,12 @@ import Pagination from "../Pagination";
 import EditUserProfile from "../../../dashboard/cultivators/profile/edit_user_profile";
 import FilterUserProfile from "../../../dashboard/cultivators/profile/filter_user_profile";
 import FilterHangarList from "../../../dashboard/hangars/filter_hangar_list";
-
-// Define the table data
-const tableData = [
-  {
-    id: 1,
-    user: {
-      name_hangar: "Hangar 1",
-      id_hangar: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-    Qte: "65 000 T",
-    Prix: "100 M",
-  },
-  {
-    id: 2,
-    user: {
-      name_hangar: "Hangar 1",
-      id_hangar: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-    Qte: "65 000 T",
-    Prix: "100 M",
-  },
-  {
-    id: 3,
-    user: {
-      name_hangar: "Hangar 1",
-      id_hangar: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-    Qte: "65 000 T",
-    Prix: "100 M",
-  },
-  {
-    id: 4,
-    user: {
-      name_hangar: "Hangar 1",
-      id_hangar: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-    Qte: "65 000 T",
-    Prix: "100 M",
-  },
-  {
-    id: 5,
-    user: {
-      name_hangar: "Hangar 1",
-      id_hangar: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-    Qte: "65 000 T",
-    Prix: "100 M",
-  },
-];
+import { fetchData } from "../../../../_utils/api";
 
 function AllCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
-
+      const [data, setData] = useState([]);
+        const [error, setError] = useState(null);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -135,6 +78,25 @@ function AllCultivatorsList() {
     openModal: openModalFilter,
     closeModal: closeModalFilter,
   } = useModal();
+
+        useEffect(() => {
+          async function getData() {
+            try {
+              const results = await fetchData('get', 'hangars/cinq_recents/', {
+                params: {},
+                additionalHeaders: {},
+                body: {}
+              });
+              setData(results);
+              console.log(results);
+            } catch (error) {
+              setError(error);
+              console.error(error);
+            }
+          }
+          getData();
+        }, []);
+      
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
@@ -325,7 +287,7 @@ function AllCultivatorsList() {
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {tableData.map((order) => (
+              {data.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <div className="relative inline-block">
@@ -343,7 +305,7 @@ function AllCultivatorsList() {
                         <DropdownItem
                           onItemClick={() => closeDropdown(order.id)}
                           tag="a"
-                          href="/dashboard/hangars/details/cultivator"
+                          href={`/dashboard/hangars/details/cultivator?hangar_id=${order.id}`}
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
                           Details
@@ -368,10 +330,10 @@ function AllCultivatorsList() {
                       </svg>
                       <div>
                         <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order.user.name_hangar}
+                          {order.hangar_name}
                         </span>
                         <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order.user.id_hangar}
+                          {order.hangar_code}
                         </span>
                       </div>
                     </div>
@@ -383,10 +345,10 @@ function AllCultivatorsList() {
                     {order.Prix}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Province}
+                   {order?.hangar_adress?.zone_code?.commune_code?.province_code?.province_name}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order.Commune}
+                    {order?.hangar_adress?.zone_code?.commune_code?.commune_name}
                   </TableCell>
                 </TableRow>
               ))}

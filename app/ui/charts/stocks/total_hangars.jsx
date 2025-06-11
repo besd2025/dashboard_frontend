@@ -1,8 +1,29 @@
-import React from "react";
-import { ArrowUpIcon } from "../../icons";
-import Badge from "../../ui_elements/badge/Badge";
-
+"use client"
+import React,{useState,useEffect} from "react";
+import { fetchData } from "../../../_utils/api";
 function TotalHangars() {
+    const [data, setData] = useState([]);
+    const [error, setError] = useState(null);
+    useEffect(() => {
+      async function getData() {
+        try {
+  
+          const results = await fetchData('get', 'hangars/total/', {
+            params: {},
+            additionalHeaders: {},
+            body: {}
+          });
+  
+          setData(results);
+           console.log(results)
+          
+        } catch (error) {
+          setError(error);
+          console.error(error);
+        }
+      }
+      getData();
+    }, []);
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
       <div className="flex items-center justify-c/enter  bg-gr/ay-100 rounded-xl dark:bg-gr/ay-800">
@@ -20,7 +41,7 @@ function TotalHangars() {
           />
         </svg>
         <h4 className="ml-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
-          800
+           {data.total_hangars ||0}
         </h4>
       </div>
 

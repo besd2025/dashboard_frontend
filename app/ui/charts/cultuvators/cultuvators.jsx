@@ -1,16 +1,19 @@
 "use client";
 import dynamic from "next/dynamic";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { fetchData } from "../../../_utils/api";
 // Dynamically import to avoid SSR errors
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
 function Cultuvators() {
+  const [error, setError] = useState(null);
+
   const [state, setState] = useState({
     series: [
       {
-        data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380],
+        data: [],
       },
     ],
     options: {
@@ -61,18 +64,7 @@ function Cultuvators() {
         colors: ["#fff"],
       },
       xaxis: {
-        categories: [
-          "Makamba",
-          "Ruyigi",
-          "Karusi",
-          "Kirundo",
-          "Muyinga",
-          "Muramvya",
-          "Gitega",
-          "Mwaro",
-          "Kayanza",
-          "Bujumbura",
-        ],
+        categories: [],
         axisBorder: {
           show: false, // Hide x-axis border
         },
@@ -104,6 +96,44 @@ function Cultuvators() {
       },
     },
   });
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData(
+          "get",
+          "cultivators/classement_par_province/",
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
+
+        const data = results.classement_par_province;
+
+        const categories = data.map((item) => item.province);
+        const values = data.map((item) => item.nombre);
+        console.log(categories);
+        // Mettre à jour le graphique avec les vraies données
+        setState((prev) => ({
+          ...prev,
+          series: [{ data: values }],
+          options: {
+            ...prev.options,
+            xaxis: {
+              ...prev.options.xaxis,
+              categories: categories,
+            },
+          },
+        }));
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
+
   return (
     <div id="chart">
       <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
