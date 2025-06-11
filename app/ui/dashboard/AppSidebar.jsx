@@ -34,7 +34,7 @@ const navItems = [
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="size-6 text-gray-600  dark:text-white/70"
+        className="size-6"
       >
         <path
           strokeLinecap="round"
@@ -52,6 +52,7 @@ const navItems = [
         path: "/dashboard/cultivators/list",
       },
     ],
+    subPath: ["/dashboard/cultivators/profile"],
   },
   {
     icon: <BoxCubeIcon />,
@@ -88,7 +89,15 @@ const navItems = [
   {
     icon: <SettingsIcon />,
     name: "Settings",
-    path: "/dashboard/settings",
+    path: "/dashboard/settings/profile",
+    subPath: [
+      "/dashboard/settings/security",
+      "/dashboard/settings/manage",
+      "/dashboard/settings/preferences",
+      "/dashboard/settings/synchronisation",
+      "/dashboard/settings/security/change_password",
+      "/dashboard/settings/roles_manager",
+    ],
   },
 ];
 

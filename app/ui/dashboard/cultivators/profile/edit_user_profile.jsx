@@ -88,12 +88,14 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
             <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
               ID
             </h5>
+
             <Input
               type="text"
               defaultValue={code}
               onChange={e => setCode(e.target.value)}
               disabled 
             />
+
           </div>
           <div className="mt-7">
             <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">

@@ -24,7 +24,7 @@ function AdminLayoutContent({ children }) {
         className={`flex-1 transition-all duration-300 ease-in-out ${mainContentMargin}`}
       >
         <AppHeader />
-        <div className="p-4 mx-auto max-w-[var(--breakpoint-2xl)] md:p-6">
+        <div className="p-4 mx-auto max-w-[var(--breakpoint-2xl)] md:p-6 relative">
           {children}
         </div>
       </div>

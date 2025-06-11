@@ -15,9 +15,6 @@ function layout({ children }) {
     if (pathname.includes("/achats")) {
       setActiveTab("achats");
     }
-    if (pathname.includes("/sechage")) {
-      setActiveTab("sechage");
-    }
   }, [pathname]);
   return (
     <div>
@@ -34,7 +31,6 @@ function layout({ children }) {
               >
                 <option value="cultivateurs">Cultivateurs</option>
                 <option value="achats">Achats</option>
-                <option value="achats">Sechage</option>
               </select>
             </div>
             <div className="hidden sm:block ">
@@ -64,17 +60,6 @@ function layout({ children }) {
                     }`}
                   >
                     Achats
-                  </Link>
-                  <Link
-                    href="/dashboard/hangars/details/sechage"
-                    onClick={() => setActiveTab("sechage")}
-                    className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold ${
-                      activeTab === "sechage"
-                        ? "border-yellow-500 text-yellow-500"
-                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                    }`}
-                  >
-                    Sechage
                   </Link>
                 </nav>
               </div>

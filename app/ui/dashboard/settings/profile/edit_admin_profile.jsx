@@ -5,7 +5,7 @@ import Label from "../../../ui_elements/form/Label";
 import Button from "../../../ui_elements/button/Button";
 import Radio from "../../../ui_elements/form/input/Radio";
 
-function EditHangarProfile({ closeModal }) {
+function EditAdminProfile({ closeModal }) {
   const [selectedStatus, setSelectedStatus] = useState("option2");
 
   const handleRadioChangeStatus = (value) => {
@@ -24,7 +24,7 @@ function EditHangarProfile({ closeModal }) {
           Modifier
         </h4>
         <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
-          Modifier les informations du Hangar
+          Modifier les informations personnelles
         </p>
       </div>
       <form className="flex flex-col">
@@ -95,4 +95,4 @@ function EditHangarProfile({ closeModal }) {
   );
 }
 
-export default EditHangarProfile;
+export default EditAdminProfile;

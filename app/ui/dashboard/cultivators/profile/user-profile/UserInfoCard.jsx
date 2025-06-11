@@ -34,6 +34,7 @@ export default function UserInfoCard({cultivateur_id}) {
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">
+            {" "}
             Information Personnelle
           </h4>
 
@@ -58,10 +59,43 @@ export default function UserInfoCard({cultivateur_id}) {
 
             <div>
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Téléphone
+                Hangar
+              </p>
+              <p className="text-sm  text-gray-800 dark:text-white/90 font-bold">
+                Hangar 1
+              </p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">
+            Information de Paiement
+          </h4>
+
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-7 2xl:gap-x-32">
+            <div>
+              <p className="text-xs leading-normal text-gray-500 dark:text-gray-400">
+                Type
+              </p>
+              <p className="text-sm  text-gray-800 dark:text-white/90 font-semibold">
+                LUMICASH
+              </p>
+            </div>
+
+            <div>
+              <p className=" text-xs leading-normal text-gray-500 dark:text-gray-400">
+                No
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                +257 76525528
+                68456125
+              </p>
+            </div>
+            <div>
+              <p className=" text-xs leading-normal text-gray-500 dark:text-gray-400">
+                Nom et Prenom
+              </p>
+              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+                Charles
               </p>
             </div>
           </div>

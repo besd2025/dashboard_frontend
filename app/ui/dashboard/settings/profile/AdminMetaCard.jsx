@@ -1,65 +1,43 @@
 "use client";
-import React, { useState,useEffect } from "react";
+import React, { useState } from "react";
 
-import Modal from "../../../../ui_elements/modal";
+import Modal from "../../../../ui/ui_elements/modal";
 
-import { useModal } from "../../../../ui_elements/hooks/useModal";
+import { useModal } from "../../../../ui/ui_elements/hooks/useModal";
 
 import Image from "next/image";
-import EditUserProfile from "../edit_user_profile";
-import CardsOverview from "./cards_overview";
-import { fetchData } from "../../../../../_utils/api";
-export default function UserMetaCard({cultivateur_id}) {
+import EditAdminProfile from "./edit_admin_profile";
 
+export default function AdminMetaCard() {
   const { isOpen, openModal, closeModal } = useModal();
-   const [data,setData]=useState([])
-useEffect(() => {
-      async function getData() {
-        try {
-          const results = await fetchData('get', `/cultivators/${cultivateur_id}`, {
-            params: {},
-            additionalHeaders: {},
-            body: {}
-          });
-          setData(results);
-           console.log(results)
-        } catch (error) {
-          setError(error);
-          console.error(error);
-        }
-      }
-      getData();
-    }, []);
-  
-
 
   return (
     <>
-      <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
-        <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between mb-4">
+      <div className="p-5  rounded-2xl dark:border-gray-800 lg:p-6">
+        <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
           <div className="flex flex-col items-center w-full gap-6 xl:flex-row">
             <div className="w-20 h-20 overflow-hidden border border-gray-200 rounded-full dark:border-gray-800">
               <Image
                 width={80}
                 height={80}
-                src={data?.cultivator_cni_photo}
+                src="/img/user_example1.png"
                 alt="user"
               />
             </div>
             <div className="order-3 xl:order-2">
               <h4 className="mb-2 text-lg font-semibold text-center text-gray-800 dark:text-white/90 xl:text-left">
-                {data?.cultivator_last_name}  {data?.cultivator_first_name}
+                MPAWENAYO Charles
               </h4>
               <div className="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
-                <p className="text-sm text-gray-500 dark:text-gray-400 font-semibold">
-                  cultivateur
+                <p className="text-sm text-yellow-500 dark:text-yellow-400 font-semibold">
+                  super admin
                 </p>
                 <p className="text-sm text-green-500 dark:text-gray-400">
-                  {data?.cultivator_code}  
+                  id54254Hkhjk6
                 </p>
                 <div className="hidden h-3.5 w-px bg-gray-300 dark:bg-gray-700 xl:block"></div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                {data?.cultivator_adress?.zone_code?.commune_code?.province_code?.province_name}/{data?.cultivator_adress?.zone_code?.commune_code?.commune_name}  
+                <p className="text-sm text-gray-500 dark:text-gray-400 font-bold">
+                  BESD
                 </p>
               </div>
             </div>
@@ -86,10 +64,9 @@ useEffect(() => {
             Edit
           </button>
         </div>
-        <CardsOverview />
       </div>
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <EditUserProfile closeModal={closeModal} cultivateur_id={data.id}/>
+        <EditAdminProfile closeModal={closeModal} />
       </Modal>
     </>
   );

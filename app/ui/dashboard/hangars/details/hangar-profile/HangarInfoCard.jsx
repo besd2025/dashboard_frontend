@@ -6,7 +6,8 @@ import Modal from "../../../../ui_elements/modal";
 import Label from "../../../../ui_elements/form/Label";
 import Button from "../../../../ui_elements/button/Button";
 import { useModal } from "../../../../ui_elements/hooks/useModal";
-import CardsOverview from "../../../home/cards_overview";
+import CardsOverview from "../cards_overview";
+// import CardsOverview from "../../../home/cards_overview";
 
 export default function UserInfoCard() {
   const { isOpen, openModal, closeModal } = useModal();
