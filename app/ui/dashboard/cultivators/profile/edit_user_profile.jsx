@@ -56,6 +56,7 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
           body: {},
         });
         setData(results);
+  
       } catch (error) {
         setError(error);
         console.error(error);

@@ -39,12 +39,17 @@ useEffect(() => {
         <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between mb-4">
           <div className="flex flex-col items-center w-full gap-6 xl:flex-row">
             <div className="w-20 h-20 overflow-hidden border border-gray-200 rounded-full dark:border-gray-800">
-              <Image
+              { data?.cultivator_cni_photo==null?(<Image
                 width={80}
                 height={80}
                 src={data?.cultivator_cni_photo}
                 alt="user"
-              />
+              />):(<Image
+                width={80}
+                height={80}
+                src="/img/blank-profile.png"
+                alt="user"
+              />)}
             </div>
             <div className="order-3 xl:order-2">
               <h4 className="mb-2 text-lg font-semibold text-center text-gray-800 dark:text-white/90 xl:text-left">

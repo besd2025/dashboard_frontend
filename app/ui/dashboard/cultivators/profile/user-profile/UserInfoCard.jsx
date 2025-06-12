@@ -19,8 +19,8 @@ export default function UserInfoCard({cultivateur_id}) {
               additionalHeaders: {},
               body: {}
             });
-            setData(results);
-             console.log("dddd")
+            setData(results.results);
+         
           } catch (error) {
             setError(error);
             console.error(error);

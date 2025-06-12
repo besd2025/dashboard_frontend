@@ -42,20 +42,20 @@ function page() {
                 </div>
               </div>
               {/* //hangars proches */}
-              <div class="flex flex-col mb-8 md:mb-auto gap-2 flex-1 p-4 mt-16">
+              <div className="flex flex-col mb-8 md:mb-auto gap-2 flex-1 p-4 mt-16">
                 <h2 className="font-bold text-gray-800 dark:text-white/90">
                   Hangar proches
                 </h2>
-                <ul class="flex flex-col gap-2 w-full sm:max-w-md m-auto">
-                  <button class="w-full flex flex-row justify-between text-sm font-medium text-gray-800 dark:text-white/90 bg-gray-100 dark:bg-white/[0.003] hover:bg-gray-200 dark:hover:bg-gray-700 py-1 px-2  rounded-md">
+                <ul className="flex flex-col gap-2 w-full sm:max-w-md m-auto">
+                  <button className="w-full flex flex-row justify-between text-sm font-medium text-gray-800 dark:text-white/90 bg-gray-100 dark:bg-white/[0.003] hover:bg-gray-200 dark:hover:bg-gray-700 py-1 px-2  rounded-md">
                     <span> Hangar 1</span>
                     <ChevronRightIcon className="size-4" />
                   </button>
-                  <button class="w-full flex flex-row justify-between text-sm font-medium text-gray-800 dark:text-white/90 bg-gray-100 dark:bg-white/[0.003] hover:bg-gray-200 dark:hover:bg-gray-700 py-1 px-2  rounded-md">
+                  <button className="w-full flex flex-row justify-between text-sm font-medium text-gray-800 dark:text-white/90 bg-gray-100 dark:bg-white/[0.003] hover:bg-gray-200 dark:hover:bg-gray-700 py-1 px-2  rounded-md">
                     <span> Hangar 2</span>
                     <ChevronRightIcon className="size-4" />
                   </button>
-                  <button class="w-full flex flex-row justify-between text-sm font-medium text-gray-800 dark:text-white/90 bg-gray-100 dark:bg-white/[0.003] hover:bg-gray-200 dark:hover:bg-gray-700 py-1 px-2  rounded-md">
+                  <button className="w-full flex flex-row justify-between text-sm font-medium text-gray-800 dark:text-white/90 bg-gray-100 dark:bg-white/[0.003] hover:bg-gray-200 dark:hover:bg-gray-700 py-1 px-2  rounded-md">
                     <span> Hangar 3</span>
                     <ChevronRightIcon className="size-4" />
                   </button>

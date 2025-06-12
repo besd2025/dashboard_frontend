@@ -86,7 +86,7 @@ function AllCultivatorsList() {
           additionalHeaders: {},
           body: {},
         });
-        setData(results);
+        setData(results.results);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -311,11 +311,16 @@ function AllCultivatorsList() {
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">
-                        <Image
-                          width={40}
-                          height={40}
-                          src={order.cultivator_photo}
-                        />
+                        {order?.cultivator_photo == null ? (
+                          <Image
+                            width={40}
+                            height={40}
+                            src={order?.cultivator_photo || null}
+                            alt="Cultivator"
+                          />
+                        ) : (
+                          ""
+                        )}
                       </div>
                       <div>
                         <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">

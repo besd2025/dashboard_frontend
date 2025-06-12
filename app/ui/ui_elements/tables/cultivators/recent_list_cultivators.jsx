@@ -1,5 +1,5 @@
 "use client";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -19,29 +19,26 @@ import { fetchData } from "../../../../_utils/api";
 
 export default function RecentCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
-      const [data, setData] = useState([]);
-        const [error, setError] = useState(null);
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
 
-         useEffect(() => {
-          async function getData() {
-            try {
-      
-              const results = await fetchData('get', 'cultivators/cinq_recents/', {
-                params: {},
-                additionalHeaders: {},
-                body: {}
-              });
-      
-              setData(results);
-             
-              
-            } catch (error) {
-              setError(error);
-              console.error(error);
-            }
-          }
-          getData();
-           }, []);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData("get", "cultivators/cinq_recents/", {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+
+        setData(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -60,8 +57,6 @@ export default function RecentCultivatorsList() {
       [rowId]: false,
     }));
   }
-
-  const { isOpen, openModal, closeModal } = useModal();
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
@@ -131,11 +126,9 @@ export default function RecentCultivatorsList() {
                         className="w-40 p-2"
                       >
                         <DropdownItem
-
                           onItemClick={() => closeDropdown(order.id)}
-                          href="/dashboard/cultivators/profile"
+                          href={`/dashboard/cultivators/profile?cult_id=${order?.id}`}
                           tag="a"
-
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
                           Details
@@ -155,12 +148,21 @@ export default function RecentCultivatorsList() {
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">
-                        <Image
-                          width={40}
-                          height={40}
-                          src={order.cultivator_photo}
-                         
-                        />
+                        {order?.cultivator_cni_photo == null ? (
+                          <Image
+                            width={80}
+                            height={80}
+                            src={order?.cultivator_cni_photo}
+                            alt="user"
+                          />
+                        ) : (
+                          <Image
+                            width={80}
+                            height={80}
+                            src="/img/blank-profile.png"
+                            alt="user"
+                          />
+                        )}
                       </div>
                       <div>
                         <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
@@ -173,13 +175,19 @@ export default function RecentCultivatorsList() {
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                     {order?.cultivator_adress?.zone_code?.commune_code?.province_code?.province_name}
+                    {
+                      order?.cultivator_adress?.zone_code?.commune_code
+                        ?.province_code?.province_name
+                    }
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                                {order?.cultivator_adress?.zone_code?.commune_code?.commune_name}
+                    {
+                      order?.cultivator_adress?.zone_code?.commune_code
+                        ?.commune_name
+                    }
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                   {order.colletor.hangar.hangar_name}
+                    {order.colletor.hangar.hangar_name}
                   </TableCell>
                 </TableRow>
               ))}
