@@ -22,8 +22,8 @@ import FilterUserProfile from "../../../dashboard/cultivators/profile/filter_use
 import { fetchData } from "../../../../_utils/api";
 function AllCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
-    const [data, setData] = useState([]);
-    const [error, setError] = useState(null);
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
 
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
@@ -78,25 +78,22 @@ function AllCultivatorsList() {
     closeModal: closeModalFilter,
   } = useModal();
 
-
-    useEffect(() => {
-      async function getData() {
-        try {
-          const results = await fetchData('get', '/cultivators/', {
-            params: {},
-            additionalHeaders: {},
-            body: {}
-          });
-          setData(results);
-  
-        } catch (error) {
-          setError(error);
-          console.error(error);
-        }
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData("get", "/cultivators/", {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+        setData(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
       }
-      getData();
-    }, []);
-  
+    }
+    getData();
+  }, []);
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
@@ -127,7 +124,7 @@ function AllCultivatorsList() {
                 ref={inputRef}
                 type="text"
                 placeholder="rechercher  ..."
-                className="dark:bg-dark-900 h-11 w-20  rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[250px]"
+                className="dark:bg-dark-900 h-11 w-[250px] rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[250px]"
               />
             </div>
           </form>
@@ -270,7 +267,6 @@ function AllCultivatorsList() {
                 >
                   Commmune
                 </TableCell>
-
               </TableRow>
             </TableHeader>
 
@@ -319,7 +315,6 @@ function AllCultivatorsList() {
                           width={40}
                           height={40}
                           src={order.cultivator_photo}
-                         
                         />
                       </div>
                       <div>
@@ -333,12 +328,17 @@ function AllCultivatorsList() {
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                   {order?.cultivator_adress?.zone_code?.commune_code?.province_code?.province_name}
+                    {
+                      order?.cultivator_adress?.zone_code?.commune_code
+                        ?.province_code?.province_name
+                    }
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.cultivator_adress?.zone_code?.commune_code?.commune_name}
+                    {
+                      order?.cultivator_adress?.zone_code?.commune_code
+                        ?.commune_name
+                    }
                   </TableCell>
-
                 </TableRow>
               ))}
             </TableBody>

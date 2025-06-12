@@ -11,7 +11,7 @@ import TotalHangars from "../../charts/stocks/total_hangars";
 
 import BuyPrice from "../../charts/home/buy_price";
 import SellPrice from "../../charts/home/sell_price";
-import MonthlyTarget from "./MonthlyTarget";
+import Synthese from "./synthese";
 
 function Home_dashboard() {
   return (
@@ -19,16 +19,13 @@ function Home_dashboard() {
       <div className="col-span-12 space-y-6 xl:col-spa/n-4">
         <CardsOverview />
       </div>
-      <div className=" col-span-12 space-y-6 lg:col-span-7">
-        <SalePurchage />
-      </div>
       <div className="col-span-12 lg:col-span-5 space-y-6 xl:col-spa/n-5">
         <div className="grid grid-cols-4 gap-4 ">
           {/* <div className="col-span-4 lg:col-span-4 space-y-/6">
             <BenefitsChart />
           </div> */}
-          <div className="col-span-3 lg:col-span-4 space-y-/6">
-            <MonthlyTarget />
+          <div className="col-span-4 lg:col-span-4 space-y-/6">
+            <Synthese />
           </div>
           <div className="col-span-4 lg:col-span-2 space-y-/6">
             <BuyPrice />
@@ -37,6 +34,9 @@ function Home_dashboard() {
             <SellPrice />
           </div>
         </div>
+      </div>
+      <div className=" col-span-12 space-y-6 lg:col-span-7">
+        <SalePurchage />
       </div>
       <div className=" col-span-12 space-y-6 lg:col-span-8">
         <Cultuvators />

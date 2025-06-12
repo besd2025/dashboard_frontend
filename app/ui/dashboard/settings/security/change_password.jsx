@@ -62,7 +62,7 @@ function ChangePassword() {
               </div>
               <div>
                 <Button className="w-sm bg-yellow-500" size="sm">
-                  Se connecter
+                  reinitiliser
                 </Button>
               </div>
             </div>

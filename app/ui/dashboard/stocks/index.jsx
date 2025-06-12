@@ -8,12 +8,16 @@ import StocksChart from "../../charts/stocks/stocks";
 import BenefitsChart from "../../charts/home/benefits";
 import StocksFilter from "./stocks_filter";
 import OutStocks from "../../charts/stocks/out_stocks";
+import MaizeCategoriesCard from "../../charts/stocks/maize_categories_global";
 
 function Stocks() {
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">
       <div className=" col-span-12 space-y-6 lg:col-span-3">
         <TotalStocks />
+      </div>
+      <div className=" col-span-12 space-y-6 lg:col-span-3">
+        <MaizeCategoriesCard />
       </div>
       <div className=" col-span-12 space-y-6 lg:col-span-3">
         <OutStocks />
