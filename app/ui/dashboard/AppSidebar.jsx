@@ -88,7 +88,7 @@ const navItems = [
   },
   {
     icon: <SettingsIcon />,
-    name: "Settings",
+    name: "Parametre",
     path: "/dashboard/settings/profile",
     subPath: [
       "/dashboard/settings/security",
@@ -302,7 +302,7 @@ const AppSidebar = () => {
             <>
               <Image
                 className="hidden lg:block dark:hidden rounded-2xl"
-                src="/img/logo_example2.jpg"
+                src="/img/ANAGESSA LOGO.jpg"
                 alt="Logo"
                 width={150}
                 height={40}
@@ -310,7 +310,7 @@ const AppSidebar = () => {
               <Image
                 //for dark mode
                 className="hidden dark:lg:block"
-                src="/img/logo_example2.jpg"
+                src="/img/ANAGESSA LOGO.jpg"
                 alt="Logo"
                 width={150}
                 height={40}
@@ -319,7 +319,7 @@ const AppSidebar = () => {
           ) : (
             <Image
               className="rounded-xl"
-              src="/img/logo_example2.jpg"
+              src="/img/ANAGESSA LOGO.jpg"
               alt="Logo"
               width={32}
               height={32}
