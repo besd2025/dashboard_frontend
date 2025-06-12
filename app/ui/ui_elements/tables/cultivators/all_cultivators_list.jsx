@@ -311,15 +311,20 @@ function AllCultivatorsList() {
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">
-                        {order?.cultivator_photo == null ? (
+                        {data?.cultivator_cni_photo == null ? (
                           <Image
-                            width={40}
-                            height={40}
-                            src={order?.cultivator_photo || null}
-                            alt="Cultivator"
+                            width={80}
+                            height={80}
+                            src={data?.cultivator_cni_photo}
+                            alt="user"
                           />
                         ) : (
-                          ""
+                          <Image
+                            width={80}
+                            height={80}
+                            src="/img/blank-profile.png"
+                            alt="user"
+                          />
                         )}
                       </div>
                       <div>
