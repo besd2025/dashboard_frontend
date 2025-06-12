@@ -3,14 +3,50 @@ import Button from "../../ui_elements/button/Button";
 import Checkbox from "../../ui_elements/form/input/Checkbox";
 import Input from "../../ui_elements/form/input/InputField";
 import Label from "../../ui_elements/form/Label";
+import { useRouter } from "next/navigation";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../../icons";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Image from "next/image";
-
+import { fetchData } from "../../../_utils/api";
+import axios from "axios";
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [identifiant, setIdentifiant] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
+  const Login = async (e) => {
+  e.preventDefault();
+
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        "X-Signature-web": process.env.NEXT_PUBLIC_SIGNATURE,
+      },
+      body: JSON.stringify({
+        identifiant: identifiant,
+        password: password,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP : ${response.status}`);
+    }
+
+    const data = await response.json();
+    localStorage.setItem('accessToken', data.access);
+    console.log(data.access);
+     router.push('/dashboard/home');
+  } catch (error) {
+    setError(error);
+    console.error('Erreur:', error);
+  }
+};
+   
   return (
     <div className="flex flex-row flex-1  w-ful  h-screen p-4 sm:p-0 bg-white overflow-hidden">
       <div className="flex flex-col justify-center flex-1 w-full lg:w-1/2 max-w-md mx-auto">
@@ -31,7 +67,9 @@ export default function SignInForm() {
                   <Label>
                     Nom utilisateur <span className="text-error-500">*</span>{" "}
                   </Label>
-                  <Input placeholder="info@gmail.com" type="email" />
+                  <Input placeholder="" type="text"  
+                  value={identifiant}
+                  onChange={(e)=>setIdentifiant(e.target.value)} />
                 </div>
                 <div>
                   <Label>
@@ -41,6 +79,8 @@ export default function SignInForm() {
                     <Input
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
+                      value={password}
+                      onChange={(e)=>setPassword(e.target.value)} 
                     />
                     <span
                       onClick={() => setShowPassword(!showPassword)}
@@ -66,7 +106,7 @@ export default function SignInForm() {
                   </div>
                 </div>
                 <div>
-                  <Button className="w-full bg-yellow-500" size="sm">
+                  <Button className="w-full bg-yellow-500" size="sm" onClick={(e) => Login(e)}>
                     Se connecter
                   </Button>
                 </div>

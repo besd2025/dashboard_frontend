@@ -1,42 +1,52 @@
-import axios from 'axios';
+import axios from "axios";
 
-const server="http://192.168.88.33/api/"
-const token={
-    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5NDc3MTU3LCJpYXQiOjE3NDk0NzY4NTcsImp0aSI6ImJmMWEzMTZlYjc5ZTQzZTE4YzQ2MmZlNTkyNGRlZWQ0IiwidXNlcl9pZCI6MiwiZmlyc3RfbmFtZSI6IklyYWR1a3VuZGEiLCJsYXN0X25hbWUiOiJFbHZpcyIsInBob25lIjoiNjk5Nzg2NDgiLCJpZGVudGlmaWFudCI6IkJVSkpIQ1ZWIiwiaXNfYWN0aXZlIjp0cnVlLCJ1bmlxdWVfY29kZSI6IjU2MTcifQ.dyqOjAFnoPUZ8XYNXL_zdMpZ4YHi-lIhyd07dH4WAbw",
-    "token_type": "Bearer",
-            }
+const server = process.env.NEXT_PUBLIC_API_URL; // URL du serveur API
+
+// Fonction pour obtenir le token d'accès
+const getAccessToken = () => {
+  return localStorage.getItem('accessToken'); // Récupère le token depuis localStorage
+};
 
 export const api = axios.create({
-    baseURL: server, 
-    headers: {
-        Authorization: `${token.token_type} ${token.access_token}`, 
-    },
-
+  baseURL: server,
+  headers: {
+    'Content-Type': 'application/json',
+    'X-Signature-web': process.env.NEXT_PUBLIC_SIGNATURE, // Signature pour la sécurité
+  },
 });
-export const fetchData = async (method, url, {params = {}, body = null, additionalHeaders = {}}) => {
 
-    try {
+// Intercepteur pour ajouter le token à chaque requête
+api.interceptors.request.use((config) => {
+  const access_token = getAccessToken();
+  if (access_token) {
+    config.headers.Authorization = `Bearer ${access_token}`;
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
 
-        const headers = {
-            ...api.defaults.headers,
-            ...additionalHeaders,
-        };
+export const fetchData = async (method, url, { params = {}, body = null, additionalHeaders = {} } = {}) => {
+  try {
+    const headers = {
+      ...additionalHeaders,
+    };
 
-        const response = await api({
-            method,  
-            url,     
-            params,  
-            data: body,  
-            headers,  
-        });
-      if(method=="get"){
-     return response.data
-      }
-       else{
-        return response.status
-       }
-    } catch (error) {
-        console.error('Request failed', error);
-        throw error;  
+    const response = await api({
+      method,
+      url,
+      params,
+      data: body,
+      headers,
+    });
+
+    if (method === "get") {
+      return response.data;
+    } else {
+      return response.status;
     }
+  } catch (error) {
+    console.error('Request failed', error);
+    throw error;  
+  }
 };
