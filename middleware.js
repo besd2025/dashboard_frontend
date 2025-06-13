@@ -1,13 +1,15 @@
 import { NextResponse } from 'next/server';
-
 export function middleware(request) {
-  const access_token = request.cookies.get('accessToken')?.value;
-  if (!access_token) {
+  const token = request.cookies.get('accessToken');
+
+  // Évite de bloquer la page d'accueil elle-même
+  if (!token && request.nextUrl.pathname.startsWith('/dashboard')) {
     return NextResponse.redirect(new URL('/', request.url));
   }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*'], // bloque /dashboard/home et ses sous-pages
+  matcher: ['/dashboard/:path*'],
 };
