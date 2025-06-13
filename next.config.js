@@ -1,16 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains:[process.env.NEXT_PUBLIC_API_URL]
+    domains: ['192.168.88.241'],
     // remotePatterns: [
     //   {
     //     protocol: 'http',
-    //     imaga: '192.168.88.33',
-    //     // Si un port est utilisé, ajoute-le, ex: port: '8000',
-
+    //     hostname: '192.168.88.33',
+    //     // port: '8000',
     //     pathname: 'media/cultivators/photos/**',
     //   },
-    //   // autres patterns si besoin
     // ],
   },
   webpack(config) {
@@ -20,7 +18,6 @@ const nextConfig = {
     });
     return config;
   },
-
 };
 
 module.exports = nextConfig;

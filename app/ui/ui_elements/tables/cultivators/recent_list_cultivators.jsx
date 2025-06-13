@@ -32,6 +32,7 @@ export default function RecentCultivatorsList() {
         });
 
         setData(results);
+        console.log(results);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -148,11 +149,11 @@ export default function RecentCultivatorsList() {
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">
-                        {order?.cultivator_cni_photo == null ?(
+                        {order?.cultivator_photo?(
                           <Image
                             width={80}
                             height={80}
-                            src={order?.cultivator_cni_photo}
+                            src={order?.cultivator_photo}
                             alt="user"
                           />
                         ) : (
