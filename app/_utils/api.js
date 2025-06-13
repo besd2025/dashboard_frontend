@@ -3,8 +3,16 @@ import axios from "axios";
 const server = process.env.NEXT_PUBLIC_API_URL; // URL du serveur API
 
 // Fonction pour obtenir le token d'accès
+/*const getAccessToken = () => {
+  return request.cookies.get('accessToken')?.value;// Récupère le token depuis localStorage
+}; */
+// Fonction pour lire le cookie côté client
 const getAccessToken = () => {
-  return localStorage.getItem('accessToken'); // Récupère le token depuis localStorage
+  if (typeof document !== "undefined") {
+    const match = document.cookie.match(new RegExp('(^| )accessToken=([^;]+)'));
+    return match ? match[2] : null;
+  }
+  return null;
 };
 
 export const api = axios.create({
