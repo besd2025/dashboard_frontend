@@ -38,7 +38,7 @@ export default function SignInForm() {
     }
 
     const data = await response.json();
-    localStorage.setItem('accessToken', data.access);
+    document.cookie = `accessToken=${data.access}; path=/; max-age=${60 * 60 * 24 * 7}`;
     console.log(data.access);
      router.push('/dashboard/home');
   } catch (error) {
