@@ -6,6 +6,7 @@ import Button from "../../../ui/ui_elements/button/Button";
 import Radio from "../../../ui/ui_elements/form/input/Radio";
 import Select from "../../../ui/ui_elements/form/Select";
 import { ChevronDownIcon } from "../../../ui/icons";
+import DatePicker from "../../ui_elements/form/date-picker";
 
 function FilterHangarList({ closeModalFilter }) {
   const [selectedStatus, setSelectedStatus] = useState("");
@@ -85,7 +86,22 @@ function FilterHangarList({ closeModalFilter }) {
                   </div>
                 </div>
               </div>
-
+              <div className="col-span-2 lg:col-span-1 z-[9999]">
+                <div className="space-y-6">
+                  <div>
+                    <DatePicker
+                      id="date-picker"
+                      label="Date "
+                      placeholder="Select a date"
+                      mode="single"
+                      defaultDate={new Date()}
+                      onChange={(dates, currentDateString) => {
+                        console.log({ dates, currentDateString });
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
               <div className="col-span-2 lg:col-span-1">
                 <Label>Phone</Label>
                 <Input type="text" defaultValue="+09 363 398 46" />

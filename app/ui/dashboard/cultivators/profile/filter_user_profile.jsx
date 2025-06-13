@@ -6,6 +6,7 @@ import Button from "../../../ui_elements/button/Button";
 import Radio from "../../../ui_elements/form/input/Radio";
 import Select from "../../../ui_elements/form/Select";
 import { ChevronDownIcon } from "../../..//icons";
+import DatePicker from "../../../ui_elements/form/date-picker";
 
 function FilterUserProfile({ closeModalFilter }) {
   const [selectedStatus, setSelectedStatus] = useState("");
@@ -38,7 +39,7 @@ function FilterUserProfile({ closeModalFilter }) {
   };
 
   return (
-    <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
+    <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11 z-0">
       <div className="px-2 pr-14">
         <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
           Filtrage
@@ -85,7 +86,22 @@ function FilterUserProfile({ closeModalFilter }) {
                   </div>
                 </div>
               </div>
-
+              <div className="col-span-2 lg:col-span-1 z-[9999]">
+                <div className="space-y-6">
+                  <div>
+                    <DatePicker
+                      id="date-picker"
+                      label="Date "
+                      placeholder="Select a date"
+                      mode="single"
+                      defaultDate={new Date()}
+                      onChange={(dates, currentDateString) => {
+                        console.log({ dates, currentDateString });
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
               <div className="col-span-2 lg:col-span-1">
                 <Label>Phone</Label>
                 <Input type="text" defaultValue="+09 363 398 46" />

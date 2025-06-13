@@ -2,6 +2,7 @@
 import React from "react";
 import TotalCultivators from "../../charts/cultuvators/total_cultivators_card";
 import GenderChart from "../../charts/cultuvators/gender";
+import AgeRange from "../../charts/cultuvators/age_range";
 import Cultuvators from "../../charts/cultuvators/cultuvators";
 import NewCultivatorsCharts from "./new_cultivators";
 import BasicTableOne from "../../ui_elements/tables/BasicTableOne";
@@ -25,6 +26,9 @@ function CultivatorsHome() {
           </div>
           <div className=" col-span-12 lg:col-span-4 space-y-6">
             <GenderChart />
+          </div>
+          <div className=" col-span-12  space-y-6">
+            <AgeRange />
           </div>
         </div>
       </div>
