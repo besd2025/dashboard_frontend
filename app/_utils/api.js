@@ -26,7 +26,6 @@ export const api = axios.create({
 // Intercepteur pour ajouter le token à chaque requête
 api.interceptors.request.use((config) => {
   const access_token = getAccessToken();
-  console.log("Access Token:", access_token);
   if (access_token) {
     config.headers.Authorization = `Bearer ${access_token}`;
   }
