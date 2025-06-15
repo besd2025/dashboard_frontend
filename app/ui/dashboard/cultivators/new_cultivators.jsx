@@ -11,12 +11,12 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 function NewCultivatorsCharts() {
         const [data, setData] = useState([]);
           const [error, setError] = useState(null);
-
+  const [timePeriod, setTimePeriod] = useState("days");
   const [state, setState] = React.useState({
     series: [
       {
         name: "Cafeiculteurs",
-        data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
+        data: [],
       },
     ],
     options: {
@@ -57,17 +57,7 @@ function NewCultivatorsCharts() {
         },
       },
       xaxis: {
-        categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-        ],
+        categories: [],
         axisBorder: {
           show: false, // Hide x-axis border
         },
@@ -105,26 +95,52 @@ function NewCultivatorsCharts() {
       },
     }));
   };
-             useEffect(() => {
-            async function getData() {
-              try {
-        
-                const results = await fetchData('get', 'cultivators/statistiques_par_temps/', {
-                  params: {},
-                  additionalHeaders: {},
-                  body: {}
-                });
-        
-                setData(results);
-                 console.log(results)
-                
-              } catch (error) {
-                setError(error);
-                console.error(error);
-              }
-            }
-            getData();
-          }, []);
+ useEffect(() => {
+    async function getData() {
+      try {
+        const periodParam =
+          timePeriod === "days"
+            ? "day"
+            : timePeriod === "weeks"
+            ? "week"
+            : timePeriod === "years"
+            ? "year"
+            : "month";
+
+        const results = await fetchData("get", `cultivators/statistiques_par_temps?period=${periodParam}`, {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+       console.log(results);
+        const categories = results?.map((item) => {
+          const date = new Date(item?.period + "T00:00:00");
+          return `${date.toLocaleDateString("fr-FR", {
+            weekday: "short",
+          })} ${item?.period}`;
+        });
+
+        const data = results?.map((item) => item?.nombre || 0);
+
+        setState((prev) => ({
+          ...prev,
+          series: [{ name: "stock", data }],
+          options: {
+            ...prev.options,
+            xaxis: {
+              ...prev.options.xaxis,
+              categories,
+            },
+          },
+        }));
+      } catch (error) {
+        console.error("Erreur de chargement :", error);
+      }
+    }
+
+    getData();
+  }, [timePeriod]);
+
   return (
     <div className="rounded-2xl border border-gray-200 bg-white px-3 pb-2 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-4 sm:pt-4">
       <div className="flex flex-col gap-5 mb-6 sm:flex-row sm:justify-between">
