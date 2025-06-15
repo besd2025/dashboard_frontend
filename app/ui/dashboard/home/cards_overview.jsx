@@ -1,5 +1,5 @@
-"use client"
-import React,{useEffect, useState} from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -9,28 +9,29 @@ import {
 import Badge from "../../ui_elements/badge/Badge";
 import { fetchData } from "../../../_utils/api";
 export default function CardsOverview() {
-
   const [data, setData] = useState([]);
-   const [quantite_vendu, setQuantite] = useState([]);
+  const [quantite_vendu, setQuantite] = useState([]);
   const [error, setError] = useState(null);
   useEffect(() => {
     async function getData() {
       try {
-
-        const results = await fetchData('get', 'achats/quantite_totale/', {
+        const results = await fetchData("get", "achats/quantite_totale/", {
           params: {},
           additionalHeaders: {},
-          body: {}
+          body: {},
         });
 
-        const quantite_vendu = await fetchData('get', 'sorties/somme_totale_sorties/', {
-          params: {},
-          additionalHeaders: {},
-          body: {}
-        });
+        const quantite_vendu = await fetchData(
+          "get",
+          "sorties/somme_totale_sorties/",
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
         setData(results);
-        setQuantite(quantite_vendu)
-        
+        setQuantite(quantite_vendu);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -103,10 +104,10 @@ export default function CardsOverview() {
               Qté Vendue
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
-             {quantite_vendu.somme_quantite_sortie} <span className="text-sm">KG</span>
+              {quantite_vendu.somme_quantite_sortie}{" "}
+              <span className="text-sm">KG</span>
             </h4>
           </div>
-         
         </div>
       </div>
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
@@ -133,7 +134,8 @@ export default function CardsOverview() {
               Revenue
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
-              {quantite_vendu.somme_total_price} <span className="text-sm">FBU</span>
+              {quantite_vendu.somme_total_price}{" "}
+              <span className="text-sm">FBU</span>
             </h4>
           </div>
         </div>
@@ -162,15 +164,22 @@ export default function CardsOverview() {
         <div className="flex items-end justify-between mt-5">
           <div>
             <span className="text-sm text-red-500">GAP</span>
-            <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
-              5,359 <span className="text-sm">KG</span>
-            </h4>
+            <div className="flex flex-row  gap-x-2">
+              <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
+                5,359 <span className="text-sm">KG</span>
+              </h4>
+              <div className="w-px bg-gray-200 h-7 dark:bg-gray-800"></div>
+
+              <h4 className="mt-2 font-bold text-gray-500 text-lg dark:text-white/90">
+                7 800 <span className="text-sm">Fbu</span>
+              </h4>
+            </div>
           </div>
 
-          <Badge color="error">
+          {/* <Badge color="error">
             <ArrowDownIcon className="text-error-500" />
             9.05%
-          </Badge>
+          </Badge> */}
         </div>
       </div>
       {/* <!-- Metric Item End --> */}

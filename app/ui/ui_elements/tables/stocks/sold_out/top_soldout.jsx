@@ -1,5 +1,5 @@
 "use client";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -17,28 +17,27 @@ import { fetchData } from "../../../../../_utils/api";
 // Define the table data
 
 export default function TopSoldOut() {
-   const [data, setData] = useState([]);
-    const [error, setError] = useState(null);
-  
-           useEffect(() => {
-            async function getData() {
-              try {
-        
-                const results = await fetchData('get', 'hangars/cinq_plus_vendus/', {
-                  params: {},
-                  additionalHeaders: {},
-                  body: {}
-                });
-        
-                setData(results);
-               console.log(results)
-              } catch (error) {
-                setError(error);
-                console.error(error);
-              }
-            }
-            getData();
-          }, []);
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData("get", "hangars/cinq_plus_vendus/", {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+
+        setData(results);
+        console.log(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
   const [openDropdowns, setOpenDropdowns] = useState({});
 
   function toggleDropdown(rowId) {
@@ -72,10 +71,10 @@ export default function TopSoldOut() {
           href="/dashboard/stocks/sold_out/list"
           className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
         >
-          See all
+          voir tous
         </Link>
         {/* <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
-          See all
+          voir tous
         </button> */}
       </div>
       <div className="max-w-full overflow-x-auto">
@@ -165,7 +164,7 @@ export default function TopSoldOut() {
                           {order.hangar}
                         </span>
                         <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                           test
+                          test
                         </span>
                       </div>
                     </div>

@@ -1,5 +1,5 @@
 "use client";
-import React,{useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { fetchData } from "../../../_utils/api";
 // Dynamically import to avoid SSR errors
@@ -8,7 +8,7 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 });
 
 function GenderChart() {
-    const [error, setError] = useState(null);
+  const [error, setError] = useState(null);
 
   const [state, setState] = React.useState({
     series: [],
@@ -48,36 +48,34 @@ function GenderChart() {
       ],
     },
   });
-        useEffect(() => {
-        async function getData() {
-          try {
-            const results = await fetchData('get', 'cultivators/stats_genre/', {
-              params: {},
-              additionalHeaders: {},
-              body: {}
-            });
-        
-          const hommes = results.hommes || 0;
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData("get", "cultivators/stats_genre/", {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+
+        const hommes = results.hommes || 0;
         const femmes = results.femmes || 0;
-  
-      setState(prev => ({
-        ...prev,
-        series: [hommes,femmes],
-        options: {
+
+        setState((prev) => ({
+          ...prev,
+          series: [hommes, femmes],
+          options: {
             ...prev.options,
             labels: [`Hommes: ${hommes}`, `Femmes: ${femmes}`],
           },
-         }));
+        }));
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
 
-    
-          } catch (error) {
-            setError(error);
-            console.error(error);
-          }
-        }
-        getData();
-      }, []);
-    
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
       <div className="flex items-center justify-between">

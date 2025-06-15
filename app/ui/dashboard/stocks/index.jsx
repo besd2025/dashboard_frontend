@@ -7,8 +7,10 @@ import Loss from "../../charts/home/loss";
 import StocksChart from "../../charts/stocks/stocks";
 import BenefitsChart from "../../charts/home/benefits";
 import StocksFilter from "./stocks_filter";
+import HangarCapacity from "./hangar_capacity";
 import OutStocks from "../../charts/stocks/out_stocks";
 import MaizeCategoriesCard from "../../charts/stocks/maize_categories_global";
+import CategoriesChart from "./categories_chart";
 
 function Stocks() {
   return (
@@ -59,14 +61,20 @@ function Stocks() {
         </div>
       </div>
 
-      <div className=" col-span-12 lg:col-span-12 space-y-6">
+      <div className=" col-span-12 lg:col-span-8 space-y-6">
         <StocksChart />
+      </div>
+      <div className=" col-span-12 lg:col-span-4 space-y-6">
+        <CategoriesChart />
       </div>
       {/* <div className=" col-span-12 lg:col-span-4 space-y-6">
         <Loss />
       </div> */}
       <div className=" col-span-12 lg:col-span-12 space-y-6">
         <StocksFilter />
+      </div>
+      <div className=" col-span-12 lg:col-span-12 space-y-6">
+        <HangarCapacity />
       </div>
     </div>
   );
