@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 // import Chart from "react-apexcharts";
 // import { ApexOptions } from "apexcharts";
 import ChartTab from "../../common/ChartTab";
 import dynamic from "next/dynamic";
 import SalePurchaseTimePeriod from "../../common/home/sale_purchase_period";
-
+import { fetchData } from "../../../_utils/api";
 // Dynamically import to avoid SSR errors
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -18,59 +18,33 @@ function SalePurchage() {
     switch (period) {
       case "days":
         return {
-          categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-          achats: [120, 150, 180, 90, 160, 200, 170],
-          ventes: [80, 100, 120, 70, 110, 150, 130],
+          categories: [],
+          achats: [],
+          ventes: [],
         };
       case "weeks":
         return {
-          categories: ["Week 1", "Week 2", "Week 3", "Week 4"],
-          achats: [800, 950, 1100, 900],
-          ventes: [600, 750, 850, 700],
+          categories: [],
+          achats: [],
+          ventes: [],
         };
       case "months":
         return {
-          categories: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-          ],
-          achats: [180, 190, 170, 160, 175, 165, 170, 205, 40, 210, 240, 235],
-          ventes: [40, 30, 50, 40, 55, 40, 70, 100, 110, 120, 150, 140],
+          categories: [],
+          achats: [],
+          ventes: [],
         };
       case "years":
         return {
-          categories: ["2020", "2021", "2022", "2023", "2024"],
-          achats: [1500, 1800, 2100, 2400, 2700],
-          ventes: [1000, 1200, 1500, 1800, 2100],
+          categories: [],
+          achats: [],
+          ventes: [],
         };
       default:
         return {
-          categories: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-          ],
-          achats: [180, 190, 170, 160, 175, 165, 170, 205, 40, 210, 240, 235],
-          ventes: [40, 30, 50, 40, 55, 40, 70, 100, 110, 120, 150, 140],
+          categories: [],
+          achats: [],
+          ventes: [],
         };
     }
   };
@@ -195,7 +169,68 @@ function SalePurchage() {
       },
     }));
   };
+useEffect(() => {
+  async function getData() {
+    try {
+      let results;
+      if (timePeriod === "days") {
+        results = await fetchData("get", `achat_vente?period=day`, {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+      } else if (timePeriod === "weeks") {
+        results = await fetchData("get", `achat_vente?period=week`, {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+      } else if (timePeriod === "months") {
+        results = await fetchData("get", `achat_vente?period=month`, {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+      } else if (timePeriod === "years") {
+        results = await fetchData("get", `achat_vente?period=year`, {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+      } else {
+        console.error("Invalid time period");
+        return;
+      }
 
+      const categories = results?.map((item) => {
+        const date = new Date(item?.period + "T00:00:00");
+        return (date.toLocaleDateString("fr-FR", { weekday: "short" }) + " " +item?.period);
+      });
+      const achats = results?.map((item) => item?.purchases || 0);
+      const ventes = results?.map((item) => item?.sales || 0);
+
+      setState((prev) => ({
+        ...prev,
+        series: [
+          { name: "Achats", data: achats },
+          { name: "Ventes", data: ventes },
+        ],
+        options: {
+          ...prev.options,
+          xaxis: {
+            ...prev.options.xaxis,
+            categories: categories,
+          },
+        },
+      }));
+
+    } catch (error) {
+      console.error("Erreur de chargement :", error);
+    }
+  }
+
+  getData();
+}, [timePeriod]); 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white px-3 pb-2 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-4 sm:pt-4">
       <div className="flex flex-col gap-5 mb-6 sm:flex-row sm:justify-between">
@@ -250,7 +285,7 @@ function SalePurchage() {
               Années
             </button>
           </div> */}
-          <SalePurchaseTimePeriod
+          <SalePurchaseTimePeriod 
             handleTimePeriodChange={handleTimePeriodChange}
           />
         </div>
