@@ -17,10 +17,7 @@ export default function SignInForm() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-
-    // Validation de base
+  const handleLogin = async () => {
     if (!identifiant || !password) {
       setError("Veuillez remplir tous les champs.");
       return;
@@ -71,7 +68,7 @@ export default function SignInForm() {
               Entrez votre nom d'utilisateur et mot de passe pour vous connecter !
             </p>
           </div>
-          <form onSubmit={handleLogin}>
+          <div>
             <div className="space-y-6">
               <div>
                 <Label>
@@ -125,12 +122,12 @@ export default function SignInForm() {
               )}
 
               <div>
-                <Button type="submit" className="w-full bg-yellow-500" size="sm">
+                <Button onClick={()=>handleLogin()} className="w-full bg-yellow-500" size="sm">
                   Se connecter
                 </Button>
               </div>
             </div>
-          </form>
+          </div>
         </div>
       </div>
 
