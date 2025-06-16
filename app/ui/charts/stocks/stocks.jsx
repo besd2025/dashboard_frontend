@@ -1,27 +1,21 @@
 "use client";
-import React, { useState } from "react";
-// import Chart from "react-apexcharts";
-// import { ApexOptions } from "apexcharts";
-import ChartTab from "../../common/ChartTab";
+import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { fetchData } from "../../../_utils/api";
+import ChartTab from "../../common/ChartTab";
 
-// Dynamically import to avoid SSR errors
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
 function StocksChart() {
-  const [state, setState] = React.useState({
+  const [timePeriod, setTimePeriod] = useState("months");
+  const [state, setState] = useState({
     series: [
       {
         name: "stock",
         type: "column",
-        data: [100, 220, 258, 354, 400, 500, 800, 956, 1000, 2000],
-      },
-      {
-        name: "Moyenne",
-        type: "area",
-        data: [15, 27, 30, 40, 115, 205, 405, 500, 950, 1050],
+        data: [],
       },
     ],
     options: {
@@ -31,48 +25,15 @@ function StocksChart() {
         fontFamily: "Outfit, sans-serif",
         height: 310,
         toolbar: {
-          show: false, // Hide chart toolbar
+          show: false,
         },
         zoom: {
           enabled: false,
         },
       },
-
       stroke: {
-        width: [0, 2, 5],
+        width: [2, 2],
         curve: "smooth",
-      },
-      plotOptions: {
-        bar: {
-          columnWidth: "50%",
-        },
-      },
-
-      fill: {
-        opacity: [0.85, 0.25, 1],
-        gradient: {
-          inverseColors: false,
-          shade: "light",
-          type: "vertical",
-          opacityFrom: 0.85,
-          opacityTo: 0.55,
-          stops: [0, 100, 100, 100],
-        },
-      },
-      labels: [
-        "01/01/2003",
-        "02/01/2003",
-        "03/01/2003",
-        "04/01/2003",
-        "05/01/2003",
-        "06/01/2003",
-        "07/01/2003",
-        "08/01/2003",
-        "09/01/2003",
-        "10/01/2003",
-      ],
-      dataLabels: {
-        enabled: false,
       },
       plotOptions: {
         bar: {
@@ -82,19 +43,30 @@ function StocksChart() {
           borderRadiusApplication: "end",
         },
       },
-      stroke: {
-        curve: "smooth", // Define the line style (straight, smooth, or step)
-        width: [2, 2], // Line width for each dataset
+      fill: {
+        opacity: [0.85],
+        gradient: {
+          inverseColors: false,
+          shade: "light",
+          type: "vertical",
+          opacityFrom: 0.85,
+          opacityTo: 0.55,
+          stops: [0, 100],
+        },
+      },
+      labels: [],
+      dataLabels: {
+        enabled: false,
       },
       grid: {
         xaxis: {
           lines: {
-            show: false, // Hide grid lines on x-axis
+            show: false,
           },
         },
         yaxis: {
           lines: {
-            show: true, // Show grid lines on y-axis
+            show: true,
           },
         },
       },
@@ -102,20 +74,21 @@ function StocksChart() {
         size: 0,
       },
       xaxis: {
-        type: "datetime",
+        type: "category",
+        categories: [],
         axisBorder: {
-          show: false, // Hide x-axis border
+          show: false,
         },
         axisTicks: {
-          show: false, // Hide x-axis ticks
+          show: false,
         },
         tooltip: {
-          enabled: false, // Disable tooltip for x-axis points
+          enabled: false,
         },
       },
       yaxis: {
         title: {
-          text: "", // Remove y-axis title
+          text: "",
           style: {
             fontSize: "0px",
           },
@@ -136,6 +109,56 @@ function StocksChart() {
     },
   });
 
+  const handleTimePeriodChange = (period) => {
+    setTimePeriod(period);
+  };
+
+  useEffect(() => {
+    async function getData() {
+      try {
+        const periodParam =
+          timePeriod === "days"
+            ? "day"
+            : timePeriod === "weeks"
+            ? "week"
+            : timePeriod === "years"
+            ? "year"
+            : "month";
+
+        const results = await fetchData("get", `stock_evolution?period=${periodParam}`, {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+
+        const categories = results?.map((item) => {
+          const date = new Date(item?.period + "T00:00:00");
+          return `${date.toLocaleDateString("fr-FR", {
+            weekday: "short",
+          })} ${item?.period}`;
+        });
+
+        const data = results?.map((item) => item?.stock || 0);
+
+        setState((prev) => ({
+          ...prev,
+          series: [{ name: "stock", data }],
+          options: {
+            ...prev.options,
+            xaxis: {
+              ...prev.options.xaxis,
+              categories,
+            },
+          },
+        }));
+      } catch (error) {
+        console.error("Erreur de chargement :", error);
+      }
+    }
+
+    getData();
+  }, [timePeriod]);
+
   return (
     <div className="rounded-2xl border border-gray-200 bg-white px-5 pb-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
       <div className="flex flex-col gap-5 mb-6 sm:flex-row sm:justify-between">
@@ -144,11 +167,11 @@ function StocksChart() {
             Stock
           </h3>
           <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-            Evolution du stock global
+            Évolution du stock global
           </p>
         </div>
         <div className="flex items-start w-full gap-3 sm:justify-end">
-          <ChartTab />
+          <ChartTab handleTimePeriodChange={handleTimePeriodChange} />
         </div>
       </div>
 

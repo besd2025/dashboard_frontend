@@ -28,7 +28,7 @@ function TotalStocks() {
             Total du stock
           </span>
           <h4 className="mt-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
-            500 452 052 T
+            2T
           </h4>
         </div>
         <Badge color="success">

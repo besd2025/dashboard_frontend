@@ -4,7 +4,7 @@ import { Dropdown } from "../../ui_elements/dropdown/Dropdown";
 import { MoreDotIcon } from "../../icons";
 import { useState, useEffect } from "react";
 import DropdownItem from "../../ui_elements/dropdown/DropdownItem";
-
+import { fetchData } from "../../../_utils/api";
 // Dynamically import both ApexCharts and ReactApexChart
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -18,7 +18,7 @@ export default function Synthese() {
   }, []);
 
   const [state, setState] = useState({
-    series: [75.55],
+    series: [],
 
     options: {
       chart: {
@@ -77,7 +77,33 @@ export default function Synthese() {
   function closeDropdown() {
     setIsOpen(false);
   }
+    const [data, setData] = useState([]);
+    const [error, setError] = useState(null);
+    useEffect(() => {
+      async function getData() {
+        try {
+  
+          const results = await fetchData('get', 'hangar_with_stats/', {
+            params: {},
+            additionalHeaders: {},
+            body: {}
+          });
+          setData(results);
+          const pourcentage = results.pct_avec_collecteur || 0;
+        
+          setState((prev) => ({
+          ...prev,
+          series: [pourcentage],
 
+        }));
+          
+        } catch (error) {
+          setError(error);
+          console.error(error);
+        }
+      }
+      getData();
+    }, []);
   return (
     <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
       <div className="flex items-center justify-between gap-5 p-6 sm:gap-8 ">
@@ -86,7 +112,7 @@ export default function Synthese() {
             HANGAR ciblés
           </p>
           <p className="flex items-center justify-center gap-1 text-base font-semibold text-gray-800 dark:text-white/90 sm:text-lg">
-            415
+            {data?.total_hangars ||0}
           </p>
         </div>
 
@@ -97,7 +123,7 @@ export default function Synthese() {
             HANGAR en activités
           </p>
           <p className="flex items-center justify-center gap-1 text-base font-semibold text-gray-800 dark:text-white/90 sm:text-lg">
-            200
+            {data?.hangars_avec_collecteur ||0}
           </p>
         </div>
 

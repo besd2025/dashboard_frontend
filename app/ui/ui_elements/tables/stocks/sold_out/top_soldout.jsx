@@ -119,8 +119,9 @@ export default function TopSoldOut() {
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {data.map((order) => (
-                <TableRow key={order.id}>
+              {data.map((order,id=1) => (
+                
+                <TableRow key={id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <div className="relative inline-block">
                       <button

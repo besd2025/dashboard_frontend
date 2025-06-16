@@ -43,7 +43,7 @@ export default function CardsOverview() {
           </div>
 
           <h4 className="ml-3 font-bold text-gray-800 text-2xl dark:text-white/90">
-            500 452
+            2T
           </h4>
         </div>
       </div>
@@ -82,7 +82,7 @@ export default function CardsOverview() {
           </div>
 
           <h4 className="ml-3 font-semibold text-gray-800 text-2xl dark:text-white/90">
-            500,452 <span className="text-sm">KG</span>
+            500kg <span className="text-sm">KG</span>
           </h4>
         </div>
       </div>
@@ -162,7 +162,7 @@ export default function CardsOverview() {
           </div>
 
           <h4 className="ml-3 font-bold text-gray-800 text-2xl dark:text-white/90">
-            300 M <span className="text-sm">FBU</span>
+            30 M <span className="text-sm">FBU</span>
           </h4>
         </div>
       </div>
