@@ -74,6 +74,8 @@ const navItems = [
     subPath: [
       "/municipal/hangars/details/cultivator",
       "/municipal/hangars/details/achats",
+      "/municipal/hangars/details/ventes",
+      "/municipal/hangars/details/synthese",
     ],
   },
   // {

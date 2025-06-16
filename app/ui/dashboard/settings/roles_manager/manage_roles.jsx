@@ -1,7 +1,7 @@
 "use client";
 import Modal from "../../../ui_elements/modal";
 import { useModal } from "../../../ui_elements/hooks/useModal";
-import LoginHistory from "../../../ui_elements/tables/settings/login_history";
+import LoginHistory from "../../../ui_elements/tables/dashboard/settings/login_history";
 import Link from "next/link";
 import React, { useState } from "react";
 import Input from "../../../ui_elements/form/input/InputField";
@@ -10,7 +10,7 @@ import Label from "../../../ui_elements/form/Label";
 import Radio from "../../../ui_elements/form/input/Radio";
 import Select from "../../../ui_elements/form/Select";
 import { ChevronDownIcon } from "../../../icons";
-import AdminUserList from "../../../ui_elements/tables/settings/admin_user_list";
+import AdminUserList from "../../../ui_elements/tables/dashboard/settings/admin_user_list";
 
 function ManageRoles() {
   const { isOpen, openModal, closeModal } = useModal();

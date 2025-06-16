@@ -37,7 +37,7 @@ function EditAdminProfile({ closeModal }) {
           </div>
           <div className="mt-7">
             <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
-              Personal Information
+              Informations personnelles
             </h5>
 
             <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
@@ -86,7 +86,7 @@ function EditAdminProfile({ closeModal }) {
           <Button size="sm" variant="outline" onClick={closeModal}>
             Fermer
           </Button>
-          <Button size="sm" onClick={handleSave}>
+          <Button size="sm" onClick={handleSave} className=" bg-yellow-500">
             Enregistrer
           </Button>
         </div>

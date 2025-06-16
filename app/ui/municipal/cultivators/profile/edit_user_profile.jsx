@@ -29,17 +29,20 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
     };
 
     try {
-      const results= await fetchData("patch", `/cultivators/${cultivateur_id}/`, {
-        params: {},
-        additionalHeaders: {},
-        body: formData,
-      });
-    
-      if(results==200){
+      const results = await fetchData(
+        "patch",
+        `/cultivators/${cultivateur_id}/`,
+        {
+          params: {},
+          additionalHeaders: {},
+          body: formData,
+        }
+      );
+
+      if (results == 200) {
         closeModal();
-      }
-      else{
-        console.log("error")
+      } else {
+        console.log("error");
       }
     } catch (error) {
       setError(error);
@@ -50,13 +53,16 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData("get", `/cultivators/${cultivateur_id}/`, {
-          params: {},
-          additionalHeaders: {},
-          body: {},
-        });
+        const results = await fetchData(
+          "get",
+          `/cultivators/${cultivateur_id}/`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
         setData(results);
-  
       } catch (error) {
         setError(error);
         console.error(error);
@@ -93,14 +99,13 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
             <Input
               type="text"
               defaultValue={code}
-              onChange={e => setCode(e.target.value)}
-              disabled 
+              onChange={(e) => setCode(e.target.value)}
+              disabled
             />
-
           </div>
           <div className="mt-7">
             <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
-              Personal Information
+              Informations personnelles
             </h5>
             <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
               <div className="col-span-2 lg:col-span-1">
@@ -108,7 +113,7 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
                 <Input
                   type="text"
                   defaultValue={name}
-                  onChange={e => setName(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                 />
               </div>
               <div className="col-span-2 lg:col-span-1">
@@ -116,7 +121,7 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
                 <Input
                   type="text"
                   defaultValue={firstName}
-                  onChange={e => setFirstName(e.target.value)}
+                  onChange={(e) => setFirstName(e.target.value)}
                 />
               </div>
               <div className="col-span-2 lg:col-span-1">
@@ -124,12 +129,16 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
                 <Input
                   type="text"
                   defaultValue={cullivator_cni}
-                  onChange={e => setCNI(e.target.value)}
+                  onChange={(e) => setCNI(e.target.value)}
                 />
               </div>
               <div className="col-span-2 lg:col-span-1">
                 <Label>Phone</Label>
-                <Input type="text" value={data?.cultivator_phone || ""} readOnly />
+                <Input
+                  type="text"
+                  value={data?.cultivator_phone || ""}
+                  readOnly
+                />
               </div>
             </div>
           </div>
@@ -157,7 +166,7 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
           <Button size="sm" variant="outline" onClick={closeModal}>
             Fermer
           </Button>
-          <Button size="sm" onClick={handleSave}>
+          <Button size="sm" onClick={handleSave} className=" bg-yellow-500">
             Enregistrer
           </Button>
         </div>

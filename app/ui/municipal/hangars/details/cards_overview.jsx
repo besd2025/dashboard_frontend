@@ -130,20 +130,16 @@ export default function CardsOverview() {
       {/* <!-- Metric Item End --> */}
       {/* <!-- Metric Item Start --> */}
 
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+      {/* <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div className="flex items-end justify-between mb-2">
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
               Montant
             </span>
           </div>
-          {/* <Badge color="success">
-            <ArrowUpIcon />
-            2.0%
-          </Badge> */}
+      
         </div>
         <div className="flex">
-          {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
           <div className="flex items-center justify-center p-2 bg-gray-100 rounded-xl dark:bg-gray-800">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -165,7 +161,7 @@ export default function CardsOverview() {
             300 M <span className="text-sm">FBU</span>
           </h4>
         </div>
-      </div>
+      </div> */}
 
       {/* <!-- Metric Item End --> */}
     </div>

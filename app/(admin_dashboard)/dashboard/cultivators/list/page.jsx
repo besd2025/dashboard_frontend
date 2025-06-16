@@ -1,4 +1,4 @@
-import AllCultivatorsList from "../../../../ui/ui_elements/tables/cultivators/all_cultivators_list";
+import AllCultivatorsList from "../../../../ui/ui_elements/tables/dashboard/cultivators/all_cultivators_list";
 import AllCultivator from "../../../../ui/dashboard/cultivators/list";
 import React from "react";
 

@@ -4,8 +4,8 @@ import HangarMetaCard from "./hangar-profile/HangarMetaCard";
 import HangarInfoCard from "./hangar-profile/HangarInfoCard";
 import HangarAddressCard from "./hangar-profile/HangarAddressCard";
 import CardsOverview from "./cards_overview";
-import AllCultivatorsList from "../../../ui_elements/tables/cultivators/all_cultivators_list";
-import HangarCultivatorsList from "../../../ui_elements/tables/hangars/details/hangar_cultivators_list";
+import AllCultivatorsList from "../../../ui_elements/tables/dashboard/cultivators/all_cultivators_list";
+import HangarCultivatorsList from "../../../ui_elements/tables/dashboard/hangars/details/hangar_cultivators_list";
 
 function Profile() {
   return (

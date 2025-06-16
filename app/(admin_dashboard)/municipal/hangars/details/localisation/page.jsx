@@ -1,5 +1,6 @@
+import HangarLocalisation from "../../../../../ui/localisation/hangar_localisation";
 import { ChevronLeftIcon, ChevronRightIcon } from "../../../../../ui/icons";
-import HangarLocalisation from "../../../../../ui/municipal/localisation/hangar_localisation";
+// import HangarLocalisation from "../../../../../ui/municipal/localisation/hangar_localisation";
 import React from "react";
 
 function page() {

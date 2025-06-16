@@ -1,8 +1,8 @@
 import React from "react";
 import TotalHangars from "../../charts/stocks/total_hangars";
-import HangarList from "../../ui_elements/tables/hangars/hangar_list";
+import HangarList from "../../ui_elements/tables/dashboard/hangars/hangar_list";
 import AllCultivator from "../cultivators/list";
-import AllCultivatorsList from "../../ui_elements/tables/cultivators/all_cultivators_list";
+import AllCultivatorsList from "../../ui_elements/tables/dashboard/cultivators/all_cultivators_list";
 
 function Hangars() {
   return (

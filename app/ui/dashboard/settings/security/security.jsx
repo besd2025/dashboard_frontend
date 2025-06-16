@@ -1,4 +1,4 @@
-import LoginHistory from "../../../ui_elements/tables/settings/login_history";
+import LoginHistory from "../../../ui_elements/tables/dashboard/settings/login_history";
 import Link from "next/link";
 import React from "react";
 
