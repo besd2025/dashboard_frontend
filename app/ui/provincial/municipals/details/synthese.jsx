@@ -14,6 +14,9 @@ function Synthese() {
     <div className="max-w-3xl p-6">
       <div>
         <div className="space-y-6">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
+            Synthese communale
+          </h3>
           <div>
             <Label
               htmlFor="input-placeholder"

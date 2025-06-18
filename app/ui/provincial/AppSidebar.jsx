@@ -43,7 +43,7 @@ const navItems = [
         />
       </svg>
     ),
-    name: "Cultivateurs",
+    name: "Hangars",
 
     subItems: [
       { name: "Details", path: "/provincial/cultivators" },
@@ -69,9 +69,10 @@ const navItems = [
   // },
   {
     icon: <HangarIcon />,
-    name: "Centre comminal",
+    name: "Provinciale",
     path: "/provincial/municipals/confirmation/en_attente",
     subPath: [
+      "/provincial/hangars/details/cultivator",
       "/provincial/municipals/confirmation/approuve",
       "/provincial/municipals/details/cultivator",
       "/provincial/municipals/details/achats",

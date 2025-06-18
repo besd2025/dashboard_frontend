@@ -10,7 +10,7 @@ function layout({ children }) {
 
   useEffect(() => {
     if (pathname.includes("/cultivator")) {
-      setActiveTab("cultivateurs");
+      setActiveTab("hangars");
     }
     if (pathname.includes("/achats")) {
       setActiveTab("achats");
@@ -23,6 +23,12 @@ function layout({ children }) {
     }
     if (pathname.includes("/ventes")) {
       setActiveTab("ventes");
+    }
+    if (pathname.includes("/transfers")) {
+      setActiveTab("transfers");
+    }
+    if (pathname.includes("/receptions")) {
+      setActiveTab("receptions");
     }
   }, [pathname]);
   return (
@@ -38,31 +44,31 @@ function layout({ children }) {
                 value={activeTab}
                 onChange={(e) => setActiveTab(e.target.value)}
               >
-                <option value="cultivateurs">Cultivateurs</option>
+                <option value="hangars">Hangars</option>
                 <option value="achats">Achats</option>
               </select>
             </div> */}
-            <div className="hidd/en sm:blo/ck block ">
-              <div className="">
+            <div className="block">
+              <div className="overflow-x-auto scrollbar-hide">
                 <nav
                   aria-label="Tabs"
-                  className="-mb-px flex items-end gap-x-8"
+                  className="-mb-px flex items-end gap-x-8 min-w-max"
                 >
                   <Link
                     href="/provincial/municipals/details/cultivator"
-                    onClick={() => setActiveTab("cultivateurs")}
-                    className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold ${
-                      activeTab === "cultivateurs"
+                    onClick={() => setActiveTab("hangars")}
+                    className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold whitespace-nowrap ${
+                      activeTab === "hangars"
                         ? "border-yellow-500 text-yellow-500"
                         : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
                     }`}
                   >
-                    Cultivateurs
+                    Hangars
                   </Link>
                   <Link
                     href="/provincial/municipals/details/achats"
                     onClick={() => setActiveTab("achats")}
-                    className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold ${
+                    className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold whitespace-nowrap ${
                       activeTab === "achats"
                         ? "border-yellow-500 text-yellow-500"
                         : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
@@ -73,7 +79,7 @@ function layout({ children }) {
                   <Link
                     href="/provincial/municipals/details/ventes"
                     onClick={() => setActiveTab("ventes")}
-                    className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold ${
+                    className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold whitespace-nowrap ${
                       activeTab === "ventes"
                         ? "border-yellow-500 text-yellow-500"
                         : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
@@ -81,11 +87,33 @@ function layout({ children }) {
                   >
                     Ventes
                   </Link>
+                  <Link
+                    href="/provincial/municipals/details/transfers"
+                    onClick={() => setActiveTab("transfers")}
+                    className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold whitespace-nowrap ${
+                      activeTab === "transfers"
+                        ? "border-yellow-500 text-yellow-500"
+                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    }`}
+                  >
+                    Transfer(désengorgement)
+                  </Link>
+                  <Link
+                    href="/provincial/municipals/details/receptions"
+                    onClick={() => setActiveTab("receptions")}
+                    className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold whitespace-nowrap ${
+                      activeTab === "receptions"
+                        ? "border-yellow-500 text-yellow-500"
+                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    }`}
+                  >
+                    Réception
+                  </Link>
 
                   <Link
                     href="/provincial/municipals/details/synthese"
                     onClick={() => setActiveTab("synthese")}
-                    className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold items-center ${
+                    className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold items-center whitespace-nowrap ${
                       activeTab === "synthese"
                         ? "border-yellow-500 text-yellow-500"
                         : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
@@ -111,7 +139,7 @@ function layout({ children }) {
                   <Link
                     href="/provincial/municipals/details/localisation"
                     onClick={() => setActiveTab("localisation")}
-                    className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold items-center ${
+                    className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold items-center whitespace-nowrap ${
                       activeTab === "localisation"
                         ? "border-yellow-500 text-yellow-500"
                         : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"

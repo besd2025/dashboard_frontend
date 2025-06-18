@@ -748,13 +748,16 @@ span.flatpickr-weekday,
 }
 
 .task {
-  transition: all 0.2s ease; /* Smooth transition for visual effects */
+  transition: all 0.3s ease;
 }
 
-.task {
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 3px 0 rgba(16, 24, 40, 0.1),
-    0 1px 2px 0 rgba(16, 24, 40, 0.06);
-  opacity: 0.8;
-  cursor: grabbing; /* Changes the cursor to indicate dragging */
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
