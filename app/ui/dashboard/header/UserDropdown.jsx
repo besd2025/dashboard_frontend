@@ -1,13 +1,13 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Dropdown } from "../../ui_elements/dropdown/Dropdown";
 import DropdownItem from "../../ui_elements/dropdown/DropdownItem";
-
+import { UserContext } from "../../context/UserContext";
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const user = useContext(UserContext);
   function toggleDropdown(e) {
     e.stopPropagation();
     setIsOpen((prev) => !prev);
@@ -34,7 +34,9 @@ export default function UserDropdown() {
         </span>
 
         <span className="block mr-1 font-medium text-theme-sm">
-          Admin Brave
+          {user?.session?.first_name.charAt(0)}
+          {"-"}
+          {user?.session?.last_name.charAt(0)}
         </span>
 
         <svg
@@ -64,10 +66,7 @@ export default function UserDropdown() {
       >
         <div>
           <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-            Brave Admin
-          </span>
-          <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
-            admin@besd.com
+            {user?.session?.first_name} {user?.session?.last_name}
           </span>
         </div>
 

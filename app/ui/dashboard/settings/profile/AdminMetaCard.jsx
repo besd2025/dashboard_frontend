@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import Modal from "../../../../ui/ui_elements/modal";
 
@@ -7,10 +7,10 @@ import { useModal } from "../../../../ui/ui_elements/hooks/useModal";
 
 import Image from "next/image";
 import EditAdminProfile from "./edit_admin_profile";
-
+import { UserContext } from "../../../../ui/context/UserContext";
 export default function AdminMetaCard() {
   const { isOpen, openModal, closeModal } = useModal();
-
+  const user = useContext(UserContext);
   return (
     <>
       <div className="p-5  rounded-2xl dark:border-gray-800 lg:p-6">
@@ -26,14 +26,14 @@ export default function AdminMetaCard() {
             </div>
             <div className="order-3 xl:order-2">
               <h4 className="mb-2 text-lg font-semibold text-center text-gray-800 dark:text-white/90 xl:text-left">
-                MPAWENAYO Charles
+                {user?.session?.last_name} {user?.session?.first_name}
               </h4>
               <div className="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
                 <p className="text-sm text-yellow-500 dark:text-yellow-400 font-semibold">
                   super admin
                 </p>
                 <p className="text-sm text-green-500 dark:text-gray-400">
-                  id54254Hkhjk6
+                  {user?.session?.user_id}
                 </p>
                 <div className="hidden h-3.5 w-px bg-gray-300 dark:bg-gray-700 xl:block"></div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 font-bold">

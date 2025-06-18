@@ -6,8 +6,7 @@ import HangarAddressCard from "./hangar-profile/HangarAddressCard";
 import CardsOverview from "./cards_overview";
 import AllCultivatorsList from "../../../ui_elements/tables/cultivators/all_cultivators_list";
 import HangarCultivatorsList from "../../../ui_elements/tables/hangars/details/hangar_cultivators_list";
-
-function Profile() {
+function Profile({ hangar_id }) {
   return (
     <div>
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
@@ -15,8 +14,8 @@ function Profile() {
           Details Hangar
         </h3>
         <div className="space-y-6">
-          <HangarMetaCard />
-          <CardsOverview />
+          <HangarMetaCard hangar_id={hangar_id} />
+          <CardsOverview hangar_id={hangar_id} />
         </div>
       </div>
     </div>

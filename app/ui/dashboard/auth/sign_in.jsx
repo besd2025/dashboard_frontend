@@ -8,7 +8,6 @@ import Checkbox from "../../ui_elements/form/input/Checkbox";
 import Input from "../../ui_elements/form/input/InputField";
 import Label from "../../ui_elements/form/Label";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../../icons";
-
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -16,7 +15,6 @@ export default function SignInForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
-
   const handleLogin = async () => {
     if (!identifiant || !password) {
       setError("Veuillez remplir tous les champs.");
@@ -24,14 +22,17 @@ export default function SignInForm() {
     }
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Signature-web": process.env.NEXT_PUBLIC_SIGNATURE,
-        },
-        body: JSON.stringify({ identifiant, password }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/login/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Signature-web": process.env.NEXT_PUBLIC_SIGNATURE,
+          },
+          body: JSON.stringify({ identifiant, password }),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -39,6 +40,8 @@ export default function SignInForm() {
       }
 
       const data = await response.json();
+      console.log(data);
+      localStorage.setItem("data", data);
       localStorage.setItem("accessToken", data.access);
       router.push("/dashboard/home");
     } catch (err) {
@@ -65,7 +68,8 @@ export default function SignInForm() {
               Se connecter
             </h1>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Entrez votre nom d'utilisateur et mot de passe pour vous connecter !
+              Entrez votre nom d'utilisateur et mot de passe pour vous connecter
+              !
             </p>
           </div>
           <div>
@@ -117,12 +121,14 @@ export default function SignInForm() {
                 </div>
               </div>
 
-              {error && (
-                <p className="text-red-500 text-sm mt-2">{error}</p>
-              )}
+              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
               <div>
-                <Button onClick={()=>handleLogin()} className="w-full bg-yellow-500" size="sm">
+                <Button
+                  onClick={() => handleLogin()}
+                  className="w-full bg-yellow-500"
+                  size="sm"
+                >
                   Se connecter
                 </Button>
               </div>

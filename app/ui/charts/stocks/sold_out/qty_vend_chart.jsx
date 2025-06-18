@@ -1,19 +1,20 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import PeriodTab from "../../../common/period_tab";
+import { fetchData } from "../../../../_utils/api";
 
-// Dynamically import to avoid SSR errors
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
 function QtyVendChart() {
+  const [timePeriod, setTimePeriod] = useState("day");
   const [state, setState] = useState({
     series: [
       {
-        name: "quantités achetées",
-        data: [28, 29, 33, 36, 32, 32, 33, 28, 29, 33, 36, 32],
+        name: "Quantités Vendues",
+        data: [],
       },
     ],
     options: {
@@ -43,28 +44,14 @@ function QtyVendChart() {
         curve: "smooth",
         width: 4,
       },
-
       markers: {
         size: 1,
       },
       xaxis: {
-        categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
-        ],
+        categories: [],
       },
       yaxis: {
-        min: 5,
+        min: 0,
         max: 40,
       },
       legend: {
@@ -77,14 +64,68 @@ function QtyVendChart() {
     },
   });
 
+  const handleTimePeriodChange = (period) => {
+    setTimePeriod(period);
+  };
+
+  useEffect(() => {
+    async function getData() {
+      try {
+        const periodParam =
+          timePeriod === "days"
+            ? "day"
+            : timePeriod === "weeks"
+            ? "week"
+            : timePeriod === "years"
+            ? "year"
+            : "month";
+
+        const results = await fetchData(
+          "get",
+          `sorties/stats_sorties_recents?period=${periodParam}`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
+
+        const categories = results?.map((item) => {
+          const date = new Date(item?.period + "T00:00:00");
+          return `${date.toLocaleDateString("fr-FR", {
+            weekday: "short",
+          })} ${item?.period}`;
+        });
+
+        const data = results?.map((item) => item?.nombre || 0);
+
+        setState((prev) => ({
+          ...prev,
+          series: [{ name: "vente", data }],
+          options: {
+            ...prev.options,
+            xaxis: {
+              ...prev.options.xaxis,
+              categories,
+            },
+          },
+        }));
+      } catch (error) {
+        console.error("Erreur de chargement :", error);
+      }
+    }
+
+    getData();
+  }, [timePeriod]);
+
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90 w-max ">
-          Quantités Vendue
+          Quantités Vendues
         </h3>
         <div className="flex items-start w-full gap-3 sm:justify-end">
-          <PeriodTab />
+          <PeriodTab handleTimePeriodChange={handleTimePeriodChange} />
         </div>
       </div>
       <div id="chart">

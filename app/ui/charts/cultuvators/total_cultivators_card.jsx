@@ -1,31 +1,33 @@
-"use client"
+"use client";
 import { ArrowUpIcon } from "../../icons";
 import Badge from "../../ui_elements/badge/Badge";
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { fetchData } from "../../../_utils/api";
 function TotalCultivators() {
   const [data, setData] = useState([]);
-      const [error, setError] = useState(null);
-      useEffect(() => {
-        async function getData() {
-          try {
-    
-            const results = await fetchData('get', 'cultivators/total_cultivators/', {
-              params: {},
-              additionalHeaders: {},
-              body: {}
-            });
-    
-            setData(results);
-             console.log(results)
-            
-          } catch (error) {
-            setError(error);
-            console.error(error);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData(
+          "get",
+          "cultivators/total_cultivators/",
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
           }
-        }
-        getData();
-      }, []);
+        );
+
+        setData(results);
+        console.log(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
       <div className="flex items-center justify-ce/nter bg-gr/ay-100 rounded-xl dark:bg-g/ray-800">
@@ -44,7 +46,7 @@ function TotalCultivators() {
           <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
         </svg>
         <h4 className="ml-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
-         {data.total_cultivators ||0}
+          {data.total_cultivators || 0}
         </h4>
       </div>
 

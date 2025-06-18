@@ -21,11 +21,18 @@ import EditUserProfile from "../../../dashboard/cultivators/profile/edit_user_pr
 import FilterUserProfile from "../../../dashboard/cultivators/profile/filter_user_profile";
 import FilterHangarList from "../../../dashboard/hangars/filter_hangar_list";
 import { fetchData } from "../../../../_utils/api";
+import { create } from "domain";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 function AllCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
+  const [pointer, setPointer] = useState(0); // index de départ
+  const limit = 5; // nombre par page
+  const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
+  const [currentPage, setCurrentPage] = useState(1);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -82,21 +89,93 @@ function AllCultivatorsList() {
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData("get", "hangars/cinq_recents/", {
-          params: {},
-          additionalHeaders: {},
-          body: {},
+        const results = await fetchData("get", "/hangars/", {
+          params: {
+            offset: pointer,
+            limit: limit,
+          },
         });
-        setData(results);
-        console.log(results);
+
+        setData(results.results);
+        setTotalCount(results.count); // si l'API retourne un `count` total
       } catch (error) {
         setError(error);
         console.error(error);
       }
     }
-    getData();
-  }, []);
 
+    getData();
+  }, [pointer]); // ← relance quand `pointer` change
+
+  const totalPages = Math.ceil(totalCount / limit);
+
+  const onPageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    setPointer((pageNumber - 1) * limit);
+  };
+
+  const exportToExcel = async () => {
+    const limit = 5;
+    let pointer = 0;
+    let allData = [];
+    let hasMore = true;
+
+    try {
+      // Charger toutes les données par pagination
+      while (hasMore) {
+        const response = await fetchData("get", "/hangars/", {
+          params: {
+            offset: pointer,
+            limit: limit,
+          },
+        });
+
+        const currentData = response.results;
+
+        if (currentData.length === 0) break;
+
+        allData = [...allData, ...currentData];
+        pointer += limit;
+
+        // S'arrêter si on a atteint toutes les données
+        if (pointer >= response.count) {
+          hasMore = false;
+        }
+      }
+
+      if (allData.length === 0) return;
+
+      const formattedData = allData.map((item) => ({
+        Hangar_name: item.hangar_name || "",
+        code: item.hangar_code || "",
+        Province: item.province || "",
+        Commune: item.commine || "",
+        Zone: item.zone || "",
+        total_achats: item.total_achats || "",
+        total_ventes: item.total_ventes || "",
+        total_transferes: item.total_transferes || "",
+        total_recus: item.total_recus || "",
+        created_at: item.created_at || "",
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(formattedData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "hangars");
+
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      const blob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+      });
+
+      saveAs(blob, "hangars.xlsx");
+    } catch (error) {
+      console.error("Erreur exportation Excel :", error);
+    }
+  };
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
@@ -176,7 +255,10 @@ function AllCultivatorsList() {
           </button>
         </div>
         <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+          <button
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+            onClick={exportToExcel}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -281,6 +363,12 @@ function AllCultivatorsList() {
                 >
                   Commune
                 </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Zone
+                </TableCell>
               </TableRow>
             </TableHeader>
 
@@ -338,22 +426,19 @@ function AllCultivatorsList() {
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Qte}
+                    {order.total_achats}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {order.Prix}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {
-                      order?.hangar_adress?.zone_code?.commune_code
-                        ?.province_code?.province_name
-                    }
+                    {order?.province}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {
-                      order?.hangar_adress?.zone_code?.commune_code
-                        ?.commune_name
-                    }
+                    {order?.commune}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order?.zone}
                   </TableCell>
                 </TableRow>
               ))}
@@ -364,7 +449,14 @@ function AllCultivatorsList() {
 
       {/* Pagination */}
 
-      <Pagination />
+      <Pagination
+        totalCount={totalCount}
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+        totalPages={totalPages}
+        pointer={pointer}
+        limit={limit}
+      />
 
       {/* filtres */}
 

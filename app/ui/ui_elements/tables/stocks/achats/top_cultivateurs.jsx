@@ -1,5 +1,5 @@
 "use client";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -18,26 +18,29 @@ import { fetchData } from "../../../../../_utils/api";
 export default function TopCultivateurs() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
-      const [error, setError] = useState(null);
-      useEffect(() => {
-        async function getData() {
-          try {
-    
-            const results = await fetchData('get', 'achats/cinq_cultivateurs_recents/', {
-              params: {},
-              additionalHeaders: {},
-              body: {}
-            });
-  
-            setData(results);
-            
-          } catch (error) {
-            setError(error);
-            console.error(error);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData(
+          "get",
+          "achats/cinq_cultivateurs_recents/",
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
           }
-        }
-        getData();
-      }, []);
+        );
+
+        setData(results);
+        console.log(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
 
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
@@ -123,7 +126,9 @@ export default function TopCultivateurs() {
                         className="w-40 p-2"
                       >
                         <DropdownItem
-                          onItemClick={() => closeDropdown(order.cultivator_code)}
+                          onItemClick={() =>
+                            closeDropdown(order.cultivator_code)
+                          }
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
                           Details

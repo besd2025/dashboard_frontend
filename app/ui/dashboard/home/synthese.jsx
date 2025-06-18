@@ -77,33 +77,30 @@ export default function Synthese() {
   function closeDropdown() {
     setIsOpen(false);
   }
-    const [data, setData] = useState([]);
-    const [error, setError] = useState(null);
-    useEffect(() => {
-      async function getData() {
-        try {
-  
-          const results = await fetchData('get', 'hangar_with_stats/', {
-            params: {},
-            additionalHeaders: {},
-            body: {}
-          });
-          setData(results);
-          const pourcentage = results.pct_avec_collecteur || 0;
-        
-          setState((prev) => ({
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData("get", "hangar_with_stats/", {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+        setData(results);
+        const pourcentage = results.pct_avec_collecteur || 0;
+
+        setState((prev) => ({
           ...prev,
           series: [pourcentage],
-
         }));
-          
-        } catch (error) {
-          setError(error);
-          console.error(error);
-        }
+      } catch (error) {
+        setError(error);
+        console.error(error);
       }
-      getData();
-    }, []);
+    }
+    getData();
+  }, []);
   return (
     <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
       <div className="flex items-center justify-between gap-5 p-6 sm:gap-8 ">
@@ -112,7 +109,7 @@ export default function Synthese() {
             HANGAR ciblés
           </p>
           <p className="flex items-center justify-center gap-1 text-base font-semibold text-gray-800 dark:text-white/90 sm:text-lg">
-            {data?.total_hangars ||0}
+            {data?.total_hangars || 0}
           </p>
         </div>
 
@@ -123,7 +120,7 @@ export default function Synthese() {
             HANGAR en activités
           </p>
           <p className="flex items-center justify-center gap-1 text-base font-semibold text-gray-800 dark:text-white/90 sm:text-lg">
-            {data?.hangars_avec_collecteur ||0}
+            {data?.hangars_avec_collecteur || 0}
           </p>
         </div>
 
