@@ -1,4 +1,5 @@
-import React from "react";
+"use client"
+import React,{useState,useEffect} from "react";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -6,8 +7,27 @@ import {
   GroupIcon,
 } from "../../../icons";
 import Badge from "../../../ui_elements/badge/Badge";
-
-export default function CardsOverview() {
+import { fetchData } from "../../../../_utils/api";
+export default function CardsOverview({hangar_id}) {
+  const [data, setData] = useState({});
+  const [error, setError] = useState(null);
+  useEffect(() => {
+          async function getData() {
+            try {
+              const results = await fetchData('get', `hangars/${hangar_id}/`, {
+                params: {},
+                additionalHeaders: {},
+                body: {}
+              });
+              setData(results);
+              console.log(results);
+            } catch (error) {
+              setError(error);
+              console.error(error);
+            }
+          }
+          getData();
+        }, []);
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 md:gap-6">
       {/* <!-- Metric Item Start --> */}
@@ -43,7 +63,7 @@ export default function CardsOverview() {
           </div>
 
           <h4 className="ml-3 font-bold text-gray-800 text-2xl dark:text-white/90">
-            2T
+            {data.nb_cultivateurs}
           </h4>
         </div>
       </div>
@@ -81,8 +101,19 @@ export default function CardsOverview() {
             </svg>
           </div>
 
-          <h4 className="ml-3 font-semibold text-gray-800 text-2xl dark:text-white/90">
-            500kg <span className="text-sm">KG</span>
+          <h4 className="mt-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
+            {data.total_achats >= 1000 ? (
+              <>
+                {(data?.total_achats / 1000).toLocaleString("fr-FR", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })} <span className="text-sm">T</span>
+              </>
+            ) : (
+              <>
+                {data?.total_achats?.toLocaleString("fr-FR") ||0} <span className="text-sm">KG</span>
+              </>
+            )}
           </h4>
         </div>
       </div>
@@ -119,9 +150,21 @@ export default function CardsOverview() {
             </svg>
           </div>
 
-          <h4 className="ml-3 font-bold text-gray-800 text-2xl dark:text-white/90">
-            30,782 <span className="text-sm">KG</span>
+          <h4 className="mt-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
+            {data.total_achats >= 1000 ? (
+              <>
+                {(data?.total_ventes / 1000).toLocaleString("fr-FR", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })} <span className="text-sm">T</span>
+              </>
+            ) : (
+              <>
+                {data?.total_ventes?.toLocaleString("fr-FR") ||0} <span className="text-sm">KG</span>
+              </>
+            )}
           </h4>
+
         </div>
       </div>
       {/* <!-- Metric Item End --> */}
@@ -134,7 +177,47 @@ export default function CardsOverview() {
         <div className="flex items-end justify-between mb-2">
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              Montant
+              Montant achats
+            </span>
+          </div>
+          {/* <Badge color="success">
+            <ArrowUpIcon />
+            2.0%
+          </Badge> */}
+        </div>
+        <div className="flex">
+          {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
+          <div className="flex items-center justify-center p-2 bg-gray-100 rounded-xl dark:bg-gray-800">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6 text-gray-800  dark:text-white/90"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z"
+              />
+            </svg>
+          </div>
+
+          <h4 className="ml-3 font-bold text-gray-800 text-2xl dark:text-white/90">
+            30 M <span className="text-sm">FBU</span>
+          </h4>
+        </div>
+      </div>
+
+      {/* <!-- Metric Item End --> */}
+         {/* <!-- Metric Item Start --> */}
+
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+        <div className="flex items-end justify-between mb-2">
+          <div>
+            <span className="text-sm text-gray-500 dark:text-gray-400">
+              Montant ventes
             </span>
           </div>
           {/* <Badge color="success">

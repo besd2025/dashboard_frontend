@@ -1,10 +1,11 @@
 "use client";
-import React from "react";
+import React, { useContext } from "react";
 
 import { useModal } from "../../../../ui/ui_elements/hooks/useModal";
-
+import { UserContext } from "../../../../ui/context/UserContext";
 export default function AdminInfoCard() {
   const { isOpen, openModal, closeModal } = useModal();
+  const user = useContext(UserContext);
   const handleSave = () => {
     // Handle save logic here
     console.log("Saving changes...");
@@ -21,10 +22,10 @@ export default function AdminInfoCard() {
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-7 2xl:gap-x-32">
             <div>
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                MPAWENAYO
+                Nom
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                Musharof
+                {user?.session?.last_name}
               </p>
             </div>
 
@@ -33,7 +34,7 @@ export default function AdminInfoCard() {
                 Prénom
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                Charles
+                {user?.session?.first_name}
               </p>
             </div>
 
@@ -51,7 +52,7 @@ export default function AdminInfoCard() {
                 Téléphone
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                +257 76525528
+                +257{user?.session?.phone}
               </p>
             </div>
           </div>

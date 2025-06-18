@@ -1,4 +1,4 @@
-import HangarCultivatorsList from "../../../../../ui/ui_elements/tables/provincial/municipals/details/municipal_hangars_list";
+import HangarCultivatorsList from "../../../../../ui/ui_elements/tables/regional/municipals/details/municipal_hangars_list";
 import React from "react";
 
 function page({ searchParams }) {

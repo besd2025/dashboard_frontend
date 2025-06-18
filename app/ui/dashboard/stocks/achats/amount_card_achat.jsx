@@ -1,6 +1,26 @@
-import React from "react";
-
+"use client";
+import React, { useState, useEffect } from "react";
+import { fetchData } from "../../../../_utils/api";
 function AmountCard() {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData("get", "achats/quantite_totale/", {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+
+        setData(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
       <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
@@ -27,7 +47,8 @@ function AmountCard() {
             Montant total des achats
           </span>
           <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
-            300 M <span className="text-sm">FBU</span>
+            {data?.prix_achat?.toLocaleString("de-DE")}{" "}
+            <span className="text-sm">FBU</span>
           </h4>
         </div>
         {/* <Badge color="success">

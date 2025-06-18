@@ -382,7 +382,7 @@ function HangarCultivatorsList({ hangar_id }) {
                         <DropdownItem
                           onItemClick={() => closeDropdown(order.id)}
                           tag="a"
-                          href={`/provincial/hangars/details/cultivator?hangar_id=${order.id}`}
+                          href={`/regional/hangars/details/cultivator?hangar_id=${order.id}`}
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
                           Details

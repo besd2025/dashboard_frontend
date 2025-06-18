@@ -125,11 +125,15 @@ function StocksChart() {
             ? "year"
             : "month";
 
-        const results = await fetchData("get", `stock_evolution?period=${periodParam}`, {
-          params: {},
-          additionalHeaders: {},
-          body: {},
-        });
+        const results = await fetchData(
+          "get",
+          `stock_evolution?period=${periodParam}`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
 
         const categories = results?.map((item) => {
           const date = new Date(item?.period + "T00:00:00");

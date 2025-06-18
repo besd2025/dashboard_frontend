@@ -67,9 +67,20 @@ export default function CardsOverview() {
             <span className="text-sm text-gray-500 dark:text-gray-400">
               Qté Collectée
             </span>
-            <h4 className="mt-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
-              {data.quantite_totale} <span className="text-sm">KG</span>
-            </h4>
+          <h4 className="mt-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
+            {data.quantite_totale >= 1000 ? (
+              <>
+                {(data?.quantite_totale / 1000).toLocaleString("fr-FR", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })} <span className="text-sm">T</span>
+              </>
+            ) : (
+              <>
+                {data?.quantite_totale?.toLocaleString("fr-FR") ||0} <span className="text-sm">KG</span>
+              </>
+            )}
+          </h4>
           </div>
           {/* <Badge color="success">
             <ArrowUpIcon />
@@ -104,8 +115,12 @@ export default function CardsOverview() {
               Qté Vendue
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
-              {quantite_vendu.somme_quantite_sortie}{" "}
-              <span className="text-sm">KG</span>
+              
+              {quantite_vendu?.somme_quantite_sortie >= 1000
+              ? `${(quantite_vendu?.somme_quantite_sorti / 1000).toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })||0} `
+              : `${quantite_vendu?.somme_quantite_sortie?.toLocaleString("fr-FR") ||0} `
+            }
+            <span className="text-sm">{quantite_vendu?.somme_quantite_sorti >= 1000 ? "T" : "KG"}</span>
             </h4>
           </div>
         </div>
@@ -133,10 +148,10 @@ export default function CardsOverview() {
             <span className="text-sm text-gray-500 dark:text-gray-400">
               Revenue
             </span>
-            <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
-              {quantite_vendu.somme_total_price}{" "}
-              <span className="text-sm">FBU</span>
-            </h4>
+          <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
+            {quantite_vendu?.somme_total_price?.toLocaleString("de-DE")}{" "}
+            <span className="text-sm">FBU</span>
+          </h4>
           </div>
         </div>
       </div>
