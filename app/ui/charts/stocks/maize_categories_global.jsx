@@ -1,8 +1,28 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { ArrowUpIcon } from "../../icons";
 import Badge from "../../ui_elements/badge/Badge";
-
+import { fetchData } from "../../../_utils/api";
 function MaizeCategoriesCard() {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData("get", "stock_resume/", {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+        console.log(results);
+        setData(results.stock);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
   return (
     <div className="">
       <div className="flex items-end justify-between bg-white py-3 px-4 dark:border-gray-800 dark:bg-white/[0.03] rounded-2xl">
@@ -26,7 +46,9 @@ function MaizeCategoriesCard() {
           </div>
 
           <h4 className=" font-semibold text-gray-800 text-xl dark:text-white/90">
-            500 452 052 T
+            {data?.blanc >= 1000
+              ? `${data?.blanc / 1000} T`
+              : `${data?.blanc} kg`}
           </h4>
         </div>
       </div>
@@ -51,7 +73,9 @@ function MaizeCategoriesCard() {
           </div>
 
           <h4 className=" font-semibold text-yellow-600 text-xl dark:text-white/90">
-            500 452 052 T
+            {data?.jaune >= 1000
+              ? `${data?.jaune / 1000} T`
+              : `${data?.jaune} kg`}
           </h4>
         </div>
       </div>

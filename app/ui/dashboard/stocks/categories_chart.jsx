@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { fetchData } from "../../../_utils/api";
 // Dynamically import to avoid SSR errors
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -10,7 +11,7 @@ function CategoriesChart() {
   const [error, setError] = useState(null);
 
   const [state, setState] = useState({
-    series: [44, 55],
+    series: [],
     options: {
       chart: {
         type: "donut",
@@ -32,6 +33,30 @@ function CategoriesChart() {
       ],
     },
   });
+
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData("get", "stock_resume/", {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+
+        const blanc = results?.stock?.blanc || 0;
+        const jaune = results?.stock?.jaune || 0;
+
+        setState((prev) => ({
+          ...prev,
+          series: [blanc, jaune],
+        }));
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">

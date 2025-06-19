@@ -12,14 +12,8 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 
 function QtyColChart() {
   const [timePeriod, setTimePeriod] = useState("days");
-
   const [state, setState] = useState({
-    series: [
-      {
-        name: "Quantités achetées",
-        data: [],
-      },
-    ],
+    series: [{ name: "Quantités achetées", data: [] }],
     options: {
       chart: {
         height: 350,
@@ -32,24 +26,16 @@ function QtyColChart() {
           blur: 10,
           opacity: 0.1,
         },
-        zoom: {
-          enabled: false,
-        },
-        toolbar: {
-          show: false,
-        },
+        zoom: { enabled: false },
+        toolbar: { show: false },
       },
       colors: ["#eab308"],
-      dataLabels: {
-        enabled: true,
-      },
+      dataLabels: { enabled: true },
       stroke: {
         curve: "smooth",
         width: 4,
       },
-      markers: {
-        size: 1,
-      },
+      markers: { size: 1 },
       xaxis: {
         categories: [],
       },
@@ -68,6 +54,29 @@ function QtyColChart() {
 
   const handleTimePeriodChange = (period) => {
     setTimePeriod(period);
+  };
+
+  const formatCategory = (item, period) => {
+    const date = new Date(item?.period + "T00:00:00");
+    switch (period) {
+      case "day":
+        return date.toLocaleDateString("fr-FR", {
+          weekday: "short",
+          day: "2-digit",
+          month: "short",
+        });
+      case "week":
+        return `Semaine ${item?.week || ""}`;
+      case "month":
+        return date.toLocaleDateString("fr-FR", {
+          month: "short",
+          year: "numeric",
+        });
+      case "year":
+        return item?.period;
+      default:
+        return item?.period;
+    }
   };
 
   useEffect(() => {
@@ -90,21 +99,12 @@ function QtyColChart() {
             body: {},
           }
         );
-        console.log(results);
-        if (!Array.isArray(results)) return;
 
-        const categories = results.map((item) => {
-          // Ensure item.period exists and is a valid date string
-          if (!item?.period) return "";
-          const date = new Date(item.period + "T00:00:00");
-          if (isNaN(date.getTime())) return item.period; // fallback to raw period if invalid date
-          return date.toLocaleDateString("fr-FR", {
-            day: "2-digit",
-            month: "short",
-          });
-        });
+        const categories = results?.map((item) =>
+          formatCategory(item, timePeriod)
+        );
+        const data = results?.map((item) => item?.nombre || 0);
 
-        const data = results.map((item) => item?.nombre || 0);
         setState((prev) => ({
           ...prev,
           series: [{ name: "Quantités achetées", data }],

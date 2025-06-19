@@ -24,14 +24,14 @@ export default function TopCultivateurs() {
       try {
         const results = await fetchData(
           "get",
-          "achats/cinq_cultivateurs_recents/",
+          "achats/achats_cinq_cultivateurs_recents/",
           {
             params: {},
             additionalHeaders: {},
             body: {},
           }
         );
-
+        console.log(results);
         setData(results);
       } catch (error) {
         setError(error);
@@ -110,23 +110,23 @@ export default function TopCultivateurs() {
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {data.map((order) => (
-                <TableRow key={order.cultivator_code}>
+                <TableRow key={order?.cultivator?.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <div className="relative inline-block">
                       <button
-                        onClick={() => toggleDropdown(order.cultivator_code)}
+                        onClick={() => toggleDropdown(order?.cultivator?.id)}
                         className="dropdown-toggle"
                       >
                         <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
                       </button>
                       <Dropdown
-                        isOpen={openDropdowns[order.cultivator_code]}
-                        onClose={() => closeDropdown(order.cultivator_code)}
+                        isOpen={openDropdowns[order?.cultivator?.id]}
+                        onClose={() => closeDropdown(order?.cultivator?.id)}
                         className="w-40 p-2"
                       >
                         <DropdownItem
                           onItemClick={() =>
-                            closeDropdown(order.cultivator_code)
+                            closeDropdown(order?.cultivator?.id)
                           }
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
@@ -139,34 +139,50 @@ export default function TopCultivateurs() {
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">
-                        <Image
-                          width={40}
-                          height={40}
-                          src={order?.cultivator_photo}
-                          alt=""
-                        />
+                        {order?.cultivator_photo == null ? (
+                          <Image
+                            width={80}
+                            height={80}
+                            src={order?.cultivator?.cultivator_photo}
+                            alt="user"
+                          />
+                        ) : (
+                          <Image
+                            width={80}
+                            height={80}
+                            src="/img/blank-profile.png"
+                            alt="user"
+                          />
+                        )}
                       </div>
                       <div>
                         <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order?.cultivator_last_name}
+                          {order?.cultivator?.cultivator_first_name}{" "}
+                          {order?.cultivator?.cultivator_last_name}
                         </span>
                         <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order?.cultivator_first_name}
+                          {order?.cultivator?.cultivator_code}
                         </span>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Qte}
+                    {order?.total_quantity}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Province}
+                    {
+                      order?.cultivator?.cultivator_adress?.zone_code
+                        ?.commune_code?.province_code?.province_name
+                    }
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order.Commune}
+                    {
+                      order?.cultivator?.cultivator_adress?.zone_code
+                        ?.commune_code?.commune_name
+                    }
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order.hangar}
+                    {order?.cultivator?.collector?.hangar?.hangar_name}
                   </TableCell>
                 </TableRow>
               ))}

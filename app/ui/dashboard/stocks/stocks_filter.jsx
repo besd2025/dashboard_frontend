@@ -1,139 +1,145 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { ChevronDownIcon, MoreDotIcon } from "../../icons";
+import { ChevronDownIcon } from "../../icons";
 import { Dropdown } from "../../ui_elements/dropdown/Dropdown";
 import DropdownItem from "../../ui_elements/dropdown/DropdownItem";
 import dynamic from "next/dynamic";
 import Label from "../../ui_elements/form/Label";
 import Select from "../../ui_elements/form/Select";
+import { fetchData } from "../../../_utils/api";
 
-// Dynamically import the ReactApexChart component
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
 function StocksFilter() {
   const [isMounted, setIsMounted] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [error, setError] = useState("");
+  const [state, setState] = useState({
+    series: [
+      { name: "Stock", data: [] },
+      { name: "Perte", data: [] },
+    ],
+    options: {
+      colors: ["#16a34a", "#F44336"],
+      chart: {
+        fontFamily: "Outfit, sans-serif",
+        type: "bar",
+        height: 200,
+        toolbar: { show: false },
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: "39%",
+          borderRadius: 4,
+          borderRadiusApplication: "end",
+        },
+      },
+      dataLabels: { enabled: false },
+      stroke: {
+        show: true,
+        width: 1,
+        colors: ["transparent"],
+      },
+      xaxis: {
+        categories: [],
+        axisBorder: { show: false },
+        axisTicks: { show: false },
+      },
+      legend: {
+        show: true,
+        position: "top",
+        horizontalAlign: "left",
+        fontFamily: "Outfit",
+      },
+      yaxis: {
+        title: { text: undefined },
+        labels: {
+          style: {
+            fontSize: "12px",
+            colors: ["#6B7280"],
+          },
+        },
+      },
+      grid: {
+        yaxis: {
+          lines: { show: true },
+        },
+      },
+      fill: { opacity: 1 },
+      tooltip: {
+        x: { show: false },
+        y: {
+          formatter: (val) => `${val}`,
+        },
+      },
+    },
+  });
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
-
-  const options = {
-    // colors: ["#465fff"],
-    colors: ["#16a34a", "#F44336"],
-    chart: {
-      fontFamily: "Outfit, sans-serif",
-      type: "bar",
-      height: 200,
-      toolbar: {
-        show: false,
-      },
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: "39%",
-        borderRadius: 4,
-        borderRadiusApplication: "end",
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    stroke: {
-      show: true,
-      width: 1,
-      colors: ["transparent"],
-    },
-    xaxis: {
-      categories: [
-        "Makamba",
-        "Ruyigi",
-        "Karusi",
-        "Kirundo",
-        "Muyinga",
-        "Muramvya",
-        "Gitega",
-        "Mwaro",
-        "Kayanza",
-        "Bujumbura",
-      ],
-      axisBorder: {
-        show: false,
-      },
-      axisTicks: {
-        show: false,
-      },
-    },
-    legend: {
-      show: true,
-      position: "top",
-      horizontalAlign: "left",
-      fontFamily: "Outfit",
-    },
-    yaxis: {
-      title: {
-        text: undefined,
-      },
-      style: {
-        fontSize: "12px", // Adjust font size for y-axis labels
-        colors: ["#6B7280"], // Color of the labels
-      },
-    },
-    grid: {
-      yaxis: {
-        lines: {
-          show: true,
-        },
-      },
-    },
-    fill: {
-      opacity: 1,
-    },
-
-    tooltip: {
-      x: {
-        show: false,
-      },
-      y: {
-        formatter: (val) => `${val}`,
-      },
-    },
-  };
-  const series = [
-    {
-      name: "stock",
-      data: [1680, 3850, 2010, 2980, 1870, 1950, 2910, 1100, 3850, 2010],
-    },
-    {
-      name: "Perte",
-      data: [168, 385, 201, 298, 187, 195, 291, 110, 385, 201],
-    },
-  ];
-  const [isOpen, setIsOpen] = useState(false);
-
-  function toggleDropdown() {
-    setIsOpen(!isOpen);
-  }
-
-  function closeDropdown() {
-    setIsOpen(false);
-  }
 
   const optionProvince = [
     { value: "Bujumbura", label: "Bujumbura" },
     { value: "Kayanza", label: "Kayanza" },
     { value: "Ngozi", label: "Ngozi" },
   ];
+
   const optionCommune = [
     { value: "Rango", label: "Rango" },
     { value: "Butanganzwa", label: "Butanganzwa" },
     { value: "Matongo", label: "Matongo" },
   ];
+
   const handleSelectChange = (value) => {
-    // console.log("Selected value:", value);
+    // TODO: handle filter logic here
   };
+
+  const toggleDropdown = () => setIsOpen(!isOpen);
+  const closeDropdown = () => setIsOpen(false);
+
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData(
+          "get",
+          "stock/details/stock_vs_pertes_province/",
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
+
+        const categories = results.map((item) => item.province);
+        const stocks = results.map((item) => item.stock_total || 0);
+        const pertes = results.map((item) => item.pertes || 0);
+
+        setState((prev) => ({
+          ...prev,
+          series: [
+            { name: "Stock", data: stocks },
+            { name: "Perte", data: pertes },
+          ],
+          options: {
+            ...prev.options,
+            xaxis: {
+              ...prev.options.xaxis,
+              categories,
+            },
+          },
+        }));
+      } catch (error) {
+        setError("Erreur lors de la récupération des données");
+        console.error(error);
+      }
+    }
+
+    getData();
+  }, []);
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
@@ -145,13 +151,13 @@ function StocksFilter() {
         <div className="relative inline-block">
           <button
             onClick={toggleDropdown}
-            className="dropdown-toggle border  border-gray-200 dark:border-gray-800 p-2 rounded"
+            className="dropdown-toggle border border-gray-200 dark:border-gray-800 p-2 rounded"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
-              className="size-6 text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 "
+              className="size-6 text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
             >
               <path
                 fillRule="evenodd"
@@ -160,19 +166,20 @@ function StocksFilter() {
               />
             </svg>
           </button>
+
           <Dropdown
             isOpen={isOpen}
             onClose={closeDropdown}
             className="w-max p-2"
           >
-            <DropdownItem className="flex w-max font-normal text-left text-gray-500 rounded-lg  dark:text-gray-400 hover:bg-transparent ">
+            <DropdownItem className="flex w-max font-normal text-left text-gray-500 rounded-lg dark:text-gray-400 hover:bg-transparent">
               <div className="space-y-6">
                 <div>
                   <Label>Province</Label>
                   <div className="relative">
                     <Select
                       options={optionProvince}
-                      placeholder="Selectionner province"
+                      placeholder="Sélectionner province"
                       onChange={handleSelectChange}
                       className="dark:bg-dark-900 cursor-pointer"
                     />
@@ -183,14 +190,15 @@ function StocksFilter() {
                 </div>
               </div>
             </DropdownItem>
-            <DropdownItem className="flex w-max font-normal text-left text-gray-500 rounded-lg  dark:text-gray-400 hover:bg-transparent ">
+
+            <DropdownItem className="flex w-max font-normal text-left text-gray-500 rounded-lg dark:text-gray-400 hover:bg-transparent">
               <div className="space-y-6">
                 <div>
                   <Label>Commune</Label>
                   <div className="relative">
                     <Select
                       options={optionCommune}
-                      placeholder="Selectionner commune"
+                      placeholder="Sélectionner commune"
                       onChange={handleSelectChange}
                       className="dark:bg-dark-900 cursor-pointer"
                     />
@@ -209,8 +217,8 @@ function StocksFilter() {
         <div className="-ml-5 min-w-[650px] xl:min-w-full pl-2">
           {isMounted && (
             <ReactApexChart
-              options={options}
-              series={series}
+              options={state.options}
+              series={state.series}
               type="bar"
               height={390}
             />

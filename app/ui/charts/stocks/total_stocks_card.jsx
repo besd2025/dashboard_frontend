@@ -4,23 +4,18 @@ import { ArrowUpIcon } from "../../icons";
 import Badge from "../../ui_elements/badge/Badge";
 import { fetchData } from "../../../_utils/api";
 function TotalStocks() {
-  const [data, setData] = useState(0);
+  const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   useEffect(() => {
     async function getData() {
       try {
-        const achats = await fetchData("get", "achats/quantite_totale/", {
+        const results = await fetchData("get", "stock_resume/", {
           params: {},
           additionalHeaders: {},
           body: {},
         });
-        const ventes = await fetchData("get", "sorties/somme_totale_sorties/", {
-          params: {},
-          additionalHeaders: {},
-          body: {},
-        });
-        setData(achats?.quantite_totale - ventes?.somme_quantity);
-        console.log(achats?.quantite_totale);
+        console.log(results);
+        setData(results.stock);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -53,7 +48,9 @@ function TotalStocks() {
             Total du stock
           </span>
           <h4 className="mt-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
-            {data >= 1000 ? `${data / 1000} T` : `${data} kg`}
+            {data?.total >= 1000
+              ? `${data?.total / 1000} T`
+              : `${data?.total} kg`}
           </h4>
         </div>
         {/* <Badge color="success">

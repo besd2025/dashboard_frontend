@@ -1,30 +1,28 @@
-"use client"
-import React,{useState,useEffect} from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import { fetchData } from "../../../../_utils/api";
 function QuantityColCard() {
-    const [data, setData] = useState([]);
-    const [error, setError] = useState(null);
-    useEffect(() => {
-      async function getData() {
-        try {
-  
-          const results = await fetchData('get', 'achats/quantite_totale/', {
-            params: {},
-            additionalHeaders: {},
-            body: {}
-          });
-  
-          setData(results);
-        
-          
-        } catch (error) {
-          setError(error);
-          console.error(error);
-        }
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData("get", "achats/quantite_totale/", {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+
+        setData(results);
+        console.log(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
       }
-      getData();
-    }, []);
-  
+    }
+    getData();
+  }, []);
+
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
       <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
@@ -51,7 +49,8 @@ function QuantityColCard() {
             Qté Collectée
           </span>
           <h4 className="mt-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
-            {data.quantite_totale}<span className="text-sm">KG</span>
+            {data?.quantite_totale}
+            <span className="text-sm">KG</span>
           </h4>
         </div>
         {/* <Badge color="success">

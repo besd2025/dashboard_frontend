@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const PeriodTab = ({ handleTimePeriodChange }) => {
-  const [timePeriod, setTimePeriod] = useState("months");
+  const [timePeriod, setTimePeriod] = useState("month");
 
   const getButtonClass = (period) =>
     timePeriod === period
@@ -12,11 +12,11 @@ const PeriodTab = ({ handleTimePeriodChange }) => {
     <div className="flex items-center gap-0.5 rounded-lg bg-gray-100 p-0.5 dark:bg-gray-900">
       <button
         onClick={() => {
-          setTimePeriod("days");
-          handleTimePeriodChange("days");
+          setTimePeriod("day");
+          handleTimePeriodChange("day");
         }}
         className={`px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900 dark:hover:text-white ${getButtonClass(
-          "days"
+          "day"
         )}`}
       >
         jours
@@ -24,11 +24,11 @@ const PeriodTab = ({ handleTimePeriodChange }) => {
 
       <button
         onClick={() => {
-          setTimePeriod("weeks");
-          handleTimePeriodChange("weeks");
+          setTimePeriod("week");
+          handleTimePeriodChange("week");
         }}
         className={`px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900 dark:hover:text-white ${getButtonClass(
-          "weeks"
+          "week"
         )}`}
       >
         semaines
@@ -36,22 +36,22 @@ const PeriodTab = ({ handleTimePeriodChange }) => {
 
       <button
         onClick={() => {
-          setTimePeriod("months");
-          handleTimePeriodChange("months");
+          setTimePeriod("month");
+          handleTimePeriodChange("month");
         }}
         className={`px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900 dark:hover:text-white ${getButtonClass(
-          "months"
+          "month"
         )}`}
       >
         mois
       </button>
       <button
         onClick={() => {
-          setTimePeriod("years");
-          handleTimePeriodChange("years");
+          setTimePeriod("year");
+          handleTimePeriodChange("year");
         }}
         className={`px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900 dark:hover:text-white ${getButtonClass(
-          "years"
+          "year"
         )}`}
       >
         années

@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import TotalStocks from "../../charts/stocks/total_stocks_card";
 import Badge from "../../ui_elements/badge/Badge";
 import { ArrowDownIcon } from "../../icons";
@@ -11,8 +12,31 @@ import HangarCapacity from "./hangar_capacity";
 import OutStocks from "../../charts/stocks/out_stocks";
 import MaizeCategoriesCard from "../../charts/stocks/maize_categories_global";
 import CategoriesChart from "./categories_chart";
-
+import { fetchData } from "../../../_utils/api";
 function Stocks() {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData(
+          "get",
+          "stock/details/pertes_totales/",
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
+        setData(results);
+        console.log(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">
       <div className=" col-span-12 space-y-6 lg:col-span-3">
@@ -49,14 +73,9 @@ function Stocks() {
                 Taux de perte moyen(GAP)
               </span>
               <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
-                5,359 <span className="text-sm">KG</span>
+                {data?.pertes_totales} <span className="text-sm">KG</span>
               </h4>
             </div>
-
-            <Badge color="error">
-              <ArrowDownIcon className="text-error-500" />
-              9.05%
-            </Badge>
           </div>
         </div>
       </div>
