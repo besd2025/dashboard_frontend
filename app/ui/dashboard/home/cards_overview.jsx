@@ -11,6 +11,7 @@ import { fetchData } from "../../../_utils/api";
 export default function CardsOverview() {
   const [data, setData] = useState([]);
   const [quantite_vendu, setQuantite] = useState([]);
+  const [gaptotal, setGapTotat] = useState([]);
   const [error, setError] = useState(null);
   useEffect(() => {
     async function getData() {
@@ -30,6 +31,16 @@ export default function CardsOverview() {
             body: {},
           }
         );
+        const pertetotal = await fetchData(
+          "get",
+          "stock/details/pertes_totales/",
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
+        setGapTotat(pertetotal);
         setData(results);
         setQuantite(quantite_vendu);
       } catch (error) {
@@ -67,20 +78,22 @@ export default function CardsOverview() {
             <span className="text-sm text-gray-500 dark:text-gray-400">
               Qté Collectée
             </span>
-          <h4 className="mt-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
-            {data.quantite_totale >= 1000 ? (
-              <>
-                {(data?.quantite_totale / 1000).toLocaleString("fr-FR", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })} <span className="text-sm">T</span>
-              </>
-            ) : (
-              <>
-                {data?.quantite_totale?.toLocaleString("fr-FR") ||0} <span className="text-sm">KG</span>
-              </>
-            )}
-          </h4>
+            <h4 className="mt-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
+              {data.quantite_totale >= 1000 ? (
+                <>
+                  {(data?.quantite_totale / 1000).toLocaleString("fr-FR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}{" "}
+                  <span className="text-sm">T</span>
+                </>
+              ) : (
+                <>
+                  {data?.quantite_totale?.toLocaleString("fr-FR") || 0}{" "}
+                  <span className="text-sm">KG</span>
+                </>
+              )}
+            </h4>
           </div>
           {/* <Badge color="success">
             <ArrowUpIcon />
@@ -115,12 +128,23 @@ export default function CardsOverview() {
               Qté Vendue
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
-              
               {quantite_vendu?.somme_quantite_sortie >= 1000
-              ? `${(quantite_vendu?.somme_quantite_sorti / 1000).toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })||0} `
-              : `${quantite_vendu?.somme_quantite_sortie?.toLocaleString("fr-FR") ||0} `
-            }
-            <span className="text-sm">{quantite_vendu?.somme_quantite_sorti >= 1000 ? "T" : "KG"}</span>
+                ? `${
+                    (
+                      quantite_vendu?.somme_quantite_sorti / 1000
+                    ).toLocaleString("fr-FR", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }) || 0
+                  } `
+                : `${
+                    quantite_vendu?.somme_quantite_sortie?.toLocaleString(
+                      "fr-FR"
+                    ) || 0
+                  } `}
+              <span className="text-sm">
+                {quantite_vendu?.somme_quantite_sorti >= 1000 ? "T" : "KG"}
+              </span>
             </h4>
           </div>
         </div>
@@ -148,10 +172,10 @@ export default function CardsOverview() {
             <span className="text-sm text-gray-500 dark:text-gray-400">
               Revenue
             </span>
-          <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
-            {quantite_vendu?.somme_total_price?.toLocaleString("de-DE")}{" "}
-            <span className="text-sm">FBU</span>
-          </h4>
+            <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
+              {quantite_vendu?.somme_total_price?.toLocaleString("de-DE")}{" "}
+              <span className="text-sm">FBU</span>
+            </h4>
           </div>
         </div>
       </div>
@@ -181,13 +205,9 @@ export default function CardsOverview() {
             <span className="text-sm text-red-500">GAP</span>
             <div className="flex flex-row  gap-x-2">
               <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
-                5,359 <span className="text-sm">KG</span>
+                {gaptotal?.pertes_totales} <span className="text-sm">KG</span>
               </h4>
               <div className="w-px bg-gray-200 h-7 dark:bg-gray-800"></div>
-
-              <h4 className="mt-2 font-bold text-gray-500 text-lg dark:text-white/90">
-                7 800 <span className="text-sm">Fbu</span>
-              </h4>
             </div>
           </div>
 
