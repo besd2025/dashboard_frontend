@@ -15,6 +15,24 @@ export default function SignInForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
+
+  function DecodeToJwt(token) {
+    try {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
+      );
+      return JSON.parse(jsonPayload);
+    } catch (error) {
+      console.error("Échec du décodage du token", error);
+      return null;
+    }
+  }
+
   const handleLogin = async () => {
     if (!identifiant || !password) {
       setError("Veuillez remplir tous les champs.");
@@ -40,10 +58,23 @@ export default function SignInForm() {
       }
 
       const data = await response.json();
-      console.log(data);
-      localStorage.setItem("data", data);
       localStorage.setItem("accessToken", data.access);
-      router.push("/dashboard/home");
+      const user = DecodeToJwt(data.access);
+      if (
+        user?.category == "Admin" ||
+        user?.category == "Anagessa" ||
+        user?.category == "General"
+      ) {
+        router.push("/dashboard/home");
+      } else if (user?.category == "Communal") {
+        router.push("/municipal/cultivators");
+      } else if (user?.category == "Provincial") {
+        router.push("/provincial/cultivators");
+      } else if (user?.category == "Regional") {
+        router.push("/regional/cultivators");
+      } else {
+        setError("vous n'avez pas d'acces.");
+      }
     } catch (err) {
       setError(err.message || "Une erreur est survenue.");
       console.error("Erreur de connexion :", err);

@@ -20,10 +20,10 @@ function Achats() {
       <div className=" col-span-12 space-y-6 lg:col-span-12">
         <QteAchatProv />
       </div>
-      <div className=" col-span-12 space-y-6 lg:col-span-8">
+      <div className=" col-span-12 space-y-6 ">
         <TopAchat />
       </div>
-      <div className=" col-span-12 space-y-6 lg:col-span-4">
+      <div className=" col-span-12 space-y-6 ">
         <TopCultivateurs />
       </div>
     </div>

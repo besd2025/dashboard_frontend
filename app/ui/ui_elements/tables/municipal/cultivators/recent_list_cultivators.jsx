@@ -112,18 +112,18 @@ export default function RecentCultivatorsList() {
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {data.map((order) => (
-                <TableRow key={order.cultivator_code}>
+                <TableRow key={order?.collector?.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <div className="relative inline-block">
                       <button
-                        onClick={() => toggleDropdown(order.cultivator_code)}
+                        onClick={() => toggleDropdown(order?.collector?.id)}
                         className="dropdown-toggle"
                       >
                         <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
                       </button>
                       <Dropdown
-                        isOpen={openDropdowns[order.cultivator_code]}
-                        onClose={() => closeDropdown(order.cultivator_code)}
+                        isOpen={openDropdowns[order?.collector?.collector]}
+                        onClose={() => closeDropdown(order?.collector?.id)}
                         className="w-40 p-2"
                       >
                         <DropdownItem
@@ -188,7 +188,7 @@ export default function RecentCultivatorsList() {
                     }
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order.colletor.hangar.hangar_name}
+                    {order?.colletor?.hangar?.hangar_name}
                   </TableCell>
                 </TableRow>
               ))}

@@ -188,7 +188,7 @@ export default function RecentCultivatorsList() {
                     }
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order.colletor.hangar.hangar_name}
+                    {order?.colletor?.hangar?.hangar_name}
                   </TableCell>
                 </TableRow>
               ))}
