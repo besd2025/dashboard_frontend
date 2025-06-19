@@ -9,7 +9,7 @@ function layout({ children }) {
       <div className=" col-span-12 space-y-6 lg:col-span-3">
         <Totalmunicipals />
       </div>
-      <div className=" col-span-12 space-y-6 lg:col-span-3">
+      <div className=" col-span-12 space-y-6 lg:col-span-5">
         <TotalQtemunicipals />
       </div>
 

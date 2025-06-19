@@ -1,5 +1,5 @@
-"use client"
-import React,{useState,useEffect} from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -8,41 +8,36 @@ import {
 } from "../../../icons";
 import Badge from "../../../ui_elements/badge/Badge";
 import { fetchData } from "../../../../_utils/api";
-export default function CardsOverview({hangar_id}) {
+export default function CardsOverview({ hangar_id }) {
   const [data, setData] = useState({});
   const [error, setError] = useState(null);
   useEffect(() => {
-          async function getData() {
-            try {
-              const results = await fetchData('get', `hangars/${hangar_id}/`, {
-                params: {},
-                additionalHeaders: {},
-                body: {}
-              });
-              setData(results);
-              console.log(results);
-            } catch (error) {
-              setError(error);
-              console.error(error);
-            }
-          }
-          getData();
-        }, []);
+    async function getData() {
+      try {
+        const results = await fetchData("get", `hangars/${hangar_id}/`, {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+        setData(results);
+        console.log(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 md:gap-6">
-      {/* <!-- Metric Item Start --> */}
-
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-16 md:gap-4">
+      {/* <!-- Metric Item Start quantity collected --> */}
+      <div className="rounded-2xl col-span-4 border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-4">
         <div className="flex items-end justify-between mb-2">
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
               Cultivateurs
             </span>
           </div>
-          {/* <Badge color="success">
-            <ArrowUpIcon />
-            2.0%
-          </Badge> */}
         </div>
         <div className="flex">
           {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
@@ -62,29 +57,18 @@ export default function CardsOverview({hangar_id}) {
             </svg>
           </div>
 
-          <h4 className="ml-3 font-bold text-gray-800 text-2xl dark:text-white/90">
+          <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
             {data.nb_cultivateurs}
           </h4>
         </div>
       </div>
-
       {/* <!-- Metric Item End --> */}
-      {/* <!-- Metric Item Start quantity collected --> */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-        <div className="flex items-end justify-between mb-2">
-          <div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              Qté Collectée
-            </span>
-          </div>
-          {/* <Badge color="success">
-            <ArrowUpIcon />
-            2.0%
-          </Badge> */}
-        </div>
-        <div className="flex">
-          {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
-          <div className="flex items-center justify-center p-2 bg-gray-100 rounded-xl dark:bg-gray-800">
+      {/* <!-- Metric Item Start --> */}
+
+      <div className="rounded-2xl col-span-6 flex flex-row justify-between border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-4">
+        <div>
+          <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
+            {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -100,40 +84,98 @@ export default function CardsOverview({hangar_id}) {
               />
             </svg>
           </div>
-
-          <h4 className="mt-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
-            {data.total_achats >= 1000 ? (
-              <>
-                {(data?.total_achats / 1000).toLocaleString("fr-FR", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })} <span className="text-sm">T</span>
-              </>
-            ) : (
-              <>
-                {data?.total_achats?.toLocaleString("fr-FR") ||0} <span className="text-sm">KG</span>
-              </>
-            )}
-          </h4>
-        </div>
-      </div>
-      {/* <!-- Metric Item End --> */}
-      {/* <!-- Metric Item Start --> quantity bought */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-        <div className="flex items-end justify-between mb-2">
-          <div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              Qté Vendue
-            </span>
-          </div>
-          {/* <Badge color="success">
+          <div className="flex items-end justify-between mt-2">
+            <div>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                Qté Collectée
+              </span>
+              <h4 className="mt-2 font-semibold text-gray-800 text-lg dark:text-white/90">
+                {data.total_achats >= 1000 ? (
+                  <>
+                    {(data?.total_achats / 1000).toLocaleString("fr-FR", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {data?.total_achats?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">KG</span>
+                  </>
+                )}
+              </h4>
+            </div>
+            {/* <Badge color="success">
             <ArrowUpIcon />
             2.0%
           </Badge> */}
+          </div>
         </div>
-        <div className="flex">
-          {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
-          <div className="flex items-center justify-center p-2 bg-gray-100 rounded-xl dark:bg-gray-800">
+        <div className="w-px bg-gray-200 h-full dark:bg-gray-800"></div>
+
+        <div className="">
+          <div className="flex items-end justify-between   rounded-2xl">
+            <div>
+              <div className="flex flex-row items-center gap-x-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="size-8"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.5 7.5a3 3 0 0 1 3-3h9a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-9Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Maïs Blanc
+                </span>
+              </div>
+
+              <h4 className=" font-semibold text-gray-800 text-xl dark:text-white/90">
+                500 452 T
+              </h4>
+            </div>
+          </div>
+          <div className="flex items-end justify-between mt-2 rounded-2xl">
+            <div>
+              <div className="flex flex-row items-center gap-x-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="size-8 text-yellow-500 "
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.5 7.5a3 3 0 0 1 3-3h9a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-9Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Maïs Jaune
+                </span>
+              </div>
+
+              <h4 className=" font-semibold text-yellow-600 text-xl dark:text-white/90">
+                500 452 T
+              </h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* <!-- Metric Item End --> */}
+
+      {/* <!-- Metric Item Start --> quantity bought */}
+
+      <div className="rounded-2xl col-span-6 flex flex-row justify-between border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-4">
+        <div>
+          <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
+            {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -149,31 +191,98 @@ export default function CardsOverview({hangar_id}) {
               />
             </svg>
           </div>
+          <div className="flex items-end justify-between mt-2">
+            <div>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                Qté Vendue
+              </span>
 
-          <h4 className="mt-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
-            {data.total_achats >= 1000 ? (
-              <>
-                {(data?.total_ventes / 1000).toLocaleString("fr-FR", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })} <span className="text-sm">T</span>
-              </>
-            ) : (
-              <>
-                {data?.total_ventes?.toLocaleString("fr-FR") ||0} <span className="text-sm">KG</span>
-              </>
-            )}
-          </h4>
+              <h4 className="ml-3  font-semibold text-gray-800 text-lg dark:text-white/90">
+                {data.total_achats >= 1000 ? (
+                  <>
+                    {(data?.total_ventes / 1000).toLocaleString("fr-FR", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {data?.total_ventes?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">KG</span>
+                  </>
+                )}
+              </h4>
+            </div>
+            {/* <Badge color="success">
+            <ArrowUpIcon />
+            2.0%
+          </Badge> */}
+          </div>
+        </div>
+        <div className="w-px bg-gray-200 h-full dark:bg-gray-800"></div>
 
+        <div className="">
+          <div className="flex items-end justify-between   rounded-2xl">
+            <div>
+              <div className="flex flex-row items-center gap-x-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="size-8"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.5 7.5a3 3 0 0 1 3-3h9a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-9Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Maïs Blanc
+                </span>
+              </div>
+
+              <h4 className=" font-semibold text-gray-800 text-xl dark:text-white/90">
+                500 452 T
+              </h4>
+            </div>
+          </div>
+          <div className="flex items-end justify-between mt-2 rounded-2xl">
+            <div>
+              <div className="flex flex-row items-center gap-x-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="size-8 text-yellow-500 "
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.5 7.5a3 3 0 0 1 3-3h9a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-9Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Maïs Jaune
+                </span>
+              </div>
+
+              <h4 className=" font-semibold text-yellow-600 text-xl dark:text-white/90">
+                500 452 T
+              </h4>
+            </div>
+          </div>
         </div>
       </div>
-      {/* <!-- Metric Item End --> */}
-      {/* <!-- Metric Item Start --> */}
 
       {/* <!-- Metric Item End --> */}
       {/* <!-- Metric Item Start --> */}
 
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+      {/* <!-- Metric Item End --> */}
+      {/* <!-- Metric Item Start --> */}
+
+      <div className="rounded-2xl col-span-4 border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-4">
         <div className="flex items-end justify-between mb-2">
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -204,16 +313,16 @@ export default function CardsOverview({hangar_id}) {
             </svg>
           </div>
 
-          <h4 className="ml-3 font-bold text-gray-800 text-2xl dark:text-white/90">
+          <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
             30 M <span className="text-sm">FBU</span>
           </h4>
         </div>
       </div>
 
       {/* <!-- Metric Item End --> */}
-         {/* <!-- Metric Item Start --> */}
+      {/* <!-- Metric Item Start --> */}
 
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+      <div className="rounded-2xl col-span-4 border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-4">
         <div className="flex items-end justify-between mb-2">
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -244,7 +353,7 @@ export default function CardsOverview({hangar_id}) {
             </svg>
           </div>
 
-          <h4 className="ml-3 font-bold text-gray-800 text-2xl dark:text-white/90">
+          <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
             30 M <span className="text-sm">FBU</span>
           </h4>
         </div>

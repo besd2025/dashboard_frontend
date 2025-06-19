@@ -16,6 +16,7 @@ import {
   PlugInIcon,
   SettingsIcon,
   UserCircleIcon,
+  UserLineIcon,
 } from "../icons";
 
 const navItems = [
@@ -62,8 +63,12 @@ const navItems = [
       { name: "Details", path: "/dashboard/stocks" },
       { name: "Achats", path: "/dashboard/stocks/achats" },
       {
-        name: "Sorties",
+        name: "Ventes",
         path: "/dashboard/stocks/sold_out",
+      },
+      {
+        name: "Sorties",
+        path: "/dashboard/stocks/out",
       },
     ],
   },
@@ -102,19 +107,16 @@ const navItems = [
 ];
 
 const othersItems = [
-  // {
-  //   icon: <AlertIcon />,
-  //   name: "Alertes",
-  //   path: "/dashboard/alerts",
-  // },
-  // {
-  //   icon: <PlugInIcon />,
-  //   name: "Authentication",
-  //   subItems: [
-  //     { name: "Sign In", path: "/signin", pro: false },
-  //     { name: "Sign Up", path: "/signup", pro: false },
-  //   ],
-  // },
+  {
+    icon: <UserLineIcon />,
+    name: "Role",
+    path: "/dashboard/stocks",
+    subItems: [
+      { name: "Communale", path: "/municipal/cultivators" },
+      { name: "Provinciale", path: "/provincial/cultivators" },
+      { name: "Regionale", path: "/regional/cultivators" },
+    ],
+  },
 ];
 
 const AppSidebar = () => {
