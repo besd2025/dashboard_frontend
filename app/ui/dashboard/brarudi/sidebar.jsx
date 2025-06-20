@@ -24,7 +24,7 @@ function Sidebar() {
           className="flex items-center space-x-1 rounded-xl bg-gray-50 p-1 dark:bg-gray-800/50"
         >
           <Link
-            href="/dashboard/brarudi/en_attente"
+            href="/dashboard/Brarudi/en_attente"
             onClick={() => setActiveTab("attente")}
             className={`relative flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-bold transition-all duration-200 ease-in-out ${
               activeTab === "attente"
@@ -38,7 +38,7 @@ function Sidebar() {
             )}
           </Link>
           <Link
-            href="/dashboard/brarudi/valide"
+            href="/dashboard/Brarudi/valide"
             onClick={() => setActiveTab("valide")}
             className={`relative flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-bold transition-all duration-200 ease-in-out ${
               activeTab === "valide"
