@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import Label from "../../../../ui_elements/form/Label";
-import Input from "../../../../ui_elements/form/input/InputField";
-import Button from "../../../../ui_elements/button/Button";
-import DatePicker from "../../../../ui_elements/form/date-picker";
-import Select from "../../../../ui_elements/form/Select";
-import { ChevronDownIcon } from "../../../../icons";
-import TextArea from "../../../../ui_elements/form/input/TextArea";
+import Label from "../../../ui_elements/form/Label";
+import Input from "../../../ui_elements/form/input/InputField";
+import Button from "../../../ui_elements/button/Button";
+import DatePicker from "../../../ui_elements/form/date-picker";
+import Select from "../../../ui_elements/form/Select";
+import { ChevronDownIcon } from "../../../icons";
+import TextArea from "../../../ui_elements/form/input/TextArea";
 
 function ResultsForm({ closeModalDetails, onBack }) {
   const [message, setMessage] = useState("");
