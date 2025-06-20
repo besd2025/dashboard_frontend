@@ -17,14 +17,13 @@ import { useSidebar } from "../../../../context/SidebarContext";
 import Modal from "../../../modal";
 import { useModal } from "../../../hooks/useModal";
 import Pagination from "../../Pagination";
-import EditUserProfile from "../../../../regional/provincials/profile/edit_user_profile";
-import FilterUserProfile from "../../../../regional/provincials/profile/filter_user_profile";
 import FilterHangarList from "../../../../regional/provincials/filter_hangar_list";
 import { fetchData } from "../../../../../_utils/api";
 import Button from "../../../button/Button";
 import Checkbox from "../../../form/input/Checkbox";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import EditUserProfile from "../../../../regional/cultivators/profile/edit_user_profile";
 
 function AllProvincialsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
