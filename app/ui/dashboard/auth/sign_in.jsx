@@ -58,7 +58,8 @@ export default function SignInForm() {
       }
 
       const data = await response.json();
-      localStorage.setItem("accessToken", data.access);
+      //localStorage.setItem("accessToken", data.access);
+      document.cookie = `accessToken=${data.access}; path=/; max-age=3600; secure`;
       const user = DecodeToJwt(data.access);
       if (
         user?.category == "Admin" ||

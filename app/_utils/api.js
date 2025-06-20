@@ -5,7 +5,7 @@ const server = process.env.NEXT_PUBLIC_API_URL; // URL du serveur API
 // Fonction pour lire le token côté client uniquement
 const getAccessToken = () => {
   if (typeof window !== "undefined") {
-    return localStorage.getItem("accessToken") || null;
+    return cookieStore.get("accessToken")?.value || null;
   }
   return null;
 };
