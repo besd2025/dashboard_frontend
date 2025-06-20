@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import {
   Table,
   TableBody,
@@ -21,7 +21,7 @@ import FilterUserProfile from "../../../../dashboard/cultivators/profile/filter_
 import { fetchData } from "../../../../../_utils/api";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-
+import { UserContext } from "../../../../../context/UserContext";
 function HangarAchatList({ hangar_id }) {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -30,6 +30,7 @@ function HangarAchatList({ hangar_id }) {
   const limit = 5; // nombre par page
   const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
+  const user = useContext(UserContext);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -413,15 +414,17 @@ function HangarAchatList({ hangar_id }) {
                         >
                           Profile
                         </DropdownItem>
-                        <DropdownItem
-                          onItemClick={() => {
-                            closeDropdown(order.id);
-                            openModal();
-                          }}
-                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                        >
-                          Modifier
-                        </DropdownItem>
+                        {user?.session?.category != "General" && (
+                          <DropdownItem
+                            onItemClick={() => {
+                              closeDropdown(order.id);
+                              openModal();
+                            }}
+                            className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                          >
+                            Modifier
+                          </DropdownItem>
+                        )}
                       </Dropdown>
                     </div>
                   </TableCell>

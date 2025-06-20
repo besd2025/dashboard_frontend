@@ -1,15 +1,13 @@
 import { SidebarProvider } from "../ui/context/SidebarContext";
 import { ThemeProvider } from "../ui/context/ThemeContext";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { UserProvider } from "../ui/context/UserContext";
-export default async function AdminLayout({ children }) {
-  // Vérifier si le token est présent dans le localStorage côté client
-  if (typeof window !== "undefined") {
-    const token = localStorage.getItem("accessToken");
 
-    if (!token) {
-      redirect("/"); // ou '/login'
-    }
+export default async function AdminLayout({ children }) {
+  const cookieStore = cookies();
+  const token = cookieStore.get("accessToken")?.value;
+  if (!token) {
+    redirect("/"); // redirige vers la page d'accueil si non connecté
   }
 
   return (

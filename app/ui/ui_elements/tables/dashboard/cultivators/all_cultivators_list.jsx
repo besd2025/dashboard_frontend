@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import {
   Table,
   TableBody,
@@ -19,6 +19,7 @@ import { useModal } from "../../../hooks/useModal";
 import DropdownItem from "../../../dropdown/DropdownItem";
 import { Dropdown } from "../../../dropdown/dropdown_cultvators";
 import { MoreDotIcon } from "../../../../icons";
+import { UserContext } from "../../../../context/UserContext";
 function AllCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
@@ -27,6 +28,8 @@ function AllCultivatorsList() {
   const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const user = useContext(UserContext);
+  console.log(user?.session?.category);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -48,14 +51,6 @@ function AllCultivatorsList() {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
   const inputRef = useRef(null);
-
-  const handleToggle = () => {
-    if (window.innerWidth >= 1024) {
-      toggleSidebar();
-    } else {
-      toggleMobileSidebar();
-    }
-  };
 
   const toggleApplicationMenu = () => {
     setApplicationMenuOpen(!isApplicationMenuOpen);
@@ -389,15 +384,17 @@ function AllCultivatorsList() {
                         >
                           Profile
                         </DropdownItem>
-                        <DropdownItem
-                          onItemClick={() => {
-                            closeDropdown(order.id);
-                            openModal();
-                          }}
-                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                        >
-                          Modifier
-                        </DropdownItem>
+                        {user?.session?.category != "General" && (
+                          <DropdownItem
+                            onItemClick={() => {
+                              closeDropdown(order.id);
+                              openModal();
+                            }}
+                            className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                          >
+                            Modifier
+                          </DropdownItem>
+                        )}
                       </Dropdown>
                     </div>
                   </TableCell>

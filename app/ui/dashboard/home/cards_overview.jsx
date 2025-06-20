@@ -10,13 +10,15 @@ import Badge from "../../ui_elements/badge/Badge";
 import { fetchData } from "../../../_utils/api";
 export default function CardsOverview() {
   const [data, setData] = useState([]);
-  const [quantite_vendu, setQuantite] = useState([]);
+  const [quantite_vendu, setQuantiteVendu] = useState(0);
   const [gaptotal, setGapTotat] = useState([]);
+  const [quantite_total_achat, setQuantiteTotal] = useState(0);
+  const [total_quantite_vendu, setTotalVendu] = useState([]);
   const [error, setError] = useState(null);
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData("get", "achats/quantite_totale/", {
+        const results = await fetchData("get", "stock_resume/", {
           params: {},
           additionalHeaders: {},
           body: {},
@@ -40,9 +42,15 @@ export default function CardsOverview() {
             body: {},
           }
         );
+        setTotalVendu(quantite_vendu);
         setGapTotat(pertetotal);
         setData(results);
-        setQuantite(quantite_vendu);
+        setQuantiteVendu(
+          results?.sorties?.achats_blanc + results?.sorties?.achats_jaune
+        );
+        setQuantiteTotal(
+          results?.achats?.achats_blanc + results?.achats?.achats_jaune
+        );
       } catch (error) {
         setError(error);
         console.error(error);
@@ -80,17 +88,16 @@ export default function CardsOverview() {
                 Qté Collectée
               </span>
               <h4 className="mt-2 font-semibold text-gray-800 text-xl dark:text-white/90">
-                {data.quantite_totale >= 1000 ? (
+                {data?.achats?.achats_blanc >= 1000 ? (
                   <>
-                    {(data?.quantite_totale / 1000).toLocaleString("fr-FR", {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}{" "}
+                    {(data?.achats?.achats_blanc / 1000).toLocaleString(
+                      "fr-FR"
+                    )}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
-                    {data?.quantite_totale?.toLocaleString("fr-FR") || 0}{" "}
+                    {data?.achats?.achats_blanc?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">KG</span>
                   </>
                 )}
@@ -126,7 +133,17 @@ export default function CardsOverview() {
               </div>
 
               <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
-                4 Kg
+                {quantite_total_achat >= 1000 ? (
+                  <>
+                    {(quantite_total_achat / 1000).toLocaleString("fr-FR")}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {quantite_total_achat?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">KG</span>
+                  </>
+                )}
               </h4>
             </div>
           </div>
@@ -151,7 +168,19 @@ export default function CardsOverview() {
               </div>
 
               <h4 className=" font-semibold text-yellow-600 text-lg dark:text-white/90">
-                20kg
+                {data?.achats?.achats_jaune >= 1000 ? (
+                  <>
+                    {(data?.achats?.achats_jaune / 1000).toLocaleString(
+                      "fr-FR"
+                    )}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {data?.achats?.achats_jaune?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">KG</span>
+                  </>
+                )}
               </h4>
             </div>
           </div>
@@ -229,10 +258,20 @@ export default function CardsOverview() {
                   Maïs Blanc
                 </span>
               </div>
-
-              <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
-                0 T
-              </h4>
+              {data?.sorties?.sorties_blanc >= 1000 ? (
+                <>
+                  {(data?.sorties?.sorties_blanc / 1000).toLocaleString(
+                    "fr-FR"
+                  )}{" "}
+                  <span className="text-sm">T</span>
+                </>
+              ) : (
+                <>
+                  {data?.sorties?.sorties_blanc?.toLocaleString("fr-FR") || 0}{" "}
+                  <span className="text-sm">KG</span>
+                </>
+              )}
+              <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90"></h4>
             </div>
           </div>
           <div className="flex items-end justify-between mt-2 rounded-2xl">
@@ -256,7 +295,19 @@ export default function CardsOverview() {
               </div>
 
               <h4 className=" font-semibold text-yellow-600 text-lg dark:text-white/90">
-                0 T
+                {data?.sorties?.sorties_jaune >= 1000 ? (
+                  <>
+                    {(data?.sorties?.sorties_jaune / 1000).toLocaleString(
+                      "fr-FR"
+                    )}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {data?.sorties?.sorties_jaune?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">KG</span>
+                  </>
+                )}
               </h4>
             </div>
           </div>
@@ -287,8 +338,14 @@ export default function CardsOverview() {
             </span>
 
             <h4 className="mt-2 font-bold text-gray-800 text-xl dark:text-white/90">
-              {quantite_vendu?.somme_total_price?.toLocaleString("de-DE")}{" "}
-              <span className="text-sm">FBU</span>
+              {total_quantite_vendu?.somme_total_price > 1000000
+                ? (
+                    total_quantite_vendu.somme_total_price / 1000000
+                  ).toLocaleString("de-DE") + " M"
+                : total_quantite_vendu?.somme_total_price?.toLocaleString(
+                    "de-DE"
+                  )}
+              <span className="text-sm"> FBU</span>
             </h4>
           </div>
         </div>

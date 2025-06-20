@@ -1,36 +1,41 @@
 import axios from "axios";
 
-const server = process.env.NEXT_PUBLIC_API_URL; // URL du serveur API
+const server = process.env.NEXT_PUBLIC_API_URL;
 
-// Fonction pour lire le token côté client uniquement
+// ✅ Lire un cookie spécifique côté client
 const getAccessToken = () => {
   if (typeof window !== "undefined") {
-    return localStorage.getItem("accessToken") || null;
+    const cookies = document.cookie.split("; ");
+    const accessTokenCookie = cookies.find((row) =>
+      row.startsWith("accessToken=")
+    );
+    return accessTokenCookie?.split("=")[1] || null;
   }
   return null;
 };
-// Création d'une instance Axios
+
+// ✅ Instance Axios
 export const api = axios.create({
   baseURL: server,
   headers: {
     "Content-Type": "application/json",
-    "X-Signature-web": process.env.NEXT_PUBLIC_SIGNATURE, // Signature personnalisée
+    "X-Signature-web": process.env.NEXT_PUBLIC_SIGNATURE,
   },
 });
 
-// Intercepteur pour ajouter le token à chaque requête si présent
+// ✅ Ajouter automatiquement le token aux requêtes
 api.interceptors.request.use(
   (config) => {
-    const access_token = getAccessToken();
-    if (access_token) {
-      config.headers.Authorization = `Bearer ${access_token}`;
+    const accessToken = getAccessToken();
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-// Fonction générique pour faire des appels API
+// ✅ Fonction générique de requête
 export const fetchData = async (
   method,
   url,
@@ -51,7 +56,7 @@ export const fetchData = async (
 
     return method === "get" ? response.data : response.status;
   } catch (error) {
-    console.error("Request failed", error);
+    console.error("❌ API Request Error:", error);
     throw error;
   }
 };

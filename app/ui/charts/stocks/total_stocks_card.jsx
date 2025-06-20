@@ -14,7 +14,6 @@ function TotalStocks() {
           additionalHeaders: {},
           body: {},
         });
-        console.log(results);
         setData(results.stock);
       } catch (error) {
         setError(error);
