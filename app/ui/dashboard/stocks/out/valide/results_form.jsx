@@ -7,7 +7,7 @@ import Select from "../../../../ui_elements/form/Select";
 import { ChevronDownIcon } from "../../../../icons";
 import TextArea from "../../../../ui_elements/form/input/TextArea";
 
-function ResultsForm({ closeModalDetails, onBack }) {
+function ResultsForm({ closeModalResults, onBack }) {
   const [message, setMessage] = useState("");
   const optionUT = [
     { value: "Rango", label: "Rango" },
@@ -123,7 +123,7 @@ function ResultsForm({ closeModalDetails, onBack }) {
         </div>
       </div>
       <div className="flex items-center  w-full gap-3 mt-6 sticky -bottom-8 bg-white pt-2">
-        <Button size="sm" variant="outline" onClick={closeModalDetails}>
+        <Button size="sm" variant="outline" onClick={closeModalResults}>
           Annuler
         </Button>
         <Button size="sm" className="bg-green-500">

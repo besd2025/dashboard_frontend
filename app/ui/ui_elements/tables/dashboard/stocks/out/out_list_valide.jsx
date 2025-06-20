@@ -409,7 +409,7 @@ function OutListValide() {
         }}
         className="max-w-[700px] m-4"
       >
-        <ResultsForm closeModalDetails={closeModalDetails} />
+        <ResultsForm closeModalResults={closeModalResults} />
       </Modal>
     </div>
   );
