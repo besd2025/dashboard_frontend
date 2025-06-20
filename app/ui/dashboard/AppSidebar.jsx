@@ -68,7 +68,7 @@ const navItems = [
       },
       {
         name: "Sorties",
-        path: "/dashboard/stocks/out",
+        path: "/dashboard/stocks/out/en_attente",
       },
     ],
   },
@@ -91,6 +91,33 @@ const navItems = [
     //   },
     // ],
   },
+  // {
+  //   icon: (
+  //     <Image
+  //       className="rounded-xl"
+  //       src="/img/brarudi-logo.png"
+  //       alt="Brarudi"
+  //       width={32}
+  //       height={32}
+  //     />
+  //   ),
+  //   name: "BRARUDI",
+  //   path: "/dashboard/Brarudi/en_attente",
+  //   subPath: [
+  //     "/dashboard/hangars/details/cultivator",
+  //     "/dashboard/hangars/details/achats",
+  //   ],
+  //   // subItems: [
+  //   //   {
+  //   //     name: "Details",
+  //   //     path: "/dashboard/hangars",
+  //   //     subPath: [
+  //   //       "/dashboard/hangars/details/cultivator",
+  //   //       "/dashboard/hangars/details/achats",
+  //   //     ],
+  //   //   },
+  //   // ],
+  // },
   {
     icon: <SettingsIcon />,
     name: "Parametre",
@@ -357,11 +384,11 @@ const AppSidebar = () => {
                     : "justify-start"
                 }`}
               >
-                {/* {isExpanded || isHovered || isMobileOpen ? (
-                  "Others"
+                {isExpanded || isHovered || isMobileOpen ? (
+                  "Autre"
                 ) : (
                   <HorizontaLDots />
-                )} */}
+                )}
               </h2>
               {renderMenuItems(othersItems, "others")}
             </div>

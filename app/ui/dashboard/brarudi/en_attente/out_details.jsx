@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import Label from "../../../../ui_elements/form/Label";
-import Input from "../../../../ui_elements/form/input/InputField";
-import Button from "../../../../ui_elements/button/Button";
-import ViewImageModal from "../../../../ui_elements/modal/ViewImageModal";
+import Button from "../../../ui_elements/button/Button";
+import ViewImageModal from "../../../ui_elements/modal/ViewImageModal";
 
 function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
   const tableData = [
@@ -111,7 +109,6 @@ function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
                 {data.prix} Fbu
               </p>
             </div>
-
             <div className="relative group  w-max">
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
                 Billet

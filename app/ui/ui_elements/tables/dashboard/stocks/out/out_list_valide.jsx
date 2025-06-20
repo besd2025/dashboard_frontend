@@ -16,9 +16,9 @@ import Pagination from "../../../Pagination";
 import FilterUserProfile from "../../../../../municipal/cultivators/profile/filter_user_profile";
 import { fetchData } from "../../../../../../_utils/api";
 import OutDetails from "../../../../../dashboard/stocks/out/en_attente/out_details";
-import ConfirmationForm from "../../../../../dashboard/stocks/out/en_attente/confirmation_form";
+import ResultsForm from "../../../../../dashboard/stocks/out/valide/results_form";
 
-function OutListEnatt() {
+function OutListValide() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [openDropdowns, setOpenDropdowns] = useState({});
@@ -80,6 +80,11 @@ function OutListEnatt() {
     openModal: openModalDetails,
     closeModal: closeModalDetails,
   } = useModal();
+  const {
+    isOpen: isOpenResults,
+    openModal: openModalResults,
+    closeModal: closeModalResults,
+  } = useModal();
 
   // Ajout de l'état pour le step du modal
   const [modalStep, setModalStep] = useState("details");
@@ -106,7 +111,7 @@ function OutListEnatt() {
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-          Liste des sorties en attente
+          Liste des sorties validés
         </h3>
         {/* search */}
         <div className="hidden lg:block">
@@ -312,6 +317,16 @@ function OutListEnatt() {
                         >
                           Details
                         </DropdownItem>
+                        <DropdownItem
+                          onItemClick={() => {
+                            closeDropdown(order.id);
+                            openModalResults();
+                          }}
+                          tag="a"
+                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                        >
+                          Resultats
+                        </DropdownItem>
                       </Dropdown>
                     </div>
                   </TableCell>
@@ -381,30 +396,23 @@ function OutListEnatt() {
       <Modal
         isOpen={isOpenDetails}
         onClose={() => {
-          setModalStep("details");
           closeModalDetails();
         }}
-        showCloseButton={false}
         className="max-w-[700px] m-4"
       >
-        {modalStep === "details" && (
-          <OutDetails
-            closeModalDetails={closeModalDetails}
-            onConfirm={() => setModalStep("confirmation")}
-          />
-        )}
-        {modalStep === "confirmation" && (
-          <ConfirmationForm
-            closeModalDetails={() => {
-              setModalStep("details");
-              closeModalDetails();
-            }}
-            onBack={() => setModalStep("details")}
-          />
-        )}
+        <OutDetails closeModalDetails={closeModalDetails} validated={true} />
+      </Modal>
+      <Modal
+        isOpen={isOpenResults}
+        onClose={() => {
+          closeModalResults();
+        }}
+        className="max-w-[700px] m-4"
+      >
+        <ResultsForm closeModalDetails={closeModalDetails} />
       </Modal>
     </div>
   );
 }
 
-export default OutListEnatt;
+export default OutListValide;

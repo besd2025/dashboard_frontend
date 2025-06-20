@@ -6,17 +6,17 @@ import {
   TableCell,
   TableHeader,
   TableRow,
-} from "../../../table_elemets";
-import { MoreDotIcon } from "../../../../../icons";
-import DropdownItem from "../../../../dropdown/DropdownItem";
-import { Dropdown } from "../../../../dropdown/dropdown_cultvators";
-import Modal from "../../../../modal";
-import { useModal } from "../../../../hooks/useModal";
-import Pagination from "../../../Pagination";
-import FilterUserProfile from "../../../../../municipal/cultivators/profile/filter_user_profile";
-import { fetchData } from "../../../../../../_utils/api";
-import OutDetails from "../../../../../dashboard/stocks/out/en_attente/out_details";
-import ConfirmationForm from "../../../../../dashboard/stocks/out/en_attente/confirmation_form";
+} from "../../table_elemets";
+import { MoreDotIcon } from "../../../../icons";
+import DropdownItem from "../../../dropdown/DropdownItem";
+import { Dropdown } from "../../../dropdown/dropdown_cultvators";
+import Modal from "../../../modal";
+import { useModal } from "../../../hooks/useModal";
+import Pagination from "../../Pagination";
+import FilterUserProfile from "../../../../municipal/cultivators/profile/filter_user_profile";
+import { fetchData } from "../../../../../_utils/api";
+import OutDetails from "../../../../dashboard/brarudi/en_attente/out_details";
+import ConfirmationForm from "../../../../dashboard/brarudi/en_attente/confirmation_form";
 
 function OutListEnatt() {
   const [data, setData] = useState([]);
@@ -280,7 +280,19 @@ function OutListEnatt() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
+                  hangar
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
                   Date
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  prix
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -391,6 +403,7 @@ function OutListEnatt() {
           <OutDetails
             closeModalDetails={closeModalDetails}
             onConfirm={() => setModalStep("confirmation")}
+            validated={false}
           />
         )}
         {modalStep === "confirmation" && (
