@@ -1,41 +1,44 @@
 "use client";
-import { useSearchParams, usePathname } from "next/navigation";
+
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Profile from "../../../../ui/dashboard/hangars/details/profile";
 import { HangarProvider } from "../../../../ui/context/DetailContext";
 
 function Layout({ children }) {
-  const searchParams = useSearchParams();
   const pathname = usePathname();
-  const hangar_id = searchParams.get("hangar_id"); // <-- ✅ récupère depuis l'URL
   const [activeTab, setActiveTab] = useState("achats");
-  console.log(hangar_id);
+  const [hangarId, setHangarId] = useState(null);
+
   useEffect(() => {
+    const storedHangarId = localStorage.getItem("hangarId");
+    setHangarId(storedHangarId);
+
     if (pathname.includes("/cultivator")) {
       setActiveTab("cultivateurs");
     } else if (pathname.includes("/achats")) {
       setActiveTab("achats");
     } else if (pathname.includes("/localisation")) {
       setActiveTab("localisation");
-    }
-    if (pathname.includes("/transfers")) {
+    } else if (pathname.includes("/transfers")) {
       setActiveTab("transfers");
-    }
-    if (pathname.includes("/receptions")) {
+    } else if (pathname.includes("/receptions")) {
       setActiveTab("receptions");
     }
   }, [pathname]);
 
+  if (!hangarId) return <div>Chargement du hangar...</div>;
+
   return (
-    <HangarProvider hangar_id={hangar_id}>
+    <HangarProvider hangar_id={hangarId}>
       <div>
-        <Profile hangar_id={hangar_id} />
+        <Profile hangar_id={hangarId} />
         <div className="bg-white dark:bg-white/[0.03] mt-2 rounded-2xl mb-1">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <nav className="-mb-px flex items-end gap-x-8">
               <Link
-                href={`/dashboard/hangars/details/cultivator?hangar_id=${hangar_id}`}
+                href={`/dashboard/hangars/details/cultivator?hangar_id=${hangarId}`}
                 className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold ${
                   activeTab === "cultivateurs"
                     ? "border-yellow-500 text-yellow-500"
@@ -45,7 +48,7 @@ function Layout({ children }) {
                 Cultivateurs
               </Link>
               <Link
-                href={`/dashboard/hangars/details/achats?hangar_id=${hangar_id}`}
+                href={`/dashboard/hangars/details/achats?hangar_id=${hangarId}`}
                 className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold ${
                   activeTab === "achats"
                     ? "border-yellow-500 text-yellow-500"
@@ -57,7 +60,7 @@ function Layout({ children }) {
               <Link
                 href="/dashboard/hangars/details/transfers"
                 onClick={() => setActiveTab("transfers")}
-                className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold whitespace-nowrap ${
+                className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold ${
                   activeTab === "transfers"
                     ? "border-yellow-500 text-yellow-500"
                     : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
@@ -68,7 +71,7 @@ function Layout({ children }) {
               <Link
                 href="/dashboard/hangars/details/receptions"
                 onClick={() => setActiveTab("receptions")}
-                className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold whitespace-nowrap ${
+                className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold ${
                   activeTab === "receptions"
                     ? "border-yellow-500 text-yellow-500"
                     : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
@@ -77,7 +80,7 @@ function Layout({ children }) {
                 Réception
               </Link>
               <Link
-                href={`/dashboard/hangars/details/localisation?hangar_id=${hangar_id}`}
+                href={`/dashboard/hangars/details/localisation?hangar_id=${hangarId}`}
                 className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold ${
                   activeTab === "localisation"
                     ? "border-yellow-500 text-yellow-500"

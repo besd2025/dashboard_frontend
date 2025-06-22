@@ -9,20 +9,21 @@ import {
 } from "../../../table_elemets";
 
 import Image from "next/image";
-import { MoreDotIcon } from "../../../../icons";
-import DropdownItem from "../../../dropdown/DropdownItem";
-import { Dropdown } from "../../../dropdown/dropdown_cultvators";
-import Badge from "../../../badge/Badge";
-import Modal from "../../../modal";
-import { useModal } from "../../../hooks/useModal";
-import Pagination from "../../Pagination";
-import EditUserProfile from "../../../../dashboard/cultivators/profile/edit_user_profile";
-import FilterUserProfile from "../../../../dashboard/cultivators/profile/filter_user_profile";
-import { fetchData } from "../../../../../_utils/api";
+import { MoreDotIcon } from "../../../../../icons";
+import DropdownItem from "../../../../dropdown/DropdownItem";
+import { Dropdown } from "../../../../dropdown/dropdown_cultvators";
+import Badge from "../../../../badge/Badge";
+import Modal from "../../../../modal";
+import { useModal } from "../../../../hooks/useModal";
+import Pagination from "../../../Pagination";
+import EditUserProfile from "../../../../../dashboard/cultivators/profile/edit_user_profile";
+import FilterUserProfile from "../../../../../dashboard/cultivators/profile/filter_user_profile";
+import { fetchData } from "../../../../../../_utils/api";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { UserContext } from "../../../../../context/UserContext";
-function HangarAchatList({ hangar_id }) {
+//import { useSearchParams } from "next/navigation";
+function HangarAchatList() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [openDropdowns, setOpenDropdowns] = useState({});
@@ -31,6 +32,9 @@ function HangarAchatList({ hangar_id }) {
   const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
   const user = useContext(UserContext);
+  //const searchParams = useSearchParams();
+  const hangar_id = localStorage.getItem("hangarId");
+  //const hangar_id = searchParams.get("hangar_id");
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one

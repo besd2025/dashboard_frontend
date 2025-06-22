@@ -1,18 +1,17 @@
 "use client";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import SalePurchaseTimePeriod from "../../common/home/sale_purchase_period";
 import { fetchData } from "../../../_utils/api";
-// Dynamically import to avoid SSR errors
+
+// Import dynamique du composant chart
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
 function NewCultivatorsCharts() {
-        const [data, setData] = useState([]);
-          const [error, setError] = useState(null);
   const [timePeriod, setTimePeriod] = useState("days");
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     series: [
       {
         name: "Cafeiculteurs",
@@ -23,79 +22,41 @@ function NewCultivatorsCharts() {
       chart: {
         height: 350,
         type: "line",
-        zoom: {
-          enabled: false,
-        },
-        toolbar: {
-          show: false,
-        },
+        zoom: { enabled: false },
+        toolbar: { show: false },
       },
-      dataLabels: {
-        enabled: true,
-      },
-      markers: {
-        size: 0,
-      },
+      dataLabels: { enabled: true },
+      markers: { size: 0 },
       stroke: {
-        curve: "smooth", // Define the line style (straight, smooth, or step)
-        width: [4, 3], // Line width for each dataset
+        curve: "smooth",
+        width: [4, 3],
       },
       grid: {
         row: {
-          colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+          colors: ["#f3f3f3", "transparent"],
           opacity: 0.5,
         },
         xaxis: {
-          lines: {
-            show: false, // Hide grid lines on x-axis
-          },
+          lines: { show: false },
         },
         yaxis: {
-          lines: {
-            show: true, // Show grid lines on y-axis
-          },
+          lines: { show: true },
         },
       },
       xaxis: {
         categories: [],
-        axisBorder: {
-          show: false, // Hide x-axis border
-        },
-        axisTicks: {
-          show: false, // Hide x-axis ticks
-        },
-        tooltip: {
-          enabled: false, // Disable tooltip for x-axis points
-        },
+        axisBorder: { show: false },
+        axisTicks: { show: false },
+        tooltip: { enabled: false },
       },
     },
   });
 
   const handleTimePeriodChange = (period) => {
-    setTimePeriod(period);
-    const newData = getChartData(period);
-    setState((prevState) => ({
-      ...prevState,
-      series: [
-        {
-          name: "Achats",
-          data: newData.achats,
-        },
-        {
-          name: "Ventes",
-          data: newData.ventes,
-        },
-      ],
-      options: {
-        ...prevState.options,
-        xaxis: {
-          ...prevState.options.xaxis,
-          categories: newData.categories,
-        },
-      },
-    }));
+    setTimePeriod(period); // On déclenche juste le useEffect
   };
- useEffect(() => {
+
+  useEffect(() => {
     async function getData() {
       try {
         const periodParam =
@@ -107,24 +68,28 @@ function NewCultivatorsCharts() {
             ? "year"
             : "month";
 
-        const results = await fetchData("get", `cultivators/statistiques_par_temps?period=${periodParam}`, {
-          params: {},
-          additionalHeaders: {},
-          body: {},
-        });
-       console.log(results);
+        const results = await fetchData(
+          "get",
+          `cultivators/statistiques_par_temps?period=${periodParam}`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
+
         const categories = results?.map((item) => {
           const date = new Date(item?.period + "T00:00:00");
-          return `${date.toLocaleDateString("fr-FR", {
-            weekday: "short",
-          })} ${item?.period}`;
+          return `${date.toLocaleDateString("fr-FR", { weekday: "short" })} ${
+            item?.period
+          }`;
         });
 
         const data = results?.map((item) => item?.nombre || 0);
 
         setState((prev) => ({
           ...prev,
-          series: [{ name: "stock", data }],
+          series: [{ name: "Cultivateurs", data }],
           options: {
             ...prev.options,
             xaxis: {

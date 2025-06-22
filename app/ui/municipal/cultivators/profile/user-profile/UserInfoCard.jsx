@@ -1,34 +1,39 @@
 "use client";
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useModal } from "../../../../ui_elements/hooks/useModal";
 import { fetchData } from "../../../../../_utils/api";
-export default function UserInfoCard({cultivateur_id}) {
+export default function UserInfoCard({ cultivateur_id }) {
   const { isOpen, openModal, closeModal } = useModal();
+  console.log(cultivateur_id);
   const handleSave = () => {
     // Handle save logic here
     console.log("Saving changes...");
     closeModal();
   };
-    const [data,setData]=useState([])
-    const [error,setError]=useState('')
+  const [data, setData] = useState([]);
+  const [error, setError] = useState("");
   useEffect(() => {
-        async function getData() {
-          try {
-            const results = await fetchData('get', `/cultivators/${cultivateur_id}`, {
-              params: {},
-              additionalHeaders: {},
-              body: {}
-            });
-            setData(results.results);
-         
-          } catch (error) {
-            setError(error);
-            console.error(error);
+    async function getData() {
+      try {
+        const results = await fetchData(
+          "get",
+          `/cultivators/${cultivateur_id}`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
           }
-        }
-        getData();
-      }, []);
-    
+        );
+        setData(results);
+        console.log(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
+
   return (
     <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -43,7 +48,7 @@ export default function UserInfoCard({cultivateur_id}) {
                 Nom
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {data?.cultivator_last_name}  
+                {data?.cultivator_last_name}
               </p>
             </div>
 
@@ -52,7 +57,7 @@ export default function UserInfoCard({cultivateur_id}) {
                 Prénom
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-               {data?.cultivator_first_name}
+                {data?.cultivator_first_name}
               </p>
             </div>
 

@@ -1,15 +1,12 @@
+"use client";
+import React, { Suspense } from "react";
 import HangarAchatList from "../../../../../ui/ui_elements/tables/dashboard/hangars/details/hangar_achats_list";
-import React from "react";
-import { useHangar } from "../../../../../ui/context/DetailContext";
-function page({ searchParams }) {
-  // const { hangar_id } = useHangar();
-  const hangar_id = searchParams?.hangar_id;
-  console.log(hangar_id);
+
+export default function Page() {
   return (
-    <>
-      <HangarAchatList hangar_id={hangar_id} />;
-    </>
+    <Suspense fallback={<div>Chargement en cours...</div>}>
+      {" "}
+      <HangarAchatList />
+    </Suspense>
   );
 }
-
-export default page;

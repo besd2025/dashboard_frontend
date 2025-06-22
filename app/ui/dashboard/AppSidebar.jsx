@@ -106,18 +106,18 @@ const navItems = [
   },
 ];
 
-const othersItems = [
-  {
-    icon: <UserLineIcon />,
-    name: "Role",
-    path: "/dashboard/stocks",
-    subItems: [
-      { name: "Communale", path: "/municipal/cultivators" },
-      { name: "Provinciale", path: "/provincial/cultivators" },
-      { name: "Regionale", path: "/regional/cultivators" },
-    ],
-  },
-];
+// const othersItems = [
+//   {
+//     icon: <UserLineIcon />,
+//     name: "Role",
+//     path: "/dashboard/stocks",
+//     subItems: [
+//       { name: "Communale", path: "/municipal/cultivators" },
+//       { name: "Provinciale", path: "/provincial/cultivators" },
+//       { name: "Regionale", path: "/regional/cultivators" },
+//     ],
+//   },
+// ];
 
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
@@ -249,22 +249,22 @@ const AppSidebar = () => {
     </ul>
   );
 
-  useEffect(() => {
-    let matched = false;
-    ["main", "others"].forEach((type) => {
-      const items = type === "main" ? navItems : othersItems;
-      items.forEach((nav, index) => {
-        if (
-          isPathActive(nav) ||
-          nav.subItems?.some((subItem) => isPathActive(subItem))
-        ) {
-          setOpenSubmenu({ type, index });
-          matched = true;
-        }
-      });
-    });
-    if (!matched) setOpenSubmenu(null);
-  }, [pathname, isPathActive]);
+  // useEffect(() => {
+  //   let matched = false;
+  //   ["main", "others"].forEach((type) => {
+  //     const items = type === "main" ? navItems : othersItems;
+  //     items.forEach((nav, index) => {
+  //       if (
+  //         isPathActive(nav) ||
+  //         nav.subItems?.some((subItem) => isPathActive(subItem))
+  //       ) {
+  //         setOpenSubmenu({ type, index });
+  //         matched = true;
+  //       }
+  //     });
+  //   });
+  //   if (!matched) setOpenSubmenu(null);
+  // }, [pathname, isPathActive]);
 
   useEffect(() => {
     if (openSubmenu !== null) {
@@ -363,7 +363,6 @@ const AppSidebar = () => {
                   <HorizontaLDots />
                 )} */}
               </h2>
-              {renderMenuItems(othersItems, "others")}
             </div>
           </div>
         </nav>

@@ -35,9 +35,9 @@ export default function UserDropdown() {
         </span>
 
         <span className="block mr-1 font-medium text-theme-sm">
-          {user?.session?.first_name.charAt(0)}
+          {user?.session?.first_name?.charAt(0)}
           {"-"}
-          {user?.session?.last_name.charAt(0)}
+          {user?.session?.last_name?.charAt(0)}
         </span>
 
         <svg

@@ -136,7 +136,7 @@ export default function CardsOverview({ hangar_id }) {
               </div>
 
               <h4 className=" font-semibold text-gray-800 text-xl dark:text-white/90">
-                500 452 T
+                0 Kg
               </h4>
             </div>
           </div>
@@ -161,7 +161,7 @@ export default function CardsOverview({ hangar_id }) {
               </div>
 
               <h4 className=" font-semibold text-yellow-600 text-xl dark:text-white/90">
-                500 452 T
+                O Kg
               </h4>
             </div>
           </div>
@@ -244,7 +244,7 @@ export default function CardsOverview({ hangar_id }) {
               </div>
 
               <h4 className=" font-semibold text-gray-800 text-xl dark:text-white/90">
-                500 452 T
+                0 Kg
               </h4>
             </div>
           </div>
@@ -269,7 +269,7 @@ export default function CardsOverview({ hangar_id }) {
               </div>
 
               <h4 className=" font-semibold text-yellow-600 text-xl dark:text-white/90">
-                500 452 T
+                0 Kg
               </h4>
             </div>
           </div>
@@ -314,7 +314,8 @@ export default function CardsOverview({ hangar_id }) {
           </div>
 
           <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
-            30 M <span className="text-sm">FBU</span>
+            {data?.total_achats_price || 0}
+            <span className="text-sm"> FBU</span>
           </h4>
         </div>
       </div>
@@ -354,7 +355,8 @@ export default function CardsOverview({ hangar_id }) {
           </div>
 
           <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
-            30 M <span className="text-sm">FBU</span>
+            {data?.total_ventes_price || 0}{" "}
+            <span className="text-sm"> FBU</span>
           </h4>
         </div>
       </div>

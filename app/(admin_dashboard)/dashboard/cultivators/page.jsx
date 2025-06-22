@@ -1,4 +1,4 @@
-import CultivatorsHome from "./../../../ui/dashboard/cultivators";
+import CultivatorsHome from "../../../ui/dashboard/cultivators";
 import React from "react";
 
 function page() {

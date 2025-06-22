@@ -1,6 +1,32 @@
-import React from "react";
-
-export default function CardsOverview() {
+"use client";
+import React, { useEffect, useState } from "react";
+import { fetchData } from "../../../../../_utils/api";
+export default function CardsOverview({ cultivateur_id }) {
+  console.log(cultivateur_id);
+  const [data, setData] = useState([]);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    async function getData() {
+      try {
+        if (cultivateur_id) {
+          const results = await fetchData(
+            "get",
+            `/cultivators/${cultivateur_id}`,
+            {
+              params: {},
+              additionalHeaders: {},
+              body: {},
+            }
+          );
+          setData(results);
+        }
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, [cultivateur_id]);
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 md:gap-6">
       {/* <!-- Metric Item Start quantity collected --> */}
@@ -32,7 +58,7 @@ export default function CardsOverview() {
           </div>
 
           <h4 className="ml-3 font-semibold text-gray-800 text-lg dark:text-white/90">
-            500,452 <span className="text-sm">KG</span>
+            50,452 <span className="text-sm">KG</span>
           </h4>
         </div>
       </div>
@@ -71,7 +97,7 @@ export default function CardsOverview() {
           </div>
 
           <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
-            300 M <span className="text-sm">FBU</span>
+            30 Mille <span className="text-sm">FBU</span>
           </h4>
         </div>
       </div>

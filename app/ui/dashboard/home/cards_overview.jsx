@@ -12,7 +12,7 @@ export default function CardsOverview() {
   const [data, setData] = useState([]);
   const [quantite_vendu, setQuantiteVendu] = useState(0);
   const [gaptotal, setGapTotat] = useState([]);
-  const [quantite_total_achat, setQuantiteTotal] = useState(0);
+  const [quantite_total_achat, setQuantiteTotalAchete] = useState(0);
   const [total_quantite_vendu, setTotalVendu] = useState([]);
   const [error, setError] = useState(null);
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function CardsOverview() {
           body: {},
         });
 
-        const quantite_vendu = await fetchData(
+        const quantite_vendu_jaune_blanc = await fetchData(
           "get",
           "sorties/somme_totale_sorties/",
           {
@@ -42,13 +42,14 @@ export default function CardsOverview() {
             body: {},
           }
         );
-        setTotalVendu(quantite_vendu);
+        setTotalVendu(quantite_vendu_jaune_blanc);
         setGapTotat(pertetotal);
         setData(results);
         setQuantiteVendu(
-          results?.sorties?.achats_blanc + results?.sorties?.achats_jaune
+          results?.sorties?.sorties_blanc + results?.sorties?.sorties_jaune
         );
-        setQuantiteTotal(
+
+        setQuantiteTotalAchete(
           results?.achats?.achats_blanc + results?.achats?.achats_jaune
         );
       } catch (error) {
@@ -88,16 +89,14 @@ export default function CardsOverview() {
                 Qté Collectée
               </span>
               <h4 className="mt-2 font-semibold text-gray-800 text-xl dark:text-white/90">
-                {data?.achats?.achats_blanc >= 1000 ? (
+                {quantite_total_achat >= 1000 ? (
                   <>
-                    {(data?.achats?.achats_blanc / 1000).toLocaleString(
-                      "fr-FR"
-                    )}{" "}
+                    {(quantite_total_achat / 1000).toLocaleString("fr-FR")}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
-                    {data?.achats?.achats_blanc?.toLocaleString("fr-FR") || 0}{" "}
+                    {quantite_total_achat?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">KG</span>
                   </>
                 )}
@@ -133,14 +132,16 @@ export default function CardsOverview() {
               </div>
 
               <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
-                {quantite_total_achat >= 1000 ? (
+                {data?.achats?.achats_blanc >= 1000 ? (
                   <>
-                    {(quantite_total_achat / 1000).toLocaleString("fr-FR")}{" "}
+                    {(data?.achats?.achats_blanc / 1000).toLocaleString(
+                      "fr-FR"
+                    )}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
-                    {quantite_total_achat?.toLocaleString("fr-FR") || 0}{" "}
+                    {data?.achats?.achats_blanc?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">KG</span>
                   </>
                 )}
@@ -215,22 +216,16 @@ export default function CardsOverview() {
                 Qté Vendue
               </span>
               <h4 className="mt-2 font-bold text-gray-800 text-xl dark:text-white/90">
-                {quantite_vendu?.somme_quantite_sortie >= 1000
+                {total_quantite_vendu >= 1000
                   ? `${
-                      (
-                        quantite_vendu?.somme_quantite_sorti / 1000
-                      ).toLocaleString("fr-FR", {
+                      (quantite_vendu / 1000).toLocaleString("fr-FR", {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                       }) || 0
                     } `
-                  : `${
-                      quantite_vendu?.somme_quantite_sortie?.toLocaleString(
-                        "fr-FR"
-                      ) || 0
-                    } `}
+                  : `${quantite_vendu?.toLocaleString("fr-FR") || 0} `}
                 <span className="text-sm">
-                  {quantite_vendu?.somme_quantite_sorti >= 1000 ? "T" : "KG"}
+                  {quantite_vendu >= 1000 ? "T" : "KG"}
                 </span>
               </h4>
             </div>

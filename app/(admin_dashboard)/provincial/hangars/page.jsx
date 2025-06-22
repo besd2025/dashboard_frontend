@@ -1,4 +1,4 @@
-import Hangars from "../../../ui/provincial/hangars";
+import Hangars from "../../../ui/municipal/hangars";
 import React from "react";
 
 function page() {

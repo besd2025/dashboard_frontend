@@ -23,6 +23,7 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { fetchData } from "../../../../../../_utils/api";
 import { UserContext } from "../../../../../context/UserContext";
+//import { useSearchParams } from "next/navigation";
 function HangarCultivatorsList({ hangar_id }) {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
@@ -32,6 +33,10 @@ function HangarCultivatorsList({ hangar_id }) {
   const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
   const user = useContext(UserContext);
+  //const searchParams = useSearchParams();
+  //const hangar_id = searchParams.get("hangar_id");
+  //const hangar_id = 5;
+  console.log("hangar_id:", hangar_id);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one

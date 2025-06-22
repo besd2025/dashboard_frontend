@@ -3,17 +3,37 @@ import axios from "axios";
 const server = process.env.NEXT_PUBLIC_API_URL;
 
 // ✅ Lire un cookie spécifique côté client
+// const getAccessToken = () => {
+//   if (typeof window !== "undefined") {
+//     const cookies = document.cookie.split("; ");
+//     console.log(cookies);
+//     const accessTokenCookie = cookies.find((row) =>
+//       row.startsWith("accessToken=")
+//     );
+//     console.log(accessTokenCookie?.split("=")[1]);
+//     return accessTokenCookie?.split("=")[1] || null;
+//   }
+//   return null;
+// };
+
+// const getAccessToken = () => {
+//   if (typeof window !== "undefined") {
+//     const cookies = document.cookie.split("; ");
+//     const accessTokenCookie = cookies.find((row) =>
+//       row.startsWith("accessToken=")
+//     );
+//     if (!accessTokenCookie) return null;
+//     const token = accessTokenCookie.split("=")[1];
+//     return token || null;
+//   }
+//   return null;
+// };
 const getAccessToken = () => {
   if (typeof window !== "undefined") {
-    const cookies = document.cookie.split("; ");
-    const accessTokenCookie = cookies.find((row) =>
-      row.startsWith("accessToken=")
-    );
-    return accessTokenCookie?.split("=")[1] || null;
+    return localStorage.getItem("accessToken") || null;
   }
   return null;
 };
-
 // ✅ Instance Axios
 export const api = axios.create({
   baseURL: server,
