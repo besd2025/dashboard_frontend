@@ -33,7 +33,11 @@ function HangarAchatList() {
   const [currentPage, setCurrentPage] = useState(1);
   const user = useContext(UserContext);
   //const searchParams = useSearchParams();
-  const hangar_id = localStorage.getItem("hangarId");
+  const token = null;
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("accessToken");
+    // ...
+  }
   //const hangar_id = searchParams.get("hangar_id");
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
