@@ -12,7 +12,7 @@ function AgeRange() {
     series: [
       {
         name: "",
-        data: [200, 330, 548, 740],
+        data: [],
       },
     ],
     options: {
@@ -57,14 +57,48 @@ function AgeRange() {
       },
 
       xaxis: {
-        categories: ["10-18ans", "18-30ans", "30-40ans", "40+"],
+        categories: [],
       },
       legend: {
         show: false,
       },
     },
   });
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData(
+          "get",
+          "cultivators/repartition_par_age/",
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
 
+        const categories = results.map((item) => item.tranche_age);
+        const values = results.map((item) => item.nombre);
+
+        // Mettre à jour le graphique avec les vraies données
+        setState((prev) => ({
+          ...prev,
+          series: [{ data: values }],
+          options: {
+            ...prev.options,
+            xaxis: {
+              ...prev.options.xaxis,
+              categories: categories,
+            },
+          },
+        }));
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
       <div className="flex items-center justify-between">

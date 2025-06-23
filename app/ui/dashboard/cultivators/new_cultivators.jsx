@@ -14,7 +14,7 @@ function NewCultivatorsCharts() {
   const [state, setState] = useState({
     series: [
       {
-        name: "Cafeiculteurs",
+        name: "cultivateurs",
         data: [],
       },
     ],
@@ -114,7 +114,7 @@ function NewCultivatorsCharts() {
             Cultivateurs
           </h3>
           <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-            Enregistrement des cafeiculteurs
+            Enregistrement des cultivateurs
           </p>
           <div className="flex items-start w-full gap-3 sm:justify-end">
             <SalePurchaseTimePeriod

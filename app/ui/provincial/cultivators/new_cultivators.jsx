@@ -15,7 +15,7 @@ function NewCultivatorsCharts() {
   const [state, setState] = React.useState({
     series: [
       {
-        name: "Cafeiculteurs",
+        name: "cultivateurs",
         data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
       },
     ],
@@ -135,7 +135,7 @@ function NewCultivatorsCharts() {
             Hangars
           </h3>
           <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-            Enregistrement des cafeiculteurs
+            Enregistrement des cultivateurs
           </p>
           <div className="flex items-start w-full gap-3 sm:justify-end">
             <SalePurchaseTimePeriod

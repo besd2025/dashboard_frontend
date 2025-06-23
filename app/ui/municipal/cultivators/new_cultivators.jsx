@@ -1,5 +1,5 @@
 "use client";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import SalePurchaseTimePeriod from "../../common/home/sale_purchase_period";
 import { fetchData } from "../../../_utils/api";
@@ -9,13 +9,13 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 });
 
 function NewCultivatorsCharts() {
-        const [data, setData] = useState([]);
-          const [error, setError] = useState(null);
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
 
   const [state, setState] = React.useState({
     series: [
       {
-        name: "Cafeiculteurs",
+        name: "cultivateurs",
         data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
       },
     ],
@@ -105,26 +105,28 @@ function NewCultivatorsCharts() {
       },
     }));
   };
-             useEffect(() => {
-            async function getData() {
-              try {
-        
-                const results = await fetchData('get', 'cultivators/statistiques_par_temps/', {
-                  params: {},
-                  additionalHeaders: {},
-                  body: {}
-                });
-        
-                setData(results);
-                 console.log(results)
-                
-              } catch (error) {
-                setError(error);
-                console.error(error);
-              }
-            }
-            getData();
-          }, []);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData(
+          "get",
+          "cultivators/statistiques_par_temps/",
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
+
+        setData(results);
+        console.log(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
   return (
     <div className="rounded-2xl border border-gray-200 bg-white px-3 pb-2 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-4 sm:pt-4">
       <div className="flex flex-col gap-5 mb-6 sm:flex-row sm:justify-between">
@@ -133,7 +135,7 @@ function NewCultivatorsCharts() {
             Cultivateurs
           </h3>
           <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-            Enregistrement des cafeiculteurs
+            Enregistrement des cultivateurs
           </p>
           <div className="flex items-start w-full gap-3 sm:justify-end">
             <SalePurchaseTimePeriod
