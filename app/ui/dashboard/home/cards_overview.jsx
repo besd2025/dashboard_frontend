@@ -253,20 +253,22 @@ export default function CardsOverview() {
                   Maïs Blanc
                 </span>
               </div>
-              {data?.sorties?.sorties_blanc >= 1000 ? (
-                <>
-                  {(data?.sorties?.sorties_blanc / 1000).toLocaleString(
-                    "de-DE"
-                  )}{" "}
-                  <span className="text-sm">T</span>
-                </>
-              ) : (
-                <>
-                  {data?.sorties?.sorties_blanc?.toLocaleString("fr-FR") || 0}{" "}
-                  <span className="text-sm">KG</span>
-                </>
-              )}
-              <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90"></h4>
+
+              <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
+                {data?.sorties?.sorties_blanc >= 1000 ? (
+                  <>
+                    {(data?.sorties?.sorties_blanc / 1000).toLocaleString(
+                      "de-DE"
+                    )}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {data?.sorties?.sorties_blanc?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">KG</span>
+                  </>
+                )}
+              </h4>
             </div>
           </div>
           <div className="flex items-end justify-between mt-2 rounded-2xl">

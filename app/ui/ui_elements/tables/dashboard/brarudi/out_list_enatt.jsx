@@ -7,26 +7,21 @@ import {
   TableHeader,
   TableRow,
 } from "../../table_elemets";
-
-import Image from "next/image";
 import { MoreDotIcon } from "../../../../icons";
 import DropdownItem from "../../../dropdown/DropdownItem";
 import { Dropdown } from "../../../dropdown/dropdown_cultvators";
-import { useSidebar } from "../../../../context/SidebarContext";
 import Modal from "../../../modal";
 import { useModal } from "../../../hooks/useModal";
 import Pagination from "../../Pagination";
-import EditUserProfile from "../../../../regional/cultivators/profile/edit_user_profile";
-import FilterHangarList from "../../../../regional/provincials/filter_hangar_list";
+import FilterUserProfile from "../../../../municipal/cultivators/profile/filter_user_profile";
 import { fetchData } from "../../../../../_utils/api";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-import EditUserProfile from "../../../../regional/cultivators/profile/edit_user_profile";
+import OutDetails from "../../../../dashboard/brarudi/en_attente/out_details";
+import ConfirmationForm from "../../../../dashboard/brarudi/en_attente/confirmation_form";
 
-function AllProvincialsList() {
-  const [openDropdowns, setOpenDropdowns] = useState({});
+function OutListEnatt() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
+  const [openDropdowns, setOpenDropdowns] = useState({});
   const [isCheckedTwo, setIsCheckedTwo] = useState(true);
 
   function toggleDropdown(rowId) {
@@ -48,7 +43,6 @@ function AllProvincialsList() {
     }));
   }
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
-  const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
   const inputRef = useRef(null);
 
   const handleToggle = () => {
@@ -81,6 +75,14 @@ function AllProvincialsList() {
     openModal: openModalFilter,
     closeModal: closeModalFilter,
   } = useModal();
+  const {
+    isOpen: isOpenDetails,
+    openModal: openModalDetails,
+    closeModal: closeModalDetails,
+  } = useModal();
+
+  // Ajout de l'état pour le step du modal
+  const [modalStep, setModalStep] = useState("details");
 
   useEffect(() => {
     async function getData() {
@@ -100,61 +102,11 @@ function AllProvincialsList() {
     getData();
   }, []);
 
-  const pathname = usePathname();
-  const [activeTab, setActiveTab] = useState("attente");
-
-  useEffect(() => {
-    if (pathname.includes("/attente")) {
-      setActiveTab("attente");
-    }
-    if (pathname.includes("/approuve")) {
-      setActiveTab("approuve");
-    }
-  }, [pathname]);
-
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
-      <div className="mx-auto max-w-7xl ">
-        <div className="w-full">
-          <nav
-            aria-label="Tabs"
-            className="flex items-center space-x-1 rounded-xl bg-gray-100 p-1 dark:bg-gray-800/50"
-          >
-            <Link
-              href="/regional/provincials/en_attente"
-              onClick={() => setActiveTab("attente")}
-              className={`relative flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-bold transition-all duration-200 ease-in-out ${
-                activeTab === "attente"
-                  ? "bg-white text-green-600 shadow-sm dark:bg-gray-900 dark:text-green-500"
-                  : "text-gray-600 hover:bg-white/50 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-gray-900/50 dark:hover:text-gray-300"
-              }`}
-            >
-              <span className="relative z-10">En attentes</span>
-              {activeTab === "attente" && (
-                <span className="absolute inset-0 rounded-lg bg-white/50 dark:bg-gray-900/50" />
-              )}
-            </Link>
-            <Link
-              href="/regional/provincials/approuve"
-              onClick={() => setActiveTab("approuve")}
-              className={`relative flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-bold transition-all duration-200 ease-in-out ${
-                activeTab === "approuve"
-                  ? "bg-white text-green-600 shadow-sm dark:bg-gray-900 dark:text-green-500"
-                  : "text-gray-600 hover:bg-white/50 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-gray-900/50 dark:hover:text-gray-300"
-              }`}
-            >
-              <span className="relative z-10">Approuvés</span>
-              {activeTab === "approuve" && (
-                <span className="absolute inset-0 rounded-lg bg-white/50 dark:bg-gray-900/50" />
-              )}
-            </Link>
-          </nav>
-        </div>
-      </div>
-
       <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90 line-clamp-1 animate-sl">
-          Données communes Approuvés
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
+          Liste des sorties en attente
         </h3>
         {/* search */}
         <div className="hidden lg:block">
@@ -179,7 +131,7 @@ function AllProvincialsList() {
                 ref={inputRef}
                 type="text"
                 placeholder="rechercher  ..."
-                className="dark:bg-dark-900 h-11 w-[250px]  rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[250px]"
+                className="dark:bg-dark-900 h-11 w-[250px] rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[250px]"
               />
             </div>
           </form>
@@ -308,37 +260,39 @@ function AllProvincialsList() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase "
                 >
-                  Commune
+                  Hangar provenance
+                </TableCell>
+
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Qte sorties
+                </TableCell>
+
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Responsable Anagessa
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Qte
+                  hangar
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  maïs blancs
+                  Date
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  maïs jaunes
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
-                  Nombre hangars
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
-                  Province
+                  prix
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -361,9 +315,11 @@ function AllProvincialsList() {
                         className="w-40 p-2"
                       >
                         <DropdownItem
-                          onItemClick={() => closeDropdown(order.id)}
+                          onItemClick={() => {
+                            closeDropdown(order.id);
+                            openModalDetails();
+                          }}
                           tag="a"
-                          href={`/regional/provincials/details/cultivator?hangar_id=${order.id}`}
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
                           Details
@@ -432,14 +388,36 @@ function AllProvincialsList() {
         onClose={closeModalFilter}
         className="max-w-[700px] m-4"
       >
-        <FilterHangarList />
+        <FilterUserProfile />
       </Modal>
-
-      <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <EditUserProfile />
+      <Modal
+        isOpen={isOpenDetails}
+        onClose={() => {
+          setModalStep("details");
+          closeModalDetails();
+        }}
+        showCloseButton={false}
+        className="max-w-[700px] m-4"
+      >
+        {modalStep === "details" && (
+          <OutDetails
+            closeModalDetails={closeModalDetails}
+            onConfirm={() => setModalStep("confirmation")}
+            validated={false}
+          />
+        )}
+        {modalStep === "confirmation" && (
+          <ConfirmationForm
+            closeModalDetails={() => {
+              setModalStep("details");
+              closeModalDetails();
+            }}
+            onBack={() => setModalStep("details")}
+          />
+        )}
       </Modal>
     </div>
   );
 }
 
-export default AllProvincialsList;
+export default OutListEnatt;

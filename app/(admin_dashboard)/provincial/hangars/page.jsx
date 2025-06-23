@@ -1,5 +1,5 @@
-import Hangars from "../../../ui/municipal/hangars";
 import React from "react";
+import Hangars from "../../../ui/municipal/hangars";
 
 function page() {
   return <Hangars />;

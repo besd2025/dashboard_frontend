@@ -22,8 +22,7 @@ import { fetchData } from "../../../../../../_utils/api";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { UserContext } from "../../../../../context/UserContext";
-//import { useSearchParams } from "next/navigation";
-function HangarAchatList() {
+function HangarAchatList({ hangar_id }) {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [openDropdowns, setOpenDropdowns] = useState({});

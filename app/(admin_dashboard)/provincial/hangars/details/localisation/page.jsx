@@ -1,6 +1,6 @@
+import React from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "../../../../../ui/icons";
 import HangarLocalisation from "../../../../../ui/localisation/hangar_localisation";
-import React from "react";
 
 function page() {
   return (
