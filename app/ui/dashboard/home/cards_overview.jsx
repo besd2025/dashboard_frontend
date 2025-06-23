@@ -91,7 +91,7 @@ export default function CardsOverview() {
               <h4 className="mt-2 font-semibold text-gray-800 text-xl dark:text-white/90">
                 {quantite_total_achat >= 1000 ? (
                   <>
-                    {(quantite_total_achat / 1000).toLocaleString("fr-FR")}{" "}
+                    {(quantite_total_achat / 1000).toLocaleString("de-DE")}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
@@ -135,7 +135,7 @@ export default function CardsOverview() {
                 {data?.achats?.achats_blanc >= 1000 ? (
                   <>
                     {(data?.achats?.achats_blanc / 1000).toLocaleString(
-                      "fr-FR"
+                      "de-DE"
                     )}{" "}
                     <span className="text-sm">T</span>
                   </>
@@ -172,7 +172,7 @@ export default function CardsOverview() {
                 {data?.achats?.achats_jaune >= 1000 ? (
                   <>
                     {(data?.achats?.achats_jaune / 1000).toLocaleString(
-                      "fr-FR"
+                      "de-DE"
                     )}{" "}
                     <span className="text-sm">T</span>
                   </>
@@ -223,7 +223,7 @@ export default function CardsOverview() {
                         maximumFractionDigits: 2,
                       }) || 0
                     } `
-                  : `${quantite_vendu?.toLocaleString("fr-FR") || 0} `}
+                  : `${quantite_vendu?.toLocaleString("de-DE") || 0} `}
                 <span className="text-sm">
                   {quantite_vendu >= 1000 ? "T" : "KG"}
                 </span>
@@ -256,7 +256,7 @@ export default function CardsOverview() {
               {data?.sorties?.sorties_blanc >= 1000 ? (
                 <>
                   {(data?.sorties?.sorties_blanc / 1000).toLocaleString(
-                    "fr-FR"
+                    "de-DE"
                   )}{" "}
                   <span className="text-sm">T</span>
                 </>
@@ -293,7 +293,7 @@ export default function CardsOverview() {
                 {data?.sorties?.sorties_jaune >= 1000 ? (
                   <>
                     {(data?.sorties?.sorties_jaune / 1000).toLocaleString(
-                      "fr-FR"
+                      "de-DE"
                     )}{" "}
                     <span className="text-sm">T</span>
                   </>
