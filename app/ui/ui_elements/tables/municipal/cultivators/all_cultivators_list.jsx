@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import {
   Table,
   TableBody,
@@ -20,6 +20,7 @@ import Pagination from "../../Pagination";
 import EditUserProfile from "../../../../municipal/cultivators/profile/edit_user_profile";
 import FilterUserProfile from "../../../../municipal/cultivators/profile/filter_user_profile";
 import { fetchData } from "../../../../../_utils/api";
+import { UserContext } from "../../../../context/UserContext";
 function AllCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
@@ -28,6 +29,7 @@ function AllCultivatorsList() {
   const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const user = useContext(UserContext);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -47,16 +49,7 @@ function AllCultivatorsList() {
     }));
   }
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
-  const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
   const inputRef = useRef(null);
-
-  const handleToggle = () => {
-    if (window.innerWidth >= 1024) {
-      toggleSidebar();
-    } else {
-      toggleMobileSidebar();
-    }
-  };
 
   const toggleApplicationMenu = () => {
     setApplicationMenuOpen(!isApplicationMenuOpen);
@@ -92,8 +85,8 @@ function AllCultivatorsList() {
         });
 
         setData(results.results);
+        console.log(results.results);
         setTotalCount(results.count); // si l'API retourne un `count` total
-        console.log(results.count);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -102,23 +95,77 @@ function AllCultivatorsList() {
 
     getData();
   }, [pointer]); // ← relance quand `pointer` change
-  const handleNext = () => {
-    if (pointer + limit < totalCount) {
-      setPointer(pointer + limit);
-    }
-  };
-
-  const handlePrev = () => {
-    if (pointer - limit >= 0) {
-      setPointer(pointer - limit);
-    }
-  };
 
   const totalPages = Math.ceil(totalCount / limit);
 
-  const handlePageClick = (pageNumber) => {
+  const onPageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
     setPointer((pageNumber - 1) * limit);
+  };
+  const exportCultivatorsToExcel = async () => {
+    const limit = 5;
+    let pointer = 0;
+    let allData = [];
+    let hasMore = true;
+
+    try {
+      // Charger toutes les données par pagination
+      while (hasMore) {
+        const response = await fetchData("get", "/cultivators/", {
+          params: {
+            offset: pointer,
+            limit: limit,
+          },
+        });
+
+        const currentData = response.results;
+
+        if (currentData.length === 0) break;
+
+        allData = [...allData, ...currentData];
+        pointer += limit;
+
+        // S'arrêter si on a atteint toutes les données
+        if (pointer >= response.count) {
+          hasMore = false;
+        }
+      }
+
+      if (allData.length === 0) return;
+
+      const formattedData = allData.map((item) => ({
+        Nom: item.cultivator_first_name || "",
+        Prénom: item.cultivator_last_name || "",
+        Genre: item.cultivator_gender || "",
+        CNI: item.cultivator_cni || "",
+        Code: item.cultivator_code || "",
+        Province:
+          item.cultivator_adress?.zone_code?.commune_code?.province_code
+            ?.province_name || "",
+        Commune:
+          item.cultivator_adress?.zone_code?.commune_code?.commune_name || "",
+        Zone: item.cultivator_adress?.zone_code?.zone_name || "",
+        Colline: item.cultivator_adress?.colline_name || "",
+        created_at: item.created_at || "",
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(formattedData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Cultivateurs");
+
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      const blob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+      });
+
+      saveAs(blob, "cultivators.xlsx");
+    } catch (error) {
+      console.error("Erreur exportation Excel :", error);
+    }
   };
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
@@ -199,7 +246,10 @@ function AllCultivatorsList() {
           </button>
         </div>
         <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+          <button
+            onClick={exportCultivatorsToExcel}
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -292,6 +342,36 @@ function AllCultivatorsList() {
                 >
                   Commmune
                 </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Zone
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Colline
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Hangar
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Province Hangar
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Commune Hangar
+                </TableCell>
               </TableRow>
             </TableHeader>
 
@@ -336,7 +416,7 @@ function AllCultivatorsList() {
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">
-                        {order?.cultivator_photo == null ? (
+                        {order?.cultivator_photo ? (
                           <Image
                             width={80}
                             height={80}
@@ -354,10 +434,11 @@ function AllCultivatorsList() {
                       </div>
                       <div>
                         <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
+                          {order.cultivator_last_name}{" "}
                           {order.cultivator_first_name}
                         </span>
                         <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order.cultivator_last_name}
+                          {order.cultivator_code}
                         </span>
                       </div>
                     </div>
@@ -374,6 +455,21 @@ function AllCultivatorsList() {
                         ?.commune_name
                     }
                   </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order?.cultivator_adress?.zone_code?.zone_name}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order?.cultivator_adress?.colline_name}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order?.collector?.hangar?.hangar_name}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order?.collector?.hangar?.province}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order?.collector?.hangar?.commune}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -381,79 +477,15 @@ function AllCultivatorsList() {
         </div>
       </div>
 
-      {/* Pagination */}
-      <div className=" px-4 py-3 border-t border-gray-200 dark:border-gray-800 sm:px-6">
-        <div className="flex items-center justify-between flex-col sm:flex-row">
-          <div className="mb-4 sm:mb-0">
-            <p className="text-sm text-gray-700 dark:text-gray-400">
-              Affichage de <span className="font-medium">{pointer + 1}</span> à{" "}
-              <span className="font-medium">
-                {Math.min(pointer + limit, totalCount)}
-              </span>{" "}
-              sur <span className="font-medium">{totalCount}</span> résultats
-            </p>
-          </div>
-          <div>
-            <nav
-              className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-              aria-label="Pagination"
-            >
-              {/* Précédent */}
-              <button
-                onClick={() => handlePageClick(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-              >
-                <span className="sr-only">Previous</span>
-                <svg
-                  className="h-5 w-5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" />
-                </svg>
-              </button>
-
-              {/* Numéros de pages */}
-              {[...Array(totalPages)].map((_, index) => {
-                const pageNum = index + 1;
-                return (
-                  <button
-                    key={pageNum}
-                    onClick={() => handlePageClick(pageNum)}
-                    className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
-                      currentPage === pageNum
-                        ? "bg-indigo-50 text-indigo-600 border-gray-300"
-                        : "bg-white text-gray-700 hover:bg-gray-50 border-gray-300"
-                    }`}
-                  >
-                    {pageNum}
-                  </button>
-                );
-              })}
-
-              {/* Suivant */}
-              <button
-                onClick={() => handlePageClick(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-              >
-                <span className="sr-only">Next</span>
-                <svg
-                  className="h-5 w-5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" />
-                </svg>
-              </button>
-            </nav>
-          </div>
-        </div>
-      </div>
-
       {/*<Pagination />*/}
-
+      <Pagination
+        totalCount={totalCount}
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+        totalPages={totalPages}
+        pointer={pointer}
+        limit={limit}
+      />
       {/* filtres */}
 
       <Modal

@@ -439,7 +439,7 @@ function HangarAchatList({ hangar_id }) {
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">
-                        {order?.cultivator?.cultivator_photo == null ? (
+                        {order?.cultivator?.cultivator_photo ? (
                           <Image
                             width={80}
                             height={80}
