@@ -27,6 +27,11 @@ function ResultsForm({ closeModalDetails, onBack }) {
 
           <div className="grid grid-cols-1 gap-x-6 gap-y-5 ">
             <div className="col-span-1">
+              <Label>Les dépenses liées à la transformation</Label>
+              <Input type="number" placeholder="Dépenses en Fbu" />
+            </div>
+
+            <div className="col-span-1">
               <Label>Quantité farine (blanc)</Label>
               <Input
                 type="number"
@@ -59,10 +64,19 @@ function ResultsForm({ closeModalDetails, onBack }) {
             </div>
 
             <div className="col-span-1">
-              <Label>GAP (en fonction de taux de transformation)</Label>
-              <p className="text-sm font-medium text-red-800 dark:text-white/90">
-                454
-              </p>
+              <Label>Quantité gruau (farine blanc)</Label>
+              <Input
+                type="number"
+                placeholder="Quantité gruau (farine blanc) en kg"
+              />
+            </div>
+
+            <div className="col-span-1">
+              <Label>Quantité gruau (farine jaune)</Label>
+              <Input
+                type="number"
+                placeholder="Quantité gruau (farine jaune) en kg"
+              />
             </div>
 
             <div className="col-span-1">

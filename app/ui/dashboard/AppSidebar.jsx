@@ -91,33 +91,33 @@ const navItems = [
     //   },
     // ],
   },
-  // {
-  //   icon: (
-  //     <Image
-  //       className="rounded-xl"
-  //       src="/img/brarudi-logo.png"
-  //       alt="Brarudi"
-  //       width={32}
-  //       height={32}
-  //     />
-  //   ),
-  //   name: "BRARUDI",
-  //   path: "/dashboard/Brarudi/en_attente",
-  //   subPath: [
-  //     "/dashboard/hangars/details/cultivator",
-  //     "/dashboard/hangars/details/achats",
-  //   ],
-  //   // subItems: [
-  //   //   {
-  //   //     name: "Details",
-  //   //     path: "/dashboard/hangars",
-  //   //     subPath: [
-  //   //       "/dashboard/hangars/details/cultivator",
-  //   //       "/dashboard/hangars/details/achats",
-  //   //     ],
-  //   //   },
-  //   // ],
-  // },
+  {
+    icon: (
+      <Image
+        className="rounded-xl"
+        src="/img/brarudi-logo.png"
+        alt="Brarudi"
+        width={32}
+        height={32}
+      />
+    ),
+    name: "BRARUDI",
+    path: "/dashboard/Brarudi/en_attente",
+    subPath: [
+      "/dashboard/hangars/details/cultivator",
+      "/dashboard/hangars/details/achats",
+    ],
+    // subItems: [
+    //   {
+    //     name: "Details",
+    //     path: "/dashboard/hangars",
+    //     subPath: [
+    //       "/dashboard/hangars/details/cultivator",
+    //       "/dashboard/hangars/details/achats",
+    //     ],
+    //   },
+    // ],
+  },
   {
     icon: <SettingsIcon />,
     name: "Parametre",
