@@ -30,6 +30,7 @@ function AllCultivatorsList() {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const user = useContext(UserContext);
+  const [cultivateur_id, setId] = useState(0);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -404,6 +405,7 @@ function AllCultivatorsList() {
                           onItemClick={() => {
                             closeDropdown(order.id);
                             openModal();
+                            setId(order.id);
                           }}
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
@@ -497,7 +499,10 @@ function AllCultivatorsList() {
       </Modal>
 
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <EditUserProfile />
+        <EditUserProfile
+          closeModal={closeModal}
+          cultivateur_id={cultivateur_id}
+        />
       </Modal>
     </div>
   );
