@@ -17,8 +17,10 @@ import Badge from "../../../../badge/Badge";
 import Modal from "../../../../modal";
 import { useModal } from "../../../../hooks/useModal";
 import Pagination from "../../../Pagination";
+import Button from "../../../../../ui_elements/button/Button";
 import EditUserProfile from "../../../../../dashboard/cultivators/profile/edit_user_profile";
 import FilterUserProfile from "../../../../../dashboard/cultivators/profile/filter_user_profile";
+import Checkbox from "../../../../form/input/Checkbox";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { fetchData } from "../../../../../../_utils/api";
@@ -26,6 +28,7 @@ import { UserContext } from "../../../../../context/UserContext";
 //import { useSearchParams } from "next/navigation";
 function HangarCultivatorsList({ hangar_id }) {
   const [openDropdowns, setOpenDropdowns] = useState({});
+  const [isCheckedTwo, setIsCheckedTwo] = useState(true);
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [pointer, setPointer] = useState(0); // index de départ
@@ -33,6 +36,7 @@ function HangarCultivatorsList({ hangar_id }) {
   const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
   const user = useContext(UserContext);
+  const [cultivateur_id, setId] = useState(0);
   //const searchParams = useSearchParams();
   //const hangar_id = searchParams.get("hangar_id");
   //const hangar_id = 5;
@@ -340,6 +344,7 @@ function HangarCultivatorsList({ hangar_id }) {
             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]  shadow-theme-xs ">
               <TableRow>
                 <th></th>
+                <th></th>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase "
@@ -372,6 +377,16 @@ function HangarCultivatorsList({ hangar_id }) {
               {data?.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    <div className="flex items-center gap-3">
+                      <Checkbox
+                        checked={isCheckedTwo}
+                        onChange={setIsCheckedTwo}
+                        id="checked-checkbox"
+                        className="checked:bg-yellow-600"
+                      />
+                    </div>
+                  </TableCell>
+                  <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <div className="relative inline-block">
                       <button
                         onClick={() => toggleDropdown(order.id)}
@@ -387,7 +402,7 @@ function HangarCultivatorsList({ hangar_id }) {
                         <DropdownItem
                           onItemClick={() => closeDropdown(order.id)}
                           tag="a"
-                          href={`/dashboard/cultivators/profile?cult_id=${order?.id}`}
+                          href={`/municipal/cultivators/profile?cult_id=${order?.id}`}
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
                           Profile
@@ -397,6 +412,7 @@ function HangarCultivatorsList({ hangar_id }) {
                             onItemClick={() => {
                               closeDropdown(order.id);
                               openModal();
+                              setId(order.id);
                             }}
                             className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                           >
@@ -492,7 +508,10 @@ function HangarCultivatorsList({ hangar_id }) {
       </Modal>
 
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <EditUserProfile />
+        <EditUserProfile
+          closeModal={closeModal}
+          cultivateur_id={cultivateur_id}
+        />
       </Modal>
     </div>
   );

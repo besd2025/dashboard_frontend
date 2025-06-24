@@ -169,6 +169,10 @@ function AllCultivatorsList() {
       console.error("Erreur exportation Excel :", error);
     }
   };
+
+  const [id1, getId] = useState(undefined ? "default" : 0);
+  console.log(id1);
+
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
@@ -389,6 +393,7 @@ function AllCultivatorsList() {
                             onItemClick={() => {
                               closeDropdown(order.id);
                               openModal();
+                              getId(order?.id);
                             }}
                             className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                           >
@@ -479,7 +484,7 @@ function AllCultivatorsList() {
       </Modal>
 
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <EditUserProfile />
+        <EditUserProfile cultivateur_id={id1} />
       </Modal>
     </div>
   );

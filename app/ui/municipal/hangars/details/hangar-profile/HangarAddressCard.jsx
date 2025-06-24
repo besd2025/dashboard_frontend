@@ -1,19 +1,31 @@
 "use client";
-import React from "react";
-import Input from "../../../../ui_elements/form/input/InputField";
-import Modal from "../../../../ui_elements/modal";
-
-import Label from "../../../../ui_elements/form/Label";
-import Button from "../../../../ui_elements/button/Button";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useModal } from "../../../../ui_elements/hooks/useModal";
-
+import { fetchData } from "../../../../../_utils/api";
 export default function UserAddressCard() {
   const { isOpen, openModal, closeModal } = useModal();
-  const handleSave = () => {
-    // Handle save logic here
-    console.log("Saving changes...");
-    closeModal();
-  };
+  const [data, setData] = useState({});
+  const [error, setError] = useState(null);
+  const search_params = useSearchParams();
+  const hangar_id = search_params?.get("hangar_id");
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData("get", `hangars/${hangar_id}/`, {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+        setData(results);
+        console.log(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
   return (
     <>
       <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
@@ -38,7 +50,7 @@ export default function UserAddressCard() {
                   Province
                 </p>
                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                  Kayanza
+                  {data?.province}
                 </p>
               </div>
 
@@ -47,7 +59,7 @@ export default function UserAddressCard() {
                   Commune
                 </p>
                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                  Butanganzwa
+                  {data?.commune}
                 </p>
               </div>
             </div>
