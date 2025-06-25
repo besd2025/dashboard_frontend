@@ -25,12 +25,17 @@ import Checkbox from "../../../form/input/Checkbox";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { fetchData } from "../../../../../_utils/api";
-
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 function AllMunicipalsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [isCheckedTwo, setIsCheckedTwo] = useState(true);
+  const [pointer, setPointer] = useState(0); // index de départ
+  const limit = 5; // nombre par page
+  const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
+  const [currentPage, setCurrentPage] = useState(1);
 
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
@@ -88,20 +93,97 @@ function AllMunicipalsList() {
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData("get", "hangars/cinq_recents/", {
-          params: {},
-          additionalHeaders: {},
-          body: {},
-        });
-        setData(results);
-        console.log(results);
+        const results = await fetchData(
+          "get",
+          "/stock/details/quantite_commune/",
+          {
+            params: {
+              offset: pointer,
+              limit: limit,
+            },
+          }
+        );
+
+        setData(results.results);
+        setTotalCount(results.count); // si l'API retourne un `count` total
+        console.log(results.results);
       } catch (error) {
         setError(error);
         console.error(error);
       }
     }
+
     getData();
-  }, []);
+  }, [pointer]); // ← relance quand `pointer` change
+
+  const totalPages = Math.ceil(totalCount / limit);
+  const onPageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    setPointer((pageNumber - 1) * limit);
+  };
+
+  const exportToExcel = async () => {
+    const limit = 5;
+    let pointer = 0;
+    let allData = [];
+    let hasMore = true;
+
+    try {
+      // Charger toutes les données par pagination
+      while (hasMore) {
+        const response = await fetchData(
+          "get",
+          "/stock/details/quantite_commune/",
+          {
+            params: {
+              offset: pointer,
+              limit: limit,
+            },
+          }
+        );
+
+        const currentData = response.results;
+
+        if (currentData.length === 0) break;
+
+        allData = [...allData, ...currentData];
+        pointer += limit;
+
+        // S'arrêter si on a atteint toutes les données
+        if (pointer >= response.count) {
+          hasMore = false;
+        }
+      }
+
+      if (allData.length === 0) return;
+
+      const formattedData = allData.map((item) => ({
+        Province: item.province || "",
+        Commune: item.commune || "",
+        Quantité: item.achat_total || "",
+        Quantité_Blanc: item.achat_blanc || "",
+        Quantité_Jaune: item.achat_jaune || "",
+        created_at: item.created_at || "",
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(formattedData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Cultivateurs");
+
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      const blob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+      });
+
+      saveAs(blob, "donnee_communal.xlsx");
+    } catch (error) {
+      console.error("Erreur exportation Excel :", error);
+    }
+  };
 
   const pathname = usePathname();
   const [activeTab, setActiveTab] = useState("attente");
@@ -232,7 +314,10 @@ function AllMunicipalsList() {
           </button>
         </div>
         <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+          <button
+            onClick={exportToExcel}
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -267,7 +352,7 @@ function AllMunicipalsList() {
       </div>
 
       <Button className="w-max bg-yellow-500 hover:bg-yellow-600" size="sm">
-        Approuver (68)
+        Approuver ({totalCount})
       </Button>
 
       <div
@@ -354,8 +439,8 @@ function AllMunicipalsList() {
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {data.map((order) => (
-                <TableRow key={order.id}>
+              {data.map((order, i = 0) => (
+                <TableRow key={i + 1}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <div className="flex items-center gap-3">
                       <Checkbox
@@ -364,30 +449,6 @@ function AllMunicipalsList() {
                         id="checked-checkbox"
                         className="checked:bg-yellow-600"
                       />
-                    </div>
-                  </TableCell>
-                  <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="relative inline-block">
-                      <button
-                        onClick={() => toggleDropdown(order.id)}
-                        className="dropdown-toggle"
-                      >
-                        <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
-                      </button>
-                      <Dropdown
-                        isOpen={openDropdowns[order.id]}
-                        onClose={() => closeDropdown(order.id)}
-                        className="w-40 p-2"
-                      >
-                        <DropdownItem
-                          onItemClick={() => closeDropdown(order.id)}
-                          tag="a"
-                          href={`/provincial/municipals/details/cultivator?hangar_id=${order.id}`}
-                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                        >
-                          Details
-                        </DropdownItem>
-                      </Dropdown>
                     </div>
                   </TableCell>
 
@@ -407,31 +468,22 @@ function AllMunicipalsList() {
                       </svg>
                       <div>
                         <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order.hangar_name}
-                        </span>
-                        <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order.hangar_code}
+                          {order.commune}
                         </span>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Qte}
+                    {order?.achat_total}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Prix}
+                    {order.achat_blanc}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {
-                      order?.hangar_adress?.zone_code?.commune_code
-                        ?.province_code?.province_name
-                    }
+                    {order?.achat_jaune}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {
-                      order?.hangar_adress?.zone_code?.commune_code
-                        ?.commune_name
-                    }
+                    {order?.total_hangar}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     <Button
@@ -450,7 +502,14 @@ function AllMunicipalsList() {
 
       {/* Pagination */}
 
-      <Pagination />
+      <Pagination
+        totalCount={totalCount}
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+        totalPages={totalPages}
+        pointer={pointer}
+        limit={limit}
+      />
 
       {/* filtres */}
 

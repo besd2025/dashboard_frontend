@@ -8,21 +8,16 @@ import {
   TableRow,
 } from "../../table_elemets";
 
-import Image from "next/image";
 import { MoreDotIcon } from "../../../../icons";
 import DropdownItem from "../../../dropdown/DropdownItem";
 import { Dropdown } from "../../../dropdown/dropdown_cultvators";
-import Badge from "../../../badge/Badge";
 import { useSidebar } from "../../../../context/SidebarContext";
 import Modal from "../../../modal";
 import { useModal } from "../../../hooks/useModal";
 import Pagination from "../../Pagination";
 import EditUserProfile from "../../../../provincial/cultivators/profile/edit_user_profile";
-import FilterUserProfile from "../../../../provincial/cultivators/profile/filter_user_profile";
 import FilterHangarList from "../../../../provincial/municipals/filter_hangar_list";
 import { fetchData } from "../../../../../_utils/api";
-import Button from "../../../button/Button";
-import Checkbox from "../../../form/input/Checkbox";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
@@ -30,7 +25,6 @@ function AllMunicipalsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
-  const [isCheckedTwo, setIsCheckedTwo] = useState(true);
 
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
@@ -86,14 +80,19 @@ function AllMunicipalsList() {
   } = useModal();
 
   useEffect(() => {
+    console.log("yyyyy");
     async function getData() {
       try {
-        const results = await fetchData("get", "hangars/cinq_recents/", {
-          params: {},
-          additionalHeaders: {},
-          body: {},
-        });
-        setData(results);
+        const results = await fetchData(
+          "get",
+          "/stock/details/quantite_commune/",
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
+        setData("resultat:", results);
         console.log(results);
       } catch (error) {
         setError(error);

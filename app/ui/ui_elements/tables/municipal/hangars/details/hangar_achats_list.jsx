@@ -397,105 +397,109 @@ function HangarAchatList() {
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {data.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="relative inline-block">
-                      <button
-                        onClick={() => toggleDropdown(order.id)}
-                        className="dropdown-toggle"
-                      >
-                        <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
-                      </button>
-                      <Dropdown
-                        isOpen={openDropdowns[order.id]}
-                        onClose={() => closeDropdown(order.id)}
-                        className="w-40 p-2"
-                      >
-                        <DropdownItem
-                          onItemClick={() => closeDropdown(order.id)}
-                          tag="a"
-                          href={`/dashboard/cultivators/profile?cult_id=${order?.id}`}
-                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              {data.map((order) =>
+                order?.is_communal_appouved === false ? (
+                  <TableRow key={order.id}>
+                    <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                      <div className="relative inline-block">
+                        <button
+                          onClick={() => toggleDropdown(order.id)}
+                          className="dropdown-toggle"
                         >
-                          Profile
-                        </DropdownItem>
-                        {user?.session?.category != "General" && (
+                          <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
+                        </button>
+                        <Dropdown
+                          isOpen={openDropdowns[order.id]}
+                          onClose={() => closeDropdown(order.id)}
+                          className="w-40 p-2"
+                        >
                           <DropdownItem
-                            onItemClick={() => {
-                              closeDropdown(order.id);
-                              openModal();
-                            }}
+                            onItemClick={() => closeDropdown(order.id)}
+                            tag="a"
+                            href={`/dashboard/cultivators/profile?cult_id=${order?.id}`}
                             className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                           >
-                            Modifier
+                            Profile
                           </DropdownItem>
-                        )}
-                      </Dropdown>
-                    </div>
-                  </TableCell>
+                          {user?.session?.category != "General" && (
+                            <DropdownItem
+                              onItemClick={() => {
+                                closeDropdown(order.id);
+                                openModal();
+                              }}
+                              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                            >
+                              Modifier
+                            </DropdownItem>
+                          )}
+                        </Dropdown>
+                      </div>
+                    </TableCell>
 
-                  <TableCell className="px-5 py-4 sm:px-6 text-start">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 overflow-hidden rounded-full">
-                        {order?.cultivator?.cultivator_photo ? (
-                          <Image
-                            width={80}
-                            height={80}
-                            src={order?.cultivator?.cultivator_photo}
-                            alt="user"
-                          />
-                        ) : (
-                          <Image
-                            width={80}
-                            height={80}
-                            src="/img/blank-profile.png"
-                            alt="user"
-                          />
-                        )}
+                    <TableCell className="px-5 py-4 sm:px-6 text-start">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 overflow-hidden rounded-full">
+                          {order?.cultivator?.cultivator_photo ? (
+                            <Image
+                              width={80}
+                              height={80}
+                              src={order?.cultivator?.cultivator_photo}
+                              alt="user"
+                            />
+                          ) : (
+                            <Image
+                              width={80}
+                              height={80}
+                              src="/img/blank-profile.png"
+                              alt="user"
+                            />
+                          )}
+                        </div>
+                        <div>
+                          <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
+                            {order?.cultivator?.cultivator_last_name}{" "}
+                            {order?.cultivator?.cultivator_first_name}
+                          </span>
+                          <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+                            {order?.cultivator?.cultivator_code}
+                          </span>
+                        </div>
                       </div>
-                      <div>
-                        <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order?.cultivator?.cultivator_last_name}{" "}
-                          {order?.cultivator?.cultivator_first_name}
-                        </span>
-                        <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order?.cultivator?.cultivator_code}
-                        </span>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.collector?.hangar.province}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.collector?.hangar?.commune}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.quantity_blanc}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.quantity_jaune}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.total_price}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <Badge
-                      size="sm"
-                      color={
-                        order.status === "Active"
-                          ? "success"
-                          : order.status === "Pending"
-                          ? "warning"
-                          : "error"
-                      }
-                    >
-                      {order.status}
-                    </Badge>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                      {order?.collector?.hangar.province}
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                      {order?.collector?.hangar?.commune}
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                      {order?.quantity_blanc}
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                      {order?.quantity_jaune}
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                      {order?.total_price}
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                      <Badge
+                        size="sm"
+                        color={
+                          order.status === "Active"
+                            ? "success"
+                            : order.status === "Pending"
+                            ? "warning"
+                            : "error"
+                        }
+                      >
+                        {order.status}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  ""
+                )
+              )}
             </TableBody>
           </Table>
         </div>

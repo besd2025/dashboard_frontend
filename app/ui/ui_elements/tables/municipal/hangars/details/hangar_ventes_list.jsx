@@ -22,94 +22,15 @@ import { fetchData } from "../../../../../../_utils/api";
 import Checkbox from "../../../../../ui_elements/form/input/Checkbox";
 import Button from "../../../../../ui_elements/button/Button";
 import EditHangarVentes from "../../../../../municipal/hangars/details/edit_hangar_ventes";
-// Define the table data
-const tableData = [
-  {
-    id: 1,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Active",
-  },
-  {
-    id: 2,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Pending",
-  },
-  {
-    id: 3,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Active",
-  },
-
-  {
-    id: 4,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Active",
-  },
-  {
-    id: 5,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Active",
-  },
-  {
-    id: 6,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Active",
-  },
-];
-
 function HangarVentesList() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [isCheckedTwo, setIsCheckedTwo] = useState(true);
+  const [pointer, setPointer] = useState(0); // index de départ
+  const limit = 5; // nombre par page
+  const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
+  const [currentPage, setCurrentPage] = useState(1);
   const search_params = useSearchParams();
   let hangar_id = search_params?.get("hangar_id");
   function toggleDropdown(rowId) {
@@ -379,7 +300,7 @@ function HangarVentesList() {
         </button>
       </div>
       <Button className="w-max bg-yellow-500 hover:bg-yellow-600" size="sm">
-        Approuver (68)
+        Approuver ({totalCount})
       </Button>
       <div
         className={`${
@@ -452,7 +373,7 @@ function HangarVentesList() {
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {tableData.map((order) => (
+              {data.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <div className="flex items-center gap-3">
@@ -501,28 +422,37 @@ function HangarVentesList() {
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">
-                        <Image
-                          width={40}
-                          height={40}
-                          src={order.user.image}
-                          alt={order.user.name_cultivator}
-                        />
+                        {order?.photo_facture ? (
+                          <Image
+                            width={80}
+                            height={80}
+                            src={order?.photo_facture}
+                            alt="user"
+                          />
+                        ) : (
+                          <Image
+                            width={80}
+                            height={80}
+                            src="/img/blank-profile.png"
+                            alt="user"
+                          />
+                        )}
                       </div>
                       <div>
                         <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order.user.name_cultivator}
+                          {order?.type_acheteur}
                         </span>
                         <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order.user.id_cultivator}
+                          {order?.type_acheteur}
                         </span>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Province}
+                    {order?.telephone_acheteur}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order.Commune}
+                    {order?.Commune}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <Badge
@@ -547,7 +477,14 @@ function HangarVentesList() {
 
       {/* Pagination */}
 
-      <Pagination />
+      <Pagination
+        totalCount={totalCount}
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+        totalPages={totalPages}
+        pointer={pointer}
+        limit={limit}
+      />
 
       {/* filtres */}
 

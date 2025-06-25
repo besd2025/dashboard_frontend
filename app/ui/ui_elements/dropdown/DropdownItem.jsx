@@ -21,7 +21,8 @@ const DropdownItem = ({
   };
 
   if (tag === "a" && href) {
-    document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     return (
       <Link href={href} className={combinedClasses} onClick={handleClick}>
         {children}

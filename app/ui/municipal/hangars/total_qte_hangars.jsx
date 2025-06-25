@@ -1,17 +1,24 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { fetchData } from "../../../_utils/api";
+import { UserContext } from "../../context/UserContext";
 function TotalQteHangars() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
+  const user = useContext(UserContext);
+  console.log(user);
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData("get", "hangars/total/", {
-          params: {},
-          additionalHeaders: {},
-          body: {},
-        });
+        const results = await fetchData(
+          "get",
+          "stock/details/quantite_commune/",
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
 
         setData(results);
         console.log(results);
