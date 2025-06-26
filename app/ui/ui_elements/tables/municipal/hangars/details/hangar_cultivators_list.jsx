@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState, useContext } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   Table,
   TableBody,
@@ -26,7 +27,8 @@ import { saveAs } from "file-saver";
 import { fetchData } from "../../../../../../_utils/api";
 import { UserContext } from "../../../../../context/UserContext";
 //import { useSearchParams } from "next/navigation";
-function HangarCultivatorsList({ hangar_id }) {
+
+function HangarCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [isCheckedTwo, setIsCheckedTwo] = useState(true);
   const [data, setData] = useState([]);
@@ -35,8 +37,10 @@ function HangarCultivatorsList({ hangar_id }) {
   const limit = 5; // nombre par page
   const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
+  const search_params = useSearchParams();
   const user = useContext(UserContext);
   const [cultivateur_id, setId] = useState(0);
+  let hangar_id = search_params?.get("hangar_id");
   //const searchParams = useSearchParams();
   //const hangar_id = searchParams.get("hangar_id");
   //const hangar_id = 5;

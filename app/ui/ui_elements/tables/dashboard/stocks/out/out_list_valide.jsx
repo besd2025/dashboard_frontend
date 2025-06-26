@@ -23,7 +23,10 @@ function OutListValide() {
   const [error, setError] = useState(null);
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [isCheckedTwo, setIsCheckedTwo] = useState(true);
-
+  const [pointer, setPointer] = useState(0); // index de départ
+  const limit = 5; // nombre par page
+  const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
+  const [currentPage, setCurrentPage] = useState(1);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -86,26 +89,33 @@ function OutListValide() {
     closeModal: closeModalResults,
   } = useModal();
 
-  // Ajout de l'état pour le step du modal
-  const [modalStep, setModalStep] = useState("details");
-
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData("get", "hangars/cinq_recents/", {
-          params: {},
-          additionalHeaders: {},
-          body: {},
+        const results = await fetchData("get", "/hangars/", {
+          params: {
+            offset: pointer,
+            limit: limit,
+          },
         });
-        setData(results);
-        console.log(results);
+
+        setData(results.results);
+        setTotalCount(results.count); // si l'API retourne un `count` total
       } catch (error) {
         setError(error);
         console.error(error);
       }
     }
+
     getData();
-  }, []);
+  }, [pointer]); // ← relance quand `pointer` change
+
+  const totalPages = Math.ceil(totalCount / limit);
+
+  const onPageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    setPointer((pageNumber - 1) * limit);
+  };
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
@@ -381,8 +391,14 @@ function OutListValide() {
       </div>
 
       {/* Pagination */}
-
-      <Pagination />
+      <Pagination
+        totalCount={totalCount}
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+        totalPages={totalPages}
+        pointer={pointer}
+        limit={limit}
+      />
 
       {/* filtres */}
 
