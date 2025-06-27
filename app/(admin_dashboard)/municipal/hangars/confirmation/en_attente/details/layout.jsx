@@ -1,12 +1,19 @@
 "use client";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
 function layout({ children }) {
   const pathname = usePathname();
   const [activeTab, setActiveTab] = useState("achats");
+  const [hangarId, setHangarId] = useState(null);
 
+  useEffect(() => {
+    const savedId = localStorage.getItem("hangarId");
+    if (savedId) {
+      setHangarId(savedId);
+    }
+  }, []);
   useEffect(() => {
     if (pathname.includes("/cultivator")) {
       setActiveTab("cultivateurs");
@@ -48,7 +55,7 @@ function layout({ children }) {
                   className="-mb-px flex items-end gap-x-8 min-w-max"
                 >
                   <Link
-                    href="/municipal/hangars/confirmation/en_attente/details/cultivator"
+                    href={`/municipal/hangars/confirmation/en_attente/details/cultivator?hangar_id=${hangarId}`}
                     onClick={() => setActiveTab("cultivateurs")}
                     className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold whitespace-nowrap ${
                       activeTab === "cultivateurs"
@@ -59,7 +66,7 @@ function layout({ children }) {
                     Cultivateurs
                   </Link>
                   <Link
-                    href="/municipal/hangars/confirmation/en_attente/details/achats"
+                    href={`/municipal/hangars/confirmation/en_attente/details/achats?hangar_id=${hangarId}`}
                     onClick={() => setActiveTab("achats")}
                     className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold whitespace-nowrap ${
                       activeTab === "achats"
@@ -70,7 +77,7 @@ function layout({ children }) {
                     Achats
                   </Link>
                   <Link
-                    href="/municipal/hangars/confirmation/en_attente/details/ventes"
+                    href={`/municipal/hangars/confirmation/en_attente/details/ventes?hangar_id=${hangarId}`}
                     onClick={() => setActiveTab("ventes")}
                     className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold whitespace-nowrap ${
                       activeTab === "ventes"
@@ -82,7 +89,7 @@ function layout({ children }) {
                   </Link>
 
                   <Link
-                    href="/municipal/hangars/confirmation/en_attente/details/synthese"
+                    href={`/municipal/hangars/confirmation/en_attente/details/synthese?hangar_id=${hangarId}`}
                     onClick={() => setActiveTab("synthese")}
                     className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold items-center ${
                       activeTab === "synthese"
@@ -108,7 +115,7 @@ function layout({ children }) {
                     <span className="ml-1">Synthese</span>
                   </Link>
                   <Link
-                    href="/municipal/hangars/confirmation/en_attente/details/localisation"
+                    href={`/municipal/hangars/confirmation/en_attente/details/localisation?hangar_id=${hangarId}`}
                     onClick={() => setActiveTab("localisation")}
                     className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold items-center ${
                       activeTab === "localisation"

@@ -116,7 +116,7 @@ export default function UserDropdown() {
                   d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
                 />
               </svg>
-              Settings
+              Parametre
             </DropdownItem>
           </li>
           <li>
@@ -140,7 +140,7 @@ export default function UserDropdown() {
                   d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9"
                 />
               </svg>
-              Logout
+              Se déconnecter
             </DropdownItem>
           </li>
         </ul>

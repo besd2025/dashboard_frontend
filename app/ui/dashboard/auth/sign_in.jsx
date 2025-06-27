@@ -1,13 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
 import Button from "../../ui_elements/button/Button";
 import Checkbox from "../../ui_elements/form/input/Checkbox";
 import Input from "../../ui_elements/form/input/InputField";
 import Label from "../../ui_elements/form/Label";
-import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../../icons";
+import { EyeCloseIcon, EyeIcon } from "../../icons";
+
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -33,7 +33,9 @@ export default function SignInForm() {
     }
   }
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    if (e) e.preventDefault(); // évite rechargement du formulaire
+
     if (!identifiant || !password) {
       setError("Veuillez remplir tous les champs.");
       return;
@@ -58,24 +60,23 @@ export default function SignInForm() {
       }
 
       const data = await response.json();
-      //localStorage.setItem("accessToken", data.access);
       document.cookie = `accessToken=${data.access}; path=/; max-age=3600; secure`;
       localStorage.setItem("accessToken", data.access);
       const user = DecodeToJwt(data.access);
       if (
-        user?.category == "Admin" ||
-        user?.category == "Anagessa" ||
-        user?.category == "General"
+        user?.category === "Admin" ||
+        user?.category === "Anagessa" ||
+        user?.category === "General"
       ) {
         router.push("/dashboard/home");
-      } else if (user?.category == "Communal") {
+      } else if (user?.category === "Communal") {
         router.push("/municipal/cultivators");
-      } else if (user?.category == "Provincial") {
+      } else if (user?.category === "Provincial") {
         router.push("/provincial/cultivators");
-      } else if (user?.category == "Regional") {
+      } else if (user?.category === "Regional") {
         router.push("/regional/cultivators");
       } else {
-        setError("vous n'avez pas d'acces.");
+        setError("Vous n'avez pas d'accès.");
       }
     } catch (err) {
       setError(err.message || "Une erreur est survenue.");
@@ -95,6 +96,7 @@ export default function SignInForm() {
             height={320}
           />
         </div>
+
         <div className="absolute sm:bottom-20 lg:bottom-0 lg:relative mx-2 bg-white p-6 lg:p-0 rounded-2xl sm:left-20 lg:left-0">
           <div className="mb-5 sm:mb-8">
             <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
@@ -105,7 +107,8 @@ export default function SignInForm() {
               !
             </p>
           </div>
-          <div>
+
+          <form onSubmit={handleLogin}>
             <div className="space-y-6">
               <div>
                 <Label>
@@ -118,6 +121,7 @@ export default function SignInForm() {
                   onChange={(e) => setIdentifiant(e.target.value)}
                 />
               </div>
+
               <div>
                 <Label>
                   Mot de passe <span className="text-error-500">*</span>
@@ -134,9 +138,9 @@ export default function SignInForm() {
                     className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
                   >
                     {showPassword ? (
-                      <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
+                      <EyeCloseIcon className="text-gray-700 dark:text-gray-400" />
                     ) : (
-                      <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
+                      <EyeIcon className="text-gray-700 dark:text-gray-400" />
                     )}
                   </span>
                 </div>
@@ -158,7 +162,7 @@ export default function SignInForm() {
 
               <div>
                 <Button
-                  onClick={() => handleLogin()}
+                  type="submit"
                   className="w-full bg-yellow-500"
                   size="sm"
                 >
@@ -166,7 +170,7 @@ export default function SignInForm() {
                 </Button>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
 

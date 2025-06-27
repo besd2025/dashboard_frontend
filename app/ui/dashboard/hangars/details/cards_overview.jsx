@@ -92,7 +92,7 @@ export default function CardsOverview({ hangar_id }) {
               <h4 className="mt-2 font-semibold text-gray-800 text-lg dark:text-white/90">
                 {data.total_achats >= 1000 ? (
                   <>
-                    {(data?.total_achats / 1000).toLocaleString("fr-FR", {
+                    {(data?.total_achats / 1000).toLocaleString("de-DE", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}{" "}
@@ -136,7 +136,20 @@ export default function CardsOverview({ hangar_id }) {
               </div>
 
               <h4 className=" font-semibold text-gray-800 text-xl dark:text-white/90">
-                0 Kg
+                {data.total_achats >= 1000 ? (
+                  <>
+                    {(data?.total_achats / 1000).toLocaleString("de-DE", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {data?.total_achats?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">KG</span>
+                  </>
+                )}
               </h4>
             </div>
           </div>

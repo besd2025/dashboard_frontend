@@ -14,6 +14,7 @@ export default function CardsOverview() {
   const [gaptotal, setGapTotat] = useState([]);
   const [quantite_total_achat, setQuantiteTotalAchete] = useState(0);
   const [total_quantite_vendu, setTotalVendu] = useState([]);
+  const [gap_total_en_prix, setGapTotalPrix] = useState(0);
   const [error, setError] = useState(null);
   useEffect(() => {
     async function getData() {
@@ -42,6 +43,17 @@ export default function CardsOverview() {
             body: {},
           }
         );
+        const prix_achat = await fetchData(
+          "get",
+          "admin/prices/get_prix_achat/",
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
+
+        setGapTotalPrix(prix_achat?.prix_achat * pertetotal?.pertes_totales);
         setTotalVendu(quantite_vendu_jaune_blanc);
         setGapTotat(pertetotal);
         setData(results);
@@ -379,7 +391,13 @@ export default function CardsOverview() {
               <div className="w-px bg-gray-200 h-7 dark:bg-gray-800"></div>
 
               <h4 className="mt-2 font-bold text-gray-500 text-md dark:text-white/90">
-                7 800 <span className="text-sm">Fbu</span>
+                {gap_total_en_prix > 1000000
+                  ? (gap_total_en_prix / 1000000).toLocaleString("de-DE") + " M"
+                  : gap_total_en_prix?.somme_total_price?.toLocaleString(
+                      "de-DE"
+                    )}
+                {0}
+                <span className="text-sm"> Fbu</span>
               </h4>
             </div>
           </div>

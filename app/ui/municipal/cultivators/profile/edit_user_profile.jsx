@@ -8,13 +8,14 @@ import { fetchData } from "../../../../_utils/api";
 
 function EditUserProfile({ closeModal, cultivateur_id }) {
   const [selectedStatus, setSelectedStatus] = useState("option2");
+  console.log(cultivateur_id);
   const [data, setData] = useState({});
   const [error, setError] = useState("");
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
   const [firstName, setFirstName] = useState("");
   const [cullivator_cni, setCNI] = useState("");
-
+  const [genre, setGenre] = useState("");
   const handleRadioChangeStatus = (value) => {
     setSelectedStatus(value);
   };
@@ -77,6 +78,7 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
     setName(data?.cultivator_last_name || "");
     setFirstName(data?.cultivator_first_name || "");
     setCNI(data?.cultivator_cni || "");
+    setGenre(data?.cultivator_gender || "");
   }, [data]);
 
   return (
@@ -133,11 +135,11 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
                 />
               </div>
               <div className="col-span-2 lg:col-span-1">
-                <Label>Phone</Label>
+                <Label>SEXE</Label>
                 <Input
                   type="text"
-                  value={data?.cultivator_phone || ""}
-                  readOnly
+                  defaultValue={genre}
+                  onChange={(e) => setGenre(e.target.value)}
                 />
               </div>
             </div>

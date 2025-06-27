@@ -1,5 +1,6 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   Table,
   TableBody,
@@ -16,103 +17,25 @@ import Badge from "../../../../badge/Badge";
 import Modal from "../../../../modal";
 import { useModal } from "../../../../hooks/useModal";
 import Pagination from "../../../Pagination";
-import EditUserProfile from "../../../../../municipal/cultivators/profile/edit_user_profile";
 import FilterUserProfile from "../../../../../municipal/cultivators/profile/filter_user_profile";
 import { fetchData } from "../../../../../../_utils/api";
 import Button from "../../../../../ui_elements/button/Button";
 import Checkbox from "../../../../../ui_elements/form/input/Checkbox";
-import EditHangarCultiv from "../../../../../municipal/hangars/details/edit_hangar_cultiv";
 import EditHangarAchats from "../../../../../municipal/hangars/details/edit_hangar_achats";
-
 // Define the table data
-const tableData = [
-  {
-    id: 1,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Active",
-  },
-  {
-    id: 2,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Pending",
-  },
-  {
-    id: 3,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Active",
-  },
-
-  {
-    id: 4,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Active",
-  },
-  {
-    id: 5,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Active",
-  },
-  {
-    id: 6,
-    user: {
-      image: "/img/users/user-17.jpg",
-      name_cultivator: "MPAWENAYO Charles",
-      id_cultivator: "id54254Hkhjk6",
-    },
-    Province: "Kayanza",
-    Commune: "Butanganzwa",
-
-    budget: "3.9K",
-    status: "Active",
-  },
-];
 
 function HangarAchatList() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [isCheckedTwo, setIsCheckedTwo] = useState(true);
-
+  const [pointer, setPointer] = useState(0); // index de départ
+  const limit = 5; // nombre par page
+  const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
+  const [currentPage, setCurrentPage] = useState(1);
+  const search_params = useSearchParams();
+  let hangar_id = search_params?.get("hangar_id");
+  console.log(hangar_id);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -133,14 +56,6 @@ function HangarAchatList() {
   }
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const inputRef = useRef(null);
-
-  const handleToggle = () => {
-    if (window.innerWidth >= 1024) {
-      toggleSidebar();
-    } else {
-      toggleMobileSidebar();
-    }
-  };
 
   const toggleApplicationMenu = () => {
     setApplicationMenuOpen(!isApplicationMenuOpen);
@@ -168,20 +83,112 @@ function HangarAchatList() {
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData("get", "hangars/cinq_recents/", {
-          params: {},
-          additionalHeaders: {},
-          body: {},
-        });
+        const response = await fetchData(
+          "get",
+          `hangars/${hangar_id}/achats/`,
+          {
+            params: {
+              offset: pointer,
+              limit: limit,
+            },
+          }
+        );
+        const results = response.items;
         setData(results);
+        setTotalCount(results.length); // si l'API retourne un `count` total
         console.log(results);
       } catch (error) {
         setError(error);
         console.error(error);
       }
     }
+
     getData();
-  }, []);
+  }, [pointer, hangar_id]); // ← relance quand `pointer` change
+
+  const totalPages = Math.ceil(totalCount / limit);
+
+  const onPageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    setPointer((pageNumber - 1) * limit);
+  };
+
+  const exportToExcel = async () => {
+    const limit = 5;
+    let pointer = 0;
+    let allData = [];
+    let hasMore = true;
+
+    try {
+      // Charger toutes les données par pagination
+      while (hasMore) {
+        const response = await fetchData(
+          "get",
+          `hangars/${hangar_id}/achats/`,
+          {
+            params: {
+              offset: pointer,
+              limit: limit,
+            },
+          }
+        );
+
+        const currentData = response?.items || [];
+
+        // Si aucune donnée n’est retournée, arrêter la boucle
+        if (currentData.length === 0) {
+          hasMore = false;
+          break;
+        }
+
+        allData = [...allData, ...currentData];
+        pointer += limit;
+
+        // Vérifier si on a atteint ou dépassé le nombre total d’éléments
+        if (pointer >= (response?.count || 0)) {
+          hasMore = false;
+        }
+      }
+
+      // Si aucune donnée, ne pas continuer
+      if (allData.length === 0) return;
+
+      // Formater les données pour Excel
+      const formattedData = allData.map((item) => ({
+        Nom_cultivateur: item.cultivator?.cultivator_first_name || "",
+        Prénom_cultivateur: item.cultivator?.cultivator_last_name || "",
+        CNI: item.cultivator?.cultivator_cni || "",
+        Code: item.cultivator?.cultivator_code || "",
+        Quantite: item.quantity || "",
+        Prix: item.total_price || "",
+        Province: item?.collector?.hangar?.province || "",
+        Commune: item.collector?.hangar?.commune || "",
+        Zone: item.collector?.hangar?.zone || "",
+        hangar_name: item.collector?.hangar?.hangar_name || "",
+        created_at: item.created_at || "",
+      }));
+
+      // Créer la feuille et le fichier Excel
+      const worksheet = XLSX.utils.json_to_sheet(formattedData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Achats_par_hangar");
+
+      // Générer le buffer Excel
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      // Créer le fichier et déclencher le téléchargement
+      const blob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+      });
+
+      saveAs(blob, "Achats_par_hangar.xlsx");
+    } catch (error) {
+      console.error("Erreur exportation Excel :", error);
+    }
+  };
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
@@ -262,7 +269,10 @@ function HangarAchatList() {
           </button>
         </div>
         <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+          <button
+            onClick={exportToExcel}
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -296,7 +306,7 @@ function HangarAchatList() {
         </button>
       </div>
       <Button className="w-max bg-yellow-500 hover:bg-yellow-600" size="sm">
-        Approuver (68)
+        Approuver ({totalCount})
       </Button>
       <div
         className={`${
@@ -362,6 +372,24 @@ function HangarAchatList() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
+                  quantité Blanc
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  quantité Jaune
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Prix
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
                   Status
                 </TableCell>
               </TableRow>
@@ -369,94 +397,109 @@ function HangarAchatList() {
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {tableData.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="flex items-center gap-3">
-                      <Checkbox
-                        checked={isCheckedTwo}
-                        onChange={setIsCheckedTwo}
-                        id="checked-checkbox"
-                        className="checked:bg-yellow-600"
-                      />
-                    </div>
-                  </TableCell>
-                  <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="relative inline-block">
-                      <button
-                        onClick={() => toggleDropdown(order.id)}
-                        className="dropdown-toggle"
-                      >
-                        <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
-                      </button>
-                      <Dropdown
-                        isOpen={openDropdowns[order.id]}
-                        onClose={() => closeDropdown(order.id)}
-                        className="w-40 p-2"
-                      >
-                        <DropdownItem
-                          onItemClick={() => closeDropdown(order.id)}
-                          tag="a"
-                          href={`/municipal/cultivators/profile?cult_id=${order?.id}`}
-                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              {data.map((order) =>
+                order?.is_communal_appouved === false ? (
+                  <TableRow key={order.id}>
+                    <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                      <div className="relative inline-block">
+                        <button
+                          onClick={() => toggleDropdown(order.id)}
+                          className="dropdown-toggle"
                         >
-                          Profile
-                        </DropdownItem>
-                        <DropdownItem
-                          onItemClick={() => {
-                            closeDropdown(order.id);
-                            openModal();
-                          }}
-                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                          <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
+                        </button>
+                        <Dropdown
+                          isOpen={openDropdowns[order.id]}
+                          onClose={() => closeDropdown(order.id)}
+                          className="w-40 p-2"
                         >
-                          Modifier
-                        </DropdownItem>
-                      </Dropdown>
-                    </div>
-                  </TableCell>
+                          <DropdownItem
+                            onItemClick={() => closeDropdown(order.id)}
+                            tag="a"
+                            href={`/dashboard/cultivators/profile?cult_id=${order?.id}`}
+                            className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                          >
+                            Profile
+                          </DropdownItem>
+                          {user?.session?.category != "General" && (
+                            <DropdownItem
+                              onItemClick={() => {
+                                closeDropdown(order.id);
+                                openModal();
+                              }}
+                              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                            >
+                              Modifier
+                            </DropdownItem>
+                          )}
+                        </Dropdown>
+                      </div>
+                    </TableCell>
 
-                  <TableCell className="px-5 py-4 sm:px-6 text-start">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 overflow-hidden rounded-full">
-                        <Image
-                          width={40}
-                          height={40}
-                          src={order.user.image}
-                          alt={order.user.name_cultivator}
-                        />
+                    <TableCell className="px-5 py-4 sm:px-6 text-start">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 overflow-hidden rounded-full">
+                          {order?.cultivator?.cultivator_photo ? (
+                            <Image
+                              width={80}
+                              height={80}
+                              src={order?.cultivator?.cultivator_photo}
+                              alt="user"
+                            />
+                          ) : (
+                            <Image
+                              width={80}
+                              height={80}
+                              src="/img/blank-profile.png"
+                              alt="user"
+                            />
+                          )}
+                        </div>
+                        <div>
+                          <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
+                            {order?.cultivator?.cultivator_last_name}{" "}
+                            {order?.cultivator?.cultivator_first_name}
+                          </span>
+                          <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+                            {order?.cultivator?.cultivator_code}
+                          </span>
+                        </div>
                       </div>
-                      <div>
-                        <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order.user.name_cultivator}
-                        </span>
-                        <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order.user.id_cultivator}
-                        </span>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Province}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order.Commune}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <Badge
-                      size="sm"
-                      color={
-                        order.status === "Active"
-                          ? "success"
-                          : order.status === "Pending"
-                          ? "warning"
-                          : "error"
-                      }
-                    >
-                      {order.status}
-                    </Badge>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                      {order?.collector?.hangar.province}
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                      {order?.collector?.hangar?.commune}
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                      {order?.quantity_blanc}
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                      {order?.quantity_jaune}
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                      {order?.total_price}
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                      <Badge
+                        size="sm"
+                        color={
+                          order.status === "Active"
+                            ? "success"
+                            : order.status === "Pending"
+                            ? "warning"
+                            : "error"
+                        }
+                      >
+                        {order.status}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  ""
+                )
+              )}
             </TableBody>
           </Table>
         </div>
@@ -464,7 +507,14 @@ function HangarAchatList() {
 
       {/* Pagination */}
 
-      <Pagination />
+      <Pagination
+        totalCount={totalCount}
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+        totalPages={totalPages}
+        pointer={pointer}
+        limit={limit}
+      />
 
       {/* filtres */}
 

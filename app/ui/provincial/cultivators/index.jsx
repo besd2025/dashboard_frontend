@@ -1,19 +1,21 @@
 "use client";
 import React from "react";
 import TotalCultivators from "../../charts/cultuvators/total_cultivators_card";
+import TotalHangarsCard from "../../charts/cultuvators/total_hangars_card";
 import GenderChart from "../../charts/cultuvators/gender";
 import AgeRange from "../../charts/cultuvators/age_range";
 import Cultuvators from "../../charts/cultuvators/cultuvators";
-import NewCultivatorsCharts from "./new_cultivators";
-import BasicTableOne from "../../ui_elements/tables/BasicTableOne";
 import RecentCultivatorsList from "../../ui_elements/tables/provincial/cultivators/recent_list_cultivators";
-import ActifCultivators from "./actif_cultivators";
+import ActifCultivators from "./actif_hangars_prov";
 
 function CultivatorsHome() {
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">
       <div className=" col-span-12 space-y-6 lg:col-span-3">
         <TotalCultivators />
+      </div>
+      <div className=" col-span-12 space-y-6 lg:col-span-3">
+        <TotalHangarsCard />
       </div>
       <div className=" col-span-12 space-y-6 lg:col-span-2">
         <ActifCultivators />
@@ -31,9 +33,6 @@ function CultivatorsHome() {
             <AgeRange />
           </div>
         </div>
-      </div>
-      <div className=" col-span-12 space-y-6 lg:col-span-12">
-        <NewCultivatorsCharts />
       </div>
       <div className=" col-span-12 space-y-6 lg:col-span-12">
         <RecentCultivatorsList />

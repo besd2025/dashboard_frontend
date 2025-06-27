@@ -36,7 +36,6 @@ function HangarCultivatorsList({ hangar_id }) {
   //const searchParams = useSearchParams();
   //const hangar_id = searchParams.get("hangar_id");
   //const hangar_id = 5;
-  console.log("hangar_id:", hangar_id);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -410,7 +409,7 @@ function HangarCultivatorsList({ hangar_id }) {
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">
-                        {order?.cultivator_photo == null ? (
+                        {order?.cultivator_photo ? (
                           <Image
                             width={80}
                             height={80}
@@ -428,25 +427,25 @@ function HangarCultivatorsList({ hangar_id }) {
                       </div>
                       <div>
                         <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order.cultivator_last_name}{" "}
-                          {order.cultivator_first_name}
+                          {order?.cultivator_last_name}{" "}
+                          {order?.cultivator_first_name}
                         </span>
                         <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order.cultivator_code}
+                          {order?.cultivator_code}
                         </span>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {
-                      order.cultivator_adress.zone_code.commune_code
-                        .province_code.province_name
+                      order?.cultivator_adress?.zone_code?.commune_code
+                        ?.province_code?.province_name
                     }
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     {
-                      order.cultivator_adress.zone_code.commune_code
-                        .commune_name
+                      order?.cultivator_adress?.zone_code?.commune_code
+                        ?.commune_name
                     }
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">

@@ -126,7 +126,7 @@ export default function DashboardLayout() {
                     ></path>
                   </svg>
                 </span>
-                Logout
+                Se déconnecter
               </a>
             </li>
           </ul>

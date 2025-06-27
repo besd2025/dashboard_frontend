@@ -1,13 +1,29 @@
-import React from "react";
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  BoxIconLine,
-  GroupIcon,
-} from "../../../icons";
-import Badge from "../../../ui_elements/badge/Badge";
-
+"use client";
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { fetchData } from "../../../../_utils/api";
 export default function CardsOverview() {
+  const search_params = useSearchParams();
+  const hangar_id = search_params.get("hangar_id");
+  const [data, setData] = useState({});
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData("get", `hangars/${hangar_id}/`, {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+        setData(results);
+        console.log(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-16 md:gap-4">
       {/* <!-- Metric Item Start quantity collected --> */}
@@ -38,7 +54,7 @@ export default function CardsOverview() {
           </div>
 
           <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
-            5858
+            {data?.nb_cultivateurs}
           </h4>
         </div>
       </div>
@@ -70,7 +86,20 @@ export default function CardsOverview() {
                 Qté Collectée
               </span>
               <h4 className="ml-3 font-bold text-gray-800 text-2xl dark:text-white/90">
-                30,782 <span className="text-sm">KG</span>
+                {data.total_achats >= 1000 ? (
+                  <>
+                    {(data?.total_achats / 1000).toLocaleString("de-DE", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {data?.total_achats?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">KG</span>
+                  </>
+                )}
               </h4>
             </div>
             {/* <Badge color="success">
@@ -103,7 +132,7 @@ export default function CardsOverview() {
               </div>
 
               <h4 className=" font-semibold text-gray-800 text-xl dark:text-white/90">
-                500 452 T
+                0 Kg
               </h4>
             </div>
           </div>
@@ -128,7 +157,7 @@ export default function CardsOverview() {
               </div>
 
               <h4 className=" font-semibold text-yellow-600 text-xl dark:text-white/90">
-                500 452 T
+                0 kg
               </h4>
             </div>
           </div>
@@ -164,7 +193,20 @@ export default function CardsOverview() {
                 Qté Vendue
               </span>
               <h4 className="ml-3 font-bold text-gray-800 text-2xl dark:text-white/90">
-                30,782 <span className="text-sm">KG</span>
+                {data.total_ventes >= 1000 ? (
+                  <>
+                    {(data?.total_ventes / 1000).toLocaleString("de-DE", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {data?.total_ventes?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">KG</span>
+                  </>
+                )}
               </h4>
             </div>
             {/* <Badge color="success">
@@ -197,7 +239,7 @@ export default function CardsOverview() {
               </div>
 
               <h4 className=" font-semibold text-gray-800 text-xl dark:text-white/90">
-                500 452 T
+                0 kg
               </h4>
             </div>
           </div>
@@ -222,7 +264,7 @@ export default function CardsOverview() {
               </div>
 
               <h4 className=" font-semibold text-yellow-600 text-xl dark:text-white/90">
-                500 452 T
+                0 Kg
               </h4>
             </div>
           </div>
@@ -267,7 +309,8 @@ export default function CardsOverview() {
           </div>
 
           <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
-            30 M <span className="text-sm">FBU</span>
+            {data?.total_achats_price?.toLocaleString("de-DE") || 0}{" "}
+            <span className="text-sm">FBU</span>
           </h4>
         </div>
       </div>
@@ -307,7 +350,8 @@ export default function CardsOverview() {
           </div>
 
           <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
-            30 M <span className="text-sm">FBU</span>
+            {data?.total_ventes_price?.toLocaleString("de-DE") || 0}{" "}
+            <span className="text-sm">FBU</span>
           </h4>
         </div>
       </div>

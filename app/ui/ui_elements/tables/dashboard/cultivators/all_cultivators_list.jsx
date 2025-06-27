@@ -20,6 +20,8 @@ import DropdownItem from "../../../dropdown/DropdownItem";
 import { Dropdown } from "../../../dropdown/dropdown_cultvators";
 import { MoreDotIcon } from "../../../../icons";
 import { UserContext } from "../../../../context/UserContext";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 function AllCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
@@ -87,7 +89,6 @@ function AllCultivatorsList() {
 
         setData(results.results);
         setTotalCount(results.count); // si l'API retourne un `count` total
-        console.log(results);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -98,7 +99,6 @@ function AllCultivatorsList() {
   }, [pointer]); // ← relance quand `pointer` change
 
   const totalPages = Math.ceil(totalCount / limit);
-
   const onPageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
     setPointer((pageNumber - 1) * limit);
@@ -169,6 +169,10 @@ function AllCultivatorsList() {
       console.error("Erreur exportation Excel :", error);
     }
   };
+
+  const [id1, getId] = useState(undefined ? "default" : 0);
+  console.log(id1);
+
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
@@ -389,6 +393,7 @@ function AllCultivatorsList() {
                             onItemClick={() => {
                               closeDropdown(order.id);
                               openModal();
+                              getId(order?.id);
                             }}
                             className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                           >
@@ -402,7 +407,7 @@ function AllCultivatorsList() {
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">
-                        {order?.cultivator_photo == null ? (
+                        {order?.cultivator_photo ? (
                           <Image
                             width={80}
                             height={80}
@@ -447,6 +452,9 @@ function AllCultivatorsList() {
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     {order?.cultivator_adress?.colline_name}
                   </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order?.colletor?.hangar?.hangar_name}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -476,7 +484,7 @@ function AllCultivatorsList() {
       </Modal>
 
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <EditUserProfile />
+        <EditUserProfile cultivateur_id={id1} />
       </Modal>
     </div>
   );

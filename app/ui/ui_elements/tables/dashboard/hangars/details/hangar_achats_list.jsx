@@ -22,7 +22,7 @@ import { fetchData } from "../../../../../../_utils/api";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { UserContext } from "../../../../../context/UserContext";
-function HangarAchatList({ hangar_id }) {
+function HangarAchatList() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [openDropdowns, setOpenDropdowns] = useState({});
@@ -32,9 +32,9 @@ function HangarAchatList({ hangar_id }) {
   const [currentPage, setCurrentPage] = useState(1);
   const user = useContext(UserContext);
   //const searchParams = useSearchParams();
-  const token = null;
+  let hangar_id = 0;
   if (typeof window !== "undefined") {
-    token = localStorage.getItem("accessToken");
+    hangar_id = localStorage.getItem("hangarId");
     // ...
   }
   //const hangar_id = searchParams.get("hangar_id");
@@ -58,15 +58,6 @@ function HangarAchatList({ hangar_id }) {
   }
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const inputRef = useRef(null);
-
-  const handleToggle = () => {
-    if (window.innerWidth >= 1024) {
-      toggleSidebar();
-    } else {
-      toggleMobileSidebar();
-    }
-  };
-
   const toggleApplicationMenu = () => {
     setApplicationMenuOpen(!isApplicationMenuOpen);
   };
@@ -106,7 +97,7 @@ function HangarAchatList({ hangar_id }) {
         const results = response.items;
         setData(results);
         setTotalCount(results.length); // si l'API retourne un `count` total
-        console.log(totalCount);
+        console.log(results);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -379,7 +370,13 @@ function HangarAchatList({ hangar_id }) {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  quantité
+                  quantité Blanc
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  quantité Jaune
                 </TableCell>
                 <TableCell
                   isHeader
@@ -439,7 +436,7 @@ function HangarAchatList({ hangar_id }) {
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">
-                        {order?.cultivator?.cultivator_photo == null ? (
+                        {order?.cultivator?.cultivator_photo ? (
                           <Image
                             width={80}
                             height={80}
@@ -473,7 +470,10 @@ function HangarAchatList({ hangar_id }) {
                     {order?.collector?.hangar?.commune}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.quantity}
+                    {order?.quantity_blanc}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order?.quantity_jaune}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     {order?.total_price}

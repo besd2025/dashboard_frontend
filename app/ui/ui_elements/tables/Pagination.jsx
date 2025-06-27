@@ -7,7 +7,6 @@ const Pagination = ({
   totalCount,
 }) => {
   const pagesToShow = [];
-  console.log(totalCount);
   // Génère les numéros de pages à afficher
   const startPage = Math.max(1, currentPage - 1);
   const endPage = Math.min(totalPages, startPage + 2);
@@ -23,11 +22,9 @@ const Pagination = ({
         <div className="mb-4 sm:mb-0">
           <p className="text-sm text-gray-700 dark:text-gray-400">
             Affichage de{" "}
-            {pointer > 0 ? (
-              <span className="font-medium">{pointer + 1}</span>
-            ) : (
-              <span className="font-medium">{0}</span>
-            )}{" "}
+            <span className="font-medium">
+              {totalCount === 0 ? pointer : pointer + 1}
+            </span>{" "}
             à{" "}
             <span className="font-medium">
               {Math.min(pointer + limit, totalCount)}

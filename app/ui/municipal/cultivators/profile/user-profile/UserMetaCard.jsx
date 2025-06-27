@@ -40,11 +40,11 @@ export default function UserMetaCard({ cultivateur_id }) {
         <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between mb-4">
           <div className="flex flex-col items-center w-full gap-6 xl:flex-row">
             <div className="w-20 h-20 overflow-hidden border border-gray-200 rounded-full dark:border-gray-800">
-              {data?.cultivator_cni_photo == null ? (
+              {data?.cultivator_photo ? (
                 <Image
                   width={80}
                   height={80}
-                  src={data?.cultivator_cni_photo}
+                  src={data?.cultivator_photo}
                   alt="user"
                 />
               ) : (

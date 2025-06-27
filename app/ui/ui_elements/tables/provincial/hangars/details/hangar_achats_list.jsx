@@ -128,14 +128,6 @@ function HangarAchatList() {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const inputRef = useRef(null);
 
-  const handleToggle = () => {
-    if (window.innerWidth >= 1024) {
-      toggleSidebar();
-    } else {
-      toggleMobileSidebar();
-    }
-  };
-
   const toggleApplicationMenu = () => {
     setApplicationMenuOpen(!isApplicationMenuOpen);
   };
@@ -402,8 +394,8 @@ function HangarAchatList() {
                         <Image
                           width={40}
                           height={40}
-                          src={order.user.image}
-                          alt={order.user.name_cultivator}
+                          src={order?.user?.image}
+                          alt={order?.user?.name_cultivator}
                         />
                       </div>
                       <div>

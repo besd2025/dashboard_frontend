@@ -7,8 +7,6 @@ import {
   TableHeader,
   TableRow,
 } from "../../table_elemets";
-
-import Image from "next/image";
 import { MoreDotIcon } from "../../../../icons";
 import DropdownItem from "../../../dropdown/DropdownItem";
 import { Dropdown } from "../../../dropdown/dropdown_cultvators";
@@ -16,19 +14,23 @@ import { useSidebar } from "../../../../context/SidebarContext";
 import Modal from "../../../modal";
 import { useModal } from "../../../hooks/useModal";
 import Pagination from "../../Pagination";
-import EditUserProfile from "../../../../regional/cultivators/profile/edit_user_profile";
 import FilterHangarList from "../../../../regional/provincials/filter_hangar_list";
-import { fetchData } from "../../../../../_utils/api";
+import Button from "../../../button/Button";
+import Checkbox from "../../../form/input/Checkbox";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import EditUserProfile from "../../../../regional/cultivators/profile/edit_user_profile";
-
+import { fetchData } from "../../../../../_utils/api";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 function AllProvincialsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [isCheckedTwo, setIsCheckedTwo] = useState(true);
-
+  const [pointer, setPointer] = useState(0); // index de départ
+  const limit = 5; // nombre par page
+  const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
+  const [currentPage, setCurrentPage] = useState(1);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -74,8 +76,6 @@ function AllProvincialsList() {
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
-
-  const { isOpen, openModal, closeModal } = useModal();
   const {
     isOpen: isOpenFilter,
     openModal: openModalFilter,
@@ -85,11 +85,15 @@ function AllProvincialsList() {
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData("get", "hangars/cinq_recents/", {
-          params: {},
-          additionalHeaders: {},
-          body: {},
-        });
+        const results = await fetchData(
+          "get",
+          "/stock/details/quantite_province/",
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
         setData(results);
         console.log(results);
       } catch (error) {
@@ -99,7 +103,98 @@ function AllProvincialsList() {
     }
     getData();
   }, []);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData(
+          "get",
+          "/stock/details/quantite_province/",
+          {
+            params: {
+              offset: pointer,
+              limit: limit,
+            },
+          }
+        );
 
+        setData(results.results);
+        setTotalCount(results.count); // si l'API retourne un `count` total
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+
+    getData();
+  }, [pointer]); // ← relance quand `pointer` change
+
+  const totalPages = Math.ceil(totalCount / limit);
+  const onPageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    setPointer((pageNumber - 1) * limit);
+  };
+
+  const exportToExcel = async () => {
+    const limit = 5;
+    let pointer = 0;
+    let allData = [];
+    let hasMore = true;
+
+    try {
+      // Charger toutes les données par pagination
+      while (hasMore) {
+        const response = await fetchData(
+          "get",
+          "/stock/details/quantite_province/",
+          {
+            params: {
+              offset: pointer,
+              limit: limit,
+            },
+          }
+        );
+
+        const currentData = response.results;
+
+        if (currentData.length === 0) break;
+
+        allData = [...allData, ...currentData];
+        pointer += limit;
+
+        // S'arrêter si on a atteint toutes les données
+        if (pointer >= response.count) {
+          hasMore = false;
+        }
+      }
+
+      if (allData.length === 0) return;
+
+      const formattedData = allData.map((item) => ({
+        Province: item.province || "",
+        Quantité: item.achat_total || "",
+        Quantité_Blanc: item.achat_blanc || "",
+        Quantité_Jaune: item.achat_jaune || "",
+        created_at: item.created_at || "",
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(formattedData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "province");
+
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      const blob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+      });
+
+      saveAs(blob, "quantite_province.xlsx");
+    } catch (error) {
+      console.error("Erreur exportation Excel :", error);
+    }
+  };
   const pathname = usePathname();
   const [activeTab, setActiveTab] = useState("attente");
 
@@ -121,7 +216,7 @@ function AllProvincialsList() {
             className="flex items-center space-x-1 rounded-xl bg-gray-100 p-1 dark:bg-gray-800/50"
           >
             <Link
-              href="/regional/provincials/en_attente"
+              href="/provincial/municipals/confirmation/en_attente"
               onClick={() => setActiveTab("attente")}
               className={`relative flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-bold transition-all duration-200 ease-in-out ${
                 activeTab === "attente"
@@ -135,7 +230,7 @@ function AllProvincialsList() {
               )}
             </Link>
             <Link
-              href="/regional/provincials/approuve"
+              href="/regional/provincials/confirmation/approuve"
               onClick={() => setActiveTab("approuve")}
               className={`relative flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-bold transition-all duration-200 ease-in-out ${
                 activeTab === "approuve"
@@ -154,7 +249,7 @@ function AllProvincialsList() {
 
       <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90 line-clamp-1 animate-sl">
-          Données communes Approuvés
+          Données provinces en attente
         </h3>
         {/* search */}
         <div className="hidden lg:block">
@@ -229,7 +324,10 @@ function AllProvincialsList() {
           </button>
         </div>
         <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+          <button
+            onClick={exportToExcel}
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -262,6 +360,10 @@ function AllProvincialsList() {
           </svg>
         </button>
       </div>
+
+      <Button className="w-max bg-yellow-500 hover:bg-yellow-600" size="sm">
+        Approuver ({totalCount})
+      </Button>
 
       <div
         className={`${
@@ -304,11 +406,12 @@ function AllProvincialsList() {
             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]  shadow-theme-xs ">
               <TableRow>
                 <th></th>
+                <th></th>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase "
                 >
-                  Commune
+                  Province
                 </TableCell>
                 <TableCell
                   isHeader
@@ -334,19 +437,25 @@ function AllProvincialsList() {
                 >
                   Nombre hangars
                 </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
-                  Province
-                </TableCell>
+
+                <th></th>
               </TableRow>
             </TableHeader>
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {data.map((order) => (
-                <TableRow key={order.id}>
+              {data.map((order, i = 0) => (
+                <TableRow key={i + 0}>
+                  <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    <div className="flex items-center gap-3">
+                      <Checkbox
+                        checked={isCheckedTwo}
+                        onChange={setIsCheckedTwo}
+                        id="checked-checkbox"
+                        className="checked:bg-yellow-600"
+                      />
+                    </div>
+                  </TableCell>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <div className="relative inline-block">
                       <button
@@ -388,31 +497,30 @@ function AllProvincialsList() {
                       </svg>
                       <div>
                         <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order.hangar_name}
-                        </span>
-                        <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order.hangar_code}
+                          {order?.province}
                         </span>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Qte}
+                    {order?.achat_total || 0}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Prix}
+                    {order?.achat_blanc}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {
-                      order?.hangar_adress?.zone_code?.commune_code
-                        ?.province_code?.province_name
-                    }
+                    {order?.achat_jaune}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {
-                      order?.hangar_adress?.zone_code?.commune_code
-                        ?.commune_name
-                    }
+                    {order?.hangar_number}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    <Button
+                      className="w-max bg-red-700 hover:bg-red-900"
+                      size="sm"
+                    >
+                      Rejetter
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
@@ -423,7 +531,14 @@ function AllProvincialsList() {
 
       {/* Pagination */}
 
-      <Pagination />
+      <Pagination
+        totalCount={totalCount}
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+        totalPages={totalPages}
+        pointer={pointer}
+        limit={limit}
+      />
 
       {/* filtres */}
 
@@ -433,10 +548,6 @@ function AllProvincialsList() {
         className="max-w-[700px] m-4"
       >
         <FilterHangarList />
-      </Modal>
-
-      <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <EditUserProfile />
       </Modal>
     </div>
   );

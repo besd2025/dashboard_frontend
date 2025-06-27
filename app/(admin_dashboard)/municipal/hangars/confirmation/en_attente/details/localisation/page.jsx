@@ -5,7 +5,7 @@ import {
 } from "../../../../../../../ui/icons";
 // import HangarLocalisation from "../../../../../ui/municipal/localisation/hangar_localisation";
 import React from "react";
-
+export const dynamic = "force-dynamic";
 function page() {
   return (
     <div className="grid grid-cols-4 gap-4 p-4">

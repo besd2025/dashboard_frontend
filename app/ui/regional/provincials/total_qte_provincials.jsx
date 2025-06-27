@@ -4,24 +4,24 @@ import { fetchData } from "../../../_utils/api";
 function TotalQteprovincials() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
-  useEffect(() => {
-    async function getData() {
-      try {
-        const results = await fetchData("get", "provincials/total/", {
-          params: {},
-          additionalHeaders: {},
-          body: {},
-        });
+  // useEffect(() => {
+  //   async function getData() {
+  //     try {
+  //       const results = await fetchData("get", "provincials/total/", {
+  //         params: {},
+  //         additionalHeaders: {},
+  //         body: {},
+  //       });
 
-        setData(results);
-        console.log(results);
-      } catch (error) {
-        setError(error);
-        console.error(error);
-      }
-    }
-    getData();
-  }, []);
+  //       setData(results);
+  //       console.log(results);
+  //     } catch (error) {
+  //       setError(error);
+  //       console.error(error);
+  //     }
+  //   }
+  //   getData();
+  // }, []);
   return (
     <div className="rounded-2xl col-span-7 flex flex-row justify-between border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
       <div>
@@ -48,7 +48,7 @@ function TotalQteprovincials() {
               Total Qté des Hangars (prov)
             </span>
             <h4 className="mt-2 font-semibold text-gray-800 text-xl dark:text-white/90">
-              {data.quantite_totale >= 1000 ? (
+              {/* {data.quantite_totale >= 1000 ? (
                 <>
                   {(data?.quantite_totale / 1000).toLocaleString("fr-FR", {
                     minimumFractionDigits: 2,
@@ -61,7 +61,7 @@ function TotalQteprovincials() {
                   {data?.quantite_totale?.toLocaleString("fr-FR") || 0}{" "}
                   <span className="text-sm">KG</span>
                 </>
-              )}
+              )} */}
             </h4>
           </div>
           {/* <Badge color="success">

@@ -1,13 +1,13 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Dropdown } from "../../ui_elements/dropdown/Dropdown";
 import DropdownItem from "../../ui_elements/dropdown/DropdownItem";
-
+import { UserContext } from "../../../ui/context/UserContext";
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const user = useContext(UserContext);
   function toggleDropdown(e) {
     e.stopPropagation();
     setIsOpen((prev) => !prev);
@@ -34,7 +34,9 @@ export default function UserDropdown() {
         </span>
 
         <span className="block mr-1 font-medium text-theme-sm">
-          Admin Brave
+          {user?.session?.first_name?.charAt(0)}
+          {"-"}
+          {user?.session?.last_name?.charAt(0)}
         </span>
 
         <svg
@@ -64,10 +66,7 @@ export default function UserDropdown() {
       >
         <div>
           <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-            Brave Admin
-          </span>
-          <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
-            admin@besd.com
+            {user?.session?.first_name} {user?.session?.last_name}
           </span>
         </div>
 
@@ -117,7 +116,7 @@ export default function UserDropdown() {
                   d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
                 />
               </svg>
-              Settings
+              Parametre
             </DropdownItem>
           </li>
           <li>
@@ -141,7 +140,7 @@ export default function UserDropdown() {
                   d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9"
                 />
               </svg>
-              Logout
+              Se déconnecter
             </DropdownItem>
           </li>
         </ul>

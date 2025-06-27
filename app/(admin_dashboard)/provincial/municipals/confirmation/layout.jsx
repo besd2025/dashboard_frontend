@@ -1,5 +1,5 @@
 import Totalmunicipals from "../../../../ui/charts/stocks/total_municipals";
-import municipals from "../../../../ui/provincial/municipals";
+import ProvCultivators from "../../../../ui/provincial/cultivators/prov-cultivators";
 import React from "react";
 import TotalQtemunicipals from "../../../../ui/provincial/municipals/total_qte_municipals";
 
@@ -12,7 +12,9 @@ function layout({ children }) {
       <div className=" col-span-12 space-y-6 lg:col-span-5">
         <TotalQtemunicipals />
       </div>
-
+      <div className=" col-span-12 space-y-6 lg:col-span-3">
+        <ProvCultivators />
+      </div>
       <div className=" col-span-12 space-y-6 lg:col-span-12">{children}</div>
     </div>
   );
