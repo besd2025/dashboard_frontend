@@ -79,7 +79,7 @@ export default function CardsOverview() {
           <div className="flex items-end justify-between mt-2">
             <div>
               <span className="text-sm text-gray-500 dark:text-gray-400">
-                Qté Demandée
+                Qté Achetée
               </span>
               <h4 className="mt-2 font-semibold text-gray-800 text-xl dark:text-white/90">
                 {quantite_total_achat >= 1000 ? (

@@ -1,16 +1,16 @@
 "use client";
-import Input from "../../ui_elements/form/input/InputField";
-import Label from "../../ui_elements/form/Label";
 import React, { useState } from "react";
-import TextArea from "../../ui_elements/form/input/TextArea";
-import Select from "../../ui_elements/form/Select";
-import { ChevronDownIcon } from "../../icons";
-import DatePicker from "../../ui_elements/form/date-picker";
-import Button from "../../ui_elements/button/Button";
+import Label from "../../../ui_elements/form/Label";
+import Input from "../../../ui_elements/form/input/InputField";
+import Button from "../../../ui_elements/button/Button";
+import DatePicker from "../../../ui_elements/form/date-picker";
+import Select from "../../../ui_elements/form/Select";
+import { ChevronDownIcon } from "../../../icons";
+import TextArea from "../../../ui_elements/form/input/TextArea";
 
-function Ventes() {
+function QtyReturnedForm({ closeModalDetails, onBack }) {
   const [message, setMessage] = useState("");
-  const achatType = [
+  const optionUT = [
     { value: "Rango", label: "Rango" },
     { value: "Butanganzwa", label: "Butanganzwa" },
     { value: "Matongo", label: "Matongo" },
@@ -20,13 +20,13 @@ function Ventes() {
   };
   return (
     <div className=" p-6 bg-white rounded-2xl   px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]">
-      <div>
-        <div className="space-y-6">
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-            Ventes des residus resultants de l'unite de transformation
-          </h3>
+      <div className="flex flex-col gap-6  lg:justify-between">
+        <div>
+          <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6  ">
+            Quantite retournée
+          </h4>
 
-          <div className="grid grid-cols-1 gap-x-6 gap-y-5 max-w-3xl">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-5 ">
             <div className="col-span-1">
               <Label>Quantité farine (blanc)</Label>
               <Input
@@ -60,44 +60,14 @@ function Ventes() {
             </div>
 
             <div className="col-span-1">
-              <Label>Prix</Label>
-              <Input
-                type="number"
-                placeholder="Quantité gruau (farine jaune) en kg"
-              />
-            </div>
-            <div className="col-span-1">
-              <Label>Prix/kg (farine)</Label>
-              <Input type="number" placeholder="Prix/kg (farine)" />
-            </div>
-            <div className="col-span-1">
-              <Label>Prix/kg (son de maïs)</Label>
-              <Input type="number" placeholder="Prix/kg (son de maïs)" />
-            </div>
-            <div className="col-span-1">
-              <Label>Téléphone</Label>
-              <Input type="number" placeholder="76545454" />
+              <Label>Prix/kg (farine/son de maïs)</Label>
+              <Input type="number" placeholder="Charges en Fbu" />
             </div>
 
-            <div className="col-span-2 lg:col-span-1">
-              <div className="space-y-6">
-                <div>
-                  <Label>Type d’acheteur</Label>
-                  <div className="relative">
-                    <Select
-                      options={achatType}
-                      placeholder="Selectionner l'acheteur"
-                      onChange={handleSelectChange}
-                      className="dark:bg-dark-900"
-                    />
-                    <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-                      <ChevronDownIcon />
-                    </span>
-                  </div>
-                </div>
-              </div>
+            <div className="col-span-1">
+              <Label>Prix total</Label>
+              <Input type="number" placeholder="Charges en Fbu" />
             </div>
-
             <div className="col-span-2 lg:col-span-1 z-[9999]">
               <div className="space-y-6">
                 <div>
@@ -117,7 +87,10 @@ function Ventes() {
           </div>
         </div>
       </div>
-      <div className="flex items-center  w-full gap-3 mt-6 sticky -bottom-8  pt-2">
+      <div className="flex items-center  w-full gap-3 mt-6   pt-2">
+        <Button size="sm" variant="outline" onClick={closeModalDetails}>
+          Annuler
+        </Button>
         <Button size="sm" className="bg-green-500">
           Enregistrer
         </Button>
@@ -126,4 +99,4 @@ function Ventes() {
   );
 }
 
-export default Ventes;
+export default QtyReturnedForm;

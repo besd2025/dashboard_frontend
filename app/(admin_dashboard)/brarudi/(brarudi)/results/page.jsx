@@ -1,4 +1,4 @@
-import Results from "../../../ui/brarudi/brarudi/results/results";
+import Results from "../../../../ui/brarudi/results/results";
 import React from "react";
 
 function page() {
@@ -11,7 +11,7 @@ function page() {
         <div className="flex flex-col gap-y-3">
           <Results
             from={{
-              name: "BRARUDI",
+              name: "ANAGESSA",
               issuedOn: "11 Mars, 2027",
             }}
             products={[
@@ -19,13 +19,12 @@ function page() {
               { name: "Farine (jaune)", quantity: 100 },
               { name: "Son (blanc)", quantity: 845 },
               { name: "Son (jaune)", quantity: 164 },
-              { name: "Gruau", quantity: 289 },
             ]}
             vatRate={0.1}
           />
           <Results
             from={{
-              name: "BRARUDI",
+              name: "ANAGESSA",
               issuedOn: "11 Mars, 2027",
             }}
             products={[
@@ -33,7 +32,6 @@ function page() {
               { name: "Farine (jaune)", quantity: 100 },
               { name: "Son (blanc)", quantity: 845 },
               { name: "Son (jaune)", quantity: 164 },
-              { name: "Gruau", quantity: 289 },
             ]}
             vatRate={0.1}
           />

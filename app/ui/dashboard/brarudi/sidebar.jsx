@@ -17,6 +17,9 @@ function Sidebar() {
     if (pathname.includes("/results")) {
       setActiveTab("resultats");
     }
+    if (pathname.includes("/returned")) {
+      setActiveTab("returned");
+    }
     if (pathname.includes("/ventes")) {
       setActiveTab("ventes");
     }
@@ -86,6 +89,35 @@ function Sidebar() {
 
             <span className="relative z-10">Resultats</span>
             {activeTab === "resultats" && (
+              <span className="absolute inset-0 rounded-lg bg-white/50 dark:bg-gray-900/50" />
+            )}
+          </Link>
+          <Link
+            href="/dashboard/Brarudi/returned"
+            onClick={() => setActiveTab("returned")}
+            className={`relative flex items-center justify-center space-x-1 rounded-lg px-4 py-2.5 text-sm font-bold transition-all duration-200 ease-in-out ${
+              activeTab === "returned"
+                ? "bg-white text-green-600 shadow-sm dark:bg-gray-900 dark:text-green-500"
+                : "text-gray-600 ho`ver:bg-white/50 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-gray-900/50 dark:hover:text-gray-300"
+            }`}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m7.875 14.25 1.214 1.942a2.25 2.25 0 0 0 1.908 1.058h2.006c.776 0 1.497-.4 1.908-1.058l1.214-1.942M2.41 9h4.636a2.25 2.25 0 0 1 1.872 1.002l.164.246a2.25 2.25 0 0 0 1.872 1.002h2.092a2.25 2.25 0 0 0 1.872-1.002l.164-.246A2.25 2.25 0 0 1 16.954 9h4.636M2.41 9a2.25 2.25 0 0 0-.16.832V12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 12V9.832c0-.287-.055-.57-.16-.832M2.41 9a2.25 2.25 0 0 1 .382-.632l3.285-3.832a2.25 2.25 0 0 1 1.708-.786h8.43c.657 0 1.281.287 1.709.786l3.284 3.832c.163.19.291.404.382.632M4.5 20.25h15A2.25 2.25 0 0 0 21.75 18v-2.625c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125V18a2.25 2.25 0 0 0 2.25 2.25Z"
+              />
+            </svg>
+
+            <span className="relative z-10">Retour</span>
+            {activeTab === "returned" && (
               <span className="absolute inset-0 rounded-lg bg-white/50 dark:bg-gray-900/50" />
             )}
           </Link>

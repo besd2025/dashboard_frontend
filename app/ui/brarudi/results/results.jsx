@@ -1,5 +1,5 @@
 "use client";
-import { ChevronDownIcon, ChevronUpIcon } from "../../../icons";
+import { ChevronDownIcon, ChevronUpIcon } from "../../icons";
 import React, { useState } from "react";
 
 export default function Results({ invoiceId, from, to, products, vatRate }) {
@@ -66,6 +66,12 @@ export default function Results({ invoiceId, from, to, products, vatRate }) {
                     <th className="px-5 py-2 text-sm font-medium text-left text-gray-700 dark:text-gray-400">
                       Quantité
                     </th>
+                    <th className="px-5 py-2 text-sm font-medium text-left text-gray-700 dark:text-gray-400">
+                      P.U
+                    </th>
+                    <th className="px-5 py-2 text-sm font-medium text-left text-gray-700 dark:text-gray-400">
+                      Prix Total
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y  divide-gray-100 dark:divide-white/[0.05]">
@@ -76,6 +82,12 @@ export default function Results({ invoiceId, from, to, products, vatRate }) {
                       </td>
                       <td className="px-5 py-2 text-left text-sm text-gray-500 dark:text-gray-400">
                         {product.quantity} Kg
+                      </td>
+                      <td className="px-5 py-2 text-left text-sm text-gray-500 dark:text-gray-400">
+                        {product.quantity} Fbu
+                      </td>
+                      <td className="px-5 py-2 text-left text-sm text-gray-500 dark:text-gray-400">
+                        {product.quantity} Fbu
                       </td>
                     </tr>
                   ))}
