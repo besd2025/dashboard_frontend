@@ -1,6 +1,6 @@
 import React from "react";
-import Sidebar from "../../../ui/dashboard/brarudi/sidebar";
-import CardsOverview from "../../../ui/dashboard/brarudi/cards_overview";
+import Sidebar from "../../../ui/brarudi/sidebar";
+import CardsOverview from "../../../ui/brarudi/cards_overview";
 
 function layout({ children }) {
   return (
