@@ -3,6 +3,9 @@ import Button from "../../../ui_elements/button/Button";
 import ViewImageModal from "../../../ui_elements/modal/ViewImageModal";
 import { ChevronDownIcon } from "../../../icons";
 import Select from "../../../ui_elements/form/Select";
+import Input from "../../../ui_elements/form/input/InputField";
+import Label from "../../../ui_elements/form/Label";
+import Modal from "../../../ui_elements/modal";
 
 function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
   const tableData = [
@@ -23,6 +26,7 @@ function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
 
   const data = tableData[0];
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOpenTransf, setIsModalOpenTansf] = useState(false);
 
   const optionProvince = [
     { value: "Bujumbura", label: "Bujumbura" },
@@ -34,7 +38,7 @@ function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
   };
 
   return (
-    <div className="no-scrollbar relative w-full max-w-[700px] max-h-[600px]  overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11 z-0">
+    <div className="no-scrol/lbar relative w-full max-w-[700px] max-h-[600px]  overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11 z-0">
       <div className="flex flex-col gap-6  lg:justify-between">
         <div>
           <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6  ">
@@ -169,7 +173,12 @@ function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
                   </span>
                 </div>
               </div>
-              <Button variant="outline" className="h-max">
+
+              <Button
+                onClick={() => setIsModalOpenTansf(true)}
+                variant="outline"
+                className="h-max"
+              >
                 +
               </Button>
             </div>
@@ -193,6 +202,35 @@ function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
         imageUrl={data.billet}
         alt="Billet"
       />
+      <Modal
+        isOpen={isOpenTransf}
+        onClose={() => setIsModalOpenTansf(false)}
+        className="max-w-[700px] m-4"
+      >
+        <div className="overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
+          <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
+            Informations personnelles
+          </h5>
+          <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+            <div className="col-span-2 lg:col-span-1">
+              <Label>Nom</Label>
+              <Input type="text" />
+            </div>
+            <div className="col-span-2 lg:col-span-1">
+              <Label>Prenom</Label>
+              <Input type="text" />
+            </div>
+            <div className="col-span-2 lg:col-span-1">
+              <Label>CNI</Label>
+              <Input type="text" />
+            </div>
+            <div className="col-span-2 lg:col-span-1">
+              <Label>Phone</Label>
+              <Input type="text" />
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
