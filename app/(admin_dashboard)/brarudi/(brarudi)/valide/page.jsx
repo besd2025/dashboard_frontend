@@ -1,5 +1,5 @@
 import React from "react";
-import OutListValide from "../../../ui/ui_elements/tables/brarudi/brarudi/out_list_valide";
+import OutListValide from "../../../../ui/ui_elements/tables/brarudi/out_list_valide";
 
 function page() {
   return <OutListValide />;

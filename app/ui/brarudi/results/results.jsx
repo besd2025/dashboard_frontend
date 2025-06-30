@@ -4,12 +4,6 @@ import React, { useState } from "react";
 
 export default function Results({ invoiceId, from, to, products, vatRate }) {
   const [expanded, setExpanded] = useState(false);
-  const subTotal = products.reduce(
-    (sum, item) => sum + item.quantity * item.unitCost,
-    0
-  );
-  const vat = subTotal * vatRate;
-  const total = subTotal + vat;
 
   return (
     <div className="rounded-2xl bor/der border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] xl:w-4/5">

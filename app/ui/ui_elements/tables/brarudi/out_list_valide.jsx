@@ -6,17 +6,17 @@ import {
   TableCell,
   TableHeader,
   TableRow,
-} from "../../table_elemets";
-import { MoreDotIcon } from "../../../../icons";
-import DropdownItem from "../../../dropdown/DropdownItem";
-import { Dropdown } from "../../../dropdown/dropdown_cultvators";
-import Modal from "../../../modal";
-import { useModal } from "../../../hooks/useModal";
-import Pagination from "../../Pagination";
-import FilterUserProfile from "../../../../municipal/cultivators/profile/filter_user_profile";
-import { fetchData } from "../../../../../_utils/api";
-import OutDetails from "../../../../dashboard/brarudi/en_attente/out_details";
-import ResultsForm from "../../../../dashboard/brarudi/valide/results_form";
+} from "../table_elemets";
+import { MoreDotIcon } from "../../../icons";
+import DropdownItem from "../../dropdown/DropdownItem";
+import { Dropdown } from "../../dropdown/dropdown_cultvators";
+import Modal from "../../modal";
+import { useModal } from "../../hooks/useModal";
+import Pagination from "../Pagination";
+import FilterUserProfile from "../../../municipal/cultivators/profile/filter_user_profile";
+import { fetchData } from "../../../../_utils/api";
+import OutDetails from "../../../dashboard/brarudi/en_attente/out_details";
+import ResultsForm from "../../../dashboard/brarudi/valide/results_form";
 
 function OutListValide() {
   const [data, setData] = useState([]);

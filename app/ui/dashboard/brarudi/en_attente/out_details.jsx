@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Button from "../../../ui_elements/button/Button";
 import ViewImageModal from "../../../ui_elements/modal/ViewImageModal";
+import { ChevronDownIcon } from "../../../icons";
+import Select from "../../../ui_elements/form/Select";
 
 function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
   const tableData = [
@@ -21,6 +23,15 @@ function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
 
   const data = tableData[0];
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const optionProvince = [
+    { value: "Bujumbura", label: "Bujumbura" },
+    { value: "Kayanza", label: "Kayanza" },
+    { value: "Ngozi", label: "Ngozi" },
+  ];
+  const handleSelectChange = (value) => {
+    // console.log("Selected value:", value);
+  };
 
   return (
     <div className="no-scrollbar relative w-full max-w-[700px] max-h-[600px]  overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11 z-0">
@@ -140,6 +151,27 @@ function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
                   />
                 </svg>
               </span>
+            </div>
+            <div className="space-y-6 flex flex-row gap-x-2 items-center">
+              <div>
+                <p className="mb-2 text-sm font-medium text-gray-800 dark:text-white/90">
+                  Transformation
+                </p>
+                <div className="relative">
+                  <Select
+                    options={optionProvince}
+                    placeholder="Transformation"
+                    onChange={handleSelectChange}
+                    className="dark:bg-dark-900 cursor-pointer"
+                  />
+                  <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
+                    <ChevronDownIcon />
+                  </span>
+                </div>
+              </div>
+              <Button variant="outline" className="h-max">
+                +
+              </Button>
             </div>
           </div>
         </div>

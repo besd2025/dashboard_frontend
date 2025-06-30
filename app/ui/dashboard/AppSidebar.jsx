@@ -103,10 +103,7 @@ const navItems = [
     ),
     name: "BRARUDI",
     path: "/dashboard/Brarudi/en_attente",
-    subPath: [
-      "/dashboard/hangars/details/cultivator",
-      "/dashboard/hangars/details/achats",
-    ],
+    subPath: ["/dashboard/Brarudi/"],
     // subItems: [
     //   {
     //     name: "Details",
