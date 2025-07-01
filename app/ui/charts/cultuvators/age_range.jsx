@@ -77,8 +77,8 @@ function AgeRange() {
           }
         );
 
-        const categories = results.map((item) => item.tranche_age);
-        const values = results.map((item) => item.nombre);
+        const categories = results?.map((item) => item.tranche_age);
+        const values = results?.map((item) => item.nombre);
 
         // Mettre à jour le graphique avec les vraies données
         setState((prev) => ({

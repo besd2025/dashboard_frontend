@@ -16,6 +16,7 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
   const [firstName, setFirstName] = useState("");
   const [cullivator_cni, setCNI] = useState("");
   const [genre, setGenre] = useState("");
+  const [phone, setPhone] = useState("");
   const handleRadioChangeStatus = (value) => {
     setSelectedStatus(value);
   };
@@ -79,6 +80,7 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
     setFirstName(data?.cultivator_first_name || "");
     setCNI(data?.cultivator_cni || "");
     setGenre(data?.cultivator_gender || "");
+    setPhone(data?.cultivator_gender || "");
   }, [data]);
 
   return (

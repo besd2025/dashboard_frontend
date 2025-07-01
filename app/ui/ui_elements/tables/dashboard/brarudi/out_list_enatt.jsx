@@ -415,7 +415,17 @@ function OutListEnatt() {
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.quantite}
+                    {order?.quantite >= 1000 ? (
+                      <>
+                        {(order?.quantite / 1000).toLocaleString("de-DE")}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {order?.quantite?.toLocaleString("fr-FR") || 0}{" "}
+                        <span className="text-sm">KG</span>
+                      </>
+                    )}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {order?.nom_responsable}
