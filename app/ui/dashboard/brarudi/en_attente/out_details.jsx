@@ -2,13 +2,8 @@
 import React, { useState, useEffect } from "react";
 import Button from "../../../ui_elements/button/Button";
 import ViewImageModal from "../../../ui_elements/modal/ViewImageModal";
-import { fetchData } from "../../../../_utils/api";
-function OutDetails({
-  closeModalDetails,
-  onConfirm,
-  validated = false,
-  idSortie,
-}) {
+
+function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
   const tableData = [
     {
       id: 1,
@@ -27,50 +22,7 @@ function OutDetails({
 
   const data = tableData[0];
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [values, setData] = useState([]);
-  useEffect(() => {
-    async function getData() {
-      try {
-        const results = await fetchData(
-          "get",
-          `sorties/detail_sortie/?sortie_id=${idSortie}`,
-          {
-            params: {},
-            additionalHeaders: {},
-            body: {},
-          }
-        );
 
-        setData(results);
-        console.log(results);
-      } catch (error) {
-        setError(error);
-        console.error(error);
-      }
-    }
-    getData();
-  }, []);
-
-  const Confirme_Sortie = async (e) => {
-    e.preventDefault();
-    try {
-      const results = await fetchData(
-        "get",
-        `sorties/detail_sortie/?sortie_id=${idSortie}`,
-        {
-          params: {},
-          additionalHeaders: {},
-          body: {},
-        }
-      );
-
-      setData(results);
-      console.log(results);
-    } catch (error) {
-      setError(error);
-      console.error(error);
-    }
-  };
   return (
     <div className="no-scrollbar relative w-full max-w-[700px] max-h-[600px]  overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11 z-0">
       <div className="flex flex-col gap-6  lg:justify-between">
@@ -170,6 +122,27 @@ function OutDetails({
                   />
                 </svg>
               </span>
+            </div>
+            <div className="space-y-6 flex flex-row gap-x-2 items-center">
+              <div>
+                <p className="mb-2 text-sm font-medium text-gray-800 dark:text-white/90">
+                  Transformation
+                </p>
+                <div className="relative">
+                  <Select
+                    options={optionProvince}
+                    placeholder="Transformation"
+                    onChange={handleSelectChange}
+                    className="dark:bg-dark-900 cursor-pointer"
+                  />
+                  <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
+                    <ChevronDownIcon />
+                  </span>
+                </div>
+              </div>
+              <Button variant="outline" className="h-max">
+                +
+              </Button>
             </div>
           </div>
         </div>

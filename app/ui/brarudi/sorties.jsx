@@ -14,6 +14,27 @@ function Sorties() {
     { value: "Butanganzwa", label: "Butanganzwa" },
     { value: "Matongo", label: "Matongo" },
   ];
+
+  const [expenses, setExpenses] = useState([{ name: "", price: "" }]);
+
+  const handleAddExpense = () => {
+    setExpenses([...expenses, { name: "", price: "" }]);
+  };
+
+  const handleRemoveExpense = (indexToRemove) => {
+    if (indexToRemove === 0) return;
+    const updatedExpenses = expenses.filter(
+      (_, index) => index !== indexToRemove
+    );
+    setExpenses(updatedExpenses);
+  };
+
+  const handleChange = (index, field, value) => {
+    const updatedExpenses = [...expenses];
+    updatedExpenses[index][field] = value;
+    setExpenses(updatedExpenses);
+  };
+
   return (
     <div className=" p-6 bg-white rounded-2xl border border-gray-200  px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]">
       <div>
@@ -23,12 +44,62 @@ function Sorties() {
           </h3>
 
           <div className="grid grid-cols-1 gap-x-6 gap-y-5 max-w-3xl">
-            <div className="col-span-1">
-              <Label>Les dépenses liées à la transformation</Label>
-              <Input
-                type="number"
-                placeholder="Qte transformée par jour en kg"
-              />
+            <div className="col-span-1 ">
+              <Label>Liste des Dépenses</Label>
+
+              {expenses.map((expense, index) => (
+                <div
+                  key={index}
+                  className="mb-4 flex flex-col md:flex-row gap-2 items-center"
+                >
+                  <Input
+                    type="text"
+                    placeholder="Nom de la dépense"
+                    value={expense.name}
+                    onChange={(e) =>
+                      handleChange(index, "name", e.target.value)
+                    }
+                  />
+                  <Input
+                    type="number"
+                    placeholder="Prix du charge"
+                    value={expense.price}
+                    onChange={(e) =>
+                      handleChange(index, "price", e.target.value)
+                    }
+                  />
+                  {index !== 0 && (
+                    <button
+                      onClick={() => handleRemoveExpense(index)}
+                      className="px-3 py-2 text-red-600 hover:text-red-800 rounded-2xl"
+                      title="Supprimer cette dépense"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              ))}
+
+              <Button
+                size="sm"
+                className="bg-yellow-500"
+                onClick={handleAddExpense}
+              >
+                Ajouter une autre dépense
+              </Button>
             </div>
             <div className="col-span-1">
               <Label>Qte transformée par jour</Label>

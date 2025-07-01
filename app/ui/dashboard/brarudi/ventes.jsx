@@ -10,13 +10,26 @@ import Button from "../../ui_elements/button/Button";
 
 function Ventes() {
   const [message, setMessage] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [quantity, setQuantity] = useState("");
+  const [price, setPrice] = useState("");
+  const productOptions = [
+    { value: "farine_blanc", label: "Farine (blanc)" },
+    { value: "farine_jaune", label: "Farine (jaune)" },
+    { value: "son_mais_blanc", label: "Son de maïs (blanc)" },
+    { value: "son_mais_jaune", label: "Son de maïs (jaune)" },
+    { value: "Gruau", label: "Gruau" },
+    // Ajoute d'autres produits ici si besoin
+  ];
   const achatType = [
     { value: "Rango", label: "Rango" },
     { value: "Butanganzwa", label: "Butanganzwa" },
     { value: "Matongo", label: "Matongo" },
   ];
   const handleSelectChange = (value) => {
-    // console.log("Selected value:", value);
+    setSelectedProduct(value);
+    setQuantity("");
+    setPrice("");
   };
   return (
     <div className=" p-6 bg-white rounded-2xl   px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]">
@@ -28,52 +41,82 @@ function Ventes() {
 
           <div className="grid grid-cols-1 gap-x-6 gap-y-5 max-w-3xl">
             <div className="col-span-1">
-              <Label>Quantité farine (blanc)</Label>
-              <Input
-                type="number"
-                placeholder="Quantité farine (blanc) en kg"
+              <Label>Produit</Label>
+              <Select
+                options={productOptions}
+                placeholder="Sélectionner le produit"
+                onChange={handleSelectChange}
+                className="dark:bg-dark-900"
               />
             </div>
+            {selectedProduct && (
+              <>
+                <div className="col-span-1">
+                  <Label>
+                    Quantité (
+                    {
+                      productOptions.find(
+                        (opt) => opt.value === selectedProduct
+                      )?.label
+                    }
+                    )
+                  </Label>
+                  <Input
+                    type="number"
+                    placeholder={`Quantité de ${
+                      productOptions.find(
+                        (opt) => opt.value === selectedProduct
+                      )?.label
+                    } en kg`}
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
+                  />
+                </div>
+                <div className="col-span-1">
+                  <Label>
+                    Prix (
+                    {
+                      productOptions.find(
+                        (opt) => opt.value === selectedProduct
+                      )?.label
+                    }
+                    )
+                  </Label>
+                  <Input
+                    type="number"
+                    placeholder={`Prix de ${
+                      productOptions.find(
+                        (opt) => opt.value === selectedProduct
+                      )?.label
+                    } en Fbu`}
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                  />
+                </div>
+                <div className="col-span-1">
+                  <Label>
+                    Prix/kg (
+                    {
+                      productOptions.find(
+                        (opt) => opt.value === selectedProduct
+                      )?.label
+                    }
+                    )
+                  </Label>
+                  <Input
+                    type="number"
+                    placeholder={`Prix/kg ${
+                      productOptions.find(
+                        (opt) => opt.value === selectedProduct
+                      )?.label
+                    } en Fbu`}
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                  />
+                </div>
+              </>
+            )}
 
-            <div className="col-span-1">
-              <Label>Quantité son de maïs (blanc)</Label>
-              <Input
-                type="number"
-                placeholder="Quantité son de maïs (blanc) en kg"
-              />
-            </div>
-
-            <div className="col-span-1">
-              <Label>Quantité farine (jaune)</Label>
-              <Input
-                type="number"
-                placeholder="Quantité farine (jaune) en kg"
-              />
-            </div>
-
-            <div className="col-span-1">
-              <Label>Quantité son de maïs (jaune)</Label>
-              <Input
-                type="number"
-                placeholder="Quantité son de maïs (jaune) en kg"
-              />
-            </div>
-
-            <div className="col-span-1">
-              <Label>Prix</Label>
-              <Input
-                type="number"
-                placeholder="Quantité gruau (farine jaune) en kg"
-              />
-            </div>
-            <div className="col-span-1">
-              <Label>Prix/kg (farine)</Label>
-              <Input type="number" placeholder="Prix/kg (farine)" />
-            </div>
-            <div className="col-span-1">
-              <Label>Prix/kg (son de maïs)</Label>
-              <Input type="number" placeholder="Prix/kg (son de maïs)" />
-            </div>
             <div className="col-span-1">
               <Label>Téléphone</Label>
               <Input type="number" placeholder="76545454" />
@@ -82,7 +125,7 @@ function Ventes() {
             <div className="col-span-2 lg:col-span-1">
               <div className="space-y-6">
                 <div>
-                  <Label>Type d’acheteur</Label>
+                  <Label>Type d'acheteur</Label>
                   <div className="relative">
                     <Select
                       options={achatType}

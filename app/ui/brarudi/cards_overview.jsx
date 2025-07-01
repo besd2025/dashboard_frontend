@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { fetchData } from "../../_utils/api";
+import Badge from "../ui_elements/badge/Badge";
+import { ArrowUpIcon } from "../icons";
 export default function CardsOverview() {
   const [data, setData] = useState([]);
   const [quantite_vendu, setQuantiteVendu] = useState(0);
@@ -96,9 +98,9 @@ export default function CardsOverview() {
               </h4>
             </div>
             {/* <Badge color="success">
-            <ArrowUpIcon />
-            2.0%
-          </Badge> */}
+              <ArrowUpIcon />
+              2.0%
+            </Badge> */}
           </div>
         </div>
         <div className="w-px bg-gray-200 h-full dark:bg-gray-800"></div>
@@ -222,6 +224,196 @@ export default function CardsOverview() {
         </div>
       </div>
       {/* <!-- Metric Item End --> */}
+      <div className="rounded-2xl  col-span-5 flex hidden flex-row justify-between border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+        <div>
+          <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
+            {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="size-6 text-yellow-500"
+            >
+              <path
+                fillRule="evenodd"
+                d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm6-2.438c0-.724.588-1.312 1.313-1.312h4.874c.725 0 1.313.588 1.313 1.313v4.874c0 .725-.588 1.313-1.313 1.313H9.564a1.312 1.312 0 0 1-1.313-1.313V9.564Z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          <div className="flex items-end justify-between mt-2 gap-x-3">
+            <div>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                Gruau
+              </span>
+              <h4 className="mt-2 font-semibold text-gray-800 text-xl dark:text-white/90">
+                {quantite_total_achat >= 1000 ? (
+                  <>
+                    {(quantite_total_achat / 1000).toLocaleString("de-DE")}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {quantite_total_achat?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">KG</span>
+                  </>
+                )}
+              </h4>
+            </div>
+            <Badge color="success">
+              {/* <ArrowUpIcon /> */}
+              2.0%
+            </Badge>
+          </div>
+        </div>
+        <div className="w-px bg-gray-200 h-full dark:bg-gray-800"></div>
+
+        <div className="">
+          <div className="flex items-end justify-between   rounded-2xl">
+            <div>
+              <div className="flex flex-row items-center gap-x-1">
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Montant
+                </span>
+              </div>
+
+              <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
+                {total_quantite_vendu?.somme_total_price > 1000000
+                  ? (
+                      total_quantite_vendu.somme_total_price / 1000000
+                    ).toLocaleString("de-DE") + " M"
+                  : total_quantite_vendu?.somme_total_price?.toLocaleString(
+                      "de-DE"
+                    )}
+                <span className="text-sm"> FBU</span>
+              </h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="rounded-2xl  col-span-6 flex hidden flex-row justify-between border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+        <div>
+          <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
+            {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="size-6 text-yellow-500"
+            >
+              <path
+                fillRule="evenodd"
+                d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm6-2.438c0-.724.588-1.312 1.313-1.312h4.874c.725 0 1.313.588 1.313 1.313v4.874c0 .725-.588 1.313-1.313 1.313H9.564a1.312 1.312 0 0 1-1.313-1.313V9.564Z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          <div className="flex items-end justify-between mt-2 gap-x-3">
+            <div>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                Gruau
+              </span>
+              <h4 className="mt-2 font-semibold text-gray-800 text-xl dark:text-white/90">
+                {quantite_total_achat >= 1000 ? (
+                  <>
+                    {(quantite_total_achat / 1000).toLocaleString("de-DE")}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {quantite_total_achat?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">KG</span>
+                  </>
+                )}
+              </h4>
+            </div>
+            <Badge color="success">
+              {/* <ArrowUpIcon /> */}
+              2.0%
+            </Badge>
+          </div>
+        </div>
+        <div className="w-px bg-gray-200 h-full dark:bg-gray-800"></div>
+
+        <div className="">
+          <div className="flex items-end justify-between   rounded-2xl">
+            <div>
+              <div className="flex flex-row items-center gap-x-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="size-8 text-green-500"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.5 7.5a3 3 0 0 1 3-3h9a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-9Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Approuvées
+                </span>
+              </div>
+
+              <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
+                {data?.achats?.achats_blanc >= 1000 ? (
+                  <>
+                    {(data?.achats?.achats_blanc / 1000).toLocaleString(
+                      "de-DE"
+                    )}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {data?.achats?.achats_blanc?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">KG</span>
+                  </>
+                )}
+              </h4>
+            </div>
+          </div>
+          <div className="flex items-end justify-between mt-2 rounded-2xl">
+            <div>
+              <div className="flex flex-row items-center gap-x-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="size-8"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.5 7.5a3 3 0 0 1 3-3h9a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-9Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  En attente
+                </span>
+              </div>
+
+              <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
+                {data?.achats?.achats_jaune >= 1000 ? (
+                  <>
+                    {(data?.achats?.achats_jaune / 1000).toLocaleString(
+                      "de-DE"
+                    )}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {data?.achats?.achats_jaune?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">KG</span>
+                  </>
+                )}
+              </h4>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
