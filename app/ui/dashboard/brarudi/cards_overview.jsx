@@ -11,40 +11,14 @@ export default function CardsOverview() {
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData("get", "stock_resume/", {
+        const results = await fetchData("get", "command/stats_commandes/", {
           params: {},
           additionalHeaders: {},
           body: {},
         });
 
-        const quantite_vendu_jaune_blanc = await fetchData(
-          "get",
-          "sorties/somme_totale_sorties/",
-          {
-            params: {},
-            additionalHeaders: {},
-            body: {},
-          }
-        );
-        const pertetotal = await fetchData(
-          "get",
-          "stock/details/pertes_totales/",
-          {
-            params: {},
-            additionalHeaders: {},
-            body: {},
-          }
-        );
-        setTotalVendu(quantite_vendu_jaune_blanc);
-        setGapTotat(pertetotal);
         setData(results);
-        setQuantiteVendu(
-          results?.sorties?.sorties_blanc + results?.sorties?.sorties_jaune
-        );
-
-        setQuantiteTotalAchete(
-          results?.achats?.achats_blanc + results?.achats?.achats_jaune
-        );
+        console.log(results);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -79,17 +53,26 @@ export default function CardsOverview() {
           <div className="flex items-end justify-between mt-2">
             <div>
               <span className="text-sm text-gray-500 dark:text-gray-400">
-                Qté Achetée
+                Qté Approuvée
               </span>
               <h4 className="mt-2 font-semibold text-gray-800 text-xl dark:text-white/90">
-                {quantite_total_achat >= 1000 ? (
+                {data?.totaux?.total_quantite_approuvee +
+                  data?.totaux?.total_quantite_non_approuvee >=
+                1000 ? (
                   <>
-                    {(quantite_total_achat / 1000).toLocaleString("de-DE")}{" "}
+                    {(
+                      (data?.totaux?.total_quantite_approuvee +
+                        data?.totaux?.total_quantite_non_approuvee) /
+                      1000
+                    ).toLocaleString("de-DE")}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
-                    {quantite_total_achat?.toLocaleString("fr-FR") || 0}{" "}
+                    {(
+                      data?.totaux?.total_quantite_approuvee +
+                      data?.totaux?.total_quantite_non_approuvee
+                    )?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">KG</span>
                   </>
                 )}
@@ -125,16 +108,18 @@ export default function CardsOverview() {
               </div>
 
               <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
-                {data?.achats?.achats_blanc >= 1000 ? (
+                {data?.totaux?.total_quantite_approuvee >= 1000 ? (
                   <>
-                    {(data?.achats?.achats_blanc / 1000).toLocaleString(
-                      "de-DE"
-                    )}{" "}
+                    {(
+                      data?.totaux?.total_quantite_approuvee / 1000
+                    ).toLocaleString("de-DE")}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
-                    {data?.achats?.achats_blanc?.toLocaleString("fr-FR") || 0}{" "}
+                    {data?.totaux?.total_quantite_approuvee?.toLocaleString(
+                      "fr-FR"
+                    ) || 0}{" "}
                     <span className="text-sm">KG</span>
                   </>
                 )}
@@ -162,16 +147,18 @@ export default function CardsOverview() {
               </div>
 
               <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
-                {data?.achats?.achats_jaune >= 1000 ? (
+                {data?.totaux?.total_quantite_non_approuvee >= 1000 ? (
                   <>
-                    {(data?.achats?.achats_jaune / 1000).toLocaleString(
-                      "de-DE"
-                    )}{" "}
+                    {(
+                      data?.totaux?.total_quantite_non_approuvee / 1000
+                    ).toLocaleString("de-DE")}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
-                    {data?.achats?.achats_jaune?.toLocaleString("fr-FR") || 0}{" "}
+                    {data?.totaux?.total_quantite_non_approuvee?.toLocaleString(
+                      "fr-FR"
+                    ) || 0}{" "}
                     <span className="text-sm">KG</span>
                   </>
                 )}
@@ -209,13 +196,11 @@ export default function CardsOverview() {
             </span>
 
             <h4 className="mt-2 font-bold text-gray-800 text-xl dark:text-white/90">
-              {total_quantite_vendu?.somme_total_price > 1000000
+              {data?.totaux?.total_montant_approuve > 1000000
                 ? (
-                    total_quantite_vendu.somme_total_price / 1000000
+                    data?.totaux?.total_montant_approuve / 1000000
                   ).toLocaleString("de-DE") + " M"
-                : total_quantite_vendu?.somme_total_price?.toLocaleString(
-                    "de-DE"
-                  )}
+                : data?.totaux?.total_montant_approuve?.toLocaleString("de-DE")}
               <span className="text-sm"> FBU</span>
             </h4>
           </div>
