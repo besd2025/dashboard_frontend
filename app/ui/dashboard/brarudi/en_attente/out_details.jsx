@@ -2,14 +2,14 @@
 import React, { useState, useEffect } from "react";
 import Button from "../../../ui_elements/button/Button";
 import ViewImageModal from "../../../ui_elements/modal/ViewImageModal";
-import Select from "../../../ui_elements/form/Select";
 import Input from "../../../ui_elements/form/input/InputField";
 import Label from "../../../ui_elements/form/Label";
 import Modal from "../../../ui_elements/modal";
-
 import Select from "../../../ui_elements/form/Select";
 import { ChevronDownIcon } from "../../../icons";
 import { fetchData } from "../../../../_utils/api";
+import TextArea from "../../../ui_elements/form/input/TextArea";
+
 function OutDetails({
   closeModalDetails,
   onConfirm,
@@ -219,26 +219,36 @@ function OutDetails({
       >
         <div className="overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
           <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
-            Informations personnelles
+            Transformation
           </h5>
           <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
             <div className="col-span-2 lg:col-span-1">
-              <Label>Nom</Label>
-              <Input type="text" />
+              <Label>Commande</Label>
+              <Input type="text" placeholder="Commande" />
             </div>
             <div className="col-span-2 lg:col-span-1">
-              <Label>Prenom</Label>
-              <Input type="text" />
+              <Label>Unité de transformation</Label>
+              <Select
+                options={unite_transformation}
+                placeholder="Unité de transformation"
+              />
             </div>
             <div className="col-span-2 lg:col-span-1">
-              <Label>CNI</Label>
-              <Input type="text" />
+              <Label>Transformé pour</Label>
+              <Input type="text" placeholder="Transformé pour" />
             </div>
             <div className="col-span-2 lg:col-span-1">
-              <Label>Phone</Label>
-              <Input type="text" />
+              <Label>Title</Label>
+              <Input type="text" placeholder="Titre" />
+            </div>
+            <div className="col-span-2">
+              <Label>Description</Label>
+              <TextArea placeholder="Description" rows={4} />
             </div>
           </div>
+          <Button size="sm" className="bg-green-500" onClick={onConfirm}>
+            Enregistrer
+          </Button>
         </div>
       </Modal>
     </div>
