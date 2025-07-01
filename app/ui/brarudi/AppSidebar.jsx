@@ -21,13 +21,6 @@ import {
 
 const navItems = [
   {
-    icon: <GridIcon />,
-    name: "Dashboard",
-    path: "/dashboard/home",
-    // subItems: [{ name: "Home", path: "/dashboard/home", pro: false }],
-  },
-
-  {
     icon: (
       <Image
         className="rounded-xl"
@@ -38,36 +31,13 @@ const navItems = [
       />
     ),
     name: "BRARUDI",
-    path: "/dashboard/Brarudi/en_attente",
+    path: "/Brarudi/en_attente",
     subPath: [
       "/dashboard/hangars/details/cultivator",
       "/dashboard/hangars/details/achats",
     ],
-    // subItems: [
-    //   {
-    //     name: "Details",
-    //     path: "/dashboard/hangars",
-    //     subPath: [
-    //       "/dashboard/hangars/details/cultivator",
-    //       "/dashboard/hangars/details/achats",
-    //     ],
-    //   },
-    // ],
   },
 ];
-
-// const othersItems = [
-//   {
-//     icon: <UserLineIcon />,
-//     name: "Role",
-//     path: "/dashboard/stocks",
-//     subItems: [
-//       { name: "Communale", path: "/municipal/cultivators" },
-//       { name: "Provinciale", path: "/provincial/cultivators" },
-//       { name: "Regionale", path: "/regional/cultivators" },
-//     ],
-//   },
-// ];
 
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();

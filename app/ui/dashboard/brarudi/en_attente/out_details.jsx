@@ -2,10 +2,16 @@
 import React, { useState, useEffect } from "react";
 import Button from "../../../ui_elements/button/Button";
 import ViewImageModal from "../../../ui_elements/modal/ViewImageModal";
+import Input from "../../../ui_elements/form/input/InputField";
+import Label from "../../../ui_elements/form/Label";
+import Modal from "../../../ui_elements/modal";
 import Select from "../../../ui_elements/form/Select";
 import { ChevronDownIcon } from "../../../icons";
 import { fetchData } from "../../../../_utils/api";
 import { useRouter } from "next/navigation";
+
+import TextArea from "../../../ui_elements/form/input/TextArea";
+
 function OutDetails({
   closeModalDetails,
   onConfirm,
@@ -17,6 +23,25 @@ function OutDetails({
   const [error, setError] = useState(null);
   const [unite_transformation, setUnites] = useState([]);
   const [ListeCommandes, setListeCommandes] = useState([]);
+
+  const [isOpenTransf, setIsModalOpenTansf] = useState(false);
+
+  const tableData = [
+    {
+      id: 1,
+      hangar: "Hangar1",
+      responsable: "Brave",
+      fonction: "DG",
+      phone: "6875425",
+      date: "8/8/2025",
+      categorie_mais: "jaune",
+      motif: "Desangorgement",
+      observation: "RAS observation",
+      prix: "564 556",
+      billet: "/img/billet_example.jpg",
+    },
+  ];
+  const data = tableData[0];
   useEffect(() => {
     async function getData() {
       try {
@@ -89,7 +114,7 @@ function OutDetails({
     }
   };
   return (
-    <div className="no-scrollbar relative w-full max-w-[700px] max-h-[600px]  overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11 z-0">
+    <div className="no-scrol/lbar relative w-full max-w-[700px] max-h-[600px]  overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11 z-0">
       <div className="flex flex-col gap-6  lg:justify-between">
         <div>
           <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6  ">
@@ -195,7 +220,11 @@ function OutDetails({
                 </div>
               </div>
 
-              <Button variant="outline" className="h-max">
+              <Button
+                onClick={() => setIsModalOpenTansf(true)}
+                variant="outline"
+                className="h-max"
+              >
                 +
               </Button>
             </div>
@@ -235,6 +264,45 @@ function OutDetails({
         imageUrl={values?.photo_facture}
         alt="Billet"
       />
+      <Modal
+        isOpen={isOpenTransf}
+        onClose={() => setIsModalOpenTansf(false)}
+        className="max-w-[700px] m-4"
+      >
+        <div className="overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
+          <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
+            Transformation
+          </h5>
+          <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+            <div className="col-span-2 lg:col-span-1">
+              <Label>Commande</Label>
+              <Input type="text" placeholder="Commande" />
+            </div>
+            <div className="col-span-2 lg:col-span-1">
+              <Label>Unité de transformation</Label>
+              <Select
+                options={unite_transformation}
+                placeholder="Unité de transformation"
+              />
+            </div>
+            <div className="col-span-2 lg:col-span-1">
+              <Label>Transformé pour</Label>
+              <Input type="text" placeholder="Transformé pour" />
+            </div>
+            <div className="col-span-2 lg:col-span-1">
+              <Label>Title</Label>
+              <Input type="text" placeholder="Titre" />
+            </div>
+            <div className="col-span-2">
+              <Label>Description</Label>
+              <TextArea placeholder="Description" rows={4} />
+            </div>
+          </div>
+          <Button size="sm" className="bg-green-500" onClick={onConfirm}>
+            Enregistrer
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }

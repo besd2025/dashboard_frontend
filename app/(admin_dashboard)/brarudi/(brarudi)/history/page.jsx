@@ -1,4 +1,4 @@
-import History from "../../../../ui/brarudi/history";
+import History from "../../../../ui/brarudi/history/history";
 import React from "react";
 
 function page() {

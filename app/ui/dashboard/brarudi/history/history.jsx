@@ -6,16 +6,16 @@ import {
   TableCell,
   TableHeader,
   TableRow,
-} from "../ui_elements/tables/table_elemets";
-import { MoreDotIcon } from "../icons";
-import DropdownItem from "../ui_elements/dropdown/DropdownItem";
-import { Dropdown } from "../ui_elements/dropdown/dropdown_cultvators";
-import Modal from "../ui_elements/modal";
-import { useModal } from "../ui_elements/hooks/useModal";
-import FilterUserProfile from "../municipal/cultivators/profile/filter_user_profile";
-import { fetchData } from "../../_utils/api";
-import OutDetails from "../dashboard/brarudi/en_attente/out_details";
-import Pagination from "../ui_elements/tables/Pagination";
+} from "../../../ui_elements/tables/table_elemets";
+import { MoreDotIcon } from "../../../icons";
+import DropdownItem from "../../../ui_elements/dropdown/DropdownItem";
+import { Dropdown } from "../../../ui_elements/dropdown/dropdown_cultvators";
+import Modal from "../../../ui_elements/modal";
+import { useModal } from "../../../ui_elements/hooks/useModal";
+import FilterUserProfile from "../../../municipal/cultivators/profile/filter_user_profile";
+import { fetchData } from "../../../../_utils/api";
+import Pagination from "../../../ui_elements/tables/Pagination";
+import HistoryDetail from "./history_detail";
 
 function History() {
   const [data, setData] = useState([]);
@@ -316,16 +316,6 @@ function History() {
                         >
                           Details
                         </DropdownItem>
-                        <DropdownItem
-                          onItemClick={() => {
-                            closeDropdown(order.id);
-                            openModalResults();
-                          }}
-                          tag="a"
-                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                        >
-                          Resultats
-                        </DropdownItem>
                       </Dropdown>
                     </div>
                   </TableCell>
@@ -399,7 +389,7 @@ function History() {
         }}
         className="max-w-[700px] m-4"
       >
-        <OutDetails closeModalDetails={closeModalDetails} validated={true} />
+        <HistoryDetail closeModalDetails={closeModalDetails} validated={true} />
       </Modal>
     </div>
   );

@@ -112,6 +112,57 @@ function Sorties() {
           <span>{error}</span>
           <div className="grid grid-cols-1 gap-x-6 gap-y-5 max-w-3xl">
             {/* <div className="col-span-1 ">
+
+            <div className="col-span-1">
+              <Label>Qte transformée par jour</Label>
+              <Input
+                type="number"
+                placeholder="Qte transformée par jour en kg"
+              />
+            </div>
+            <div className="col-span-1">
+              <Label>Quantité farine (blanc)</Label>
+              <Input
+                type="number"
+                placeholder="Quantité farine (blanc) en kg"
+              />
+            </div>
+            <div className="col-span-1">
+              <Label>Quantité son de maïs (blanc)</Label>
+              <Input
+                type="number"
+                placeholder="Quantité son de maïs (blanc) en kg"
+              />
+            </div>
+            <div className="col-span-1">
+              <Label>Quantité farine (jaune)</Label>
+              <Input
+                type="number"
+                placeholder="Quantité farine (jaune) en kg"
+              />
+            </div>
+            <div className="col-span-1">
+              <Label>Quantité son de maïs (jaune)</Label>
+              <Input
+                type="number"
+                placeholder="Quantité son de maïs (jaune) en kg"
+              />
+            </div>
+            <div className="col-span-1">
+              <Label>Quantité gruau (farine blanc)</Label>
+              <Input
+                type="number"
+                placeholder="Quantité gruau (farine blanc) en kg"
+              />
+            </div>
+            <div className="col-span-1">
+              <Label>Quantité gruau (farine jaune)</Label>
+              <Input
+                type="number"
+                placeholder="Quantité gruau (farine jaune) en kg"
+              />
+            </div>
+            <div className="col-span-1 ">
               <Label>Liste des Dépenses</Label>
 
               {expenses.map((expense, index) => (
@@ -234,6 +285,10 @@ function Sorties() {
               />
             </div>
             {/* <div className="col-span-2 lg:col-span-1 z-[9999]">
+=======
+            </div>
+            <div className="col-span-2 lg:col-span-1 z-[9999]">
+>>>>>>> origin/main
               <div className="space-y-6">
                 <div>
                   <DatePicker

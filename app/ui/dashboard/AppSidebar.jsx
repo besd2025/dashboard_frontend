@@ -45,7 +45,6 @@ const navItems = [
       </svg>
     ),
     name: "Cultivateurs",
-
     subItems: [
       { name: "Details", path: "/dashboard/cultivators" },
       {
@@ -53,7 +52,7 @@ const navItems = [
         path: "/dashboard/cultivators/list",
       },
     ],
-    subPath: ["/dashboard/cultivators/profile"],
+    startWithUrl: "/dashboard/cultivators/",
   },
   {
     icon: <BoxCubeIcon />,
@@ -71,25 +70,13 @@ const navItems = [
         path: "/dashboard/stocks/out/en_attente",
       },
     ],
+    startWithUrl: "/dashboard/stocks/",
   },
   {
     icon: <HangarIcon />,
     name: "Hangars",
     path: "/dashboard/hangars",
-    subPath: [
-      "/dashboard/hangars/details/cultivator",
-      "/dashboard/hangars/details/achats",
-    ],
-    // subItems: [
-    //   {
-    //     name: "Details",
-    //     path: "/dashboard/hangars",
-    //     subPath: [
-    //       "/dashboard/hangars/details/cultivator",
-    //       "/dashboard/hangars/details/achats",
-    //     ],
-    //   },
-    // ],
+    startWithUrl: "/dashboard/hangars/",
   },
   {
     icon: (
@@ -102,31 +89,14 @@ const navItems = [
       />
     ),
     name: "BRARUDI",
-    path: "/dashboard/Brarudi/en_attente",
-    subPath: ["/dashboard/Brarudi/"],
-    // subItems: [
-    //   {
-    //     name: "Details",
-    //     path: "/dashboard/hangars",
-    //     subPath: [
-    //       "/dashboard/hangars/details/cultivator",
-    //       "/dashboard/hangars/details/achats",
-    //     ],
-    //   },
-    // ],
+    path: "/dashboard/Brarudi/stocks",
+    startWithUrl: "/dashboard/Brarudi/",
   },
   {
     icon: <SettingsIcon />,
     name: "Parametre",
     path: "/dashboard/settings/profile",
-    subPath: [
-      "/dashboard/settings/security",
-      "/dashboard/settings/manage",
-      "/dashboard/settings/preferences",
-      "/dashboard/settings/synchronisation",
-      "/dashboard/settings/security/change_password",
-      "/dashboard/settings/roles_manager",
-    ],
+    startWithUrl: "/dashboard/settings/",
   },
 ];
 
@@ -157,9 +127,11 @@ const AppSidebar = () => {
       if (isActive(item.path)) return true;
       if (item.subPath && item.subPath.some((path) => isActive(path)))
         return true;
+      if (item.startWithUrl && pathname.startsWith(item.startWithUrl))
+        return true;
       return false;
     },
-    [isActive]
+    [isActive, pathname]
   );
 
   const handleSubmenuToggle = (index, menuType) => {

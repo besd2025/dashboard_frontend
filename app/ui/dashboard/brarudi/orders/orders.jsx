@@ -1,19 +1,12 @@
 "use client";
-import { ChevronDownIcon, ChevronUpIcon } from "../../../icons";
+import { ChevronDownIcon, ChevronUpIcon } from "../../icons";
 import React, { useState } from "react";
 
-export default function Results({ invoiceId, from, to, products, vatRate }) {
+function Orders({ from, products }) {
   const [expanded, setExpanded] = useState(false);
-  const subTotal = products.reduce(
-    (sum, item) => sum + item.quantity * item.unitCost,
-    0
-  );
-  const vat = subTotal * vatRate;
-  const total = subTotal + vat;
-
   return (
     <div className="rounded-2xl bor/der border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] xl:w-4/5">
-      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400">
+      <div className="flex hidden items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400">
         <h3 className="font-medium text-gray-800 text-md dark:text-white/90">
           Resultats
         </h3>
@@ -35,21 +28,42 @@ export default function Results({ invoiceId, from, to, products, vatRate }) {
 
       <div className="p-5 relative">
         <div className="flex flex-col gap-6 mb-5 sm:flex-row sm:items-center sm:justify-between ">
-          <div className="flex flex-row space-x-5">
-            <div className="flex flex-row space-x-2">
-              <span className="block  text-sm font-medium text-gray-700 dark:text-gray-400">
-                De
+          <div className="flex flex-col lg:flex-row space-x-5">
+            <div>
+              <span className="mb-1.5 block text-md font-semibold text-yellow-700 dark:text-gray-400">
+                Commande #id
               </span>
-              <h5 className="text-sm font-semibold text-green-800 ">
-                {from.name}
-              </h5>
             </div>
             <div>
               <span className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                Enregistré le:
+                Fait le :
               </span>
               <span className="block text-sm text-gray-500 dark:text-gray-400">
                 {from.issuedOn}
+              </span>
+            </div>
+            <div className={`${expanded ? "hidden" : "block"}`}>
+              <span className="mb-1.5 block text-sm font-semibold text-gray-700 dark:text-gray-400">
+                Qte :
+              </span>
+              <span className="block text-sm text-gray-500 dark:text-gray-400">
+                500 T
+              </span>
+            </div>
+            <div className={`${expanded ? "hidden" : "block"}`}>
+              <span className="mb-1.5 block text-sm font-semibold text-gray-700 dark:text-gray-400">
+                P.U :
+              </span>
+              <span className="block text-sm text-gray-500 dark:text-gray-400">
+                2000 Fbu
+              </span>
+            </div>
+            <div className={`${expanded ? "hidden" : "block"}`}>
+              <span className="mb-1.5 block text-sm font-semibold text-gray-700 dark:text-gray-400">
+                Mode de paiement :
+              </span>
+              <span className="block text-sm text-gray-500 dark:text-gray-400">
+                Banque
               </span>
             </div>
           </div>
@@ -66,6 +80,12 @@ export default function Results({ invoiceId, from, to, products, vatRate }) {
                     <th className="px-5 py-2 text-sm font-medium text-left text-gray-700 dark:text-gray-400">
                       Quantité
                     </th>
+                    <th className="px-5 py-2 text-sm font-medium text-left text-gray-700 dark:text-gray-400">
+                      P.U
+                    </th>
+                    <th className="px-5 py-2 text-sm font-medium text-left text-gray-700 dark:text-gray-400">
+                      Mode paiement
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y  divide-gray-100 dark:divide-white/[0.05]">
@@ -76,6 +96,12 @@ export default function Results({ invoiceId, from, to, products, vatRate }) {
                       </td>
                       <td className="px-5 py-2 text-left text-sm text-gray-500 dark:text-gray-400">
                         {product.quantity} Kg
+                      </td>
+                      <td className="px-5 py-2 text-left text-sm text-gray-500 dark:text-gray-400">
+                        {product.quantity} Fbu
+                      </td>
+                      <td className="px-5 py-2 text-left text-sm text-gray-500 dark:text-gray-400">
+                        Banque
                       </td>
                     </tr>
                   ))}
@@ -102,11 +128,21 @@ export default function Results({ invoiceId, from, to, products, vatRate }) {
             !expanded ? "lg:absolute" : ""
           }`}
         >
-          <button className="flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-white rounded-lg bg-yellow-600 shadow hover:bg-yellow-700">
-            Approuver
+          <button
+            onClick={() => setExpanded((prev) => !prev)}
+            className="focus:outline-none flex flex-row items-center border-2 text-green-500 border-green-500 p-1 rounded-md"
+          >
+            <span className="text-sm  ">Détails</span>
+            {expanded ? (
+              <ChevronUpIcon className="size-3" />
+            ) : (
+              <ChevronDownIcon className="size-3" />
+            )}
           </button>
         </div>
       </div>
     </div>
   );
 }
+
+export default Orders;

@@ -207,6 +207,87 @@ export default function CardsOverview() {
         </div>
       </div>
       {/* <!-- Metric Item End --> */}
+      <div className="rounded-2xl col-span-4 flex flex-row justify-between border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+        <div className="">
+          <div className="flex items-end justify-between   rounded-2xl">
+            <div>
+              <div className="flex flex-row items-center gap-x-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="size-6 text-yellow-500"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5Zm6.61 10.936a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 14.47a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                    clipRule="evenodd"
+                  />
+                  <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
+                </svg>
+
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Livrées
+                </span>
+              </div>
+
+              <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
+                {data?.achats?.achats_blanc >= 1000 ? (
+                  <>
+                    {(data?.achats?.achats_blanc / 1000).toLocaleString(
+                      "de-DE"
+                    )}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {data?.achats?.achats_blanc?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">KG</span>
+                  </>
+                )}
+              </h4>
+            </div>
+          </div>
+          <div className="flex items-end justify-between mt-2 rounded-2xl">
+            <div>
+              <div className="flex flex-row items-center gap-x-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="size-8 text-red-500"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.5 12a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm6 0a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm6 0a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Restantes
+                </span>
+              </div>
+
+              <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
+                {data?.achats?.achats_jaune >= 1000 ? (
+                  <>
+                    {(data?.achats?.achats_jaune / 1000).toLocaleString(
+                      "de-DE"
+                    )}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {data?.achats?.achats_jaune?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">KG</span>
+                  </>
+                )}
+              </h4>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

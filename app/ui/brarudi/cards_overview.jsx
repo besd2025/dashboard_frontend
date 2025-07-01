@@ -203,6 +203,102 @@ export default function CardsOverview() {
         </div>
       </div>
       {/* <!-- Metric Item End --> */}
+      <div className="rounded-2xl  col-span-5 flex  flex-row justify-between border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+        <div>
+          <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
+            {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="size-6 text-yellow-500"
+            >
+              <path
+                fillRule="evenodd"
+                d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm6-2.438c0-.724.588-1.312 1.313-1.312h4.874c.725 0 1.313.588 1.313 1.313v4.874c0 .725-.588 1.313-1.313 1.313H9.564a1.312 1.312 0 0 1-1.313-1.313V9.564Z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          <div className="flex items-end justify-between mt-2 gap-x-3">
+            <div>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                Gruau
+              </span>
+              <h4 className="mt-2 font-semibold text-gray-800 text-xl dark:text-white/90">
+                {quantite_total_achat >= 1000 ? (
+                  <>
+                    {(quantite_total_achat / 1000).toLocaleString("de-DE")}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {quantite_total_achat?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">KG</span>
+                  </>
+                )}
+              </h4>
+            </div>
+            <Badge color="success">
+              {/* <ArrowUpIcon /> */}
+              2.0%
+            </Badge>
+          </div>
+        </div>
+        <div className="w-px bg-gray-200 h-full dark:bg-gray-800"></div>
+
+        <div className="">
+          <div className="flex items-end justify-between rounded-2xl">
+            <div>
+              <div className="flex flex-row items-center gap-x-1 mb-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="size-6 text-slate-500 dark:text-white"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M2.25 2.25a.75.75 0 0 0 0 1.5H3v10.5a3 3 0 0 0 3 3h1.21l-1.172 3.513a.75.75 0 0 0 1.424.474l.329-.987h8.418l.33.987a.75.75 0 0 0 1.422-.474l-1.17-3.513H18a3 3 0 0 0 3-3V3.75h.75a.75.75 0 0 0 0-1.5H2.25Zm6.54 15h6.42l.5 1.5H8.29l.5-1.5Zm8.085-8.995a.75.75 0 1 0-.75-1.299 12.81 12.81 0 0 0-3.558 3.05L11.03 8.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l2.47-2.47 1.617 1.618a.75.75 0 0 0 1.146-.102 11.312 11.312 0 0 1 3.612-3.321Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Prévision (%)
+                </span>
+              </div>
+
+              <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
+                <span className="inline-flex items-center px-1 py-0.5 justify-center gap-1 rounded font-semibold text-md bg-amber-50  text-yellow-600">
+                  2.0%
+                </span>
+              </h4>
+            </div>
+          </div>
+          <div className="flex items-end justify-between mt-2 rounded-2xl">
+            <div>
+              <div className="flex flex-row items-center gap-x-1">
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Montant
+                </span>
+              </div>
+
+              <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
+                {total_quantite_vendu?.somme_total_price > 1000000
+                  ? (
+                      total_quantite_vendu.somme_total_price / 1000000
+                    ).toLocaleString("de-DE") + " M"
+                  : total_quantite_vendu?.somme_total_price?.toLocaleString(
+                      "de-DE"
+                    )}
+                <span className="text-sm"> FBU</span>
+              </h4>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
