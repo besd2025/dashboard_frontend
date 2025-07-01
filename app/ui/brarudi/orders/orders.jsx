@@ -15,7 +15,7 @@ function Orders({ from, products }) {
         </h4> */}
         <button
           onClick={() => setExpanded((prev) => !prev)}
-          className="focus:outline-none flex flex-row border-2 text-green-500 border-green-500 p-1 rounded-md"
+          className="focus:outline-none flex flex-row items-center border-2 text-green-500 border-green-500 p-1 rounded-md"
         >
           <span className="text-sm  "> Voir en détails</span>
           {expanded ? (
@@ -130,9 +130,9 @@ function Orders({ from, products }) {
         >
           <button
             onClick={() => setExpanded((prev) => !prev)}
-            className="focus:outline-none flex flex-row border-2 text-green-500 border-green-500 p-1 rounded-md"
+            className="focus:outline-none flex flex-row items-center border-2 text-green-500 border-green-500 p-1 rounded-md"
           >
-            <span className="text-sm  "> Détails</span>
+            <span className="text-sm  ">Détails</span>
             {expanded ? (
               <ChevronUpIcon className="size-3" />
             ) : (

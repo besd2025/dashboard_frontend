@@ -5,26 +5,21 @@ import React, { useEffect, useState } from "react";
 
 function Sidebar() {
   const pathname = usePathname();
-  const [activeTab, setActiveTab] = useState("achats");
+  const [activeTab, setActiveTab] = useState("en_attente");
 
   useEffect(() => {
-    if (pathname.includes("/en_attente")) {
-      setActiveTab("attente");
-    }
-    if (pathname.includes("/valide")) {
-      setActiveTab("valide");
-    }
-    if (pathname.includes("/results")) {
-      setActiveTab("resultats");
-    }
-    if (pathname.includes("/sorties")) {
-      setActiveTab("sorties");
-    }
-    if (pathname.includes("/history")) {
-      setActiveTab("history");
-    }
-    if (pathname.includes("/stocks")) {
-      setActiveTab("stocks");
+    const tabMap = [
+      { key: "attente", path: "/en_attente" },
+      { key: "valide", path: "/valide" },
+      { key: "resultats", path: "/results" },
+      { key: "sorties", path: "/sorties" },
+      { key: "history", path: "/history" },
+      { key: "stocks", path: "/stocks" },
+      { key: "orders", path: "/orders" },
+    ];
+    const found = tabMap.find((tab) => pathname.includes(tab.path));
+    if (found) {
+      setActiveTab(found.key);
     }
   }, [pathname]);
 
