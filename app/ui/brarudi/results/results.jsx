@@ -1,9 +1,49 @@
 "use client";
 import { ChevronDownIcon, ChevronUpIcon } from "../../icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function Results({ invoiceId, from, to, products, vatRate }) {
   const [expanded, setExpanded] = useState(false);
+  const subTotal = products.reduce(
+    (sum, item) => sum + item.quantity * item.unitCost,
+    0
+  );
+  const vat = subTotal * vatRate;
+  const total = subTotal + vat;
+  const [data, setData] = useState();
+  const [pointer, setPointer] = useState(0); // index de départ
+  const limit = 5; // nombre par page
+  const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
+  const [currentPage, setCurrentPage] = useState(1);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData(
+          "get",
+          "/produits_transforme/deja_faites/",
+          {
+            params: {
+              offset: pointer,
+              limit: limit,
+            },
+          }
+        );
+        const items = results.results;
+        setData(items);
+        setTotalCount(results.count);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, [pointer]);
+  const totalPages = Math.ceil(totalCount / limit);
+
+  const onPageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    setPointer((pageNumber - 1) * limit);
+  };
 
   return (
     <div className="rounded-2xl bor/der border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] xl:w-4/5">

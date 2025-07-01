@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import Button from "../../../ui_elements/button/Button";
 import ViewImageModal from "../../../ui_elements/modal/ViewImageModal";
 import { ChevronDownIcon } from "../../../icons";
@@ -28,15 +29,6 @@ function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpenTransf, setIsModalOpenTansf] = useState(false);
 
-  const optionProvince = [
-    { value: "Bujumbura", label: "Bujumbura" },
-    { value: "Kayanza", label: "Kayanza" },
-    { value: "Ngozi", label: "Ngozi" },
-  ];
-  const handleSelectChange = (value) => {
-    // console.log("Selected value:", value);
-  };
-
   return (
     <div className="no-scrol/lbar relative w-full max-w-[700px] max-h-[600px]  overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11 z-0">
       <div className="flex flex-col gap-6  lg:justify-between">
@@ -51,7 +43,7 @@ function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
                 Hangar de provenance
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {data.hangar}
+                {values?.nom_hangar}
               </p>
             </div>
 
@@ -60,43 +52,24 @@ function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
                 Responsable
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {data.responsable}
+                {values?.nom_responsable}
               </p>
             </div>
-
-            <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Fonction
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {data.fonction}
-              </p>
-            </div>
-
-            <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Téléphone
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {data.phone}
-              </p>
-            </div>
-
             <div>
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
                 Date
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {data.date}
+                {values?.date_sortie}
               </p>
             </div>
 
             <div>
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Catégorie Maïs
+                Qte Maïs
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {data.categorie_mais}
+                {values?.quantite}
               </p>
             </div>
 
@@ -105,7 +78,7 @@ function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
                 Motif
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {data.motif}
+                {values?.raison_sociale}
               </p>
             </div>
             <div>
@@ -121,7 +94,7 @@ function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
                 Prix
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {data.prix} Fbu
+                {data.observation}
               </p>
             </div>
             <div className="relative group  w-max">
@@ -129,7 +102,7 @@ function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
                 Billet
               </p>
               <img
-                src={data.billet}
+                src={values?.photo_facture}
                 alt="Billet"
                 className="w-32 h-32 rounded-md object-cover cursor-pointer group-hover:brightness-75 transition"
                 onClick={() => setIsModalOpen(true)}

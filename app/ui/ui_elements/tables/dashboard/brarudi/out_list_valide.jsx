@@ -17,13 +17,17 @@ import FilterUserProfile from "../../../../municipal/cultivators/profile/filter_
 import { fetchData } from "../../../../../_utils/api";
 import OutDetails from "../../../../dashboard/brarudi/en_attente/out_details";
 import ResultsForm from "../../../../dashboard/brarudi/valide/results_form";
-
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 function OutListValide() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [openDropdowns, setOpenDropdowns] = useState({});
-  const [isCheckedTwo, setIsCheckedTwo] = useState(true);
-
+  const [pointer, setPointer] = useState(0); // index de départ
+  const limit = 5; // nombre par page
+  const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
+  const [currentPage, setCurrentPage] = useState(1);
+  const [quantite_total, setQuantiteTotal] = useState(0);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -45,14 +49,6 @@ function OutListValide() {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const inputRef = useRef(null);
 
-  const handleToggle = () => {
-    if (window.innerWidth >= 1024) {
-      toggleSidebar();
-    } else {
-      toggleMobileSidebar();
-    }
-  };
-
   const toggleApplicationMenu = () => {
     setApplicationMenuOpen(!isApplicationMenuOpen);
   };
@@ -69,7 +65,6 @@ function OutListValide() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const { isOpen, openModal, closeModal } = useModal();
   const {
     isOpen: isOpenFilter,
     openModal: openModalFilter,
@@ -86,26 +81,109 @@ function OutListValide() {
     closeModal: closeModalResults,
   } = useModal();
 
-  // Ajout de l'état pour le step du modal
-  const [modalStep, setModalStep] = useState("details");
-
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData("get", "hangars/cinq_recents/", {
-          params: {},
-          additionalHeaders: {},
-          body: {},
-        });
+        const results = await fetchData(
+          "get",
+          "/pret_transforme/group_by_transformation/",
+          {
+            params: {
+              offset: pointer,
+              limit: limit,
+            },
+          }
+        );
+
         setData(results);
+
+        // Calculer la somme des quantités
+        const totalQuantity = results.reduce((acc, item) => {
+          return (
+            acc +
+            (item?.total_quantity_blanc || 0) +
+            (item?.total_quantity_jaune || 0)
+          );
+        }, 0);
+
+        setQuantiteTotal(totalQuantity); // Mettre à jour le total
+
         console.log(results);
+        setTotalCount(results.length);
       } catch (error) {
         setError(error);
         console.error(error);
       }
     }
     getData();
-  }, []);
+  }, [pointer]);
+  const totalPages = Math.ceil(totalCount / limit);
+
+  const onPageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    setPointer((pageNumber - 1) * limit);
+  };
+  const exportToExcel = async () => {
+    const limit = 5;
+    let pointer = 0;
+    let allData = [];
+    let hasMore = true;
+
+    try {
+      // Charger toutes les données par pagination
+      while (hasMore) {
+        const response = await fetchData(
+          "get",
+          "/pret_transforme/group_by_transformation/",
+          {
+            params: {
+              offset: pointer,
+              limit: limit,
+            },
+          }
+        );
+
+        const currentData = response.results;
+
+        if (currentData.length === 0) break;
+
+        allData = [...allData, ...currentData];
+        pointer += limit;
+
+        // S'arrêter si on a atteint toutes les données
+        if (pointer >= response.count) {
+          hasMore = false;
+        }
+      }
+
+      if (allData.length === 0) return;
+
+      const formattedData = allData.map((item) => ({
+        Unite_de_Transformation: item.transformation || "",
+        Responsable_ANAGESSA: item.nom_responsable || "",
+        Quantite_Blanc: item?.total_quantity_blanc || "",
+        Quantite_jaune: item?.total_quantity_jaune || "",
+        Date_Sortie: item.date_sortie || "",
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(formattedData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "pret_a_transforme");
+
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      const blob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+      });
+
+      saveAs(blob, "pret_a_transforme.xlsx");
+    } catch (error) {
+      console.error("Erreur exportation Excel :", error);
+    }
+  };
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
@@ -265,35 +343,34 @@ function OutListValide() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase "
                 >
-                  Hangar provenance
+                  Unite de Transformation
                 </TableCell>
 
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Qte sorties
-                </TableCell>
-
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
-                  Responsable Anagessa
+                  Qte Blanc
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Date
+                  Qte Jaune
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Qte Total
                 </TableCell>
               </TableRow>
             </TableHeader>
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {data.map((order) => (
-                <TableRow key={order.id}>
+              {data.map((order, i = 0) => (
+                <TableRow key={i + 1}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <div className="relative inline-block">
                       <button
@@ -347,31 +424,19 @@ function OutListValide() {
                       </svg>
                       <div>
                         <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order.hangar_name}
-                        </span>
-                        <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order.hangar_code}
+                          {order?.transformation}
                         </span>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Qte}
+                    {order?.total_quantity_blanc}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Prix}
+                    {order?.total_quantity_jaune}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {
-                      order?.hangar_adress?.zone_code?.commune_code
-                        ?.province_code?.province_name
-                    }
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {
-                      order?.hangar_adress?.zone_code?.commune_code
-                        ?.commune_name
-                    }
+                    {quantite_total}
                   </TableCell>
                 </TableRow>
               ))}
@@ -382,7 +447,14 @@ function OutListValide() {
 
       {/* Pagination */}
 
-      <Pagination />
+      <Pagination
+        totalCount={totalCount}
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+        totalPages={totalPages}
+        pointer={pointer}
+        limit={limit}
+      />
 
       {/* filtres */}
 
