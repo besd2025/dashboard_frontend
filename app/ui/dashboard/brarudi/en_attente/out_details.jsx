@@ -2,8 +2,18 @@
 import React, { useState, useEffect } from "react";
 import Button from "../../../ui_elements/button/Button";
 import ViewImageModal from "../../../ui_elements/modal/ViewImageModal";
-
-function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
+import Select from "../../../ui_elements/form/Select";
+import { ChevronDownIcon } from "../../../icons";
+import { fetchData } from "../../../../_utils/api";
+function OutDetails({
+  closeModalDetails,
+  onConfirm,
+  validated = false,
+  idSortie,
+}) {
+  const [values, setValues] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [error, setError] = useState(null);
   const tableData = [
     {
       id: 1,
@@ -19,10 +29,35 @@ function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
       billet: "/img/billet_example.jpg",
     },
   ];
-
   const data = tableData[0];
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData(
+          "get",
+          `sorties/detail_sortie/?sortie_id=${idSortie}`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
 
+        setValues(results);
+        console.log(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
+  const unite_transformation = [
+    { value: "option1", label: "Option 1" },
+    { value: "option2", label: "Option 2" },
+    { value: "option3", label: "Option 3" },
+    // Ajoutez d'autres options ici
+  ];
   return (
     <div className="no-scrollbar relative w-full max-w-[700px] max-h-[600px]  overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11 z-0">
       <div className="flex flex-col gap-6  lg:justify-between">
@@ -87,9 +122,9 @@ function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
                 Prix
               </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+              {/* <p className="text-sm font-medium text-gray-800 dark:text-white/90">
                 {data.observation}
-              </p>
+              </p> */}
             </div>
             <div className="relative group  w-max">
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
@@ -130,9 +165,9 @@ function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
                 </p>
                 <div className="relative">
                   <Select
-                    options={optionProvince}
+                    options={unite_transformation}
                     placeholder="Transformation"
-                    onChange={handleSelectChange}
+                    //onChange={handleSelectChange}
                     className="dark:bg-dark-900 cursor-pointer"
                   />
                   <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">

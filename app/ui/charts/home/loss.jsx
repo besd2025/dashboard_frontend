@@ -103,7 +103,7 @@ function Loss() {
         );
 
         // results est un tableau [{ period: string, pertes: number }]
-        const seriesData = results.map((item) => [
+        const seriesData = results?.map((item) => [
           new Date(item.period).getTime(),
           item.pertes || 0,
         ]);
