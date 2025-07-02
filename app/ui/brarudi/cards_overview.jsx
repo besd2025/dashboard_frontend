@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { fetchData } from "../../_utils/api";
+import Badge from "../../ui/ui_elements/badge/Badge";
 export default function CardsOverview() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -227,14 +228,18 @@ export default function CardsOverview() {
                 Gruau
               </span>
               <h4 className="mt-2 font-semibold text-gray-800 text-xl dark:text-white/90">
-                {quantite_total_achat >= 1000 ? (
+                {data?.totaux?.total_montant_approuve >= 1000 ? (
                   <>
-                    {(quantite_total_achat / 1000).toLocaleString("de-DE")}{" "}
+                    {(
+                      data?.totaux?.total_montant_approuve / 1000
+                    ).toLocaleString("de-DE")}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
-                    {quantite_total_achat?.toLocaleString("fr-FR") || 0}{" "}
+                    {data?.totaux?.total_montant_approuve?.toLocaleString(
+                      "fr-FR"
+                    ) || 0}{" "}
                     <span className="text-sm">KG</span>
                   </>
                 )}
@@ -286,11 +291,11 @@ export default function CardsOverview() {
               </div>
 
               <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
-                {total_quantite_vendu?.somme_total_price > 1000000
+                {data?.totaux?.total_montant_approuve > 1000000
                   ? (
-                      total_quantite_vendu.somme_total_price / 1000000
+                      data?.totaux?.total_montant_approuve / 1000000
                     ).toLocaleString("de-DE") + " M"
-                  : total_quantite_vendu?.somme_total_price?.toLocaleString(
+                  : data?.totaux?.total_montant_approuve?.toLocaleString(
                       "de-DE"
                     )}
                 <span className="text-sm"> FBU</span>
