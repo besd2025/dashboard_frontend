@@ -1,64 +1,24 @@
 "use client";
 import { ChevronDownIcon, ChevronUpIcon } from "../../icons";
 import React, { useState, useEffect } from "react";
+import { fetchData } from "../../../_utils/api";
 
 export default function Results({ invoiceId, from, to, products, vatRate }) {
   const [expanded, setExpanded] = useState(false);
-  const subTotal = products.reduce(
-    (sum, item) => sum + item.quantity * item.unitCost,
-    0
-  );
-  const vat = subTotal * vatRate;
-  const total = subTotal + vat;
-  const [data, setData] = useState();
-  const [pointer, setPointer] = useState(0); // index de départ
-  const limit = 5; // nombre par page
-  const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
-  const [currentPage, setCurrentPage] = useState(1);
-  useEffect(() => {
-    async function getData() {
-      try {
-        const results = await fetchData(
-          "get",
-          "/produits_transforme/deja_faites/",
-          {
-            params: {
-              offset: pointer,
-              limit: limit,
-            },
-          }
-        );
-        const items = results.results;
-        setData(items);
-        setTotalCount(results.count);
-      } catch (error) {
-        setError(error);
-        console.error(error);
-      }
-    }
-    getData();
-  }, [pointer]);
-  const totalPages = Math.ceil(totalCount / limit);
-
-  const onPageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    setPointer((pageNumber - 1) * limit);
-  };
+  const produit = products;
 
   return (
-    <div className="rounded-2xl bor/der border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] xl:w-4/5">
-      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400">
-        <h3 className="font-medium text-gray-800 text-md dark:text-white/90">
-          Resultats
+    <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] xl:w-4/5">
+      {/* ----- En‑tête ----- */}
+      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+        <h3 className="font-medium text-gray-800 dark:text-white/90">
+          Résultats
         </h3>
-        {/* <h4 className="text-base font-medium text-gray-700 dark:text-gray-400">
-          ID : #{invoiceId}
-        </h4> */}
         <button
           onClick={() => setExpanded((prev) => !prev)}
-          className="focus:outline-none flex flex-row items-center border-2 text-green-500 border-green-500 p-1 rounded-md"
+          className="flex items-center gap-1 rounded-md border-2 border-green-500 px-2 py-1 text-sm text-green-500"
         >
-          <span className="text-sm  "> Voir en détails</span>
+          Voir en détails
           {expanded ? (
             <ChevronUpIcon className="size-3" />
           ) : (
@@ -67,88 +27,86 @@ export default function Results({ invoiceId, from, to, products, vatRate }) {
         </button>
       </div>
 
+      {/* ----- Corps ----- */}
       <div className="p-5 relative">
-        <div className="flex flex-col gap-6 mb-5 sm:flex-row sm:items-center sm:justify-between ">
-          <div className="flex flex-row space-x-5">
-            <div className="flex flex-row space-x-2">
-              <span className="block  text-sm font-medium text-gray-700 dark:text-gray-400">
-                De
-              </span>
-              <h5 className="text-sm font-semibold text-green-800 ">
-                {from.name}
-              </h5>
+        <div className="mb-5 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex gap-5">
+            <div className="flex gap-2">
+              <span className="text-sm text-gray-700">De</span>
+              <h5 className="text-sm font-semibold text-green-800">ANAGESSA</h5>
             </div>
             <div>
               <span className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                 Enregistré le:
               </span>
               <span className="block text-sm text-gray-500 dark:text-gray-400">
-                {from.issuedOn}
+                11 mars 2025
               </span>
             </div>
+            {/* autres métadonnées… */}
           </div>
         </div>
+
         {expanded && (
-          <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+          <div className="overflow-hidden rounded-2xl border border-gray-100 dark:border-white/[0.05]">
             <div className="max-w-full overflow-x-auto">
               <table className="min-w-full">
                 <thead className="border-b border-gray-100 dark:border-white/[0.05]">
                   <tr>
-                    <th className="px-5 py-2 text-sm font-medium text-left text-gray-700 dark:text-gray-400">
+                    <th className="px-5 py-2 text-left text-sm font-medium text-gray-700">
                       Produit
                     </th>
-                    <th className="px-5 py-2 text-sm font-medium text-left text-gray-700 dark:text-gray-400">
-                      Quantité
+                    <th className="px-5 py-2 text-left text-sm font-medium text-gray-700">
+                      Quantité (kg)
                     </th>
-                    <th className="px-5 py-2 text-sm font-medium text-left text-gray-700 dark:text-gray-400">
-                      P.U
+                    <th className="px-5 py-2 text-left text-sm font-medium text-gray-700">
+                      P.U (Fbu)
                     </th>
-                    <th className="px-5 py-2 text-sm font-medium text-left text-gray-700 dark:text-gray-400">
-                      Prix Total
+                    <th className="px-5 py-2 text-left text-sm font-medium text-gray-700">
+                      Prix Total (Fbu)
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y  divide-gray-100 dark:divide-white/[0.05]">
-                  {products.map((product, index) => (
-                    <tr key={index}>
-                      <td className="px-5 py-2 text-left text-sm font-semibold text-gray-500 dark:text-gray-400">
-                        {product.name}
+                <tbody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                  {produit.map((p, idx = 1) => (
+                    <tr key={idx + 1}>
+                      <td className="px-5 py-2 text-sm font-semibold text-gray-600">
+                        {p.name}
                       </td>
-                      <td className="px-5 py-2 text-left text-sm text-gray-500 dark:text-gray-400">
-                        {product.quantity} Kg
+                      <td className="px-5 py-2 text-sm text-gray-600">
+                        {p.quantite?.toLocaleString("fr-FR")}
                       </td>
-                      <td className="px-5 py-2 text-left text-sm text-gray-500 dark:text-gray-400">
-                        {product.quantity} Fbu
+                      <td className="px-5 py-2 text-sm text-gray-600">
+                        {p.prix?.toLocaleString("fr-FR")}
                       </td>
-                      <td className="px-5 py-2 text-left text-sm text-gray-500 dark:text-gray-400">
-                        {product.quantity} Fbu
+                      <td className="px-5 py-2 text-sm text-gray-600">
+                        {p.prix_total?.toLocaleString("fr-FR")}
                       </td>
                     </tr>
                   ))}
+                  {produit.length === 0 && (
+                    <tr>
+                      <td
+                        colSpan={4}
+                        className="px-5 py-4 text-center text-sm text-gray-500"
+                      >
+                        {erreur || "Aucun résultat"}
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
           </div>
-
-          //   <div className="pb-6 my-6 text-right border-b border-gray-100 dark:border-gray-800">
-          //     <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-          //       Sub Total amount: ${subTotal.toFixed(2)}
-          //     </p>
-          //     <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">
-          //       Vat ({vatRate * 100}%): ${vat.toFixed(2)}
-          //     </p>
-          //     <p className="text-lg font-semibold text-gray-800 dark:text-white/90">
-          //       Total : ${total.toFixed(2)}
-          //     </p>
-          //   </div>
         )}
 
+        {/* ----- Bouton d’action ----- */}
         <div
-          className={`flex items-center justify-end gap-3 mt-3 top-0 right-5 ${
-            !expanded ? "lg:absolute" : ""
+          className={`mt-3 flex justify-end gap-3 ${
+            !expanded ? "lg:absolute top-0 right-5" : ""
           }`}
         >
-          <button className="flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-white rounded-lg bg-yellow-600 shadow hover:bg-yellow-700">
+          <button className="rounded-lg bg-yellow-600 px-4 py-3 text-sm font-medium text-white shadow hover:bg-yellow-700">
             Approuver
           </button>
         </div>

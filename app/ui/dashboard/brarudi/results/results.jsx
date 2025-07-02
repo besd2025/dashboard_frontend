@@ -41,7 +41,7 @@ export default function Results({ invoiceId, from, to, products, vatRate }) {
                 De
               </span>
               <h5 className="text-sm font-semibold text-green-800 ">
-                {from.name}
+                ANAGESSA
               </h5>
             </div>
             <div>
@@ -49,7 +49,7 @@ export default function Results({ invoiceId, from, to, products, vatRate }) {
                 Enregistré le:
               </span>
               <span className="block text-sm text-gray-500 dark:text-gray-400">
-                {from.issuedOn}
+                23 Mars 2025
               </span>
             </div>
           </div>
@@ -75,7 +75,7 @@ export default function Results({ invoiceId, from, to, products, vatRate }) {
                         {product.name}
                       </td>
                       <td className="px-5 py-2 text-left text-sm text-gray-500 dark:text-gray-400">
-                        {product.quantity} Kg
+                        {product.quantite} Kg
                       </td>
                     </tr>
                   ))}
