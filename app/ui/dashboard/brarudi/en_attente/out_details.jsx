@@ -8,6 +8,8 @@ import Modal from "../../../ui_elements/modal";
 import Select from "../../../ui_elements/form/Select";
 import { ChevronDownIcon } from "../../../icons";
 import { fetchData } from "../../../../_utils/api";
+import { useRouter } from "next/navigation";
+
 import TextArea from "../../../ui_elements/form/input/TextArea";
 
 function OutDetails({
@@ -19,6 +21,9 @@ function OutDetails({
   const [values, setValues] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState(null);
+  const [unite_transformation, setUnites] = useState([]);
+  const [ListeCommandes, setListeCommandes] = useState([]);
+
   const [isOpenTransf, setIsModalOpenTansf] = useState(false);
 
   const tableData = [
@@ -37,7 +42,6 @@ function OutDetails({
     },
   ];
   const data = tableData[0];
-
   useEffect(() => {
     async function getData() {
       try {
@@ -50,9 +54,32 @@ function OutDetails({
             body: {},
           }
         );
-
+        const unites = await fetchData("get", `unite_de_transformation/`, {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+        const commandes = await fetchData("get", `command/`, {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+        const options = unites?.results?.map((unite) => ({
+          value: unite.id,
+          label: unite.usine_name,
+        }));
+        const commands = commandes?.results?.map((commande) => ({
+          value: commande.id,
+          label:
+            "commande de " +
+            commande?.quantite +
+            " KG ENVOYE LE " +
+            new Date(commande?.date_commande).toLocaleDateString(),
+        }));
+        setUnites(options);
         setValues(results);
-        console.log(results);
+        setListeCommandes(commands);
+        console.log(commands);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -60,12 +87,32 @@ function OutDetails({
     }
     getData();
   }, []);
-  const unite_transformation = [
-    { value: "option1", label: "Option 1" },
-    { value: "option2", label: "Option 2" },
-    { value: "option3", label: "Option 3" },
-    // Ajoutez d'autres options ici
-  ];
+
+  const [selectedUnitOption, setSelectedUnitOption] = useState(null);
+  const [selectedCommandOption, setSelectedCommandOption] = useState(null);
+  const handleSelectCommandChange = async (option) => {
+    setSelectedCommandOption(option);
+  };
+  const handleSelectUnitChange = async (option) => {
+    setSelectedUnitOption(option);
+  };
+  const confirmation = async () => {
+    if (selectedUnitOption && selectedCommandOption) {
+      const response = await fetchData("post", `/pret_transforme/stock_data/`, {
+        params: {},
+        additionalHeaders: {},
+        body: {
+          command: selectedCommandOption,
+          unite_transformation: selectedUnitOption,
+          sortie: idSortie,
+        },
+      });
+
+      if (response === 200) {
+        window.location.reload();
+      }
+    }
+  };
   return (
     <div className="no-scrol/lbar relative w-full max-w-[700px] max-h-[600px]  overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11 z-0">
       <div className="flex flex-col gap-6  lg:justify-between">
@@ -120,19 +167,8 @@ function OutDetails({
             </div>
             <div>
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Observation
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {data.observation}
-              </p>
-            </div>
-            <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
                 Prix
               </p>
-              {/* <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {data.observation}
-              </p> */}
             </div>
             <div className="relative group  w-max">
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
@@ -175,7 +211,7 @@ function OutDetails({
                   <Select
                     options={unite_transformation}
                     placeholder="Transformation"
-                    //onChange={handleSelectChange}
+                    onChange={handleSelectUnitChange}
                     className="dark:bg-dark-900 cursor-pointer"
                   />
                   <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
@@ -192,6 +228,22 @@ function OutDetails({
                 +
               </Button>
             </div>
+            <div>
+              <p className="mb-2 text-sm font-medium text-gray-800 dark:text-white/90">
+                Commandes
+              </p>
+              <div className="relative">
+                <Select
+                  options={ListeCommandes}
+                  placeholder="commande"
+                  onChange={handleSelectCommandChange}
+                  className="dark:bg-dark-900 cursor-pointer"
+                />
+                <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
+                  <ChevronDownIcon />
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -200,7 +252,7 @@ function OutDetails({
           <Button size="sm" variant="outline" onClick={closeModalDetails}>
             Annuler
           </Button>
-          <Button size="sm" className="bg-green-500" onClick={onConfirm}>
+          <Button size="sm" className="bg-green-500" onClick={confirmation}>
             Confirmer
           </Button>
         </div>
@@ -209,7 +261,7 @@ function OutDetails({
       <ViewImageModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        imageUrl={data.billet}
+        imageUrl={values?.photo_facture}
         alt="Billet"
       />
       <Modal

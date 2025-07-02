@@ -84,32 +84,27 @@ function OutListValide() {
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData(
-          "get",
-          "/pret_transforme/group_by_transformation/",
-          {
-            params: {
-              offset: pointer,
-              limit: limit,
-            },
-          }
-        );
+        const results = await fetchData("get", "pret_transforme/", {
+          params: {
+            offset: pointer,
+            limit: limit,
+          },
+        });
 
-        setData(results);
-
+        setData(results?.results);
+        console.log(results);
         // Calculer la somme des quantités
-        const totalQuantity = results.reduce((acc, item) => {
-          return (
-            acc +
-            (item?.total_quantity_blanc || 0) +
-            (item?.total_quantity_jaune || 0)
-          );
-        }, 0);
+        const totalQuantity = results?.results?.map((item) => {
+          const blanc = item?.sortie?.quantity_blanc || 0;
+          const jaune = item?.sortie?.quantity_jaune || 0;
 
+          return blanc + jaune;
+        }, 0);
+        console.log(totalQuantity);
         setQuantiteTotal(totalQuantity); // Mettre à jour le total
 
         console.log(results);
-        setTotalCount(results.length);
+        setTotalCount(results.count);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -132,16 +127,12 @@ function OutListValide() {
     try {
       // Charger toutes les données par pagination
       while (hasMore) {
-        const response = await fetchData(
-          "get",
-          "/pret_transforme/group_by_transformation/",
-          {
-            params: {
-              offset: pointer,
-              limit: limit,
-            },
-          }
-        );
+        const response = await fetchData("get", "pret_transforme/", {
+          params: {
+            offset: pointer,
+            limit: limit,
+          },
+        });
 
         const currentData = response.results;
 
@@ -159,11 +150,11 @@ function OutListValide() {
       if (allData.length === 0) return;
 
       const formattedData = allData.map((item) => ({
-        Unite_de_Transformation: item.transformation || "",
-        Responsable_ANAGESSA: item.nom_responsable || "",
-        Quantite_Blanc: item?.total_quantity_blanc || "",
-        Quantite_jaune: item?.total_quantity_jaune || "",
-        Date_Sortie: item.date_sortie || "",
+        Unite_de_Transformation:
+          item?.transformation?.usine_transformation?.usine_name || "",
+        Quantite_Blanc: item?.sortie?.quantity_blanc || "",
+        Quantite_jaune: item?.sortie?.quantity_jaune || "",
+        Date_Creation: item.created_at || "",
       }));
 
       const worksheet = XLSX.utils.json_to_sheet(formattedData);
@@ -264,7 +255,10 @@ function OutListValide() {
           </button>
         </div>
         <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+          <button
+            onClick={exportToExcel}
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -424,19 +418,69 @@ function OutListValide() {
                       </svg>
                       <div>
                         <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order?.transformation}
+                          {
+                            order?.transformation?.usine_transformation
+                              ?.usine_name
+                          }
                         </span>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.total_quantity_blanc}
+                    {order?.sortie?.quantity_blanc >= 1000 ? (
+                      <>
+                        {(order?.sortie?.quantity_blanc / 1000).toLocaleString(
+                          "de-DE"
+                        )}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {order?.sortie?.quantity_blanc?.toLocaleString(
+                          "fr-FR"
+                        ) || 0}{" "}
+                        <span className="text-sm">KG</span>
+                      </>
+                    )}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.total_quantity_jaune}
+                    {order?.sortie?.quantity_jaune >= 1000 ? (
+                      <>
+                        {(order?.sortie?.quantity_jaune / 1000).toLocaleString(
+                          "de-DE"
+                        )}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {order?.sortie?.quantity_jaune?.toLocaleString(
+                          "fr-FR"
+                        ) || 0}{" "}
+                        <span className="text-sm">KG</span>
+                      </>
+                    )}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {quantite_total}
+                    {order?.sortie?.quantity_blanc +
+                      order?.sortie?.quantity_jaune >=
+                    1000 ? (
+                      <>
+                        {(
+                          (order?.sortie?.quantity_blanc +
+                            order?.sortie?.quantity_jaune) /
+                          1000
+                        ).toLocaleString("de-DE")}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {(
+                          order?.sortie?.quantity_blanc +
+                          order?.sortie?.quantity_jaune
+                        )?.toLocaleString("fr-FR") || 0}{" "}
+                        <span className="text-sm">KG</span>
+                      </>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
