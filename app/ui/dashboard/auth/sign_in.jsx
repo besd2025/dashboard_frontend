@@ -89,8 +89,8 @@ export default function SignInForm() {
     }
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white lg:bg-yellow-50">
-      <div className="bg-white lg:rounded-2xl shadow-lg w-full max-w-md overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 lg:bg-yellow-50">
+      <div className="bg-white dark:bg-white/[0.03] lg:rounded-2xl shadow-lg w-full max-w-md overflow-hidden">
         {/* Header Image with Overlay and SIGN IN text */}
         <div className="relative h-40 w-full">
           <Image
