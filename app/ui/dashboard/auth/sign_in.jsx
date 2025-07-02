@@ -83,31 +83,26 @@ export default function SignInForm() {
       console.error("Erreur de connexion :", err);
     }
   };
-
   return (
-    <div className="flex flex-row flex-1 w-full h-screen lg:p-4 sm:p-0 bg-yellow-500/80 lg:bg-white overflow-hidden">
-      <div className="relative flex flex-col h-full justify-center flex-1 w-full lg:w-1/2 lg:max-w-md lg:mx-auto">
-        <div className="w-full h-full blur-[2px] contrast-75 block lg:hidden">
+    <div className="min-h-screen flex items-center justify-center bg-yellow-50">
+      <div className="bg-white rounded-2xl shadow-lg w-full max-w-md overflow-hidden">
+        {/* Header Image with Overlay and SIGN IN text */}
+        <div className="relative h-40 w-full">
           <Image
-            className="w-full object-cover"
             src="/img/mais_background.jpg"
             alt="Background"
-            width={320}
-            height={320}
+            layout="fill"
+            objectFit="cover"
+            className="w-full h-full object-cover brightness-75 blur-[0.5px] "
           />
-        </div>
-
-        <div className="absolute sm:bottom-20 lg:bottom-0 lg:relative mx-2 bg-white p-6 lg:p-0 rounded-2xl sm:left-20 lg:left-0">
-          <div className="mb-5 sm:mb-8">
-            <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
+          <div className="absolute inset-0 bg-bl/ack bg-opacity-40 flex items-center justify-center">
+            <h2 className="text-white text-4xl font-bold tracking-wide">
               Se connecter
-            </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Entrez votre nom d'utilisateur et mot de passe pour vous connecter
-              !
-            </p>
+            </h2>
           </div>
-
+        </div>
+        {/* Form Section */}
+        <div className="p-8">
           <form onSubmit={handleLogin}>
             <div className="space-y-6">
               <div>
@@ -172,16 +167,6 @@ export default function SignInForm() {
             </div>
           </form>
         </div>
-      </div>
-
-      <div className="w-1/2 h-full blur-[2px] contrast-75 hidden lg:block">
-        <Image
-          className="w-full object-cover"
-          src="/img/mais_background.jpg"
-          alt="Background"
-          width={320}
-          height={320}
-        />
       </div>
     </div>
   );
