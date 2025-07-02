@@ -7,6 +7,7 @@ import Checkbox from "../../ui_elements/form/input/Checkbox";
 import Input from "../../ui_elements/form/input/InputField";
 import Label from "../../ui_elements/form/Label";
 import { EyeCloseIcon, EyeIcon } from "../../icons";
+import LoadingDots from "../../ui_elements/loading/loading_dots";
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,6 +15,7 @@ export default function SignInForm() {
   const [identifiant, setIdentifiant] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   function DecodeToJwt(token) {
@@ -41,6 +43,7 @@ export default function SignInForm() {
       return;
     }
 
+    setLoading(true);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/login/`,
@@ -81,11 +84,13 @@ export default function SignInForm() {
     } catch (err) {
       setError(err.message || "Une erreur est survenue.");
       console.error("Erreur de connexion :", err);
+    } finally {
+      setLoading(false);
     }
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-yellow-50">
-      <div className="bg-white rounded-2xl shadow-lg w-full max-w-md overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-white lg:bg-yellow-50">
+      <div className="bg-white lg:rounded-2xl shadow-lg w-full max-w-md overflow-hidden">
         {/* Header Image with Overlay and SIGN IN text */}
         <div className="relative h-40 w-full">
           <Image
@@ -133,9 +138,9 @@ export default function SignInForm() {
                     className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
                   >
                     {showPassword ? (
-                      <EyeCloseIcon className="text-gray-700 dark:text-gray-400" />
+                      <EyeCloseIcon className="size-6 text-gray-400 dark:text-gray-400" />
                     ) : (
-                      <EyeIcon className="text-gray-700 dark:text-gray-400" />
+                      <EyeIcon className="size-6 text-gray-400 dark:text-gray-400" />
                     )}
                   </span>
                 </div>
@@ -158,10 +163,11 @@ export default function SignInForm() {
               <div>
                 <Button
                   type="submit"
-                  className="w-full bg-yellow-500"
+                  className="w-full bg-yellow-500 disabled:bg-yellow-500"
                   size="sm"
+                  disabled={loading}
                 >
-                  Se connecter
+                  {loading ? <LoadingDots /> : "Se connecter"}
                 </Button>
               </div>
             </div>

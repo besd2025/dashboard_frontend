@@ -5,18 +5,12 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import {
-  AlertIcon,
   BoxCubeIcon,
   ChevronDownIcon,
-  DollarLine,
   GridIcon,
   HangarIcon,
   HorizontaLDots,
-  PieChartIcon,
-  PlugInIcon,
   SettingsIcon,
-  UserCircleIcon,
-  UserLineIcon,
 } from "../icons";
 
 const navItems = [
@@ -89,7 +83,7 @@ const navItems = [
       />
     ),
     name: "BRARUDI",
-    path: "/dashboard/Brarudi/stocks",
+    path: "/dashboard/Brarudi/en_attente",
     startWithUrl: "/dashboard/Brarudi/",
   },
   {
