@@ -58,10 +58,11 @@ export default function SignInForm() {
       );
 
       if (!response.ok) {
+        setLoading(false);
         const errorData = await response.json();
         throw new Error(errorData?.detail || "Échec de connexion.");
       }
-
+      setLoading(true);
       const data = await response.json();
       document.cookie = `accessToken=${data.access}; path=/; max-age=3600; secure`;
       localStorage.setItem("accessToken", data.access);

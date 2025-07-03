@@ -32,9 +32,9 @@ function Ventes() {
     // Ajoute d'autres produits ici si besoin
   ];
   const achatType = [
-    { value: "Rango", label: "Rango" },
-    { value: "Butanganzwa", label: "Butanganzwa" },
-    { value: "Matongo", label: "Matongo" },
+    { value: "prive", label: "SECTEUR PRIVE" },
+    { value: "public", label: "INSTITUTION PUBLIQUE" },
+    { value: "Autres", label: "Autres" },
   ];
   const handleSelectChange = (value) => {
     setSelectedProduct(value);
@@ -163,15 +163,6 @@ function Ventes() {
               </>
             )}
 
-            <div className="col-span-1">
-              <Label>Téléphone</Label>
-              <Input
-                onChange={(e) => setPhone(e.target.value)}
-                type="number"
-                placeholder="76545454"
-              />
-            </div>
-
             <div className="col-span-2 lg:col-span-1">
               <div className="space-y-6">
                 <div>
@@ -190,7 +181,14 @@ function Ventes() {
                 </div>
               </div>
             </div>
-
+            <div className="col-span-1">
+              <Label>Téléphone</Label>
+              <Input
+                onChange={(e) => setPhone(e.target.value)}
+                type="number"
+                placeholder="76545454"
+              />
+            </div>
             <div className="col-span-2 lg:col-span-1 z-[9999]">
               <div className="space-y-6">
                 <div>
