@@ -4,20 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
-import {
-  AlertIcon,
-  BoxCubeIcon,
-  ChevronDownIcon,
-  DollarLine,
-  GridIcon,
-  HangarIcon,
-  HorizontaLDots,
-  PieChartIcon,
-  PlugInIcon,
-  SettingsIcon,
-  UserCircleIcon,
-  UserLineIcon,
-} from "../icons";
+import { ChevronDownIcon, HorizontaLDots } from "../icons";
 
 const navItems = [
   {
@@ -31,7 +18,7 @@ const navItems = [
       />
     ),
     name: "BRARUDI",
-    path: "/Brarudi/en_attente",
+    path: "/brarudi/stocks",
     subPath: [
       "/dashboard/hangars/details/cultivator",
       "/dashboard/hangars/details/achats",
