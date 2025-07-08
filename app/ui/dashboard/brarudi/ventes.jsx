@@ -8,28 +8,17 @@ import { ChevronDownIcon } from "../../icons";
 import DatePicker from "../../ui_elements/form/date-picker";
 import Button from "../../ui_elements/button/Button";
 import FileInput from "../../ui_elements/form/input/FileInput";
-
 function Ventes() {
   const [message, setMessage] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState("");
   const [price, setPrice] = useState("");
-  const [quantite_farine_blanc, setQuantiteFarineBlanc] = useState(0);
-  const [quantite_farine_jaune, setQuantiteFarineJaune] = useState(0);
-  const [quantite_son_blanc, setQuantiteSonBlanc] = useState(0);
-  const [quantite_son_jaune, setQuantiteSonJaune] = useState(0);
-  const [prix_farine, setPrixFarine] = useState(0);
-  const [prix_son, setPrixSon] = useState(0);
-  const [date_transformation, setDateTransformation] = useState("");
-  const [phone, setPhone] = useState("");
-  const [selectedCommandOption, setSelectedCommandOption] = useState(null);
+  const [image_facture, setImageFacture] = useState(null);
+  const [date_sortie, setDateSortie] = useState("");
   const [error, setError] = useState(null);
-  const [ListeCommandes, setListeCommandes] = useState([]);
   const productOptions = [
-    { value: "farine_blanc", label: "Farine (blanc)" },
-    { value: "farine_jaune", label: "Farine (jaune)" },
-    { value: "son_mais_blanc", label: "Son de maïs (blanc)" },
-    { value: "son_mais_jaune", label: "Son de maïs (jaune)" },
+    { value: "farine", label: "Farine" },
+    { value: "son_mais", label: "Son de maïs " },
     // Ajoute d'autres produits ici si besoin
   ];
   const achatType = [
@@ -42,41 +31,13 @@ function Ventes() {
     setQuantity("");
     setPrice("");
   };
-  const handleSelectCommandChange = async (option) => {
-    setSelectedCommandOption(option);
-  };
-  useEffect(() => {
-    async function getData() {
-      try {
-        const commandes = await fetchData("get", `command/`, {
-          params: {},
-          additionalHeaders: {},
-          body: {},
-        });
-        const commands = commandes?.results?.map((commande) => ({
-          value: commande.id,
-          label:
-            "commande de " +
-            commande?.quantite +
-            " KG ENVOYE LE " +
-            new Date(commande?.date_commande).toLocaleDateString(),
-        }));
-        setListeCommandes(commands);
-      } catch (error) {
-        setError(error);
-        console.error(error);
-      }
-    }
-    getData();
-  }, []);
-
   // Nouveaux états pour identification acheteur
   const [typeAcheteur, setTypeAcheteur] = useState("");
   const [sousTypeAcheteur, setSousTypeAcheteur] = useState("");
   const [acheteurFields, setAcheteurFields] = useState({});
   const [autrePreciser, setAutrePreciser] = useState("");
   const [imageBordereau, setImageBordereau] = useState(null);
-
+  const [numeroFacture, setNumeroFacture] = useState("");
   // Validation des champs obligatoires
   const fieldsToShow = getIdentificationFields(typeAcheteur, sousTypeAcheteur);
   function areRequiredFieldsFilled() {
@@ -93,8 +54,7 @@ function Ventes() {
     }
     if (!typeAcheteur) return false;
     if (typeAcheteur && !sousTypeAcheteur) return false;
-    if (fieldsToShow.some((f) => f.type === "photo") && !imageBordereau)
-      return false;
+    if (fieldsToShow.some((f) => f.type === "photo")) return false;
     return true;
   }
 
@@ -102,7 +62,7 @@ function Ventes() {
   const optionsSousType = {
     private: [
       { label: "Cultivateur individuel", value: "cultivateur" },
-      { label: "BRARUDI", value: "brarudi" },
+      //{ label: "BRARUDI", value: "brarudi" },
       { label: "Entreprise / Société privée", value: "entreprise" },
     ],
     public: [
@@ -231,7 +191,57 @@ function Ventes() {
     if (!/^\d{8}$/.test(num)) return "Numéro invalide (8 chiffres)";
     return null;
   }
+  const Enregistrer = async () => {
+    if (selectedProduct && quantity && price && typeAcheteur) {
+      const formData = new FormData();
 
+      formData.append("quantity_type", selectedProduct || "");
+      formData.append("quantity", quantity || "");
+      formData.append("numero_facture", numeroFacture || "");
+      formData.append("price", price || "");
+      formData.append("type_acheteur", typeAcheteur || "");
+      formData.append("sous_type_acheteur", sousTypeAcheteur || "");
+      formData.append("autre_preciser", autrePreciser || "");
+      formData.append("nom_acheteur", acheteurFields.nom || "");
+      formData.append("telephone_acheteur", acheteurFields.telephone || "");
+      formData.append(
+        "carte_identite_acheteur",
+        acheteurFields.carteIdentite || ""
+      );
+      formData.append("raison_sociale", acheteurFields.raisonSociale || "");
+      formData.append("nif", acheteurFields.nif || "");
+      formData.append("representant", acheteurFields.representant || "");
+      formData.append("nom_institution", acheteurFields.nomInstitution || "");
+      formData.append("fonction_responsable", acheteurFields.fonction || "");
+      formData.append("contact_autre", acheteurFields.contactAutre || "");
+      formData.append("date_sortie", date_sortie || "");
+      formData.append(
+        "numero_bordereau",
+        acheteurFields.numero_bordereau || ""
+      );
+      if (image_facture) formData.append("photo_facture", image_facture);
+      if (imageBordereau) formData.append("image_bordereau", imageBordereau);
+
+      console.log("Form data to submit:", formData);
+      try {
+        const response = await fetchData("post", `/vente_produits/`, {
+          params: {},
+          additionalHeaders: {},
+          body: formData, // Utilisation de FormData ici
+        });
+        if (response === 200) {
+          window.location.reload();
+        } else {
+          setError("Erreur d'enregistrement");
+        }
+      } catch (error) {
+        console.error("Error during submission:", error);
+        setError("Erreur lors de l'enregistrement des données");
+      }
+    } else {
+      setError("Complétez d'abord tous les champs");
+    }
+  };
   return (
     <div className=" p-6 bg-white rounded-2xl   px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]">
       <div>
@@ -239,104 +249,104 @@ function Ventes() {
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
             Ventes des residus resultants de l'unite de transformation
           </h3>
-
-          {/* Identification Acheteur */}
-          <div className="grid grid-cols-1 gap-x-6 gap-y-5 max-w-3xl mb-6">
-            <div className="col-span-1">
-              <Label>Type d'acheteur</Label>
-              <Select
-                options={[
-                  { label: "Secteur privé", value: "private" },
-                  { label: "Institution publique", value: "public" },
-                ]}
-                placeholder="-- Sélectionnez le type d'acheteur --"
-                onChange={setTypeAcheteur}
-                value={typeAcheteur}
-              />
-            </div>
-            {typeAcheteur && (
+          <form action="" encType="multipart/form-data">
+            {/* Identification Acheteur */}
+            <div className="grid grid-cols-1 gap-x-6 gap-y-5 max-w-3xl mb-6">
               <div className="col-span-1">
-                <Label>Catégorie</Label>
+                <Label>Type d'acheteur</Label>
                 <Select
-                  options={optionsSousType[typeAcheteur] || []}
-                  placeholder="-- Sélectionnez la catégorie --"
-                  onChange={setSousTypeAcheteur}
-                  value={sousTypeAcheteur}
+                  options={[
+                    { label: "Secteur privé", value: "private" },
+                    { label: "Institution publique", value: "public" },
+                  ]}
+                  placeholder="-- Sélectionnez le type d'acheteur --"
+                  onChange={setTypeAcheteur}
+                  value={typeAcheteur}
                 />
               </div>
-            )}
-            {/* Champs dynamiques identification */}
-            {fieldsToShow.map((field) => {
-              if (field.type === "photo") {
+              {typeAcheteur && (
+                <div className="col-span-1">
+                  <Label>Catégorie</Label>
+                  <Select
+                    options={optionsSousType[typeAcheteur] || []}
+                    placeholder="-- Sélectionnez la catégorie --"
+                    onChange={setSousTypeAcheteur}
+                    value={sousTypeAcheteur}
+                  />
+                </div>
+              )}
+              {/* Champs dynamiques identification */}
+              {fieldsToShow.map((field) => {
+                if (field.type === "photo") {
+                  return (
+                    <div key={field.key} className="col-span-1">
+                      <Label>{field.label}</Label>
+                      <FileInput
+                        onChange={(e) => {
+                          setImageBordereau(e.target.files[0]);
+                          setAcheteurFields((prev) => ({
+                            ...prev,
+                            [field.key]: e.target.files[0],
+                          }));
+                        }}
+                      />
+                      {imageBordereau && (
+                        <span className="text-xs text-green-600">
+                          Image sélectionnée
+                        </span>
+                      )}
+                    </div>
+                  );
+                }
                 return (
                   <div key={field.key} className="col-span-1">
-                    <Label>{field.label}</Label>
-                    <FileInput
+                    <Label>
+                      {field.label}
+                      {field.required ? " *" : ""}
+                    </Label>
+                    <Input
+                      type={field.type === "phone" ? "tel" : "text"}
+                      placeholder={field.label}
+                      value={acheteurFields[field.key] || ""}
                       onChange={(e) => {
-                        setImageBordereau(e.target.files[0]);
-                        setAcheteurFields((prev) => ({
-                          ...prev,
-                          [field.key]: e.target.files[0],
-                        }));
+                        const txt = e.target.value;
+                        if (field.type === "phone") {
+                          setAcheteurFields((current) => ({
+                            ...current,
+                            [field.key]: txt.replace(/[^0-9]/g, "").slice(0, 8),
+                          }));
+                        } else {
+                          setAcheteurFields((current) => ({
+                            ...current,
+                            [field.key]: txt,
+                          }));
+                        }
                       }}
+                      maxLength={field.type === "phone" ? 8 : undefined}
                     />
-                    {imageBordereau && (
-                      <span className="text-xs text-green-600">
-                        Image sélectionnée
-                      </span>
-                    )}
+                    {field.type === "phone" &&
+                      phoneNumberErrorMsg(acheteurFields[field.key]) && (
+                        <span style={{ color: "red", fontSize: 12 }}>
+                          {phoneNumberErrorMsg(acheteurFields[field.key])}
+                        </span>
+                      )}
                   </div>
                 );
-              }
-              return (
-                <div key={field.key} className="col-span-1">
-                  <Label>
-                    {field.label}
-                    {field.required ? " *" : ""}
-                  </Label>
-                  <Input
-                    type={field.type === "phone" ? "tel" : "text"}
-                    placeholder={field.label}
-                    value={acheteurFields[field.key] || ""}
-                    onChange={(e) => {
-                      const txt = e.target.value;
-                      if (field.type === "phone") {
-                        setAcheteurFields((current) => ({
-                          ...current,
-                          [field.key]: txt.replace(/[^0-9]/g, "").slice(0, 8),
-                        }));
-                      } else {
-                        setAcheteurFields((current) => ({
-                          ...current,
-                          [field.key]: txt,
-                        }));
-                      }
-                    }}
-                    maxLength={field.type === "phone" ? 8 : undefined}
-                  />
-                  {field.type === "phone" &&
-                    phoneNumberErrorMsg(acheteurFields[field.key]) && (
-                      <span style={{ color: "red", fontSize: 12 }}>
-                        {phoneNumberErrorMsg(acheteurFields[field.key])}
-                      </span>
-                    )}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Partie produit/quantité/prix (inchangée) */}
-          <div className="grid grid-cols-1 gap-x-6 gap-y-5 max-w-3xl">
-            <div className="col-span-1">
-              <Label>Produit</Label>
-              <Select
-                options={productOptions}
-                placeholder="Sélectionner le produit"
-                onChange={handleSelectChange}
-                className="dark:bg-dark-900"
-              />
+              })}
             </div>
-            <div className="col-span-1">
+
+            {/* Partie produit/quantité/prix (inchangée) */}
+            <div className="grid grid-cols-1 gap-x-6 gap-y-5 max-w-3xl">
+              <div className="col-span-1">
+                <Label>Produit</Label>
+                <Select
+                  options={productOptions}
+                  placeholder="Sélectionner le produit"
+                  onChange={handleSelectChange}
+                  className="dark:bg-dark-900"
+                />
+              </div>
+              {/* <div className="col-span-1">
               <Label>Commande</Label>
               <Select
                 options={ListeCommandes}
@@ -344,123 +354,122 @@ function Ventes() {
                 onChange={handleSelectCommandChange}
                 className="dark:bg-dark-900 cursor-pointer"
               />
-            </div>
-            {selectedProduct && (
-              <>
-                <div className="col-span-1">
-                  <Label>
-                    Quantité (
-                    {
-                      productOptions.find(
-                        (opt) => opt.value === selectedProduct
-                      )?.label
-                    }
-                    )
-                  </Label>
-                  <Input
-                    type="number"
-                    placeholder={`Quantité de ${
-                      productOptions.find(
-                        (opt) => opt.value === selectedProduct
-                      )?.label
-                    } en kg`}
-                    value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)}
-                  />
-                </div>
-                <div className="col-span-1">
-                  <Label>
-                    Prix (
-                    {
-                      productOptions.find(
-                        (opt) => opt.value === selectedProduct
-                      )?.label
-                    }
-                    )
-                  </Label>
-                  <Input
-                    type="number"
-                    placeholder={`Prix de ${
-                      productOptions.find(
-                        (opt) => opt.value === selectedProduct
-                      )?.label
-                    } en Fbu`}
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                  />
-                </div>
-                <div className="col-span-1">
-                  <Label>
-                    Prix/kg (
-                    {
-                      productOptions.find(
-                        (opt) => opt.value === selectedProduct
-                      )?.label
-                    }
-                    )
-                  </Label>
-                  <Input
-                    type="number"
-                    placeholder={`Prix/kg ${
-                      productOptions.find(
-                        (opt) => opt.value === selectedProduct
-                      )?.label
-                    } en Fbu`}
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                  />
-                </div>
-              </>
-            )}
-
-            <div className="col-span-2 lg:col-span-1">
-              <div className="space-y-6">
-                <div>
-                  <Label>Type d'acheteur</Label>
-                  <div className="relative">
-                    <Select
-                      options={achatType}
-                      placeholder="Selectionner l'acheteur"
-                      onChange={handleSelectChange}
-                      className="dark:bg-dark-900"
+            </div> */}
+              {selectedProduct && (
+                <>
+                  <div className="col-span-1">
+                    <Label>
+                      Quantité (
+                      {
+                        productOptions.find(
+                          (opt) => opt.value === selectedProduct
+                        )?.label
+                      }
+                      )
+                    </Label>
+                    <Input
+                      type="number"
+                      placeholder={`Quantité de ${
+                        productOptions.find(
+                          (opt) => opt.value === selectedProduct
+                        )?.label
+                      } en kg`}
+                      value={quantity}
+                      onChange={(e) => setQuantity(e.target.value)}
                     />
-                    <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-                      <ChevronDownIcon />
-                    </span>
+                  </div>
+
+                  <div className="col-span-1">
+                    <Label>
+                      Prix/kg (
+                      {
+                        productOptions.find(
+                          (opt) => opt.value === selectedProduct
+                        )?.label
+                      }
+                      )
+                    </Label>
+                    <Input
+                      type="number"
+                      placeholder={`Prix/kg ${
+                        productOptions.find(
+                          (opt) => opt.value === selectedProduct
+                        )?.label
+                      } en Fbu`}
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                    />
+                  </div>
+                  <div className="col-span-1">
+                    <Label>
+                      Prix (
+                      {
+                        productOptions.find(
+                          (opt) => opt.value === selectedProduct
+                        )?.label
+                      }
+                      )
+                    </Label>
+                    <Input
+                      type="number"
+                      placeholder={`Prix de ${
+                        productOptions.find(
+                          (opt) => opt.value === selectedProduct
+                        )?.label
+                      } en Fbu`}
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                    />
+                  </div>
+                </>
+              )}
+
+              <div className="col-span-1">
+                <Label>Numero du facture</Label>
+                <Input
+                  onChange={(e) => setNumeroFacture(e.target.value)}
+                  type="number"
+                  placeholder="76545454"
+                />
+              </div>
+              <div className="col-span-1">
+                <Label>Image du facture</Label>
+                <Input
+                  onChange={(e) => setImageFacture(e.target.files[0])}
+                  type="file"
+                  placeholder="76545454"
+                />
+              </div>
+              <div className="col-span-2 lg:col-span-1 z-[9999]">
+                <div className="space-y-6">
+                  <div>
+                    <DatePicker
+                      id="date-sortie"
+                      label="Date de sortie"
+                      placeholder="Sélectionner la date de sortie"
+                      mode="single"
+                      defaultDate={new Date()}
+                      onChange={(dates, currentDateString, e) => {
+                        // Vérifiez si une date a été sélectionnée
+                        if (dates && dates.length > 0) {
+                          const selectedDate = dates[0]; // En supposant que dates est un tableau
+                          const formattedDate = selectedDate
+                            .toISOString()
+                            .split("T")[0]; // Format YYYY-MM-DD
+                          setDateSortie(formattedDate);
+                        }
+                      }}
+                    />
                   </div>
                 </div>
               </div>
             </div>
-
-            <div className="col-span-1">
-              <Label>Téléphone</Label>
-              <Input
-                onChange={(e) => setPhone(e.target.value)}
-                type="number"
-                placeholder="76545454"
-              />
-            </div>
-            <div className="col-span-2 lg:col-span-1 z-[9999]">
-              <div className="space-y-6">
-                <div>
-                  <DatePicker
-                    id="date-sortie"
-                    label="Date de sortie"
-                    placeholder="Sélectionner la date de sortie"
-                    mode="single"
-                    defaultDate={new Date()}
-                    onChange={(dates, currentDateString) => {
-                      // Traiter la date de sortie ici
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
       <div className="flex items-center  w-full gap-3 mt-6 sticky -bottom-8  pt-2">
         <Button
+          onClick={Enregistrer}
           size="sm"
           className="bg-green-500"
           disabled={!areRequiredFieldsFilled()}

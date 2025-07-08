@@ -97,6 +97,7 @@ function QtyReturnedForm({ closeModalDetails, onBack }) {
                 className="dark:bg-dark-900 cursor-pointer"
               />
             </div>
+
             <div className="col-span-1">
               <Label>Quantité farine (blanc)</Label>
               <Input

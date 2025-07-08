@@ -17,7 +17,6 @@ import FilterUserProfile from "../../../../municipal/cultivators/profile/filter_
 import { fetchData } from "../../../../../_utils/api";
 import OutDetails from "../../../../dashboard/brarudi/en_attente/out_details";
 import ConfirmationForm from "../../../../dashboard/brarudi/en_attente/confirmation_form";
-
 function OutListEnatt() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -124,29 +123,159 @@ function OutListEnatt() {
         </h3>
         {/* search */}
         <div className="hidden lg:block">
-          <form>
-            <div className="relative ">
-              <span className="absolute -translate-y-1/2 left-4 top-1/2 pointer-events-none">
-                <svg
-                  className="fill-gray-500 dark:fill-gray-400"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M3.04175 9.37363C3.04175 5.87693 5.87711 3.04199 9.37508 3.04199C12.8731 3.04199 15.7084 5.87693 15.7084 9.37363C15.7084 12.8703 12.8731 15.7053 9.37508 15.7053C5.87711 15.7053 3.04175 12.8703 3.04175 9.37363ZM9.37508 1.54199C5.04902 1.54199 1.54175 5.04817 1.54175 9.37363C1.54175 13.6991 5.04902 17.2053 9.37508 17.2053C11.2674 17.2053 13.003 16.5344 14.357 15.4176L17.177 18.238C17.4699 18.5309 17.9448 18.5309 18.2377 18.238C18.5306 17.9451 18.5306 17.4703 18.2377 17.1774L15.418 14.3573C16.5365 13.0033 17.2084 11.2669 17.2084 9.37363C17.2084 5.04817 13.7011 1.54199 9.37508 1.54199Z"
-                  />
-                </svg>
-              </span>
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder="rechercher  ..."
-                className="dark:bg-dark-900 h-11 w-[250px] rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[250px]"
-              />
+          <form className="flex flex-col">
+            <div className="custom-scrollbar h-max overflow-y-auto px-2 pb-3">
+              <div className="mt-7">
+                <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+                  <div className="col-span-2 lg:col-span-1">
+                    <div className="space-y-6">
+                      <div>
+                        <Label>Province</Label>
+                        <div className="relative">
+                          <Select
+                            options={province}
+                            placeholder="Selectionner province"
+                            onChange={handleSelectProvinceChange}
+                            className="dark:bg-dark-900"
+                          />
+                          <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
+                            <ChevronDownIcon />
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="col-span-2 lg:col-span-1">
+                    <div className="space-y-6">
+                      <div>
+                        <Label>Commune</Label>
+                        <div className="relative">
+                          <Select
+                            options={commune}
+                            placeholder="Selectionner Commune"
+                            onChange={handleSelectCommuneChange}
+                            className="dark:bg-dark-900"
+                          />
+                          <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
+                            <ChevronDownIcon />
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-span-2 lg:col-span-1">
+                    <div className="space-y-6">
+                      <div>
+                        <Label>Zone</Label>
+                        <div className="relative">
+                          <Select
+                            options={zones}
+                            placeholder="Selectionner zone"
+                            onChange={handleSelectZoneChange}
+                            className="dark:bg-dark-900"
+                          />
+                          <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
+                            <ChevronDownIcon />
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-span-2 lg:col-span-1">
+                    <div className="space-y-6">
+                      <div>
+                        <Label>Quantite min achetée</Label>
+                        <div className="relative">
+                          <Input
+                            type="number"
+                            options={quantiteMinAchetee}
+                            placeholder="Quantite min achetée"
+                            onChange={(e) =>
+                              setQuantiteMinAchetee(e.target.value)
+                            }
+                            className="dark:bg-dark-900"
+                          />
+                          <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
+                            <ChevronDownIcon />
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-span-2 lg:col-span-1">
+                    <div className="space-y-6">
+                      <div>
+                        <Label>Quantite max achetée</Label>
+                        <div className="relative">
+                          <Input
+                            type="number"
+                            options={quantiteMaxAchetee}
+                            placeholder="Quantite min achetée"
+                            onChange={(e) =>
+                              setQuantiteMaxAchetee(e.target.value)
+                            }
+                            className="dark:bg-dark-900"
+                          />
+                          <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
+                            <ChevronDownIcon />
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-span-2 lg:col-span-1">
+                    <div className="space-y-6">
+                      <div>
+                        <Label>Quantite min Vendu</Label>
+                        <div className="relative">
+                          <Input
+                            type="number"
+                            options={quantiteMinVendue}
+                            placeholder="Quantite min achetée"
+                            onChange={(e) =>
+                              setQuantiteMinVendue(e.target.value)
+                            }
+                            className="dark:bg-dark-900"
+                          />
+                          <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
+                            <ChevronDownIcon />
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-span-2 lg:col-span-1">
+                    <div className="space-y-6">
+                      <div>
+                        <Label>Quantite max vendu</Label>
+                        <div className="relative">
+                          <Input
+                            type="number"
+                            options={quantiteMaxVendue}
+                            placeholder="Quantite min achetée"
+                            onChange={(e) =>
+                              setQuantiteMaxVendue(e.target.value)
+                            }
+                            className="dark:bg-dark-900"
+                          />
+                          <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
+                            <ChevronDownIcon />
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
+              <Button size="sm" variant="outline" onClick={closeModalFilter}>
+                Fermer
+              </Button>
+              <Button size="sm" onClick={handleFilters}>
+                rechercher
+              </Button>
             </div>
           </form>
         </div>

@@ -5,7 +5,6 @@ import GenderChart from "../../charts/cultuvators/gender";
 import AgeRange from "../../charts/cultuvators/age_range";
 import Cultuvators from "../../charts/cultuvators/cultuvators";
 import NewCultivatorsCharts from "./new_cultivators";
-import BasicTableOne from "../../ui_elements/tables/BasicTableOne";
 import RecentCultivatorsList from "../../ui_elements/tables/dashboard/cultivators/recent_list_cultivators";
 import ActifCultivators from "./actif_cultivators";
 

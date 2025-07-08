@@ -25,23 +25,6 @@ function OutDetails({
   const [ListeCommandes, setListeCommandes] = useState([]);
 
   const [isOpenTransf, setIsModalOpenTansf] = useState(false);
-
-  const tableData = [
-    {
-      id: 1,
-      hangar: "Hangar1",
-      responsable: "Brave",
-      fonction: "DG",
-      phone: "6875425",
-      date: "8/8/2025",
-      categorie_mais: "jaune",
-      motif: "Desangorgement",
-      observation: "RAS observation",
-      prix: "564 556",
-      billet: "/img/billet_example.jpg",
-    },
-  ];
-  const data = tableData[0];
   useEffect(() => {
     async function getData() {
       try {
@@ -79,7 +62,6 @@ function OutDetails({
         setUnites(options);
         setValues(results);
         setListeCommandes(commands);
-        console.log(commands);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -120,7 +102,6 @@ function OutDetails({
           <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6  ">
             Detailles
           </h4>
-
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32">
             <div>
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
@@ -130,7 +111,6 @@ function OutDetails({
                 {values?.nom_hangar}
               </p>
             </div>
-
             <div>
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
                 Responsable

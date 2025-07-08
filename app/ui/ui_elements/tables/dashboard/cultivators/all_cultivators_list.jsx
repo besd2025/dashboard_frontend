@@ -31,6 +31,8 @@ function AllCultivatorsList() {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const user = useContext(UserContext);
+  const [filterData, setFilterData] = useState({});
+  const [searchdata, setSearchData] = useState("");
   console.log(user?.session?.category);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
@@ -76,27 +78,55 @@ function AllCultivatorsList() {
     openModal: openModalFilter,
     closeModal: closeModalFilter,
   } = useModal();
-
+  // Fonction pour gérer la recherche
+  // Cette fonction est appelée à chaque fois que l'utilisateur tape dans le champ de recherche
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchData(value);
+  };
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData("get", "/cultivators/", {
-          params: {
-            offset: pointer,
-            limit: limit,
-          },
-        });
+        let results;
+
+        if (filterData && Object.keys(filterData).length > 0) {
+          // Si des filtres sont appliqués, construire dynamiquement les paramètres
+          results = await fetchData("get", "/cultivators/", {
+            params: {
+              province_name: filterData.province,
+              commune_name: filterData.commune,
+              zone_name: filterData.zone,
+              colline_name: filterData.colline,
+              age_min: filterData.ageMin,
+              age_max: filterData.ageMax,
+              created_at_min: filterData.dateFrom,
+              created_at_max: filterData.dateTo,
+              search: searchdata,
+              offset: pointer,
+              limit: limit,
+            },
+          });
+        } else {
+          // Sinon, récupération simple sans filtres
+          results = await fetchData("get", "/cultivators/", {
+            params: {
+              search: searchdata,
+              offset: pointer,
+              limit: limit,
+            },
+          });
+        }
 
         setData(results.results);
-        setTotalCount(results.count); // si l'API retourne un `count` total
+        setTotalCount(results.count);
+        console.log(results.results);
       } catch (error) {
         setError(error);
         console.error(error);
       }
     }
-
     getData();
-  }, [pointer]); // ← relance quand `pointer` change
+  }, [pointer, filterData, searchdata]);
 
   const totalPages = Math.ceil(totalCount / limit);
   const onPageChange = (pageNumber) => {
@@ -172,7 +202,9 @@ function AllCultivatorsList() {
 
   const [id1, getId] = useState(undefined ? "default" : 0);
   console.log(id1);
-
+  const handleFilter = (filterData) => {
+    setFilterData(filterData);
+  };
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
@@ -199,6 +231,7 @@ function AllCultivatorsList() {
                 </svg>
               </span>
               <input
+                onChange={handleSearch}
                 ref={inputRef}
                 type="text"
                 placeholder="rechercher  ..."
@@ -480,7 +513,10 @@ function AllCultivatorsList() {
         onClose={closeModalFilter}
         className="max-w-[700px] m-4"
       >
-        <FilterUserProfile />
+        <FilterUserProfile
+          handleFilter={handleFilter}
+          closeModalFilter={closeModalFilter}
+        />
       </Modal>
 
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">

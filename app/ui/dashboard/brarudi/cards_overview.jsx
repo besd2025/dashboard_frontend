@@ -7,6 +7,7 @@ export default function CardsOverview() {
   const [gaptotal, setGapTotat] = useState([]);
   const [quantite_total_achat, setQuantiteTotalAchete] = useState(0);
   const [total_quantite_vendu, setTotalVendu] = useState([]);
+
   const [error, setError] = useState(null);
   useEffect(() => {
     async function getData() {
@@ -30,7 +31,6 @@ export default function CardsOverview() {
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-18 md:gap-6">
       {/* <!-- Metric Item Start quantity collected --> */}
-
       <div className="rounded-2xl col-span-6 flex flex-row justify-between border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div>
           <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
@@ -73,7 +73,7 @@ export default function CardsOverview() {
                       data?.totaux?.total_quantite_approuvee +
                       data?.totaux?.total_quantite_non_approuvee
                     )?.toLocaleString("fr-FR") || 0}{" "}
-                    <span className="text-sm">KG</span>
+                    <span className="text-sm">Kg</span>
                   </>
                 )}
               </h4>
@@ -120,7 +120,7 @@ export default function CardsOverview() {
                     {data?.totaux?.total_quantite_approuvee?.toLocaleString(
                       "fr-FR"
                     ) || 0}{" "}
-                    <span className="text-sm">KG</span>
+                    <span className="text-sm">Kg</span>
                   </>
                 )}
               </h4>
@@ -159,7 +159,7 @@ export default function CardsOverview() {
                     {data?.totaux?.total_quantite_non_approuvee?.toLocaleString(
                       "fr-FR"
                     ) || 0}{" "}
-                    <span className="text-sm">KG</span>
+                    <span className="text-sm">Kg</span>
                   </>
                 )}
               </h4>
@@ -242,7 +242,7 @@ export default function CardsOverview() {
                 ) : (
                   <>
                     {data?.achats?.achats_blanc?.toLocaleString("fr-FR") || 0}{" "}
-                    <span className="text-sm">KG</span>
+                    <span className="text-sm">Kg</span>
                   </>
                 )}
               </h4>
@@ -280,7 +280,7 @@ export default function CardsOverview() {
                 ) : (
                   <>
                     {data?.achats?.achats_jaune?.toLocaleString("fr-FR") || 0}{" "}
-                    <span className="text-sm">KG</span>
+                    <span className="text-sm">Kg</span>
                   </>
                 )}
               </h4>

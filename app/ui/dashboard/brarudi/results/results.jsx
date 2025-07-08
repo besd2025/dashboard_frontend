@@ -83,18 +83,6 @@ export default function Results({ invoiceId, from, to, products, vatRate }) {
               </table>
             </div>
           </div>
-
-          //   <div className="pb-6 my-6 text-right border-b border-gray-100 dark:border-gray-800">
-          //     <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-          //       Sub Total amount: ${subTotal.toFixed(2)}
-          //     </p>
-          //     <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">
-          //       Vat ({vatRate * 100}%): ${vat.toFixed(2)}
-          //     </p>
-          //     <p className="text-lg font-semibold text-gray-800 dark:text-white/90">
-          //       Total : ${total.toFixed(2)}
-          //     </p>
-          //   </div>
         )}
 
         <div

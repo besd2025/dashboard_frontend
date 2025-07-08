@@ -28,6 +28,7 @@ function OutListValide() {
   const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
   const [quantite_total, setQuantiteTotal] = useState(0);
+  const [idSortie, setIdSortie] = useState(0);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -382,6 +383,7 @@ function OutListValide() {
                           onItemClick={() => {
                             closeDropdown(order.id);
                             openModalDetails();
+                            setIdSortie(order?.id);
                           }}
                           tag="a"
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
@@ -439,7 +441,7 @@ function OutListValide() {
                         {order?.sortie?.quantity_blanc?.toLocaleString(
                           "fr-FR"
                         ) || 0}{" "}
-                        <span className="text-sm">KG</span>
+                        <span className="text-sm">Kg</span>
                       </>
                     )}
                   </TableCell>
@@ -456,7 +458,7 @@ function OutListValide() {
                         {order?.sortie?.quantity_jaune?.toLocaleString(
                           "fr-FR"
                         ) || 0}{" "}
-                        <span className="text-sm">KG</span>
+                        <span className="text-sm">Kg</span>
                       </>
                     )}
                   </TableCell>
@@ -478,7 +480,7 @@ function OutListValide() {
                           order?.sortie?.quantity_blanc +
                           order?.sortie?.quantity_jaune
                         )?.toLocaleString("fr-FR") || 0}{" "}
-                        <span className="text-sm">KG</span>
+                        <span className="text-sm">Kg</span>
                       </>
                     )}
                   </TableCell>
@@ -516,7 +518,11 @@ function OutListValide() {
         }}
         className="max-w-[700px] m-4"
       >
-        <OutDetails closeModalDetails={closeModalDetails} validated={true} />
+        <OutDetails
+          closeModalDetails={closeModalDetails}
+          validated={true}
+          idSortie={idSortie}
+        />
       </Modal>
       <Modal
         isOpen={isOpenResults}

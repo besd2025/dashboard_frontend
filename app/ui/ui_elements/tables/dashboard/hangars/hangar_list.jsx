@@ -32,6 +32,8 @@ function AllCultivatorsList() {
   const limit = 5; // nombre par page
   const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
+  const [filterData, setFilterData] = useState({});
+  console.log(filterData);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -51,16 +53,8 @@ function AllCultivatorsList() {
     }));
   }
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
-  const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
   const inputRef = useRef(null);
-
-  const handleToggle = () => {
-    if (window.innerWidth >= 1024) {
-      toggleSidebar();
-    } else {
-      toggleMobileSidebar();
-    }
-  };
+  const [searchData, setSearchData] = useState("");
 
   const toggleApplicationMenu = () => {
     setApplicationMenuOpen(!isApplicationMenuOpen);
@@ -88,13 +82,32 @@ function AllCultivatorsList() {
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData("get", "/hangars/", {
-          params: {
-            offset: pointer,
-            limit: limit,
-          },
-        });
+        let results;
 
+        if (filterData && Object.keys(filterData).length > 0) {
+          results = await fetchData("get", "/hangars/", {
+            params: {
+              province: filterData.province,
+              commune: filterData.commune,
+              zone: filterData.zone,
+              min_quantity_achete: filterData.QtMinAchetee,
+              max_quantity_achete: filterData.QtMaxAchete,
+              min_quantity_vendu: filterData.QtMinVendue,
+              max_quantity_vendu: filterData.QtMaxVendue,
+              search: searchData,
+              offset: pointer,
+              limit: limit,
+            },
+          });
+        } else {
+          results = await fetchData("get", "/hangars/", {
+            params: {
+              search: searchData,
+              offset: pointer,
+              limit: limit,
+            },
+          });
+        }
         setData(results.results);
         setTotalCount(results.count); // si l'API retourne un `count` total
       } catch (error) {
@@ -104,7 +117,7 @@ function AllCultivatorsList() {
     }
 
     getData();
-  }, [pointer]); // ← relance quand `pointer` change
+  }, [pointer, filterData, searchData]); // ← relance quand `pointer` change
 
   const totalPages = Math.ceil(totalCount / limit);
 
@@ -175,6 +188,9 @@ function AllCultivatorsList() {
       console.error("Erreur exportation Excel :", error);
     }
   };
+  const handleFilter = (filterData) => {
+    setFilterData(filterData);
+  };
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
@@ -201,6 +217,7 @@ function AllCultivatorsList() {
                 </svg>
               </span>
               <input
+                onChange={(e) => setSearchData(e.target.value)}
                 ref={inputRef}
                 type="text"
                 placeholder="rechercher  ..."
@@ -482,7 +499,10 @@ function AllCultivatorsList() {
         onClose={closeModalFilter}
         className="max-w-[700px] m-4"
       >
-        <FilterHangarList />
+        <FilterHangarList
+          handleDatahangarsFilter={handleFilter}
+          closeModalFilter={closeModalFilter}
+        />
       </Modal>
 
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
