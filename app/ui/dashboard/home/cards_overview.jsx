@@ -103,13 +103,16 @@ export default function CardsOverview() {
               <h4 className="mt-2 font-semibold text-gray-800 text-xl dark:text-white/90">
                 {quantite_total_achat >= 1000 ? (
                   <>
-                    {(quantite_total_achat / 1000).toLocaleString("de-DE")}{" "}
+                    {(quantite_total_achat / 1000).toLocaleString("de-DE", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
                     {quantite_total_achat?.toLocaleString("fr-FR") || 0}{" "}
-                    <span className="text-sm">KG</span>
+                    <span className="text-sm">Kg</span>
                   </>
                 )}
               </h4>
@@ -147,14 +150,18 @@ export default function CardsOverview() {
                 {data?.achats?.achats_blanc >= 1000 ? (
                   <>
                     {(data?.achats?.achats_blanc / 1000).toLocaleString(
-                      "de-DE"
+                      "de-DE",
+                      {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }
                     )}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
                     {data?.achats?.achats_blanc?.toLocaleString("fr-FR") || 0}{" "}
-                    <span className="text-sm">KG</span>
+                    <span className="text-sm">Kg</span>
                   </>
                 )}
               </h4>
@@ -184,14 +191,18 @@ export default function CardsOverview() {
                 {data?.achats?.achats_jaune >= 1000 ? (
                   <>
                     {(data?.achats?.achats_jaune / 1000).toLocaleString(
-                      "de-DE"
+                      "de-DE",
+                      {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }
                     )}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
                     {data?.achats?.achats_jaune?.toLocaleString("fr-FR") || 0}{" "}
-                    <span className="text-sm">KG</span>
+                    <span className="text-sm">Kg</span>
                   </>
                 )}
               </h4>
@@ -228,17 +239,20 @@ export default function CardsOverview() {
                 Qté Vendue
               </span>
               <h4 className="mt-2 font-bold text-gray-800 text-xl dark:text-white/90">
-                {total_quantite_vendu >= 1000
-                  ? `${
-                      (quantite_vendu / 1000).toLocaleString("fr-FR", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      }) || 0
-                    } `
-                  : `${quantite_vendu?.toLocaleString("de-DE") || 0} `}
-                <span className="text-sm">
-                  {quantite_vendu >= 1000 ? "T" : "KG"}
-                </span>
+                {quantite_vendu >= 1000 ? (
+                  <>
+                    {(quantite_vendu / 1000).toLocaleString("de-DE", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {quantite_vendu.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">Kg</span>
+                  </>
+                )}
               </h4>
             </div>
           </div>
@@ -270,14 +284,18 @@ export default function CardsOverview() {
                 {data?.sorties?.sorties_blanc >= 1000 ? (
                   <>
                     {(data?.sorties?.sorties_blanc / 1000).toLocaleString(
-                      "de-DE"
+                      "de-DE",
+                      {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }
                     )}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
                     {data?.sorties?.sorties_blanc?.toLocaleString("fr-FR") || 0}{" "}
-                    <span className="text-sm">KG</span>
+                    <span className="text-sm">Kg</span>
                   </>
                 )}
               </h4>
@@ -307,14 +325,18 @@ export default function CardsOverview() {
                 {data?.sorties?.sorties_jaune >= 1000 ? (
                   <>
                     {(data?.sorties?.sorties_jaune / 1000).toLocaleString(
-                      "de-DE"
+                      "de-DE",
+                      {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }
                     )}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
                     {data?.sorties?.sorties_jaune?.toLocaleString("fr-FR") || 0}{" "}
-                    <span className="text-sm">KG</span>
+                    <span className="text-sm">Kg</span>
                   </>
                 )}
               </h4>
@@ -352,7 +374,11 @@ export default function CardsOverview() {
                     total_quantite_vendu.somme_total_price / 1000000
                   ).toLocaleString("de-DE") + " M"
                 : total_quantite_vendu?.somme_total_price?.toLocaleString(
-                    "de-DE"
+                    "de-DE",
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }
                   )}
               <span className="text-sm"> FBU</span>
             </h4>

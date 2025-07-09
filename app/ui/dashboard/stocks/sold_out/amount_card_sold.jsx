@@ -1,28 +1,31 @@
-"use client"
-import React,{useState,useEffect} from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import { fetchData } from "../../../../_utils/api";
 function AmountCardSold() {
-      const [data, setData] = useState([]);
-      const [error, setError] = useState(null);
-      useEffect(() => {
-        async function getData() {
-          try {
-    
-            const results = await fetchData('get', 'sorties/somme_totale_sorties/', {
-              params: {},
-              additionalHeaders: {},
-              body: {}
-            });
-    
-            setData(results);
-            console.log(results)
-          } catch (error) {
-            setError(error);
-            console.error(error);
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData(
+          "get",
+          "sorties/somme_totale_sorties/",
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
           }
-        }
-        getData();
-      }, []);
+        );
+
+        setData(results);
+        console.log(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
       <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
@@ -49,7 +52,14 @@ function AmountCardSold() {
             Montant total des ventes
           </span>
           <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
-          {data?.somme_total_price||0} <span className="text-sm">FBU</span>
+            {data?.somme_total_price > 1000000
+              ? (data?.somme_total_price / 1000000).toLocaleString("de-DE") +
+                " M"
+              : data?.somme_total_price?.toLocaleString("de-DE", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+            <span className="text-sm"> FBU</span>
           </h4>
         </div>
         {/* <Badge color="success">

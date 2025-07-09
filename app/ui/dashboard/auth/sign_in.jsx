@@ -113,7 +113,7 @@ export default function SignInForm() {
             <div className="space-y-6">
               <div>
                 <Label>
-                  Nom utilisateur <span className="text-error-500">*</span>
+                  Identifiant <span className="text-error-500">*</span>
                 </Label>
                 <Input
                   placeholder="Nom d'utilisateur"

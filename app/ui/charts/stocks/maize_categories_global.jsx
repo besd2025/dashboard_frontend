@@ -46,9 +46,20 @@ function MaizeCategoriesCard() {
           </div>
 
           <h4 className=" font-semibold text-gray-800 text-xl dark:text-white/90">
-            {data?.blanc >= 1000
-              ? `${data?.blanc / 1000} T`
-              : `${data?.blanc} kg`}
+            {data?.blanc && data?.blanc >= 1000 ? (
+              <>
+                {(data?.blanc / 1000)?.toLocaleString("de-DE", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}{" "}
+                <span className="text-sm">T</span>
+              </>
+            ) : (
+              <>
+                {(data?.blanc && data?.blanc?.toLocaleString("fr-FR")) || 0}{" "}
+                <span className="text-sm">Kg</span>
+              </>
+            )}
           </h4>
         </div>
       </div>
@@ -73,9 +84,20 @@ function MaizeCategoriesCard() {
           </div>
 
           <h4 className=" font-semibold text-yellow-600 text-xl dark:text-white/90">
-            {data?.jaune >= 1000
-              ? `${data?.jaune / 1000} T`
-              : `${data?.jaune} kg`}
+            {data?.jaune && data?.jaune >= 1000 ? (
+              <>
+                {(data?.jaune / 1000)?.toLocaleString("de-DE", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}{" "}
+                <span className="text-sm">T</span>
+              </>
+            ) : (
+              <>
+                {(data?.jaune && data?.jaune?.toLocaleString("fr-FR")) || 0}{" "}
+                <span className="text-sm">Kg</span>
+              </>
+            )}
           </h4>
         </div>
       </div>
