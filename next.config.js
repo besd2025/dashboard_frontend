@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["192.168.88.243"],
+    domains: [process.env.NEXT_PUBLIC_IMAGE_DOMAIN],
 
     // remotePatterns: [
     //   {

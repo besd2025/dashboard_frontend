@@ -22,21 +22,6 @@ function FilterUserProfile({ handleFilter, closeModalFilter }) {
   const [selectedCommune, setSelectedCommune] = useState("");
   const [selectedZone, setSelectedZone] = useState("");
   const [selectedColline, setSelectedColline] = useState("");
-  const [FormData, setFormData] = useState([]);
-  const handleRadioChangeStatus = (value) => {
-    setSelectedStatus(value);
-  };
-
-  const optionProvince = [
-    { value: "Bujumbura", label: "Bujumbura" },
-    { value: "Kayanza", label: "Kayanza" },
-    { value: "Ngozi", label: "Ngozi" },
-  ];
-  const optionCommune = [
-    { value: "Rango", label: "Rango" },
-    { value: "Butanganzwa", label: "Butanganzwa" },
-    { value: "Matongo", label: "Matongo" },
-  ];
 
   const handleSelectProvinceChange = async (value) => {
     //console.log("Selected value:", value);
@@ -45,7 +30,7 @@ function FilterUserProfile({ handleFilter, closeModalFilter }) {
       return;
     }
     const communes = await fetchData("get", `adress/commune/`, {
-      params: {},
+      params: { province: value },
       additionalHeaders: {},
       body: {},
     });
@@ -62,7 +47,7 @@ function FilterUserProfile({ handleFilter, closeModalFilter }) {
       return;
     }
     const zones = await fetchData("get", `adress/zone/`, {
-      params: {},
+      params: { commune: value },
       additionalHeaders: {},
       body: {},
     });
