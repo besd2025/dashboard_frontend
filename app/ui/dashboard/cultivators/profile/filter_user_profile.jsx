@@ -29,12 +29,16 @@ function FilterUserProfile({ handleFilter, closeModalFilter }) {
       setCommune([]);
       return;
     }
-    const communes = await fetchData("get", `adress/commune/`, {
-      params: { province: value },
-      additionalHeaders: {},
-      body: {},
-    });
-    const options = communes?.results?.map((item) => ({
+    const communes = await fetchData(
+      "get",
+      `adress/commune/get_communes_by_province`,
+      {
+        params: { province: value },
+        additionalHeaders: {},
+        body: {},
+      }
+    );
+    const options = communes?.map((item) => ({
       value: item.commune_name,
       label: item.commune_name,
     }));
@@ -46,12 +50,12 @@ function FilterUserProfile({ handleFilter, closeModalFilter }) {
       setCommune([]);
       return;
     }
-    const zones = await fetchData("get", `adress/zone/`, {
+    const zones = await fetchData("get", `adress/zone/get_zones_by_commune/`, {
       params: { commune: value },
       additionalHeaders: {},
       body: {},
     });
-    const options = zones?.results?.map((item) => ({
+    const options = zones?.map((item) => ({
       value: item.zone_name,
       label: item.zone_name,
     }));
@@ -83,7 +87,10 @@ function FilterUserProfile({ handleFilter, closeModalFilter }) {
     async function getData() {
       try {
         const provinces = await fetchData("get", `adress/province/`, {
-          params: {},
+          params: {
+            offset: 0,
+            limit: 18,
+          },
           additionalHeaders: {},
           body: {},
         });

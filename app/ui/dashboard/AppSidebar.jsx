@@ -94,19 +94,6 @@ const navItems = [
   },
 ];
 
-// const othersItems = [
-//   {
-//     icon: <UserLineIcon />,
-//     name: "Role",
-//     path: "/dashboard/stocks",
-//     subItems: [
-//       { name: "Communale", path: "/municipal/cultivators" },
-//       { name: "Provinciale", path: "/provincial/cultivators" },
-//       { name: "Regionale", path: "/regional/cultivators" },
-//     ],
-//   },
-// ];
-
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const pathname = usePathname();
@@ -239,23 +226,6 @@ const AppSidebar = () => {
     </ul>
   );
 
-  // useEffect(() => {
-  //   let matched = false;
-  //   ["main", "others"].forEach((type) => {
-  //     const items = type === "main" ? navItems : othersItems;
-  //     items.forEach((nav, index) => {
-  //       if (
-  //         isPathActive(nav) ||
-  //         nav.subItems?.some((subItem) => isPathActive(subItem))
-  //       ) {
-  //         setOpenSubmenu({ type, index });
-  //         matched = true;
-  //       }
-  //     });
-  //   });
-  //   if (!matched) setOpenSubmenu(null);
-  // }, [pathname, isPathActive]);
-
   useEffect(() => {
     if (openSubmenu !== null) {
       const key = `${openSubmenu.type}-${openSubmenu.index}`;
@@ -289,7 +259,7 @@ const AppSidebar = () => {
           !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
         }`}
       >
-        <Link href="/">
+        <Link href="/dashboard/home">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <Image

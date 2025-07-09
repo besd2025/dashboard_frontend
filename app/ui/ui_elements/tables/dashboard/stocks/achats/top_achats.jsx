@@ -27,6 +27,7 @@ export default function TopAchat() {
         });
 
         setData(results);
+        console.log("Top achats data:", results);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -77,7 +78,7 @@ export default function TopAchat() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Qte
+                  Qte TOTAL
                 </TableCell>
                 <TableCell
                   isHeader
@@ -97,7 +98,7 @@ export default function TopAchat() {
                 >
                   Prix
                 </TableCell>
-                <TableCell
+                {/* <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
@@ -108,7 +109,7 @@ export default function TopAchat() {
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
                   Commune
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             </TableHeader>
 
@@ -166,7 +167,48 @@ export default function TopAchat() {
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.quantity}
+                    {order?.quantity_blanc + order?.quantity_jaune >= 1000 ? (
+                      <>
+                        {(
+                          (order?.quantity_blanc + order?.quantity_jaune) /
+                          1000
+                        ).toLocaleString("de-DE")}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {(
+                          order?.quantity_blanc + order?.quantity_jaune
+                        )?.toLocaleString("fr-FR") || 0}{" "}
+                        <span className="text-sm">Kg</span>
+                      </>
+                    )}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {order?.quantity_blanc >= 1000 ? (
+                      <>
+                        {(order?.quantity_blanc / 1000).toLocaleString("de-DE")}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {order?.quantity_blanc?.toLocaleString("fr-FR") || 0}{" "}
+                        <span className="text-sm">Kg</span>
+                      </>
+                    )}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {order?.quantity_jaune >= 1000 ? (
+                      <>
+                        {(order?.quantity_jaune / 1000).toLocaleString("de-DE")}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {order?.quantity_jaune?.toLocaleString("fr-FR") || 0}{" "}
+                        <span className="text-sm">Kg</span>
+                      </>
+                    )}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {order.total_price}

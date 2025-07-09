@@ -109,6 +109,7 @@ function AllCultivatorsList() {
           });
         }
         setData(results.results);
+        console.log("Hangars data:", results.results);
         setTotalCount(results.count); // si l'API retourne un `count` total
       } catch (error) {
         setError(error);

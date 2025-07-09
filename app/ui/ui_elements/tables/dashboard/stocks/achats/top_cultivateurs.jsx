@@ -143,11 +143,11 @@ export default function TopCultivateurs() {
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">
-                        {order?.cultivator_photo == null ? (
+                        {order?.cultivator?.cultivator_photo ? (
                           <Image
                             width={80}
                             height={80}
-                            src={order?.cultivator?.cultivator_photo}
+                            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${order?.cultivator?.cultivator_photo}`}
                             alt="user"
                           />
                         ) : (
@@ -171,7 +171,17 @@ export default function TopCultivateurs() {
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.total_quantity}
+                    {order?.total_quantity >= 1000 ? (
+                      <>
+                        {(order?.total_quantity / 1000).toLocaleString("de-DE")}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {order?.total_quantity?.toLocaleString("fr-FR") || 0}{" "}
+                        <span className="text-sm">Kg</span>
+                      </>
+                    )}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {

@@ -181,7 +181,17 @@ export default function TopSoldOut() {
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.kg}
+                    {order?.kg >= 1000 ? (
+                      <>
+                        {(order?.kg / 1000).toLocaleString("de-DE")}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {order?.kg?.toLocaleString("fr-FR") || 0}{" "}
+                        <span className="text-sm">Kg</span>
+                      </>
+                    )}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {order.Prix}
