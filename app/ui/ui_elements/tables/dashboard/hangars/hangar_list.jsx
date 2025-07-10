@@ -170,7 +170,7 @@ function AllCultivatorsList() {
         total_recus: item.total_recus || "",
         created_at: item.created_at || "",
       }));
-
+      console.log("Formatted data for Excel:", formattedData);
       const worksheet = XLSX.utils.json_to_sheet(formattedData);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "hangars");
