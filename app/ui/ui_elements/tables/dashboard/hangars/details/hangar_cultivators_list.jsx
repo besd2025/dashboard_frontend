@@ -95,6 +95,7 @@ function HangarCultivatorsList({ hangar_id }) {
         );
 
         setData(results);
+        console.log(results);
         setTotalCount(results.length); // si l'API retourne un `count` total
       } catch (error) {
         setError(error);
@@ -121,33 +122,30 @@ function HangarCultivatorsList({ hangar_id }) {
     try {
       // Charger toutes les données par pagination
       while (hasMore) {
-        const response = await fetchData(
-          "get",
-          `hangars/${hangar_id}/cultivateurs/`,
-          {
-            params: {
-              offset: pointer,
-              limit: limit,
-            },
-          }
-        );
-        if (response?.count > 0) {
-          const currentData = response;
+        const response = await fetchData("get", "/cultivators/", {
+          params: {
+            offset: pointer,
+            limit: limit,
+          },
+        });
 
-          if (currentData?.length === 0) break;
+        const currentData = response.results;
 
-          allData = [...allData, ...currentData];
-          pointer += limit;
+        if (currentData.length === 0) break;
 
-          // S'arrêter si on a atteint toutes les données
-          if (pointer >= response?.count) {
-            hasMore = false;
-          }
+        allData = [...allData, ...currentData];
+        pointer += limit;
+
+        // S'arrêter si on a atteint toutes les données
+        if (pointer >= response.count) {
+          hasMore = false;
         }
+      }
 
-        if (allData.length === 0) return;
+      if (allData.length === 0) return;
 
-        const formattedData = allData.map((item) => ({
+      const formattedData = allData.map((item) => {
+        const formattedItem = {
           Nom: item.cultivator_first_name || "",
           Prénom: item.cultivator_last_name || "",
           Genre: item.cultivator_gender || "",
@@ -160,24 +158,53 @@ function HangarCultivatorsList({ hangar_id }) {
             item.cultivator_adress?.zone_code?.commune_code?.commune_name || "",
           Zone: item.cultivator_adress?.zone_code?.zone_name || "",
           Colline: item.cultivator_adress?.colline_name || "",
-          created_at: item.created_at || "",
-        }));
+          Hangar: item?.collector?.hangar?.hangar_name || "",
+          quantité_total: item?.total_quantite || 0,
+          quantité_mais_blanc: item?.total_blanc || 0,
+          quantité_mais_jaune: item?.total_jaune || 0,
+        };
 
-        const worksheet = XLSX.utils.json_to_sheet(formattedData);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Cultivateurs");
+        if (item?.cultivator_bank_name) {
+          // Cas Banque ou Microfinance : on ignore mobile money
+          formattedItem.mode_payement = "BANQUE OU MICROFINANCE";
+          formattedItem.Banque_ou_microfinance = item?.cultivator_bank_name;
+          formattedItem.Numero_compte = item?.cultivator_bank_account || "";
+        } else if (item?.cultivator_mobile_payment) {
+          // Cas Mobile Money uniquement si pas de banque
+          formattedItem.mode_payement = "MOBILE MONEY";
+          if (item?.cultivator_mobile_payment?.toString().slice(0, 1) == "6") {
+            formattedItem.nom_service = "LUMICASH";
+          } else if (
+            item?.cultivator_mobile_payment?.toString().slice(0, 1) == "7"
+          ) {
+            formattedItem.nom_service = "ECOCASH";
+            formattedItem.Numero_de_telephone_de_payement =
+              item?.cultivator_mobile_payment || "";
+            formattedItem.date_enregistrement = item.created_at || "";
+          }
+        } else {
+          formattedItem.mode_payement = "";
+        }
 
-        const excelBuffer = XLSX.write(workbook, {
-          bookType: "xlsx",
-          type: "array",
-        });
+        // Date en dernier
 
-        const blob = new Blob([excelBuffer], {
-          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
-        });
+        return formattedItem;
+      });
 
-        saveAs(blob, "cultivators.xlsx");
-      }
+      const worksheet = XLSX.utils.json_to_sheet(formattedData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Cultivateurs");
+
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      const blob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+      });
+
+      saveAs(blob, "cultivators.xlsx");
     } catch (error) {
       console.error("Erreur exportation Excel :", error);
     }
@@ -361,7 +388,19 @@ function HangarCultivatorsList({ hangar_id }) {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Status
+                  Zone
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Colline
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Quantite
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -413,7 +452,10 @@ function HangarCultivatorsList({ hangar_id }) {
                           <Image
                             width={80}
                             height={80}
-                            src={order?.cultivator_photo}
+                            src={
+                              process.env.NEXT_PUBLIC_IMAGE_URL +
+                              order?.cultivator_photo
+                            }
                             alt="user"
                           />
                         ) : (
@@ -448,7 +490,7 @@ function HangarCultivatorsList({ hangar_id }) {
                         ?.commune_name
                     }
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <Badge
                       size="sm"
                       color={
@@ -461,6 +503,33 @@ function HangarCultivatorsList({ hangar_id }) {
                     >
                       {order.status}
                     </Badge>
+                  </TableCell> */}
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order?.cultivator_adress?.zone_code?.zone_name}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order?.cultivator_adress?.colline_name}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order?.total_quantite && order.total_quantite >= 1000 ? (
+                      <>
+                        {(order.total_quantite / 1000)?.toLocaleString(
+                          "de-DE",
+                          {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          }
+                        )}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {(order.total_quantite &&
+                          order.total_quantite?.toLocaleString("fr-FR")) ||
+                          0}{" "}
+                        <span className="text-sm">Kg</span>
+                      </>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

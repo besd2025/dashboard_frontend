@@ -1,12 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  BoxIconLine,
-  GroupIcon,
-} from "../../icons";
-import Badge from "../../ui_elements/badge/Badge";
 import { fetchData } from "../../../_utils/api";
 export default function CardsOverview() {
   const [data, setData] = useState([]);

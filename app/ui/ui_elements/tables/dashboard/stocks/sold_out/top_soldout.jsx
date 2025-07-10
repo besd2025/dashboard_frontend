@@ -59,8 +59,6 @@ export default function TopSoldOut() {
     }));
   }
 
-  const { isOpen, openModal, closeModal } = useModal();
-
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
       <div className="flex items-center justify-between mb-4">
@@ -68,7 +66,7 @@ export default function TopSoldOut() {
           Top ventes
         </h3>
         <Link
-          href="/dashboard/stocks/sold_out/list"
+          href="/dashboard/hangars"
           className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
         >
           voir tous

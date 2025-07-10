@@ -7,13 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from "../../table_elemets";
-
-import Image from "next/image";
-
-import { useSidebar } from "../../../../context/SidebarContext";
 import EditUserProfile from "../../../../dashboard/cultivators/profile/edit_user_profile";
 import FilterHangarList from "../../../../dashboard/hangars/filter_hangar_list";
-import { create } from "domain";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import Pagination from "../../Pagination";
@@ -162,13 +157,21 @@ function AllCultivatorsList() {
         Hangar_name: item.hangar_name || "",
         code: item.hangar_code || "",
         Province: item.province || "",
-        Commune: item.commine || "",
+        Commune: item.commune || "",
         Zone: item.zone || "",
-        total_achats: item.total_achats || "",
-        total_ventes: item.total_ventes || "",
-        total_transferes: item.total_transferes || "",
-        total_recus: item.total_recus || "",
-        created_at: item.created_at || "",
+        total_achats: item.total_achats || 0,
+        quantité_mais_blanc_achat: item?.quantite_blanc_achete || 0,
+        quantité_mais_jaune_achat: item?.quantite_jaune_achete || 0,
+        total_ventes: item.total_ventes || 0,
+        quantité_mais_blanc_vendu: item?.quantite_blanc_vendue || 0,
+        quantité_mais_jaune_vendu: item?.quantite_jaune_vendue || 0,
+        total_transferes: item?.total_transferes || 0,
+        quantité_mais_blanc_transfere: item?.quantite_blanc_transfere || 0,
+        quantité_mais_jaune_transfere: item?.quantite_jaune_transfere || 0,
+        total_recus: item?.total_recus || 0,
+        quantité_mais_blanc_recu: item?.quantite_blanc_recu || 0,
+        quantité_mais_jaune_recu: item?.quantite_jaune_recu || 0,
+        created_at: item?.created_at || "",
       }));
       console.log("Formatted data for Excel:", formattedData);
       const worksheet = XLSX.utils.json_to_sheet(formattedData);
@@ -455,16 +458,64 @@ function AllCultivatorsList() {
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.total_achats}
+                    {order?.total_achats && order?.total_achats >= 1000 ? (
+                      <>
+                        {(order?.total_achats / 1000)?.toLocaleString("de-DE", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {(order?.total_achats &&
+                          order?.total_achats?.toLocaleString("fr-FR")) ||
+                          0}{" "}
+                        <span className="text-sm">Kg</span>
+                      </>
+                    )}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.total_achats_price}
+                    {order?.total_achats_price &&
+                    order?.total_achats_price > 1000000
+                      ? (order.total_achats_price / 1000000).toLocaleString(
+                          "de-DE"
+                        ) + " M"
+                      : order.total_achats_price?.toLocaleString("de-DE", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }) || 0}
+                    <span className="text-sm"> FBU</span>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.total_ventes}
+                    {order?.total_ventes && order.total_ventes >= 1000 ? (
+                      <>
+                        {(order.total_ventes / 1000)?.toLocaleString("de-DE", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {(order.total_ventes &&
+                          order.total_ventes?.toLocaleString("fr-FR")) ||
+                          0}{" "}
+                        <span className="text-sm">Kg</span>
+                      </>
+                    )}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.total_ventes_price}
+                    {order?.total_ventes_price &&
+                    order?.total_ventes_price > 1000000
+                      ? (order.total_ventes_price / 1000000).toLocaleString(
+                          "de-DE"
+                        ) + " M"
+                      : order.total_ventes_price?.toLocaleString("de-DE", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }) || 0}
+                    <span className="text-sm"> FBU</span>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {order?.province}

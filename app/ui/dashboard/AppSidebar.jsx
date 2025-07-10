@@ -49,6 +49,12 @@ const navItems = [
     startWithUrl: "/dashboard/cultivators/",
   },
   {
+    icon: <HangarIcon />,
+    name: "Hangars",
+    path: "/dashboard/hangars",
+    startWithUrl: "/dashboard/hangars/",
+  },
+  {
     icon: <BoxCubeIcon />,
     name: "Stock",
     path: "/dashboard/stocks",
@@ -65,12 +71,6 @@ const navItems = [
       },
     ],
     startWithUrl: "/dashboard/stocks/",
-  },
-  {
-    icon: <HangarIcon />,
-    name: "Hangars",
-    path: "/dashboard/hangars",
-    startWithUrl: "/dashboard/hangars/",
   },
   {
     icon: (

@@ -1,6 +1,5 @@
 "use client";
 import { ArrowUpIcon, HangarBoldIcon, HangarIcon } from "../../icons";
-import Badge from "../../ui_elements/badge/Badge";
 import React, { useState, useEffect } from "react";
 import { fetchData } from "../../../_utils/api";
 function TotalHangarsCard() {

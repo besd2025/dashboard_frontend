@@ -37,6 +37,7 @@ export default function TopCultivateurs() {
         );
 
         setData(results);
+        console.log(results);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -88,12 +89,6 @@ export default function TopCultivateurs() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Qte vendue
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
                   Province
                 </TableCell>
                 <TableCell
@@ -107,6 +102,24 @@ export default function TopCultivateurs() {
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
                   Hangar
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Qte vendue
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Qte Maïs Blanc
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Qte Maïs Jaune
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -161,8 +174,8 @@ export default function TopCultivateurs() {
                       </div>
                       <div>
                         <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order?.cultivator?.cultivator_first_name}{" "}
-                          {order?.cultivator?.cultivator_last_name}
+                          {order?.cultivator?.cultivator_last_name}{" "}
+                          {order?.cultivator?.cultivator_first_name}
                         </span>
                         <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
                           {order?.cultivator?.cultivator_code}
@@ -170,19 +183,7 @@ export default function TopCultivateurs() {
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.total_quantity >= 1000 ? (
-                      <>
-                        {(order?.total_quantity / 1000).toLocaleString("de-DE")}{" "}
-                        <span className="text-sm">T</span>
-                      </>
-                    ) : (
-                      <>
-                        {order?.total_quantity?.toLocaleString("fr-FR") || 0}{" "}
-                        <span className="text-sm">Kg</span>
-                      </>
-                    )}
-                  </TableCell>
+
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {
                       order?.cultivator?.cultivator_adress?.zone_code
@@ -197,6 +198,57 @@ export default function TopCultivateurs() {
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     {order?.cultivator?.collector?.hangar?.hangar_name}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {order?.cultivator?.total_quantite >= 1000 ? (
+                      <>
+                        {(
+                          order?.cultivator?.total_quantite / 1000
+                        ).toLocaleString("de-DE")}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {order?.cultivator?.total_quantite?.toLocaleString(
+                          "fr-FR"
+                        ) || 0}{" "}
+                        <span className="text-sm">Kg</span>
+                      </>
+                    )}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {order?.cultivator?.total_blanc >= 1000 ? (
+                      <>
+                        {(order?.cultivator?.total_blanc / 1000).toLocaleString(
+                          "de-DE"
+                        )}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {order?.cultivator?.total_blanc?.toLocaleString(
+                          "fr-FR"
+                        ) || 0}{" "}
+                        <span className="text-sm">Kg</span>
+                      </>
+                    )}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {order?.cultivator?.total_jaune >= 1000 ? (
+                      <>
+                        {(order?.cultivator?.total_jaune / 1000).toLocaleString(
+                          "de-DE"
+                        )}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {order?.cultivator?.total_jaune?.toLocaleString(
+                          "fr-FR"
+                        ) || 0}{" "}
+                        <span className="text-sm">Kg</span>
+                      </>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

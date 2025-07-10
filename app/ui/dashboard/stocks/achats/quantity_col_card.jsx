@@ -59,7 +59,7 @@ function QuantityColCard() {
               </>
             ) : (
               <>
-                {(data?.jaune &&
+                {(data?.quantite_totale &&
                   data?.quantite_totale?.toLocaleString("fr-FR")) ||
                   0}{" "}
                 <span className="text-sm">Kg</span>

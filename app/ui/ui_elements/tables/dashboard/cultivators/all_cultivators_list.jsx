@@ -134,6 +134,23 @@ function AllCultivatorsList() {
     setPointer((pageNumber - 1) * limit);
   };
 
+  const supprimerCultivateur = async (cultivateurId) => {
+    try {
+      const response = await fetchData(
+        "delete",
+        `/cultivators/${cultivateurId}/`
+      );
+
+      if (response?.status === 200 || response?.status === 204) {
+        // 204 = No Content, souvent utilisé pour DELETE
+        window.location.reload();
+      } else {
+        console.warn("La suppression a échoué :", response);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la suppression du cultivateur :", error);
+    }
+  };
   const exportCultivatorsToExcel = async () => {
     const limit = 5;
     let pointer = 0;
@@ -165,21 +182,52 @@ function AllCultivatorsList() {
 
       if (allData.length === 0) return;
 
-      const formattedData = allData.map((item) => ({
-        Nom: item.cultivator_first_name || "",
-        Prénom: item.cultivator_last_name || "",
-        Genre: item.cultivator_gender || "",
-        CNI: item.cultivator_cni || "",
-        Code: item.cultivator_code || "",
-        Province:
-          item.cultivator_adress?.zone_code?.commune_code?.province_code
-            ?.province_name || "",
-        Commune:
-          item.cultivator_adress?.zone_code?.commune_code?.commune_name || "",
-        Zone: item.cultivator_adress?.zone_code?.zone_name || "",
-        Colline: item.cultivator_adress?.colline_name || "",
-        created_at: item.created_at || "",
-      }));
+      const formattedData = allData.map((item) => {
+        const formattedItem = {
+          Nom: item.cultivator_first_name || "",
+          Prénom: item.cultivator_last_name || "",
+          Genre: item.cultivator_gender || "",
+          CNI: item.cultivator_cni || "",
+          Code: item.cultivator_code || "",
+          Province:
+            item.cultivator_adress?.zone_code?.commune_code?.province_code
+              ?.province_name || "",
+          Commune:
+            item.cultivator_adress?.zone_code?.commune_code?.commune_name || "",
+          Zone: item.cultivator_adress?.zone_code?.zone_name || "",
+          Colline: item.cultivator_adress?.colline_name || "",
+          Hangar: item?.collector?.hangar?.hangar_name || "",
+          quantité_total: item?.total_quantite || 0,
+          quantité_mais_blanc: item?.total_blanc || 0,
+          quantité_mais_jaune: item?.total_jaune || 0,
+        };
+
+        if (item?.cultivator_bank_name) {
+          // Cas Banque ou Microfinance : on ignore mobile money
+          formattedItem.mode_payement = "BANQUE OU MICROFINANCE";
+          formattedItem.Banque_ou_microfinance = item?.cultivator_bank_name;
+          formattedItem.Numero_compte = item?.cultivator_bank_account || "";
+        } else if (item?.cultivator_mobile_payment) {
+          // Cas Mobile Money uniquement si pas de banque
+          formattedItem.mode_payement = "MOBILE MONEY";
+          if (item?.cultivator_mobile_payment?.toString().slice(0, 1) == "6") {
+            formattedItem.nom_service = "LUMICASH";
+          } else if (
+            item?.cultivator_mobile_payment?.toString().slice(0, 1) == "7"
+          ) {
+            formattedItem.nom_service = "ECOCASH";
+            formattedItem.Numero_de_telephone_de_payement =
+              item?.cultivator_mobile_payment || "";
+            formattedItem.date_enregistrement = item.created_at || "";
+          }
+        } else {
+          formattedItem.mode_payement = "";
+        }
+
+        // Date en dernier
+
+        return formattedItem;
+      });
 
       const worksheet = XLSX.utils.json_to_sheet(formattedData);
       const workbook = XLSX.utils.book_new();
@@ -393,6 +441,12 @@ function AllCultivatorsList() {
                 >
                   Colline
                 </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Hangar
+                </TableCell>
               </TableRow>
             </TableHeader>
 
@@ -431,6 +485,17 @@ function AllCultivatorsList() {
                             className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                           >
                             Modifier
+                          </DropdownItem>
+                        )}
+                        {user?.session?.category == " Admin" && (
+                          <DropdownItem
+                            onItemClick={() => {
+                              closeDropdown(order.id);
+                              supprimerCultivateur(order?.id);
+                            }}
+                            className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                          >
+                            Supprimer
                           </DropdownItem>
                         )}
                       </Dropdown>
@@ -486,7 +551,7 @@ function AllCultivatorsList() {
                     {order?.cultivator_adress?.colline_name}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.colletor?.hangar?.hangar_name}
+                    {order?.collector?.hangar?.hangar_name}
                   </TableCell>
                 </TableRow>
               ))}

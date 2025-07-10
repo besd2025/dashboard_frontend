@@ -1,12 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import TotalStocks from "../../charts/stocks/total_stocks_card";
-import Badge from "../../ui_elements/badge/Badge";
-import { ArrowDownIcon } from "../../icons";
-import TotalHangars from "../../charts/stocks/total_hangars";
-import Loss from "../../charts/home/loss";
 import StocksChart from "../../charts/stocks/stocks";
-import BenefitsChart from "../../charts/home/benefits";
 import StocksFilter from "./stocks_filter";
 import HangarCapacity from "./hangar_capacity";
 import OutStocks from "../../charts/stocks/out_stocks";

@@ -52,15 +52,6 @@ function HangarTranfersList() {
   }
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const inputRef = useRef(null);
-
-  const handleToggle = () => {
-    if (window.innerWidth >= 1024) {
-      toggleSidebar();
-    } else {
-      toggleMobileSidebar();
-    }
-  };
-
   const toggleApplicationMenu = () => {
     setApplicationMenuOpen(!isApplicationMenuOpen);
   };
@@ -95,6 +86,7 @@ function HangarTranfersList() {
         });
 
         setData(results.results);
+        console.log("results", results);
         setTotalCount(results.count); // si l'API retourne un `count` total
       } catch (error) {
         setError(error);

@@ -166,10 +166,11 @@ export default function RecentCultivatorsList() {
                       </div>
                       <div>
                         <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order.cultivator_first_name}
+                          {order?.cultivator_last_name}{" "}
+                          {order?.cultivator_first_name}
                         </span>
                         <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order.cultivator_code}
+                          {order?.cultivator_code}
                         </span>
                       </div>
                     </div>
