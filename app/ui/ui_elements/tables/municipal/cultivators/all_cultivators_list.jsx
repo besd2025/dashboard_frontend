@@ -422,7 +422,10 @@ function AllCultivatorsList() {
                           <Image
                             width={80}
                             height={80}
-                            src={order?.cultivator_photo}
+                            src={
+                              process.env.NEXT_PUBLIC_IMAGE_URL +
+                              order?.cultivator_photo
+                            }
                             alt="user"
                           />
                         ) : (

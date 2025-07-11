@@ -71,6 +71,12 @@ export default function TopCultivateurs() {
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
           Top cultivateurs
         </h3>
+        <Link
+          href="/dashboard/stocks/achats/liste"
+          className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+        >
+          voir tous
+        </Link>
       </div>
       <div className="max-w-full overflow-x-auto">
         <div className="min-w-[1102px] ">
