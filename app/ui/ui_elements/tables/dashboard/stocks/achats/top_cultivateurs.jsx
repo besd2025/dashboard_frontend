@@ -84,7 +84,6 @@ export default function TopCultivateurs() {
             {/* Table Header */}
             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05] shadow-sm ">
               <TableRow>
-                <th></th>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase "
@@ -134,31 +133,6 @@ export default function TopCultivateurs() {
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {data.map((order) => (
                 <TableRow key={order?.cultivator?.id}>
-                  <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="relative inline-block">
-                      <button
-                        onClick={() => toggleDropdown(order?.cultivator?.id)}
-                        className="dropdown-toggle"
-                      >
-                        <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
-                      </button>
-                      <Dropdown
-                        isOpen={openDropdowns[order?.cultivator?.id]}
-                        onClose={() => closeDropdown(order?.cultivator?.id)}
-                        className="w-40 p-2"
-                      >
-                        <DropdownItem
-                          onItemClick={() =>
-                            closeDropdown(order?.cultivator?.id)
-                          }
-                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                        >
-                          Details
-                        </DropdownItem>
-                      </Dropdown>
-                    </div>
-                  </TableCell>
-
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">

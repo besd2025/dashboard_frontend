@@ -83,24 +83,26 @@ function HangarAchatList() {
 
   useEffect(() => {
     async function getData() {
-      try {
-        const response = await fetchData(
-          "get",
-          `hangars/${hangar_id}/achats/`,
-          {
-            params: {
-              offset: pointer,
-              limit: limit,
-            },
-          }
-        );
-        const results = response.items;
-        setData(results);
-        setTotalCount(results.length); // si l'API retourne un `count` total
-        console.log(results);
-      } catch (error) {
-        setError(error);
-        console.error(error);
+      if (hangar_id) {
+        try {
+          const response = await fetchData(
+            "get",
+            `hangars/${hangar_id}/achats/`,
+            {
+              params: {
+                offset: pointer,
+                limit: limit,
+              },
+            }
+          );
+          const results = response.items;
+          setData(results);
+          setTotalCount(results.length); // si l'API retourne un `count` total
+          console.log(results);
+        } catch (error) {
+          setError(error);
+          console.error(error);
+        }
       }
     }
 
