@@ -97,9 +97,9 @@ function HangarCultivatorsList({ hangar_id }) {
             }
           );
 
-          setData(results);
+          setData(results.results);
           console.log(results);
-          setTotalCount(results.length); // si l'API retourne un `count` total
+          setTotalCount(results.count); // si l'API retourne un `count` total
         } catch (error) {
           setError(error);
           console.error(error);
@@ -137,8 +137,8 @@ function HangarCultivatorsList({ hangar_id }) {
           }
         );
 
-        const currentData = response || [];
-        const totalCount = response?.length || 0;
+        const currentData = response.results || [];
+        const totalCount = response?.count || 0;
 
         console.log("Fetched:", currentData.length, "| Total:", totalCount);
 

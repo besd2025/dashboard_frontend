@@ -95,10 +95,9 @@ function HangarAchatList() {
               },
             }
           );
-          const results = response.items;
+          const results = response.results.items;
           setData(results);
-          setTotalCount(results.length); // si l'API retourne un `count` total
-          console.log(results);
+          setTotalCount(response.count); // si l'API retourne un `count` total
         } catch (error) {
           setError(error);
           console.error(error);
@@ -136,7 +135,7 @@ function HangarAchatList() {
           }
         );
 
-        const currentData = response?.items || [];
+        const currentData = response?.results?.items || [];
 
         // Si aucune donnée n’est retournée, arrêter la boucle
         if (currentData.length === 0) {

@@ -18,7 +18,6 @@ const navItems = [
     icon: <GridIcon />,
     name: "Dashboard",
     path: "/dashboard/home",
-    // subItems: [{ name: "Home", path: "/dashboard/home", pro: false }],
   },
 
   {
@@ -72,6 +71,21 @@ const navItems = [
     ],
     startWithUrl: "/dashboard/stocks/",
   },
+  // {
+  //   icon: (
+  //     <Image
+  //       className="rounded-xl"
+  //       src="/img/brarudi-logo.png"
+  //       alt="Brarudi"
+  //       width={32}
+  //       height={32}
+  //     />
+  //   ),
+  //   name: "BRARUDI",
+  //   path: "/dashboard/Brarudi/en_attente",
+  //   startWithUrl: "/dashboard/Brarudi/",
+  // },
+
   {
     icon: (
       <Image
@@ -82,9 +96,32 @@ const navItems = [
         height={32}
       />
     ),
-    name: "BRARUDI",
-    path: "/dashboard/Brarudi/en_attente",
-    startWithUrl: "/dashboard/Brarudi/",
+    name: "Brarudi",
+    path: "/dashboard/brarudi/en_attente",
+    subItems: [
+      { name: "Agent", path: "/brarudi/stocks" },
+      { name: "ANAGESSA", path: "/dashboard/Brarudi/en_attente" },
+    ],
+    startWithUrl: "/dashboard/Brarudi/en_attente",
+  },
+  {
+    icon: (
+      <Image
+        className="rounded-xl"
+        src="/img/role-logo.png"
+        alt="Roles"
+        width={32}
+        height={32}
+      />
+    ),
+    name: "Roles",
+    path: "/municipal/cultivators",
+    subItems: [
+      { name: "Communal", path: "/municipal/cultivators" },
+      { name: "Provincial", path: "/provincial/cultivators" },
+      { name: "Regional", path: "/regional/cultivators" },
+    ],
+    startWithUrl: "/municipal/cultivators",
   },
   {
     icon: <SettingsIcon />,

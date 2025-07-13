@@ -32,7 +32,7 @@ export default function RecentCultivatorsList() {
         });
 
         setData(results);
-        console.log(results);
+        console.log("result: ", results);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -153,10 +153,7 @@ export default function RecentCultivatorsList() {
                           <Image
                             width={80}
                             height={80}
-                            src={
-                              process.env.NEXT_PUBLIC_IMAGE_URL +
-                              order?.cultivator_photo
-                            }
+                            src={order?.cultivator_photo}
                             alt="user"
                           />
                         ) : (
