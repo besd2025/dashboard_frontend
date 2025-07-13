@@ -4,8 +4,11 @@ import { fetchData } from "../../../../_utils/api";
 export default function CardsOverview({ hangar_id }) {
   const [data, setData] = useState({});
   const [error, setError] = useState(null);
+
   useEffect(() => {
-    async function getData() {
+    if (!hangar_id) return; // Ne rien faire si l'ID est invalide
+
+    const getData = async () => {
       try {
         const results = await fetchData("get", `hangars/${hangar_id}/`, {
           params: {},
@@ -18,9 +21,10 @@ export default function CardsOverview({ hangar_id }) {
         setError(error);
         console.error(error);
       }
-    }
+    };
+
     getData();
-  }, []);
+  }, [hangar_id]);
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-16 md:gap-4">
       {/* <!-- Metric Item Start quantity collected --> */}

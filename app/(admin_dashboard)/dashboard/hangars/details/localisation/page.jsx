@@ -2,7 +2,7 @@
 import React from "react";
 import { ChevronRightIcon } from "../../../../../ui/icons";
 import HangarLocalisation from "../../../../../ui/localisation/hangar_localisation";
-
+export const dynamic = "force-dynamic";
 export default function Page() {
   return (
     <div className="grid grid-cols-4 gap-4 p-4">

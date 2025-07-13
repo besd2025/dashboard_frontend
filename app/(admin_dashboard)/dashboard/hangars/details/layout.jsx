@@ -28,8 +28,6 @@ function Layout({ children }) {
     }
   }, [pathname]);
 
-  if (!hangarId) return <div>Chargement du hangar...</div>;
-
   return (
     <HangarProvider hangar_id={hangarId}>
       <div>

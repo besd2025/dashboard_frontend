@@ -23,6 +23,7 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { fetchData } from "../../../../../../_utils/api";
 import { UserContext } from "../../../../../context/UserContext";
+import dynamic from "next/dynamic";
 //import { useSearchParams } from "next/navigation";
 function HangarCultivatorsList({ hangar_id }) {
   const [openDropdowns, setOpenDropdowns] = useState({});
@@ -82,24 +83,27 @@ function HangarCultivatorsList({ hangar_id }) {
 
   useEffect(() => {
     async function getData() {
-      try {
-        const results = await fetchData(
-          "get",
-          `hangars/${hangar_id}/cultivateurs/`,
-          {
-            params: {
-              offset: pointer,
-              limit: limit,
-            },
-          }
-        );
+      if (hangar_id) {
+        // Vérifier si hangar_id est défini avant de faire la requête
+        try {
+          const results = await fetchData(
+            "get",
+            `hangars/${hangar_id}/cultivateurs/`,
+            {
+              params: {
+                offset: pointer,
+                limit: limit,
+              },
+            }
+          );
 
-        setData(results);
-        console.log(results);
-        setTotalCount(results.length); // si l'API retourne un `count` total
-      } catch (error) {
-        setError(error);
-        console.error(error);
+          setData(results);
+          console.log(results);
+          setTotalCount(results.length); // si l'API retourne un `count` total
+        } catch (error) {
+          setError(error);
+          console.error(error);
+        }
       }
     }
 
@@ -114,37 +118,48 @@ function HangarCultivatorsList({ hangar_id }) {
   };
 
   const exportCultivatorsToExcel = async () => {
-    const limit = 5;
+    const limit = 5; // tu peux ajuster selon les performances
     let pointer = 0;
     let allData = [];
     let hasMore = true;
 
     try {
-      // Charger toutes les données par pagination
+      // Charger toutes les données paginées
       while (hasMore) {
-        const response = await fetchData("get", "/cultivators/", {
-          params: {
-            offset: pointer,
-            limit: limit,
-          },
-        });
+        const response = await fetchData(
+          "get",
+          `hangars/${hangar_id}/cultivateurs/`,
+          {
+            params: {
+              offset: pointer,
+              limit: limit,
+            },
+          }
+        );
 
-        const currentData = response.results;
+        const currentData = response || [];
+        const totalCount = response?.length || 0;
+
+        console.log("Fetched:", currentData.length, "| Total:", totalCount);
 
         if (currentData.length === 0) break;
 
         allData = [...allData, ...currentData];
-        pointer += limit;
+        pointer += currentData.length;
 
-        // S'arrêter si on a atteint toutes les données
-        if (pointer >= response.count) {
+        if (pointer >= totalCount) {
           hasMore = false;
         }
       }
 
       if (allData.length === 0) return;
 
-      const formattedData = allData.map((item) => {
+      // Dé-duplication par ID (si disponible)
+      const uniqueData = Array.from(
+        new Map(allData.map((item) => [item.id, item])).values()
+      );
+
+      const formattedData = uniqueData.map((item) => {
         const formattedItem = {
           Nom: item.cultivator_first_name || "",
           Prénom: item.cultivator_last_name || "",
@@ -164,33 +179,29 @@ function HangarCultivatorsList({ hangar_id }) {
           quantité_mais_jaune: item?.total_jaune || 0,
         };
 
+        // Gestion du mode de paiement
         if (item?.cultivator_bank_name) {
-          // Cas Banque ou Microfinance : on ignore mobile money
           formattedItem.mode_payement = "BANQUE OU MICROFINANCE";
           formattedItem.Banque_ou_microfinance = item?.cultivator_bank_name;
           formattedItem.Numero_compte = item?.cultivator_bank_account || "";
         } else if (item?.cultivator_mobile_payment) {
-          // Cas Mobile Money uniquement si pas de banque
           formattedItem.mode_payement = "MOBILE MONEY";
-          if (item?.cultivator_mobile_payment?.toString().slice(0, 1) == "6") {
+          const phone = item.cultivator_mobile_payment.toString();
+          if (phone.startsWith("6")) {
             formattedItem.nom_service = "LUMICASH";
-          } else if (
-            item?.cultivator_mobile_payment?.toString().slice(0, 1) == "7"
-          ) {
+          } else if (phone.startsWith("7")) {
             formattedItem.nom_service = "ECOCASH";
-            formattedItem.Numero_de_telephone_de_payement =
-              item?.cultivator_mobile_payment || "";
-            formattedItem.date_enregistrement = item.created_at || "";
           }
+          formattedItem.Numero_de_telephone_de_payement = phone;
+          formattedItem.date_enregistrement = item.created_at || "";
         } else {
           formattedItem.mode_payement = "";
         }
 
-        // Date en dernier
-
         return formattedItem;
       });
 
+      // Génération Excel
       const worksheet = XLSX.utils.json_to_sheet(formattedData);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Cultivateurs");
@@ -204,11 +215,15 @@ function HangarCultivatorsList({ hangar_id }) {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
       });
 
-      saveAs(blob, "cultivators.xlsx");
+      saveAs(
+        blob,
+        `cultivateurs_${new Date().toISOString().split("T")[0]}.xlsx`
+      );
     } catch (error) {
       console.error("Erreur exportation Excel :", error);
     }
   };
+
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">

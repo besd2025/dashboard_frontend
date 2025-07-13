@@ -4,6 +4,7 @@ import HangarMetaCard from "./hangar-profile/HangarMetaCard";
 import CardsOverview from "./cards_overview";
 
 function Profile({ hangar_id }) {
+  console.log("Hangar ID in Profile:", hangar_id);
   return (
     <div>
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">

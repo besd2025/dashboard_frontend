@@ -7,22 +7,17 @@ import {
   TableHeader,
   TableRow,
 } from "../../../table_elemets";
-
-import Image from "next/image";
 import { MoreDotIcon } from "../../../../../icons";
 import DropdownItem from "../../../../dropdown/DropdownItem";
 import { Dropdown } from "../../../../dropdown/dropdown_cultvators";
-import Badge from "../../../../badge/Badge";
 import Modal from "../../../../modal";
 import { useModal } from "../../../../hooks/useModal";
 import Pagination from "../../../Pagination";
-import EditUserProfile from "../../../../../municipal/cultivators/profile/edit_user_profile";
 import FilterUserProfile from "../../../../../municipal/cultivators/profile/filter_user_profile";
 import { fetchData } from "../../../../../../_utils/api";
-import Checkbox from "../../../../form/input/Checkbox";
-import Button from "../../../../button/Button";
 import EditHangarVentes from "../../../../../provincial/municipals/details/edit_hangar_ventes";
-function HangarTranfersList() {
+import dynamic from "next/dynamic";
+function HangarTranfersList({ hangar_id }) {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [openDropdowns, setOpenDropdowns] = useState({});
@@ -31,7 +26,7 @@ function HangarTranfersList() {
   const limit = 5; // nombre par page
   const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
-  const hangar_id = localStorage.getItem("hangarId");
+  //const hangar_id = localStorage.getItem("hangarId");
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -77,23 +72,24 @@ function HangarTranfersList() {
 
   useEffect(() => {
     async function getData() {
-      try {
-        const results = await fetchData("get", "/hangars/", {
-          params: {
-            offset: pointer,
-            limit: limit,
-          },
-        });
+      if (hangar_id) {
+        try {
+          const results = await fetchData("get", "/hangars/", {
+            params: {
+              offset: pointer,
+              limit: limit,
+            },
+          });
 
-        setData(results.results);
-        console.log("results", results);
-        setTotalCount(results.count); // si l'API retourne un `count` total
-      } catch (error) {
-        setError(error);
-        console.error(error);
+          setData(results.results);
+          console.log("results", results);
+          setTotalCount(results.count); // si l'API retourne un `count` total
+        } catch (error) {
+          setError(error);
+          console.error(error);
+        }
       }
     }
-
     getData();
   }, [pointer]); // ← relance quand `pointer` change
 

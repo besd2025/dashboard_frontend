@@ -27,7 +27,6 @@ import { saveAs } from "file-saver";
 import { fetchData } from "../../../../../../_utils/api";
 import { UserContext } from "../../../../../context/UserContext";
 //import { useSearchParams } from "next/navigation";
-
 function HangarCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [isCheckedTwo, setIsCheckedTwo] = useState(true);

@@ -33,7 +33,6 @@ function AllCultivatorsList() {
   const user = useContext(UserContext);
   const [filterData, setFilterData] = useState({});
   const [searchdata, setSearchData] = useState("");
-  console.log(user?.session?.category);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
