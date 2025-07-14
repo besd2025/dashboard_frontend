@@ -2,48 +2,29 @@ import axios from "axios";
 
 const server = process.env.NEXT_PUBLIC_API_URL;
 
-// ✅ Lire un cookie spécifique côté client
-// const getAccessToken = () => {
-//   if (typeof window !== "undefined") {
-//     const cookies = document.cookie.split("; ");
-//     console.log(cookies);
-//     const accessTokenCookie = cookies.find((row) =>
-//       row.startsWith("accessToken=")
-//     );
-//     console.log(accessTokenCookie?.split("=")[1]);
-//     return accessTokenCookie?.split("=")[1] || null;
-//   }
-//   return null;
-// };
-
-// const getAccessToken = () => {
-//   if (typeof window !== "undefined") {
-//     const cookies = document.cookie.split("; ");
-//     const accessTokenCookie = cookies.find((row) =>
-//       row.startsWith("accessToken=")
-//     );
-//     if (!accessTokenCookie) return null;
-//     const token = accessTokenCookie.split("=")[1];
-//     return token || null;
-//   }
-//   return null;
-// };
+/* ------------------------------------------------------------------ */
+/*  Récupère le token (localStorage)                                   */
+/* ------------------------------------------------------------------ */
 const getAccessToken = () => {
   if (typeof window !== "undefined") {
     return localStorage.getItem("accessToken") || null;
   }
   return null;
 };
-// ✅ Instance Axios
+
+/* ------------------------------------------------------------------ */
+/*  Instance Axios SANS Content‑Type par défaut                        */
+/* ------------------------------------------------------------------ */
 export const api = axios.create({
   baseURL: server,
   headers: {
-    "Content-Type": "application/json",
     "X-Signature-web": process.env.NEXT_PUBLIC_SIGNATURE,
   },
 });
 
-// ✅ Ajouter automatiquement le token aux requêtes
+/* ------------------------------------------------------------------ */
+/*  Interceptor : ajoute automatiquement le Bearer token              */
+/* ------------------------------------------------------------------ */
 api.interceptors.request.use(
   (config) => {
     const accessToken = getAccessToken();
@@ -55,26 +36,34 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ✅ Fonction générique de requête
+/* ------------------------------------------------------------------ */
+/*  Fonction générique fetchData                                      */
+/* ------------------------------------------------------------------ */
 export const fetchData = async (
   method,
   url,
   { params = {}, body = null, additionalHeaders = {} } = {}
 ) => {
   try {
-    const headers = {
-      ...additionalHeaders,
-    };
+    const headers = { ...additionalHeaders };
+    let finalBody = body;
+
+    // ➜ Si ce n’est PAS du FormData → JSON
+    if (!(body instanceof FormData)) {
+      headers["Content-Type"] = "application/json";
+      finalBody = body ? JSON.stringify(body) : null;
+    }
+    // ➜ Sinon, on laisse Axios gérer le multipart/form‑data
 
     const response = await api({
       method,
       url,
       params,
-      data: body,
+      data: finalBody,
       headers,
     });
 
-    return method === "get" ? response.data : response.status;
+    return method.toLowerCase() === "get" ? response.data : response.status;
   } catch (error) {
     console.error("❌ API Request Error:", error);
     throw error;

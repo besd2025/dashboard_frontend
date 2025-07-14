@@ -7,6 +7,7 @@ const Modal = ({
   onClose,
   children,
   className,
+  handleFiler,
   showCloseButton = true,
   isFullscreen = false,
 }) => {

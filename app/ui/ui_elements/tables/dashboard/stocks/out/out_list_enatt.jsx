@@ -27,6 +27,8 @@ function OutListEnatt() {
   const limit = 5; // nombre par page
   const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
+  const [filterData, setFilterData] = useState({});
+  const [searchdata, setSearchData] = useState("");
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -47,14 +49,6 @@ function OutListEnatt() {
   }
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const inputRef = useRef(null);
-
-  const handleToggle = () => {
-    if (window.innerWidth >= 1024) {
-      toggleSidebar();
-    } else {
-      toggleMobileSidebar();
-    }
-  };
 
   const toggleApplicationMenu = () => {
     setApplicationMenuOpen(!isApplicationMenuOpen);
@@ -87,13 +81,34 @@ function OutListEnatt() {
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData("get", "/hangars/", {
-          params: {
-            offset: pointer,
-            limit: limit,
-          },
-        });
+        let results;
 
+        if (filterData && Object.keys(filterData).length > 0) {
+          results = await fetchData("get", "/hangars/", {
+            params: {
+              province: filterData.province,
+              commune: filterData.commune,
+              zone: filterData.zone,
+              quantite_min: filterData.QtMin,
+              quantite_max: filterData.QtMax,
+              date_achat: filterData.dateSortie,
+              date_achat_min: filterData.dateFrom,
+              date_achat_max: filterData.dateTo,
+              search: searchdata, // ← recherche
+              offset: pointer,
+              limit: limit,
+            },
+          });
+        } else {
+          // Si aucun filtre, on récupère les données de base
+          results = await fetchData("get", "/hangars/", {
+            params: {
+              search: searchdata, // ← recherche
+              offset: pointer,
+              limit: limit,
+            },
+          });
+        }
         setData(results.results);
         setTotalCount(results.count); // si l'API retourne un `count` total
       } catch (error) {
@@ -103,7 +118,7 @@ function OutListEnatt() {
     }
 
     getData();
-  }, [pointer]); // ← relance quand `pointer` change
+  }, [pointer, filterData, searchdata]); // ← relance quand `pointer` change
 
   const totalPages = Math.ceil(totalCount / limit);
 
@@ -111,7 +126,9 @@ function OutListEnatt() {
     setCurrentPage(pageNumber);
     setPointer((pageNumber - 1) * limit);
   };
-
+  const handleFilter = (filterData) => {
+    setFilterData(filterData);
+  };
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
@@ -138,6 +155,7 @@ function OutListEnatt() {
                 </svg>
               </span>
               <input
+                onChange={(e) => setSearchData(e.target.value)}
                 ref={inputRef}
                 type="text"
                 placeholder="rechercher  ..."
@@ -392,7 +410,10 @@ function OutListEnatt() {
         onClose={closeModalFilter}
         className="max-w-[700px] m-4"
       >
-        <FilterUserProfile />
+        <FilterUserProfile
+          handleDataSortieFilter={handleFilter}
+          closeModalFilter={closeModalFilter}
+        />
       </Modal>
       <Modal
         isOpen={isOpenDetails}

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Table,
   TableBody,
@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "../../table_elemets";
-
+import { UserContext } from "../../../../context/UserContext";
 import Image from "next/image";
 import { MoreDotIcon } from "../../../../icons";
 import DropdownItem from "../../../dropdown/DropdownItem";
@@ -21,7 +21,7 @@ export default function RecentCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
-
+  const user = useContext(UserContext);
   useEffect(() => {
     async function getData() {
       try {
@@ -133,14 +133,16 @@ export default function RecentCultivatorsList() {
                         >
                           Details
                         </DropdownItem>
-                        <DropdownItem
-                          onItemClick={() => {
-                            closeDropdown(order.cultivator_code);
-                          }}
-                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                        >
-                          Modifier
-                        </DropdownItem>
+                        {user?.session?.category != "General" && (
+                          <DropdownItem
+                            onItemClick={() => {
+                              closeDropdown(order.cultivator_code);
+                            }}
+                            className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                          >
+                            Modifier
+                          </DropdownItem>
+                        )}
                       </Dropdown>
                     </div>
                   </TableCell>
@@ -166,10 +168,11 @@ export default function RecentCultivatorsList() {
                       </div>
                       <div>
                         <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order.cultivator_first_name}
+                          {order?.cultivator_last_name}{" "}
+                          {order?.cultivator_first_name}
                         </span>
                         <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order.cultivator_code}
+                          {order?.cultivator_code}
                         </span>
                       </div>
                     </div>

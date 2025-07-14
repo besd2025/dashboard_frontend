@@ -32,7 +32,7 @@ export default function RecentCultivatorsList() {
         });
 
         setData(results);
-        console.log(results);
+        console.log("result: ", results);
       } catch (error) {
         setError(error);
         console.error(error);

@@ -18,7 +18,6 @@ const navItems = [
     icon: <GridIcon />,
     name: "Dashboard",
     path: "/dashboard/home",
-    // subItems: [{ name: "Home", path: "/dashboard/home", pro: false }],
   },
 
   {
@@ -49,6 +48,12 @@ const navItems = [
     startWithUrl: "/dashboard/cultivators/",
   },
   {
+    icon: <HangarIcon />,
+    name: "Hangars",
+    path: "/dashboard/hangars",
+    startWithUrl: "/dashboard/hangars/",
+  },
+  {
     icon: <BoxCubeIcon />,
     name: "Stock",
     path: "/dashboard/stocks",
@@ -66,12 +71,21 @@ const navItems = [
     ],
     startWithUrl: "/dashboard/stocks/",
   },
-  {
-    icon: <HangarIcon />,
-    name: "Hangars",
-    path: "/dashboard/hangars",
-    startWithUrl: "/dashboard/hangars/",
-  },
+  // {
+  //   icon: (
+  //     <Image
+  //       className="rounded-xl"
+  //       src="/img/brarudi-logo.png"
+  //       alt="Brarudi"
+  //       width={32}
+  //       height={32}
+  //     />
+  //   ),
+  //   name: "BRARUDI",
+  //   path: "/dashboard/Brarudi/en_attente",
+  //   startWithUrl: "/dashboard/Brarudi/",
+  // },
+
   {
     icon: (
       <Image
@@ -82,9 +96,32 @@ const navItems = [
         height={32}
       />
     ),
-    name: "BRARUDI",
-    path: "/dashboard/Brarudi/en_attente",
-    startWithUrl: "/dashboard/Brarudi/",
+    name: "Brarudi",
+    path: "/dashboard/brarudi/en_attente",
+    subItems: [
+      { name: "Agent", path: "/brarudi/stocks" },
+      { name: "ANAGESSA", path: "/dashboard/Brarudi/en_attente" },
+    ],
+    startWithUrl: "/dashboard/Brarudi/en_attente",
+  },
+  {
+    icon: (
+      <Image
+        className="rounded-xl"
+        src="/img/role-logo.png"
+        alt="Roles"
+        width={32}
+        height={32}
+      />
+    ),
+    name: "Roles",
+    path: "/municipal/cultivators",
+    subItems: [
+      { name: "Communal", path: "/municipal/cultivators" },
+      { name: "Provincial", path: "/provincial/cultivators" },
+      { name: "Regional", path: "/regional/cultivators" },
+    ],
+    startWithUrl: "/municipal/cultivators",
   },
   {
     icon: <SettingsIcon />,
@@ -93,19 +130,6 @@ const navItems = [
     startWithUrl: "/dashboard/settings/",
   },
 ];
-
-// const othersItems = [
-//   {
-//     icon: <UserLineIcon />,
-//     name: "Role",
-//     path: "/dashboard/stocks",
-//     subItems: [
-//       { name: "Communale", path: "/municipal/cultivators" },
-//       { name: "Provinciale", path: "/provincial/cultivators" },
-//       { name: "Regionale", path: "/regional/cultivators" },
-//     ],
-//   },
-// ];
 
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
@@ -239,23 +263,6 @@ const AppSidebar = () => {
     </ul>
   );
 
-  // useEffect(() => {
-  //   let matched = false;
-  //   ["main", "others"].forEach((type) => {
-  //     const items = type === "main" ? navItems : othersItems;
-  //     items.forEach((nav, index) => {
-  //       if (
-  //         isPathActive(nav) ||
-  //         nav.subItems?.some((subItem) => isPathActive(subItem))
-  //       ) {
-  //         setOpenSubmenu({ type, index });
-  //         matched = true;
-  //       }
-  //     });
-  //   });
-  //   if (!matched) setOpenSubmenu(null);
-  // }, [pathname, isPathActive]);
-
   useEffect(() => {
     if (openSubmenu !== null) {
       const key = `${openSubmenu.type}-${openSubmenu.index}`;
@@ -289,7 +296,7 @@ const AppSidebar = () => {
           !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
         }`}
       >
-        <Link href="/">
+        <Link href="/dashboard/home">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <Image

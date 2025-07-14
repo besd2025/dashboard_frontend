@@ -16,13 +16,16 @@ import FilterUserProfile from "../../../municipal/cultivators/profile/filter_use
 import { fetchData } from "../../../../_utils/api";
 import Pagination from "../../../ui_elements/tables/Pagination";
 import HistoryDetail from "./history_detail";
-
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 function History() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [openDropdowns, setOpenDropdowns] = useState({});
-  const [isCheckedTwo, setIsCheckedTwo] = useState(true);
-
+  const [pointer, setPointer] = useState(0); // index de départ
+  const limit = 5; // nombre par page
+  const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
+  const [currentPage, setCurrentPage] = useState(1);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -79,32 +82,100 @@ function History() {
     openModal: openModalDetails,
     closeModal: closeModalDetails,
   } = useModal();
-  const {
-    isOpen: isOpenResults,
-    openModal: openModalResults,
-    closeModal: closeModalResults,
-  } = useModal();
-
-  // Ajout de l'état pour le step du modal
-  const [modalStep, setModalStep] = useState("details");
-
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData("get", "hangars/cinq_recents/", {
-          params: {},
-          additionalHeaders: {},
-          body: {},
+        const results = await fetchData("get", "/vente_produits/", {
+          params: {
+            offset: pointer,
+            limit: limit,
+          },
         });
-        setData(results);
-        console.log(results);
+
+        setData(results.results);
+        console.log("Data fetched:", results.results);
+        setTotalCount(results.count); // si l'API retourne un `count` total
       } catch (error) {
         setError(error);
         console.error(error);
       }
     }
+
     getData();
-  }, []);
+  }, [pointer]); // ← relance quand `pointer` change
+
+  const exportToExcel = async () => {
+    const limit = 5;
+    let pointer = 0;
+    let allData = [];
+    let hasMore = true;
+
+    try {
+      // Charger toutes les données par pagination
+      while (hasMore) {
+        const response = await fetchData("get", `/vente_produits/`, {
+          params: {
+            offset: pointer,
+            limit: limit,
+          },
+        });
+
+        const currentData = response?.results || [];
+        console.log("Current data fetched:", currentData);
+        // Si aucune donnée n’est retournée, arrêter la boucle
+        if (currentData.length === 0) {
+          hasMore = false;
+          break;
+        }
+
+        allData = [...allData, ...currentData];
+        pointer += limit;
+
+        // Vérifier si on a atteint ou dépassé le nombre total d’éléments
+        if (pointer >= (response?.count || 0)) {
+          hasMore = false;
+        }
+      }
+
+      // Si aucune donnée, ne pas continuer
+      if (allData.length === 0) return;
+
+      // Formater les données pour Excel
+      const formattedData = allData.map((item) => ({
+        type_acheteur: item?.type_acheteur || "",
+        sous_type_acheteur: item?.sous_type_acheteur || "",
+        nom_acheteur: item?.nom_acheteur || "",
+        created_at: item.date_sortie || "",
+      }));
+
+      // Créer la feuille et le fichier Excel
+      const worksheet = XLSX.utils.json_to_sheet(formattedData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "historique_de_vente");
+
+      // Générer le buffer Excel
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      // Créer le fichier et déclencher le téléchargement
+      const blob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+      });
+
+      saveAs(blob, "historique_de_vente.xlsx");
+    } catch (error) {
+      console.error("Erreur exportation Excel :", error);
+    }
+  };
+
+  const totalPages = Math.ceil(totalCount / limit);
+
+  const onPageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    setPointer((pageNumber - 1) * limit);
+  };
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
@@ -185,7 +256,10 @@ function History() {
           </button>
         </div>
         <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+          <button
+            onClick={exportToExcel}
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -336,31 +410,19 @@ function History() {
                       </svg>
                       <div>
                         <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order.hangar_name}
-                        </span>
-                        <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order.hangar_code}
+                          {order?.type_acheteur}
                         </span>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Qte}
+                    {order?.quantity}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Prix}
+                    {order.price}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {
-                      order?.hangar_adress?.zone_code?.commune_code
-                        ?.province_code?.province_name
-                    }
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {
-                      order?.hangar_adress?.zone_code?.commune_code
-                        ?.commune_name
-                    }
+                    {order?.date_sortie}
                   </TableCell>
                 </TableRow>
               ))}
@@ -371,7 +433,14 @@ function History() {
 
       {/* Pagination */}
 
-      <Pagination />
+      <Pagination
+        totalCount={totalCount}
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+        totalPages={totalPages}
+        pointer={pointer}
+        limit={limit}
+      />
 
       {/* filtres */}
 

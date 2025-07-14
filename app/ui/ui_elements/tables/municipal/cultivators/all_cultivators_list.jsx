@@ -21,6 +21,8 @@ import EditUserProfile from "../../../../municipal/cultivators/profile/edit_user
 import FilterUserProfile from "../../../../municipal/cultivators/profile/filter_user_profile";
 import { fetchData } from "../../../../../_utils/api";
 import { UserContext } from "../../../../context/UserContext";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 function AllCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
@@ -134,21 +136,52 @@ function AllCultivatorsList() {
 
       if (allData.length === 0) return;
 
-      const formattedData = allData.map((item) => ({
-        Nom: item.cultivator_first_name || "",
-        Prénom: item.cultivator_last_name || "",
-        Genre: item.cultivator_gender || "",
-        CNI: item.cultivator_cni || "",
-        Code: item.cultivator_code || "",
-        Province:
-          item.cultivator_adress?.zone_code?.commune_code?.province_code
-            ?.province_name || "",
-        Commune:
-          item.cultivator_adress?.zone_code?.commune_code?.commune_name || "",
-        Zone: item.cultivator_adress?.zone_code?.zone_name || "",
-        Colline: item.cultivator_adress?.colline_name || "",
-        created_at: item.created_at || "",
-      }));
+      const formattedData = allData.map((item) => {
+        const formattedItem = {
+          Nom: item.cultivator_first_name || "",
+          Prénom: item.cultivator_last_name || "",
+          Genre: item.cultivator_gender || "",
+          CNI: item.cultivator_cni || "",
+          Code: item.cultivator_code || "",
+          Province:
+            item.cultivator_adress?.zone_code?.commune_code?.province_code
+              ?.province_name || "",
+          Commune:
+            item.cultivator_adress?.zone_code?.commune_code?.commune_name || "",
+          Zone: item.cultivator_adress?.zone_code?.zone_name || "",
+          Colline: item.cultivator_adress?.colline_name || "",
+          Hangar: item?.collector?.hangar?.hangar_name || "",
+          quantité_total: item?.total_quantite || 0,
+          quantité_mais_blanc: item?.total_blanc || 0,
+          quantité_mais_jaune: item?.total_jaune || 0,
+        };
+
+        if (item?.cultivator_bank_name) {
+          // Cas Banque ou Microfinance : on ignore mobile money
+          formattedItem.mode_payement = "BANQUE OU MICROFINANCE";
+          formattedItem.Banque_ou_microfinance = item?.cultivator_bank_name;
+          formattedItem.Numero_compte = item?.cultivator_bank_account || "";
+        } else if (item?.cultivator_mobile_payment) {
+          // Cas Mobile Money uniquement si pas de banque
+          formattedItem.mode_payement = "MOBILE MONEY";
+          if (item?.cultivator_mobile_payment?.toString().slice(0, 1) == "6") {
+            formattedItem.nom_service = "LUMICASH";
+          } else if (
+            item?.cultivator_mobile_payment?.toString().slice(0, 1) == "7"
+          ) {
+            formattedItem.nom_service = "ECOCASH";
+            formattedItem.Numero_de_telephone_de_payement =
+              item?.cultivator_mobile_payment || "";
+            formattedItem.date_enregistrement = item.created_at || "";
+          }
+        } else {
+          formattedItem.mode_payement = "";
+        }
+
+        // Date en dernier
+
+        return formattedItem;
+      });
 
       const worksheet = XLSX.utils.json_to_sheet(formattedData);
       const workbook = XLSX.utils.book_new();
@@ -168,6 +201,7 @@ function AllCultivatorsList() {
       console.error("Erreur exportation Excel :", error);
     }
   };
+
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">

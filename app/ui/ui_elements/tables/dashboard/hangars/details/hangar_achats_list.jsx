@@ -83,24 +83,25 @@ function HangarAchatList() {
 
   useEffect(() => {
     async function getData() {
-      try {
-        const response = await fetchData(
-          "get",
-          `hangars/${hangar_id}/achats/`,
-          {
-            params: {
-              offset: pointer,
-              limit: limit,
-            },
-          }
-        );
-        const results = response.items;
-        setData(results);
-        setTotalCount(results.length); // si l'API retourne un `count` total
-        console.log(results);
-      } catch (error) {
-        setError(error);
-        console.error(error);
+      if (hangar_id) {
+        try {
+          const response = await fetchData(
+            "get",
+            `hangars/${hangar_id}/achats/`,
+            {
+              params: {
+                offset: pointer,
+                limit: limit,
+              },
+            }
+          );
+          const results = response.results.items;
+          setData(results);
+          setTotalCount(response.count); // si l'API retourne un `count` total
+        } catch (error) {
+          setError(error);
+          console.error(error);
+        }
       }
     }
 
@@ -134,7 +135,7 @@ function HangarAchatList() {
           }
         );
 
-        const currentData = response?.items || [];
+        const currentData = response?.results?.items || [];
 
         // Si aucune donnée n’est retournée, arrêter la boucle
         if (currentData.length === 0) {
@@ -384,12 +385,12 @@ function HangarAchatList() {
                 >
                   Prix
                 </TableCell>
-                <TableCell
+                {/* <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
                   Status
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             </TableHeader>
 
@@ -440,7 +441,10 @@ function HangarAchatList() {
                           <Image
                             width={80}
                             height={80}
-                            src={order?.cultivator?.cultivator_photo}
+                            src={
+                              process.env.NEXT_PUBLIC_IMAGE_URL +
+                              order?.cultivator?.cultivator_photo
+                            }
                             alt="user"
                           />
                         ) : (
@@ -476,9 +480,15 @@ function HangarAchatList() {
                     {order?.quantity_jaune}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.total_price}
+                    {order?.total_price > 1000000
+                      ? (order?.total_price / 1000000).toLocaleString("de-DE") +
+                        " M"
+                      : order?.total_price?.toLocaleString("de-DE", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }) || 0}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <Badge
                       size="sm"
                       color={
@@ -491,7 +501,7 @@ function HangarAchatList() {
                     >
                       {order.status}
                     </Badge>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               ))}
             </TableBody>

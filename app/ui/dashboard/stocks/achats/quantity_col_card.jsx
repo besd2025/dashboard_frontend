@@ -49,8 +49,22 @@ function QuantityColCard() {
             Qté Collectée
           </span>
           <h4 className="mt-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
-            {data?.quantite_totale}
-            <span className="text-sm">KG</span>
+            {data?.quantite_totale && data?.quantite_totale >= 1000 ? (
+              <>
+                {(data?.quantite_totale / 1000)?.toLocaleString("de-DE", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}{" "}
+                <span className="text-sm">T</span>
+              </>
+            ) : (
+              <>
+                {(data?.quantite_totale &&
+                  data?.quantite_totale?.toLocaleString("fr-FR")) ||
+                  0}{" "}
+                <span className="text-sm">Kg</span>
+              </>
+            )}
           </h4>
         </div>
         {/* <Badge color="success">

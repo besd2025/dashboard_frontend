@@ -58,10 +58,11 @@ export default function SignInForm() {
       );
 
       if (!response.ok) {
+        setLoading(false);
         const errorData = await response.json();
         throw new Error(errorData?.detail || "Échec de connexion.");
       }
-
+      setLoading(true);
       const data = await response.json();
       document.cookie = `accessToken=${data.access}; path=/; max-age=3600; secure`;
       localStorage.setItem("accessToken", data.access);
@@ -112,7 +113,7 @@ export default function SignInForm() {
             <div className="space-y-6">
               <div>
                 <Label>
-                  Nom utilisateur <span className="text-error-500">*</span>
+                  Identifiant <span className="text-error-500">*</span>
                 </Label>
                 <Input
                   placeholder="Nom d'utilisateur"

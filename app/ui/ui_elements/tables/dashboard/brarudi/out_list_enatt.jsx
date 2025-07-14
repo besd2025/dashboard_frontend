@@ -29,6 +29,8 @@ function OutListEnatt() {
   const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
   const [idSortie, setIdSortie] = useState(0);
+  const [filterData, setFilterData] = useState({});
+  const [searchdata, setSearchData] = useState("");
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -81,16 +83,42 @@ function OutListEnatt() {
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData(
-          "get",
-          "/sorties/sortie_par_anagessa_brarudi/",
-          {
-            params: {
-              offset: pointer,
-              limit: limit,
-            },
-          }
-        );
+        let results;
+
+        if (filterData && Object.keys(filterData).length > 0) {
+          results = await fetchData(
+            "get",
+            "/sorties/sortie_par_anagessa_brarudi/",
+            {
+              params: {
+                province: filterData.province,
+                commune: filterData.commune,
+                zone: filterData.zone,
+                quantite_min: filterData.QtMin,
+                quantite_max: filterData.QtMax,
+                date_achat: filterData.dateSortie,
+                date_achat_min: filterData.dateFrom,
+                date_achat_max: filterData.dateTo,
+                search: searchdata, // ← recherche
+                offset: pointer,
+                limit: limit,
+              },
+            }
+          );
+        } else {
+          // Si aucun filtre, on récupère les données de base
+          results = await fetchData(
+            "get",
+            "/sorties/sortie_par_anagessa_brarudi/",
+            {
+              params: {
+                search: searchdata, // ← recherche
+                offset: pointer,
+                limit: limit,
+              },
+            }
+          );
+        }
         const items = results.results;
         setData(items);
         setTotalCount(results.count);
@@ -100,7 +128,7 @@ function OutListEnatt() {
       }
     }
     getData();
-  }, [pointer]);
+  }, [pointer, filterData, searchdata]); // ← relance quand `pointer` change
   const totalPages = Math.ceil(totalCount / limit);
 
   const onPageChange = (pageNumber) => {
@@ -168,7 +196,9 @@ function OutListEnatt() {
       console.error("Erreur exportation Excel :", error);
     }
   };
-
+  const handleFilter = (filterData) => {
+    setFilterData(filterData);
+  };
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
@@ -195,6 +225,7 @@ function OutListEnatt() {
                 </svg>
               </span>
               <input
+                onChange={(e) => setSearchData(e.target.value)}
                 ref={inputRef}
                 type="text"
                 placeholder="rechercher  ..."
@@ -423,7 +454,7 @@ function OutListEnatt() {
                     ) : (
                       <>
                         {order?.quantite?.toLocaleString("fr-FR") || 0}{" "}
-                        <span className="text-sm">KG</span>
+                        <span className="text-sm">Kg</span>
                       </>
                     )}
                   </TableCell>
@@ -461,7 +492,10 @@ function OutListEnatt() {
         onClose={closeModalFilter}
         className="max-w-[700px] m-4"
       >
-        <FilterUserProfile />
+        <FilterUserProfile
+          handleDataSortieFilter={handleFilter}
+          closeModalFilter={closeModalFilter}
+        />
       </Modal>
       <Modal
         isOpen={isOpenDetails}

@@ -114,9 +114,10 @@ function StocksFilter() {
           }
         );
 
-        const categories = results?.map((item) => item.province);
-        const stocks = results?.map((item) => item.stock_total || 0);
-        const pertes = results?.map((item) => item.pertes || 0);
+        console.log("Results:", results);
+        const categories = results?.results?.map((item) => item.province);
+        const stocks = results?.results?.map((item) => item.stock_total || 0);
+        const pertes = results?.results?.map((item) => item.pertes || 0);
 
         setState((prev) => ({
           ...prev,

@@ -37,6 +37,7 @@ export default function TopCultivateurs() {
         );
 
         setData(results);
+        console.log(results);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -70,6 +71,12 @@ export default function TopCultivateurs() {
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
           Top cultivateurs
         </h3>
+        <Link
+          href="/dashboard/stocks/achats/liste"
+          className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+        >
+          voir tous
+        </Link>
       </div>
       <div className="max-w-full overflow-x-auto">
         <div className="min-w-[1102px] ">
@@ -77,18 +84,11 @@ export default function TopCultivateurs() {
             {/* Table Header */}
             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05] shadow-sm ">
               <TableRow>
-                <th></th>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase "
                 >
                   Cultivateur
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
-                  Qte vendue
                 </TableCell>
                 <TableCell
                   isHeader
@@ -108,6 +108,24 @@ export default function TopCultivateurs() {
                 >
                   Hangar
                 </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Qte vendue
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Qte Maïs Blanc
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Qte Maïs Jaune
+                </TableCell>
               </TableRow>
             </TableHeader>
 
@@ -115,39 +133,14 @@ export default function TopCultivateurs() {
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {data.map((order) => (
                 <TableRow key={order?.cultivator?.id}>
-                  <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="relative inline-block">
-                      <button
-                        onClick={() => toggleDropdown(order?.cultivator?.id)}
-                        className="dropdown-toggle"
-                      >
-                        <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
-                      </button>
-                      <Dropdown
-                        isOpen={openDropdowns[order?.cultivator?.id]}
-                        onClose={() => closeDropdown(order?.cultivator?.id)}
-                        className="w-40 p-2"
-                      >
-                        <DropdownItem
-                          onItemClick={() =>
-                            closeDropdown(order?.cultivator?.id)
-                          }
-                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                        >
-                          Details
-                        </DropdownItem>
-                      </Dropdown>
-                    </div>
-                  </TableCell>
-
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">
-                        {order?.cultivator_photo == null ? (
+                        {order?.cultivator?.cultivator_photo ? (
                           <Image
                             width={80}
                             height={80}
-                            src={order?.cultivator?.cultivator_photo}
+                            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${order?.cultivator?.cultivator_photo}`}
                             alt="user"
                           />
                         ) : (
@@ -161,8 +154,8 @@ export default function TopCultivateurs() {
                       </div>
                       <div>
                         <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order?.cultivator?.cultivator_first_name}{" "}
-                          {order?.cultivator?.cultivator_last_name}
+                          {order?.cultivator?.cultivator_last_name}{" "}
+                          {order?.cultivator?.cultivator_first_name}
                         </span>
                         <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
                           {order?.cultivator?.cultivator_code}
@@ -170,9 +163,7 @@ export default function TopCultivateurs() {
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.total_quantity}
-                  </TableCell>
+
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {
                       order?.cultivator?.cultivator_adress?.zone_code
@@ -187,6 +178,57 @@ export default function TopCultivateurs() {
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     {order?.cultivator?.collector?.hangar?.hangar_name}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {order?.cultivator?.total_quantite >= 1000 ? (
+                      <>
+                        {(
+                          order?.cultivator?.total_quantite / 1000
+                        ).toLocaleString("de-DE")}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {order?.cultivator?.total_quantite?.toLocaleString(
+                          "fr-FR"
+                        ) || 0}{" "}
+                        <span className="text-sm">Kg</span>
+                      </>
+                    )}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {order?.cultivator?.total_blanc >= 1000 ? (
+                      <>
+                        {(order?.cultivator?.total_blanc / 1000).toLocaleString(
+                          "de-DE"
+                        )}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {order?.cultivator?.total_blanc?.toLocaleString(
+                          "fr-FR"
+                        ) || 0}{" "}
+                        <span className="text-sm">Kg</span>
+                      </>
+                    )}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {order?.cultivator?.total_jaune >= 1000 ? (
+                      <>
+                        {(order?.cultivator?.total_jaune / 1000).toLocaleString(
+                          "de-DE"
+                        )}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {order?.cultivator?.total_jaune?.toLocaleString(
+                          "fr-FR"
+                        ) || 0}{" "}
+                        <span className="text-sm">Kg</span>
+                      </>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
