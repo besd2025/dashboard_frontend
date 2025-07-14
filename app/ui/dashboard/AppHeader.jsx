@@ -72,14 +72,14 @@ const AppHeader = () => {
               width={54}
               height={32}
               className="dark:hidden"
-              src="/img/logo_example2.jpg"
+              src="/img/ANAGESSA LOGO.jpg"
               alt="Logo"
             />
             <Image
               width={54}
               height={32}
               className="hidden dark:block"
-              src="/img/logo_example2.jpg"
+              src="/img/ANAGESSA LOGO.jpg"
               alt="Logo"
             />
           </Link>

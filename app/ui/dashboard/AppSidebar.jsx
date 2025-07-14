@@ -7,9 +7,11 @@ import { useSidebar } from "../context/SidebarContext";
 import {
   BoxCubeIcon,
   ChevronDownIcon,
+  DetailIcon,
   GridIcon,
   HangarIcon,
   HorizontaLDots,
+  MapIcon,
   SettingsIcon,
 } from "../icons";
 
@@ -50,7 +52,16 @@ const navItems = [
   {
     icon: <HangarIcon />,
     name: "Hangars",
-    path: "/dashboard/hangars",
+
+    // subMenuIcon: <HangarIcon />,
+    subItems: [
+      { icon: <DetailIcon />, name: "Details", path: "/dashboard/hangars" },
+      {
+        icon: <MapIcon />,
+        name: "Repartition",
+        path: "/dashboard/hangars/geolocalisation",
+      },
+    ],
     startWithUrl: "/dashboard/hangars/",
   },
   {
@@ -251,6 +262,9 @@ const AppSidebar = () => {
                           : "menu-dropdown-item-inactive"
                       }`}
                     >
+                      {subItem.icon && (
+                        <span className="mr-">{subItem.icon}</span>
+                      )}
                       {subItem.name}
                     </Link>
                   </li>
