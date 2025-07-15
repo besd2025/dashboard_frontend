@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
-import L from "leaflet";
+import Button from "../../../ui_elements/button/Button";
 
 const MapWithNoSSR = dynamic(
   () => import("../../../localisation/MapComponent"),
@@ -15,6 +15,14 @@ const MapWithNoSSR = dynamic(
 function GlobalMap() {
   // Example data for hangars
   const data = [
+    {
+      name: null,
+      province: null,
+      commune: null,
+      zone: null,
+      latitude: 0,
+      longitude: 0,
+    },
     {
       name: "Salle Communal",
       province: "Bubanza",
@@ -3540,9 +3548,9 @@ function GlobalMap() {
   const [selectedHangar, setSelectedHangar] = useState(data[0]);
 
   return (
-    <div className=" p-4 relative">
-      <div className=" space-y-6 absolute top-16 left-16 z-999">
-        <div className="flex flex-col top-0 left-0 w-full lg:w-max mt-4 lg:mt-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 transition-all duration-300 ease-in-out z-50 border rounded-xl border-gray-200">
+    <div className=" lg:p-4 relative space-y-4">
+      <div className=" space-y-6 lg:absolute top-20 left-16 z-999  ">
+        <div className="flex flex-col top-0 left-0 w-full lg:w-max mt-4 shadow-xl lg:mt-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 transition-all duration-300 ease-in-out z-50 border rounded-2xl border-gray-200">
           <div className="overflow-y-auto overflow-x-auto lg:overflow-x-hidden flex flex-col justify-between flex-grow">
             <ul className="flex flex-col py-4 space-y-1">
               <div>
@@ -3598,6 +3606,14 @@ function GlobalMap() {
                           {/* Replace with real data if available */}-
                         </p>
                       </div>
+                      <div>
+                        <Button
+                          className="bg-green-600 hover:bg-green-600 disabled:bg-green-600"
+                          disabled={selectedHangar.name == null}
+                        >
+                          Voir detail
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -3607,8 +3623,12 @@ function GlobalMap() {
         </div>
       </div>
 
-      <div className="col-spa/n-4 lg:col-s/pan-3 h-[80vh] space-y-6 overflow-x-auto rounded-2xl">
-        <MapWithNoSSR data={data} onMarkerClick={setSelectedHangar} />
+      <div className="col-spa/n-4 lg:col-s/pan-3 h-[80vh] space-y-6 overflow-x-auto rounded">
+        <MapWithNoSSR
+          data={data}
+          onMarkerClick={setSelectedHangar}
+          onFilterClick={setSelectedHangar}
+        />
       </div>
     </div>
   );

@@ -128,9 +128,9 @@ const navItems = [
     name: "Roles",
     path: "/municipal/cultivators",
     subItems: [
-      { name: "Communal", path: "/municipal/cultivators" },
-      { name: "Provincial", path: "/provincial/cultivators" },
-      { name: "Regional", path: "/regional/cultivators" },
+      { name: "Communal", path: "/municipal/hangars" },
+      { name: "Provincial", path: "/provincial/hangars" },
+      { name: "Regional", path: "/regional/hangars" },
     ],
     startWithUrl: "/municipal/cultivators",
   },
