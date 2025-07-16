@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useContext } from "react";
 
 import Modal from "../../../../ui_elements/modal";
+import ViewImageModal from "../../../../ui_elements/modal/ViewImageModal";
 
 import { useModal } from "../../../../ui_elements/hooks/useModal";
 
@@ -15,6 +16,7 @@ export default function UserMetaCard({ cultivateur_id }) {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const user = useContext(UserContext);
+  const [isImageModalOpen, setImageModalOpen] = useState(false);
   useEffect(() => {
     async function getData() {
       try {
@@ -41,7 +43,10 @@ export default function UserMetaCard({ cultivateur_id }) {
       <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between mb-4">
           <div className="flex flex-col items-center w-full gap-6 xl:flex-row">
-            <div className="w-20 h-20 overflow-hidden border border-gray-200 rounded-full dark:border-gray-800">
+            <div
+              className="w-20 h-20 overflow-hidden border border-gray-200 rounded-full dark:border-gray-800 cursor-pointer"
+              onClick={() => setImageModalOpen(true)}
+            >
               {data?.cultivator_photo ? (
                 <Image
                   width={80}
@@ -113,6 +118,12 @@ export default function UserMetaCard({ cultivateur_id }) {
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
         <EditUserProfile closeModal={closeModal} cultivateur_id={data.id} />
       </Modal>
+      <ViewImageModal
+        isOpen={isImageModalOpen}
+        onClose={() => setImageModalOpen(false)}
+        imageUrl={data?.cultivator_photo || "/img/blank-profile.png"}
+        alt={data?.cultivator_last_name + " " + data?.cultivator_first_name}
+      />
     </>
   );
 }
