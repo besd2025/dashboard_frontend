@@ -19,6 +19,7 @@ export default function CardsOverview({ cultivateur_id }) {
             }
           );
           setData(results);
+          console.log("result :", results);
         }
       } catch (error) {
         setError(error);
@@ -58,7 +59,20 @@ export default function CardsOverview({ cultivateur_id }) {
           </div>
 
           <h4 className="ml-3 font-semibold text-gray-800 text-lg dark:text-white/90">
-            50,452 <span className="text-sm">KG</span>
+            {data?.total_quantite >= 1000 ? (
+              <>
+                {(data?.total_quantite / 1000).toLocaleString("de-DE", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}{" "}
+                <span className="text-sm">T</span>
+              </>
+            ) : (
+              <>
+                {data?.total_quantite?.toLocaleString("fr-FR") || 0}{" "}
+                <span className="text-sm">Kg</span>
+              </>
+            )}
           </h4>
         </div>
       </div>
@@ -97,7 +111,15 @@ export default function CardsOverview({ cultivateur_id }) {
           </div>
 
           <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
-            30 Mille <span className="text-sm">FBU</span>
+            {data?.total_quantite * 1700 > 1000000
+              ? ((data?.total_quantite * 1700) / 1000000).toLocaleString(
+                  "de-DE"
+                ) + " M"
+              : (data?.total_quantite * 1700)?.toLocaleString("de-DE", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}{" "}
+            <span className="text-sm">FBU</span>
           </h4>
         </div>
       </div>
@@ -140,19 +162,36 @@ export default function CardsOverview({ cultivateur_id }) {
               <p className="text-xs leading-normal text-gray-500 dark:text-gray-400">
                 Type
               </p>
-              <p className="text-sm  text-gray-800 dark:text-white/90 font-semibold">
-                LUMICASH
-              </p>
+              {data?.cultivator_mobile_payment ? (
+                data.cultivator_mobile_payment.slice(0, 2) === "7" ? (
+                  <p className="text-sm text-gray-800 dark:text-white/90 font-semibold">
+                    ECOCASH
+                  </p>
+                ) : (
+                  <p className="text-sm text-gray-800 dark:text-white/90 font-semibold">
+                    LUMICASH
+                  </p>
+                )
+              ) : data?.cultivator_bank_name ? (
+                <p className="text-sm text-gray-800 dark:text-white/90 font-semibold">
+                  BANK / {data.cultivator_bank_name}
+                </p>
+              ) : (
+                ""
+              )}
             </div>
-
-            <div>
-              <p className=" text-xs leading-normal text-gray-500 dark:text-gray-400">
-                No
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                68456125
-              </p>
-            </div>
+            {data?.cultivator_mobile_payment ? (
+              <div>
+                <p className=" text-xs leading-normal text-gray-500 dark:text-gray-400">
+                  No
+                </p>
+                <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+                  68456125
+                </p>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>

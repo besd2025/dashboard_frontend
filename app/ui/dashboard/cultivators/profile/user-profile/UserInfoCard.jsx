@@ -75,12 +75,18 @@ export default function UserInfoCard({ cultivateur_id }) {
                 Type
               </p>
               {data?.cultivator_mobile_payment ? (
-                <p className="text-sm text-gray-800 dark:text-white/90 font-semibold">
-                  MOBILE MONEY
-                </p>
+                data.cultivator_mobile_payment.slice(0, 2) === "7" ? (
+                  <p className="text-sm text-gray-800 dark:text-white/90 font-semibold">
+                    ECOCASH
+                  </p>
+                ) : (
+                  <p className="text-sm text-gray-800 dark:text-white/90 font-semibold">
+                    LUMICASH
+                  </p>
+                )
               ) : data?.cultivator_bank_name ? (
                 <p className="text-sm text-gray-800 dark:text-white/90 font-semibold">
-                  BANK / {data?.cultivator_bank_name}
+                  BANK / {data.cultivator_bank_name}
                 </p>
               ) : (
                 ""
@@ -104,14 +110,18 @@ export default function UserInfoCard({ cultivateur_id }) {
                 ""
               )}
             </div>
-            <div>
-              <p className=" text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Nom et Prenom
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {data?.cultivator_mobile_payment_name}
-              </p>
-            </div>
+            {data?.cultivator_mobile_payment ? (
+              <div>
+                <p className=" text-xs leading-normal text-gray-500 dark:text-gray-400">
+                  Nom et Prenom
+                </p>
+                <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+                  {data?.cultivator_mobile_payment_user_name}
+                </p>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>
