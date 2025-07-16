@@ -1,5 +1,4 @@
 const imageDomain = process.env.NEXT_PUBLIC_IMAGE_DOMAIN;
-
 const nextConfig = {
   images: {
     domains: imageDomain ? [imageDomain] : [],
