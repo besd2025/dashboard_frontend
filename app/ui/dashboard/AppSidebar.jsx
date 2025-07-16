@@ -368,11 +368,11 @@ const AppSidebar = () => {
                     : "justify-start"
                 }`}
               >
-                {isExpanded || isHovered || isMobileOpen ? (
+                {/* {isExpanded || isHovered || isMobileOpen ? (
                   "Autre"
                 ) : (
                   <HorizontaLDots />
-                )}
+                )} */}
               </h2>
             </div>
           </div>

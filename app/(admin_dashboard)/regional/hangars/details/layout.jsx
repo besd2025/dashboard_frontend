@@ -18,7 +18,7 @@ function layout({ children }) {
   }, [pathname]);
   return (
     <div>
-      <Profile />;
+      <Profile />
       <div className="bg-white dark:bg-white/[0.03]  mt-2 rounded-2xl mb-1">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="w-full">
