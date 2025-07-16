@@ -90,9 +90,9 @@ function HangarVentesList() {
             },
           }
         );
-        const results = response.items;
+        const results = response.results.items;
         setData(results);
-        setTotalCount(results.length); // si l'API retourne un `count` total
+        setTotalCount(results.count); // si l'API retourne un `count` total
         console.log(results);
       } catch (error) {
         setError(error);

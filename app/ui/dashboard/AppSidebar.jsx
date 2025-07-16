@@ -7,9 +7,11 @@ import { useSidebar } from "../context/SidebarContext";
 import {
   BoxCubeIcon,
   ChevronDownIcon,
+  DetailIcon,
   GridIcon,
   HangarIcon,
   HorizontaLDots,
+  MapIcon,
   SettingsIcon,
 } from "../icons";
 
@@ -50,7 +52,16 @@ const navItems = [
   {
     icon: <HangarIcon />,
     name: "Hangars",
-    path: "/dashboard/hangars",
+
+    // subMenuIcon: <HangarIcon />,
+    subItems: [
+      { icon: <DetailIcon />, name: "Details", path: "/dashboard/hangars" },
+      {
+        icon: <MapIcon />,
+        name: "Repartition",
+        path: "/dashboard/hangars/geolocalisation",
+      },
+    ],
     startWithUrl: "/dashboard/hangars/",
   },
   {
@@ -117,9 +128,8 @@ const navItems = [
     name: "Roles",
     path: "/municipal/cultivators",
     subItems: [
-      { name: "Communal", path: "/municipal/cultivators" },
-      { name: "Provincial", path: "/provincial/cultivators" },
-      { name: "Regional", path: "/regional/cultivators" },
+      { name: "Communal", path: "/municipal/hangars" },
+      { name: "Provincial", path: "/provincial/hangars" },
     ],
     startWithUrl: "/municipal/cultivators",
   },
@@ -251,6 +261,9 @@ const AppSidebar = () => {
                           : "menu-dropdown-item-inactive"
                       }`}
                     >
+                      {subItem.icon && (
+                        <span className="mr-">{subItem.icon}</span>
+                      )}
                       {subItem.name}
                     </Link>
                   </li>
@@ -354,11 +367,11 @@ const AppSidebar = () => {
                     : "justify-start"
                 }`}
               >
-                {isExpanded || isHovered || isMobileOpen ? (
+                {/* {isExpanded || isHovered || isMobileOpen ? (
                   "Autre"
                 ) : (
                   <HorizontaLDots />
-                )}
+                )} */}
               </h2>
             </div>
           </div>

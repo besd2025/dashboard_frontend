@@ -399,15 +399,15 @@ function AllCultivatorsList() {
                       <Dropdown
                         isOpen={openDropdowns[order.id]}
                         onClose={() => closeDropdown(order.id)}
-                        className="w-40 p-2"
+                        className="w-max p-2"
                       >
                         <DropdownItem
                           onItemClick={() => closeDropdown(order.id)}
                           tag="a"
-                          href={`/municipal/hangars/confirmation/en_attente/details/cultivator?hangar_id=${order.id}`}
+                          href={`/provincial/hangars/reports/details/cultivators-achats?hangar_id=${order.id}`}
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
-                          Details
+                          Rapport journalier
                         </DropdownItem>
                       </Dropdown>
                     </div>

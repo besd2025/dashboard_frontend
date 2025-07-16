@@ -15,7 +15,7 @@ import { useModal } from "../../../../hooks/useModal";
 import Pagination from "../../../Pagination";
 import FilterUserProfile from "../../../../../municipal/cultivators/profile/filter_user_profile";
 import { fetchData } from "../../../../../../_utils/api";
-import EditHangarVentes from "../../../../../provincial/municipals/details/edit_hangar_ventes";
+import EditHangarVentes from "../../../../../municipal/hangars/details/edit_hangar_ventes";
 import dynamic from "next/dynamic";
 function HangarTranfersList({ hangar_id }) {
   const [data, setData] = useState([]);
