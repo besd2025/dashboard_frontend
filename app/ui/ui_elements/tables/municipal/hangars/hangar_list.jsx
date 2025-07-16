@@ -404,7 +404,7 @@ function AllCultivatorsList() {
                         <DropdownItem
                           onItemClick={() => closeDropdown(order.id)}
                           tag="a"
-                          href={`/municipal/hangars/reports/details/cultivator?hangar_id=${order.id}`}
+                          href={`/provincial/hangars/reports/details/cultivators-achats?hangar_id=${order.id}`}
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
                           Rapport journalier

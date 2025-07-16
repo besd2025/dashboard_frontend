@@ -130,7 +130,6 @@ const navItems = [
     subItems: [
       { name: "Communal", path: "/municipal/hangars" },
       { name: "Provincial", path: "/provincial/hangars" },
-      { name: "Regional", path: "/regional/hangars" },
     ],
     startWithUrl: "/municipal/cultivators",
   },

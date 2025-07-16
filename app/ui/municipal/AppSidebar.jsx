@@ -77,37 +77,11 @@ const navItems = [
       "/municipal/hangars/details/ventes",
       "/municipal/hangars/details/synthese",
     ],
+    startWithUrl: "/municipal/hangars/",
   },
-  // {
-  //   icon: <SettingsIcon />,
-  //   name: "Parametre",
-  //   path: "/municipal/settings/profile",
-  //   subPath: [
-  //     "/municipal/settings/security",
-  //     "/municipal/settings/manage",
-  //     "/municipal/settings/preferences",
-  //     "/municipal/settings/synchronisation",
-  //     "/municipal/settings/security/change_password",
-  //     "/municipal/settings/roles_manager",
-  //   ],
-  // },
 ];
 
-const othersItems = [
-  // {
-  //   icon: <AlertIcon />,
-  //   name: "Alertes",
-  //   path: "/municipal/alerts",
-  // },
-  // {
-  //   icon: <PlugInIcon />,
-  //   name: "Authentication",
-  //   subItems: [
-  //     { name: "Sign In", path: "/signin", pro: false },
-  //     { name: "Sign Up", path: "/signup", pro: false },
-  //   ],
-  // },
-];
+const othersItems = [];
 
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
@@ -123,11 +97,12 @@ const AppSidebar = () => {
       if (isActive(item.path)) return true;
       if (item.subPath && item.subPath.some((path) => isActive(path)))
         return true;
+      if (item.startWithUrl && pathname.startsWith(item.startWithUrl))
+        return true;
       return false;
     },
-    [isActive]
+    [isActive, pathname]
   );
-
   const handleSubmenuToggle = (index, menuType) => {
     setOpenSubmenu((prev) =>
       prev && prev.type === menuType && prev.index === index
