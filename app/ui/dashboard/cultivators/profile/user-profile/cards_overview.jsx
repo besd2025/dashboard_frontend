@@ -5,6 +5,7 @@ export default function CardsOverview({ cultivateur_id }) {
   console.log(cultivateur_id);
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
+  const [prix_achat, setTotalPrixAchat] = useState([]);
   useEffect(() => {
     async function getData() {
       try {
@@ -18,8 +19,18 @@ export default function CardsOverview({ cultivateur_id }) {
               body: {},
             }
           );
+          const prix_achat = await fetchData(
+            "get",
+            "admin/prices/get_prix_achat/",
+            {
+              params: {},
+              additionalHeaders: {},
+              body: {},
+            }
+          );
           setData(results);
-          console.log("result :", results);
+          setTotalPrixAchat(prix_achat);
+          console.log("prix Achat", prix_achat);
         }
       } catch (error) {
         setError(error);
@@ -28,20 +39,15 @@ export default function CardsOverview({ cultivateur_id }) {
     }
     getData();
   }, [cultivateur_id]);
+
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 md:gap-6">
       {/* <!-- Metric Item Start quantity collected --> */}
-      <div className="rounded-2xl border border-gray-200 bg-green-300 p-3 dark:border-gray-800 dark:bg-white/[0.03] ">
-        <div className="flex items-end justify-between mb-2">
-          <div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              Qté Vendue
-            </span>
-          </div>
-        </div>
-        <div className="flex">
-          {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
-          <div className="flex items-center justify-center   rounded-xl dark:bg-gray-800">
+
+      <div className="rounded-2xl col-span-2 flex flex-row justify-between border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+        <div>
+          <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
+            {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -57,23 +63,130 @@ export default function CardsOverview({ cultivateur_id }) {
               />
             </svg>
           </div>
+          <div className="flex items-end justify-between mt-2">
+            <div>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                Qté Vendue
+              </span>
+              <h4 className="mt-2 font-semibold text-gray-800 text-xl dark:text-white/90">
+                {data?.total_quantite >= 1000 ? (
+                  <>
+                    {(data?.total_quantite / 1000).toLocaleString("de-DE", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {data?.total_quantite?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">Kg</span>
+                  </>
+                )}
+              </h4>
+            </div>
+            {/* <Badge color="success">
+            <ArrowUpIcon />
+            2.0%
+          </Badge> */}
+          </div>
+        </div>
+        {/* <div className="w-px bg-gray-200 h-full dark:bg-gray-800"></div>
 
-          <h4 className="ml-3 font-semibold text-gray-800 text-lg dark:text-white/90">
-            {data?.total_quantite >= 1000 ? (
-              <>
-                {(data?.total_quantite / 1000).toLocaleString("de-DE", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}{" "}
-                <span className="text-sm">T</span>
-              </>
-            ) : (
-              <>
-                {data?.total_quantite?.toLocaleString("fr-FR") || 0}{" "}
-                <span className="text-sm">Kg</span>
-              </>
-            )}
-          </h4>
+        <h4 className="ml-3 font-semibold text-gray-800 text-lg dark:text-white/90">
+          {data?.total_quantite >= 1000 ? (
+            <>
+              {(data?.total_quantite / 1000).toLocaleString("de-DE", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}{" "}
+              <span className="text-sm">T</span>
+            </>
+          ) : (
+            <>
+              {data?.total_quantite?.toLocaleString("fr-FR") || 0}{" "}
+              <span className="text-sm">Kg</span>
+            </>
+          )}
+        </h4> */}
+
+        <div className="">
+          <div className="flex items-end justify-between   rounded-2xl">
+            <div>
+              <div className="flex flex-row items-center gap-x-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="size-8"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.5 7.5a3 3 0 0 1 3-3h9a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-9Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Maïs Blanc
+                </span>
+              </div>
+
+              <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
+                {data?.total_blanc >= 1000 ? (
+                  <>
+                    {(data?.total_blanc / 1000).toLocaleString("de-DE", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {data?.total_blanc?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">Kg</span>
+                  </>
+                )}
+              </h4>
+            </div>
+          </div>
+          <div className="flex items-end justify-between mt-2 rounded-2xl">
+            <div>
+              <div className="flex flex-row items-center gap-x-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="size-8 text-yellow-500 "
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.5 7.5a3 3 0 0 1 3-3h9a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-9Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Maïs Jaune
+                </span>
+              </div>
+
+              <h4 className=" font-semibold text-yellow-600 text-lg dark:text-white/90">
+                {data?.total_jaune >= 1000 ? (
+                  <>
+                    {(data?.total_jaune / 1000).toLocaleString("de-DE", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    <span className="text-sm">T</span>
+                  </>
+                ) : (
+                  <>
+                    {data?.total_jaune?.toLocaleString("fr-FR") || 0}{" "}
+                    <span className="text-sm">Kg</span>
+                  </>
+                )}
+              </h4>
+            </div>
+          </div>
         </div>
       </div>
       {/* <!-- Metric Item End --> */}
@@ -83,7 +196,7 @@ export default function CardsOverview({ cultivateur_id }) {
       {/* <!-- Metric Item End --> */}
       {/* <!-- Metric Item Start --> */}
 
-      <div className="rounded-2xl border border-gray-200 bg-yellow-200 p-3 dark:border-gray-800 dark:bg-white/[0.03] ">
+      <div className="rounded-2xl border border-gray-200 bg-white p-3 dark:border-gray-800 dark:bg-white/[0.03] ">
         <div className="flex items-end justify-between mb-2">
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -111,14 +224,18 @@ export default function CardsOverview({ cultivateur_id }) {
           </div>
 
           <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
-            {data?.total_quantite * 1700 > 1000000
-              ? ((data?.total_quantite * 1700) / 1000000).toLocaleString(
-                  "de-DE"
-                ) + " M"
-              : (data?.total_quantite * 1700)?.toLocaleString("de-DE", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}{" "}
+            {data?.total_quantite * prix_achat?.prix_achat > 1000000
+              ? (
+                  (data?.total_quantite * prix_achat?.prix_achat) /
+                  1000000
+                ).toLocaleString("de-DE") + " M"
+              : (data?.total_quantite * prix_achat?.prix_achat)?.toLocaleString(
+                  "de-DE",
+                  {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }
+                )}{" "}
             <span className="text-sm">FBU</span>
           </h4>
         </div>
