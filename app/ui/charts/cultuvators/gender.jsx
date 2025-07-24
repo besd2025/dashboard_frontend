@@ -1,24 +1,30 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { fetchData } from "../../../_utils/api";
-// Dynamically import to avoid SSR errors
+
+// Chargement dynamique de ReactApexChart
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
+  loading: () => (
+    <p className="text-gray-500 text-sm">Chargement du graphique...</p>
+  ),
 });
 
 function GenderChart() {
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [state, setState] = React.useState({
-    series: [],
+  const [state, setState] = useState({
+    series: [0, 0],
     options: {
       chart: {
         width: 300,
         type: "pie",
         fontFamily: "Outfit, sans-serif",
         toolbar: {
-          show: false, // Hide chart toolbar
+          show: false,
         },
       },
       stroke: {
@@ -32,7 +38,7 @@ function GenderChart() {
         },
         offsetX: 30,
       },
-      labels: [],
+      labels: ["Hommes", "Femmes"],
       responsive: [
         {
           breakpoint: 480,
@@ -48,6 +54,7 @@ function GenderChart() {
       ],
     },
   });
+
   useEffect(() => {
     async function getData() {
       try {
@@ -63,16 +70,15 @@ function GenderChart() {
         setState((prev) => ({
           ...prev,
           series: [hommes, femmes],
-          options: {
-            ...prev.options,
-            labels: [`Hommes: ${hommes}`, `Femmes: ${femmes}`],
-          },
         }));
-      } catch (error) {
-        setError(error);
-        console.error(error);
+      } catch (err) {
+        setError("Erreur lors du chargement des données.");
+        console.error(err);
+      } finally {
+        setLoading(false);
       }
     }
+
     getData();
   }, []);
 
@@ -83,13 +89,27 @@ function GenderChart() {
           Genre
         </h3>
       </div>
-      <div className="max-w-full   overflow-x-auto custom-scrollbar">
-        <div className="-ml-5 min-w-[650px] xl:min-w-full pl-2 ">
-          <ReactApexChart
-            options={state.options}
-            series={state.series}
-            type="pie"
-          />
+
+      {error && <div className="mt-4 text-red-500 text-sm">{error}</div>}
+
+      <div className="max-w-full overflow-x-auto custom-scrollbar">
+        <div className="-ml-5 min-w-[650px] xl:min-w-full pl-2">
+          {loading ? (
+            <div className="py-10 text-center text-gray-500">
+              Chargement du graphique...
+            </div>
+          ) : (
+            <>
+              <ReactApexChart
+                options={state.options}
+                series={state.series}
+                type="pie"
+              />
+              <div className="mt-4 text-sm text-gray-700 dark:text-white/80 text-center">
+                Hommes : {state.series[0]} | Femmes : {state.series[1]}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

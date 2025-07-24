@@ -5,12 +5,7 @@ export default function CardsOverview({ cultivateur_id }) {
   console.log(cultivateur_id);
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
-
-  const [quantite_vendu, setQuantiteVendu] = useState(0);
-  const [gaptotal, setGapTotat] = useState([]);
-  const [quantite_total_achat, setQuantiteTotalAchete] = useState(0);
-  const [total_quantite_vendu, setTotalVendu] = useState([]);
-  const [gap_total_en_prix, setGapTotalPrix] = useState(0);
+  const [prix_achat, setTotalPrixAchat] = useState([]);
   useEffect(() => {
     async function getData() {
       try {
@@ -24,7 +19,18 @@ export default function CardsOverview({ cultivateur_id }) {
               body: {},
             }
           );
+          const prix_achat = await fetchData(
+            "get",
+            "admin/prices/get_prix_achat/",
+            {
+              params: {},
+              additionalHeaders: {},
+              body: {},
+            }
+          );
           setData(results);
+          setTotalPrixAchat(prix_achat);
+          console.log("prix Achat", prix_achat);
         }
       } catch (error) {
         setError(error);
@@ -34,66 +40,11 @@ export default function CardsOverview({ cultivateur_id }) {
     getData();
   }, [cultivateur_id]);
 
-  useEffect(() => {
-    async function getData() {
-      try {
-        const results = await fetchData("get", "stock_resume/", {
-          params: {},
-          additionalHeaders: {},
-          body: {},
-        });
-
-        const quantite_vendu_jaune_blanc = await fetchData(
-          "get",
-          "sorties/somme_totale_sorties/",
-          {
-            params: {},
-            additionalHeaders: {},
-            body: {},
-          }
-        );
-        const pertetotal = await fetchData(
-          "get",
-          "stock/details/pertes_totales/",
-          {
-            params: {},
-            additionalHeaders: {},
-            body: {},
-          }
-        );
-        const prix_achat = await fetchData(
-          "get",
-          "admin/prices/get_prix_achat/",
-          {
-            params: {},
-            additionalHeaders: {},
-            body: {},
-          }
-        );
-
-        setGapTotalPrix(prix_achat?.prix_achat * pertetotal?.pertes_totales);
-        setTotalVendu(quantite_vendu_jaune_blanc);
-        setGapTotat(pertetotal);
-        setData(results);
-        setQuantiteVendu(
-          results?.sorties?.sorties_blanc + results?.sorties?.sorties_jaune
-        );
-
-        setQuantiteTotalAchete(
-          results?.achats?.achats_blanc + results?.achats?.achats_jaune
-        );
-      } catch (error) {
-        setError(error);
-        console.error(error);
-      }
-    }
-    getData();
-  }, []);
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 md:gap-6">
       {/* <!-- Metric Item Start quantity collected --> */}
 
-      <div className="rounded-2xl col-span-1 flex flex-row justify-between border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+      <div className="rounded-2xl col-span-2 flex flex-row justify-between border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div>
           <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
             {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
@@ -118,9 +69,9 @@ export default function CardsOverview({ cultivateur_id }) {
                 Qté Vendue
               </span>
               <h4 className="mt-2 font-semibold text-gray-800 text-xl dark:text-white/90">
-                {quantite_total_achat >= 1000 ? (
+                {data?.total_quantite >= 1000 ? (
                   <>
-                    {(quantite_total_achat / 1000).toLocaleString("de-DE", {
+                    {(data?.total_quantite / 1000).toLocaleString("de-DE", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}{" "}
@@ -128,7 +79,7 @@ export default function CardsOverview({ cultivateur_id }) {
                   </>
                 ) : (
                   <>
-                    {quantite_total_achat?.toLocaleString("fr-FR") || 0}{" "}
+                    {data?.total_quantite?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
@@ -140,7 +91,24 @@ export default function CardsOverview({ cultivateur_id }) {
           </Badge> */}
           </div>
         </div>
-        <div className="w-px bg-gray-200 h-full dark:bg-gray-800"></div>
+        {/* <div className="w-px bg-gray-200 h-full dark:bg-gray-800"></div>
+
+        <h4 className="ml-3 font-semibold text-gray-800 text-lg dark:text-white/90">
+          {data?.total_quantite >= 1000 ? (
+            <>
+              {(data?.total_quantite / 1000).toLocaleString("de-DE", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}{" "}
+              <span className="text-sm">T</span>
+            </>
+          ) : (
+            <>
+              {data?.total_quantite?.toLocaleString("fr-FR") || 0}{" "}
+              <span className="text-sm">Kg</span>
+            </>
+          )}
+        </h4> */}
 
         <div className="">
           <div className="flex items-end justify-between   rounded-2xl">
@@ -164,20 +132,17 @@ export default function CardsOverview({ cultivateur_id }) {
               </div>
 
               <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
-                {data?.achats?.achats_blanc >= 1000 ? (
+                {data?.total_blanc >= 1000 ? (
                   <>
-                    {(data?.achats?.achats_blanc / 1000).toLocaleString(
-                      "de-DE",
-                      {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      }
-                    )}{" "}
+                    {(data?.total_blanc / 1000).toLocaleString("de-DE", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
-                    {data?.achats?.achats_blanc?.toLocaleString("fr-FR") || 0}{" "}
+                    {data?.total_blanc?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
@@ -205,20 +170,17 @@ export default function CardsOverview({ cultivateur_id }) {
               </div>
 
               <h4 className=" font-semibold text-yellow-600 text-lg dark:text-white/90">
-                {data?.achats?.achats_jaune >= 1000 ? (
+                {data?.total_jaune >= 1000 ? (
                   <>
-                    {(data?.achats?.achats_jaune / 1000).toLocaleString(
-                      "de-DE",
-                      {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      }
-                    )}{" "}
+                    {(data?.total_jaune / 1000).toLocaleString("de-DE", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
-                    {data?.achats?.achats_jaune?.toLocaleString("fr-FR") || 0}{" "}
+                    {data?.total_jaune?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
@@ -262,7 +224,19 @@ export default function CardsOverview({ cultivateur_id }) {
           </div>
 
           <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
-            30 Mille <span className="text-sm">FBU</span>
+            {data?.total_quantite * prix_achat?.prix_achat > 1000000
+              ? (
+                  (data?.total_quantite * prix_achat?.prix_achat) /
+                  1000000
+                ).toLocaleString("de-DE") + " M"
+              : (data?.total_quantite * prix_achat?.prix_achat)?.toLocaleString(
+                  "de-DE",
+                  {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }
+                )}{" "}
+            <span className="text-sm">FBU</span>
           </h4>
         </div>
       </div>
@@ -305,19 +279,36 @@ export default function CardsOverview({ cultivateur_id }) {
               <p className="text-xs leading-normal text-gray-500 dark:text-gray-400">
                 Type
               </p>
-              <p className="text-sm  text-gray-800 dark:text-white/90 font-semibold">
-                LUMICASH
-              </p>
+              {data?.cultivator_mobile_payment ? (
+                data.cultivator_mobile_payment.slice(0, 2) === "7" ? (
+                  <p className="text-sm text-gray-800 dark:text-white/90 font-semibold">
+                    ECOCASH
+                  </p>
+                ) : (
+                  <p className="text-sm text-gray-800 dark:text-white/90 font-semibold">
+                    LUMICASH
+                  </p>
+                )
+              ) : data?.cultivator_bank_name ? (
+                <p className="text-sm text-gray-800 dark:text-white/90 font-semibold">
+                  BANK / {data.cultivator_bank_name}
+                </p>
+              ) : (
+                ""
+              )}
             </div>
-
-            <div>
-              <p className=" text-xs leading-normal text-gray-500 dark:text-gray-400">
-                No
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                68456125
-              </p>
-            </div>
+            {data?.cultivator_mobile_payment ? (
+              <div>
+                <p className=" text-xs leading-normal text-gray-500 dark:text-gray-400">
+                  No
+                </p>
+                <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+                  68456125
+                </p>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>
