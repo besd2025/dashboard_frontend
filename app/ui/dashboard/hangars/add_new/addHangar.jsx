@@ -73,9 +73,10 @@ function AddHangar() {
         }
       );
       const options = zones?.map((item) => ({
-        value: item.zone_name,
+        value: item.id,
         label: item.zone_name,
       }));
+      console.log(options);
       setZoneOptions(options);
     } catch (err) {
       setError(err);
@@ -106,6 +107,29 @@ function AddHangar() {
     getProvinces();
   }, []);
 
+  const Create_Hangars = async () => {
+    if (formData) {
+      console.log(formData);
+      const formdata = {
+        hangar_name: formData.name,
+        hangar_adress: formData.zone,
+        hangar_code: formData.code,
+        initial_stock: formData.initialStock,
+      };
+      const response = await fetchData("post", `/hangars/`, {
+        params: {},
+        additionalHeaders: {},
+        body: formdata,
+      });
+      if (response == 201) {
+        window.location.reload();
+      } else {
+        setError("erreur d'enregistrement");
+      }
+    } else {
+      setError("complete d'abord tous les cases ");
+    }
+  };
   return (
     <div className="max-w-3xl p-6 bg-white rounded-2xl">
       <div>
@@ -175,6 +199,7 @@ function AddHangar() {
           </div>
           <div>
             <Button
+              onClick={Create_Hangars}
               className="w-sm bg-yellow-500 hover:bg-yellow-600"
               size="sm"
             >

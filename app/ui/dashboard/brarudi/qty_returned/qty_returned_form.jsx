@@ -66,7 +66,7 @@ function QtyReturnedForm({ closeModalDetails, onBack }) {
         additionalHeaders: {},
         body: formdata,
       });
-      if (response == 200) {
+      if (response == 201) {
         window.location.reload();
       } else {
         setError("erreur d'enregistrement");

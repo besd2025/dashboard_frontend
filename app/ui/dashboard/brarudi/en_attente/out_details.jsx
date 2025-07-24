@@ -90,7 +90,7 @@ function OutDetails({
         },
       });
 
-      if (response === 200) {
+      if (response === 201) {
         window.location.reload();
       }
     }

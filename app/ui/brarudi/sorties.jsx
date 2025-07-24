@@ -89,7 +89,7 @@ function Sorties() {
         additionalHeaders: {},
         body: formdata,
       });
-      if (response == 200) {
+      if (response == 201) {
         window.location.reload();
       } else {
         setError("erreur d'enregistrement");

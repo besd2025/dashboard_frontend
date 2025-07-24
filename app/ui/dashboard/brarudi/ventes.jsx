@@ -229,7 +229,7 @@ function Ventes() {
           additionalHeaders: {},
           body: formData, // Utilisation de FormData ici
         });
-        if (response === 200) {
+        if (response === 201) {
           window.location.reload();
         } else {
           setError("Erreur d'enregistrement");
