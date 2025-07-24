@@ -61,6 +61,11 @@ const navItems = [
         name: "Repartition",
         path: "/dashboard/hangars/geolocalisation",
       },
+      {
+        icon: <DetailIcon />,
+        name: "Ajouter",
+        path: "/dashboard/hangars/add_new",
+      },
     ],
     startWithUrl: "/dashboard/hangars/",
   },
