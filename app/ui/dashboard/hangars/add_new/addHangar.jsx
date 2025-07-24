@@ -125,6 +125,17 @@ function AddHangar() {
             />
           </div>
           <div>
+            <Label htmlFor="hangar-code">Hangar code</Label>
+            <Input
+              type="text"
+              id="hangar-code"
+              name="code"
+              placeholder="Code du hangar"
+              value={formData.code}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
             <Label htmlFor="initial-stock">Stock initial</Label>
             <Input
               type="number"
