@@ -1,28 +1,36 @@
-"use client"
-import React,{useState,useEffect} from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import { fetchData } from "../../../_utils/api";
+import SkeletonLoader from "../../ui_elements/loading/SkeletonLoader";
 function ActifCultivators() {
-const [data, setData] = useState([]);
-    const [error, setError] = useState(null);
-    useEffect(() => {
-      async function getData() {
-        try {
-  
-          const results = await fetchData('get', 'achats/nombre_cultivateurs_ayant_achete/', {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function getData() {
+      setLoading(true);
+      try {
+        const results = await fetchData(
+          "get",
+          "achats/nombre_cultivateurs_ayant_achete/",
+          {
             params: {},
             additionalHeaders: {},
-            body: {}
-          });
-  
-          setData(results);
-          
-        } catch (error) {
-          setError(error);
-          console.error(error);
-        }
+            body: {},
+          }
+        );
+
+        setData(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      } finally {
+        setLoading(false);
       }
-      getData();
-    }, []);
+    }
+    getData();
+  }, []);
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6 relative">
@@ -42,7 +50,11 @@ const [data, setData] = useState([]);
           <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
         </svg>
         <h4 className="ml-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
-          {data.nombre_cultivateurs_ayant_achete || 0}
+          {loading ? (
+            <SkeletonLoader width="80px" height="14px" borderRadius="4px" />
+          ) : (
+            data.nombre_cultivateurs_ayant_achete || 0
+          )}
         </h4>
         <span
           className={`absolute -left-1 -top-1 z-10 h-4 w-4 rounded-full bg-green-600 `}
@@ -57,10 +69,6 @@ const [data, setData] = useState([]);
             Cultivateurs actif
           </span>
         </div>
-        {/* <Badge color="success">
-          <ArrowUpIcon />
-          2.0%
-        </Badge> */}
       </div>
     </div>
   );

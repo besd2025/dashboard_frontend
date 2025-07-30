@@ -4,8 +4,12 @@ import React, { useEffect, useState } from "react";
 function Stocks() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     async function getData() {
+      setLoading(true);
+
       try {
         const results = await fetchData("get", "stock_resume/", {
           params: {},
@@ -16,6 +20,8 @@ function Stocks() {
       } catch (error) {
         setError(error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
     getData();
@@ -43,15 +49,15 @@ function Stocks() {
         <div>
           <span className="text-sm text-gray-200">Total du stock</span>
           <h4 className="mt-2 font-semibold text-white text-2xl">
-            {data?.total >= 1000
-              ? `${data?.total / 1000} T`
-              : `${data?.total} kg`}
+            {loading ? (
+              <SkeletonLoader width="80px" height="14px" borderRadius="4px" />
+            ) : data?.total >= 1000 ? (
+              `${data?.total / 1000} T`
+            ) : (
+              `${data?.total} kg`
+            )}
           </h4>
         </div>
-        {/* <Badge color="success">
-          <ArrowUpIcon />
-          2.0%
-        </Badge> */}
       </div>
     </div>
   );

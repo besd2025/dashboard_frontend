@@ -19,7 +19,7 @@ const TableBody = ({ children, className }) => {
 const TableRow = ({ children, className }) => {
   return (
     <tr
-      className={`${className} cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.05] rounded-2xl`}
+      className={`${className}  hover:bg-gray-50 dark:hover:bg-white/[0.05] rounded-2xl`}
     >
       {children}
     </tr>

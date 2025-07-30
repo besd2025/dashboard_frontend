@@ -5,6 +5,7 @@ import { MoreDotIcon } from "../../icons";
 import { useState, useEffect } from "react";
 import DropdownItem from "../../ui_elements/dropdown/DropdownItem";
 import { fetchData } from "../../../_utils/api";
+import SkeletonLoader from "../../ui_elements/loading/SkeletonLoader";
 // Dynamically import both ApexCharts and ReactApexChart
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -12,6 +13,7 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 
 export default function Synthese() {
   const [isMounted, setIsMounted] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setIsMounted(true);
@@ -97,6 +99,8 @@ export default function Synthese() {
       } catch (error) {
         setError(error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
     getData();
@@ -104,23 +108,31 @@ export default function Synthese() {
   return (
     <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
       <div className="flex items-center justify-between gap-5 p-6 sm:gap-8 ">
-        <div>
+        <div className="cursor-pointer">
           <p className="mb-1 text-center text-gray-500 text-theme-xs dark:text-gray-400 sm:text-sm">
             HANGAR ciblés
           </p>
           <p className="flex items-center justify-center gap-1 text-base font-semibold text-gray-800 dark:text-white/90 sm:text-lg">
-            {data?.total_hangars || 0}
+            {loading ? (
+              <SkeletonLoader width="80px" height="20px" borderRadius="4px" />
+            ) : (
+              data?.total_hangars || 0
+            )}
           </p>
         </div>
 
         <div className="w-px bg-gray-200 h-7 dark:bg-gray-800"></div>
 
-        <div>
+        <div className="cursor-pointer">
           <p className="mb-1 text-center text-gray-500 text-theme-xs dark:text-gray-400 sm:text-sm">
             HANGAR en activités
           </p>
           <p className="flex items-center justify-center gap-1 text-base font-semibold text-gray-800 dark:text-white/90 sm:text-lg">
-            {data?.hangars_avec_collecteur || 0}
+            {loading ? (
+              <SkeletonLoader width="80px" height="20px" borderRadius="4px" />
+            ) : (
+              data?.hangars_avec_collecteur || 0
+            )}
           </p>
         </div>
 

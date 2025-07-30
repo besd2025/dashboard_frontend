@@ -12,8 +12,6 @@ import Image from "next/image";
 import { MoreDotIcon } from "../../../../icons";
 import DropdownItem from "../../../dropdown/DropdownItem";
 import { Dropdown } from "../../../dropdown/dropdown_cultvators";
-import Badge from "../../../badge/Badge";
-import { useSidebar } from "../../../../context/SidebarContext";
 import Modal from "../../../modal";
 import { useModal } from "../../../hooks/useModal";
 import Pagination from "../../Pagination";
@@ -23,6 +21,7 @@ import { fetchData } from "../../../../../_utils/api";
 import { UserContext } from "../../../../context/UserContext";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import ViewImageModal from "../../../modal/ViewImageModal";
 function AllCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
@@ -33,6 +32,8 @@ function AllCultivatorsList() {
   const [currentPage, setCurrentPage] = useState(1);
   const user = useContext(UserContext);
   const [cultivateur_id, setId] = useState(0);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [modalImageUrl, setModalImageUrl] = useState("");
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -200,6 +201,11 @@ function AllCultivatorsList() {
     } catch (error) {
       console.error("Erreur exportation Excel :", error);
     }
+  };
+
+  const handleImageClick = (url) => {
+    setModalImageUrl(url);
+    setIsImageModalOpen(true);
   };
 
   return (
@@ -451,7 +457,14 @@ function AllCultivatorsList() {
 
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 overflow-hidden rounded-full">
+                      <div
+                        className="w-10 h-10 overflow-hidden rounded-full cursor-pointer"
+                        onClick={() =>
+                          handleImageClick(
+                            order?.cultivator_photo || "/img/blank-profile.png"
+                          )
+                        }
+                      >
                         {order?.cultivator_photo ? (
                           <Image
                             width={80}
@@ -538,6 +551,12 @@ function AllCultivatorsList() {
           cultivateur_id={cultivateur_id}
         />
       </Modal>
+      <ViewImageModal
+        isOpen={isImageModalOpen}
+        onClose={() => setIsImageModalOpen(false)}
+        imageUrl={modalImageUrl}
+        alt="Cultivateur photo"
+      />
     </div>
   );
 }

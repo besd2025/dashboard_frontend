@@ -23,6 +23,7 @@ import DropdownItem from "../../../dropdown/DropdownItem";
 import { Dropdown } from "../../../dropdown/dropdown_cultvators";
 import { MoreDotIcon } from "../../../../icons";
 import { fetchData } from "../../../../../_utils/api";
+import SkeletonLoader from "../../../loading/SkeletonLoader";
 
 function AllCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
@@ -32,6 +33,8 @@ function AllCultivatorsList() {
   const limit = 5; // nombre par page
   const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -87,6 +90,8 @@ function AllCultivatorsList() {
 
   useEffect(() => {
     async function getData() {
+      setLoading(true);
+
       try {
         const results = await fetchData("get", "/hangars/", {
           params: {
@@ -101,6 +106,8 @@ function AllCultivatorsList() {
       } catch (error) {
         setError(error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -386,80 +393,93 @@ function AllCultivatorsList() {
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {data.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="relative inline-block">
-                      <button
-                        onClick={() => toggleDropdown(order.id)}
-                        className="dropdown-toggle"
-                      >
-                        <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
-                      </button>
-                      <Dropdown
-                        isOpen={openDropdowns[order.id]}
-                        onClose={() => closeDropdown(order.id)}
-                        className="w-max p-2"
-                      >
-                        <DropdownItem
-                          onItemClick={() => closeDropdown(order.id)}
-                          tag="a"
-                          href={`/provincial/hangars/reports/details/cultivators-achats?hangar_id=${order.id}`}
-                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                        >
-                          Rapport journalier
-                        </DropdownItem>
-                      </Dropdown>
-                    </div>
-                  </TableCell>
+              {loading
+                ? Array.from({ length: 9 }).map((_, idx) => (
+                    <TableCell
+                      key={idx}
+                      className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400"
+                    >
+                      <SkeletonLoader
+                        width="100%"
+                        height="100%"
+                        borderRadius="4px"
+                      />
+                    </TableCell>
+                  ))
+                : data.map((order) => (
+                    <TableRow key={order.id}>
+                      <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        <div className="relative inline-block">
+                          <button
+                            onClick={() => toggleDropdown(order.id)}
+                            className="dropdown-toggle"
+                          >
+                            <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
+                          </button>
+                          <Dropdown
+                            isOpen={openDropdowns[order.id]}
+                            onClose={() => closeDropdown(order.id)}
+                            className="w-max p-2"
+                          >
+                            <DropdownItem
+                              onItemClick={() => closeDropdown(order.id)}
+                              tag="a"
+                              href={`/provincial/hangars/reports/details/cultivators-achats?hangar_id=${order.id}`}
+                              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                            >
+                              Rapport journalier
+                            </DropdownItem>
+                          </Dropdown>
+                        </div>
+                      </TableCell>
 
-                  <TableCell className="px-5 py-4 sm:px-6 text-start">
-                    <div className="flex items-center gap-3">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="size-6 text-gray-600  dark:text-white/90"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M4.5 2.25a.75.75 0 0 0 0 1.5v16.5h-.75a.75.75 0 0 0 0 1.5h16.5a.75.75 0 0 0 0-1.5h-.75V3.75a.75.75 0 0 0 0-1.5h-15ZM9 6a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5H9Zm-.75 3.75A.75.75 0 0 1 9 9h1.5a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75ZM9 12a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5H9Zm3.75-5.25A.75.75 0 0 1 13.5 6H15a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75ZM13.5 9a.75.75 0 0 0 0 1.5H15A.75.75 0 0 0 15 9h-1.5Zm-.75 3.75a.75.75 0 0 1 .75-.75H15a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75ZM9 19.5v-2.25a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 9 19.5Z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <div>
-                        <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order?.hangar_name}
-                        </span>
-                        <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order?.hangar_code}
-                        </span>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.total_achats}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.total_achats_price}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.total_ventes}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.total_ventes_price}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.province}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.commune}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.zone}
-                  </TableCell>
-                </TableRow>
-              ))}
+                      <TableCell className="px-5 py-4 sm:px-6 text-start">
+                        <div className="flex items-center gap-3">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="size-6 text-gray-600  dark:text-white/90"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M4.5 2.25a.75.75 0 0 0 0 1.5v16.5h-.75a.75.75 0 0 0 0 1.5h16.5a.75.75 0 0 0 0-1.5h-.75V3.75a.75.75 0 0 0 0-1.5h-15ZM9 6a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5H9Zm-.75 3.75A.75.75 0 0 1 9 9h1.5a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75ZM9 12a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5H9Zm3.75-5.25A.75.75 0 0 1 13.5 6H15a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75ZM13.5 9a.75.75 0 0 0 0 1.5H15A.75.75 0 0 0 15 9h-1.5Zm-.75 3.75a.75.75 0 0 1 .75-.75H15a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75ZM9 19.5v-2.25a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 9 19.5Z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          <div>
+                            <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
+                              {order?.hangar_name}
+                            </span>
+                            <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+                              {order?.hangar_code}
+                            </span>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        {order?.total_achats}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        {order?.total_achats_price}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        {order?.total_ventes}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        {order?.total_ventes_price}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        {order?.province}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        {order?.commune}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        {order?.zone}
+                      </TableCell>
+                    </TableRow>
+                  ))}
             </TableBody>
           </Table>
         </div>

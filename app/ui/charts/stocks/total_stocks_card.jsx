@@ -3,11 +3,16 @@ import React, { useState, useEffect } from "react";
 import { ArrowUpIcon } from "../../icons";
 import Badge from "../../ui_elements/badge/Badge";
 import { fetchData } from "../../../_utils/api";
+import SkeletonLoader from "../../ui_elements/loading/SkeletonLoader";
 function TotalStocks() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     async function getData() {
+      setLoading(true);
+
       try {
         const results = await fetchData("get", "stock_resume/", {
           params: {},
@@ -18,6 +23,8 @@ function TotalStocks() {
       } catch (error) {
         setError(error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
     getData();
@@ -47,7 +54,9 @@ function TotalStocks() {
             Total du stock
           </span>
           <h4 className="mt-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
-            {data?.total >= 1000 ? (
+            {loading ? (
+              <SkeletonLoader width="80px" height="14px" borderRadius="4px" />
+            ) : data?.total >= 1000 ? (
               <>
                 {(data?.total / 1000).toLocaleString("de-DE", {
                   minimumFractionDigits: 2,

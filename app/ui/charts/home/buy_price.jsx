@@ -1,33 +1,37 @@
 "use client";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Badge from "../../ui_elements/badge/Badge";
 import { ArrowUpIcon, MoreDotIcon } from "../../icons";
 import DropdownItem from "../../ui_elements/dropdown/DropdownItem";
 import { Dropdown } from "../../ui_elements/dropdown/Dropdown";
 import { fetchData } from "../../../_utils/api";
+import SkeletonLoader from "../../ui_elements/loading/SkeletonLoader";
+
 function BuyPrice() {
   const [isOpen, setIsOpen] = useState(false);
-      const [data, setData] = useState([]);
-      const [error, setError] = useState(null);
-  useEffect(() => {
-          async function getData() {
-            try {
-              const results = await fetchData('get', 'admin/prices/get_prix_achat/', {
-                params: {},
-                additionalHeaders: {},
-                body: {}
-              });
-               
-              setData(results)
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-      
-            } catch (error) {
-              setError(error);
-              console.error(error);
-            }
-          }
-          getData();
-        }, []);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData("get", "admin/prices/get_prix_achat/", {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+
+        setData(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    getData();
+  }, []);
 
   function toggleDropdown() {
     setIsOpen(!isOpen);
@@ -56,7 +60,12 @@ function BuyPrice() {
         </svg>
 
         <h4 className="ml-2 font-semibold  text-2xl dark:text-white/90">
-          {data?.prix_achat} <span className="text-sm">FBU/kg</span>
+          {loading ? (
+            <SkeletonLoader width="80px" height="20px" borderRadius="4px" />
+          ) : (
+            data?.prix_achat
+          )}
+          <span className="text-sm">FBU/kg</span>
         </h4>
       </div>
 
@@ -66,7 +75,7 @@ function BuyPrice() {
             Prix d'Achat
           </span>
         </div>
-        
+
         <div className="relative inline-block">
           <button onClick={toggleDropdown} className="dropdown-toggle">
             <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />

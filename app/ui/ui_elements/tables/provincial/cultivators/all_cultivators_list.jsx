@@ -20,6 +20,7 @@ import Pagination from "../../Pagination";
 import EditUserProfile from "../../../../municipal/cultivators/profile/edit_user_profile";
 import FilterUserProfile from "../../../../municipal/cultivators/profile/filter_user_profile";
 import { fetchData } from "../../../../../_utils/api";
+import SkeletonLoader from "../../../loading/SkeletonLoader";
 function AllCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
@@ -28,6 +29,8 @@ function AllCultivatorsList() {
   const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -83,6 +86,8 @@ function AllCultivatorsList() {
 
   useEffect(() => {
     async function getData() {
+      setLoading(true);
+
       try {
         const results = await fetchData("get", "/cultivators/", {
           params: {
@@ -97,6 +102,8 @@ function AllCultivatorsList() {
       } catch (error) {
         setError(error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -295,87 +302,99 @@ function AllCultivatorsList() {
               </TableRow>
             </TableHeader>
 
-            {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {data.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="relative inline-block">
-                      <button
-                        onClick={() => toggleDropdown(order.id)}
-                        className="dropdown-toggle"
-                      >
-                        <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
-                      </button>
-                      <Dropdown
-                        isOpen={openDropdowns[order.id]}
-                        onClose={() => closeDropdown(order.id)}
-                        className="w-40 p-2"
-                      >
-                        <DropdownItem
-                          onItemClick={() => closeDropdown(order.id)}
-                          tag="a"
-                          href={`/municipal/cultivators/profile?cult_id=${order?.id}`}
-                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                        >
-                          Profile
-                        </DropdownItem>
-                        <DropdownItem
-                          onItemClick={() => {
-                            closeDropdown(order.id);
-                            openModal();
-                          }}
-                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                        >
-                          Modifier
-                        </DropdownItem>
-                      </Dropdown>
-                    </div>
-                  </TableCell>
+              {loading
+                ? Array.from({ length: 7 }).map((_, idx) => (
+                    <TableCell
+                      key={idx}
+                      className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400"
+                    >
+                      <SkeletonLoader
+                        width="100%"
+                        height="100%"
+                        borderRadius="4px"
+                      />
+                    </TableCell>
+                  ))
+                : data.map((order) => (
+                    <TableRow key={order.id}>
+                      <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        <div className="relative inline-block">
+                          <button
+                            onClick={() => toggleDropdown(order.id)}
+                            className="dropdown-toggle"
+                          >
+                            <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
+                          </button>
+                          <Dropdown
+                            isOpen={openDropdowns[order.id]}
+                            onClose={() => closeDropdown(order.id)}
+                            className="w-40 p-2"
+                          >
+                            <DropdownItem
+                              onItemClick={() => closeDropdown(order.id)}
+                              tag="a"
+                              href={`/municipal/cultivators/profile?cult_id=${order?.id}`}
+                              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                            >
+                              Profile
+                            </DropdownItem>
+                            <DropdownItem
+                              onItemClick={() => {
+                                closeDropdown(order.id);
+                                openModal();
+                              }}
+                              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                            >
+                              Modifier
+                            </DropdownItem>
+                          </Dropdown>
+                        </div>
+                      </TableCell>
 
-                  <TableCell className="px-5 py-4 sm:px-6 text-start">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 overflow-hidden rounded-full">
-                        {order?.cultivator_photo == null ? (
-                          <Image
-                            width={80}
-                            height={80}
-                            src={order?.cultivator_photo}
-                            alt="user"
-                          />
-                        ) : (
-                          <Image
-                            width={80}
-                            height={80}
-                            src="/img/blank-profile.png"
-                            alt="user"
-                          />
-                        )}
-                      </div>
-                      <div>
-                        <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order.cultivator_first_name}
-                        </span>
-                        <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order.cultivator_last_name}
-                        </span>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {
-                      order?.cultivator_adress?.zone_code?.commune_code
-                        ?.province_code?.province_name
-                    }
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {
-                      order?.cultivator_adress?.zone_code?.commune_code
-                        ?.commune_name
-                    }
-                  </TableCell>
-                </TableRow>
-              ))}
+                      <TableCell className="px-5 py-4 sm:px-6 text-start">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 overflow-hidden rounded-full">
+                            {order?.cultivator_photo == null ? (
+                              <Image
+                                width={80}
+                                height={80}
+                                src={order?.cultivator_photo}
+                                alt="user"
+                              />
+                            ) : (
+                              <Image
+                                width={80}
+                                height={80}
+                                src="/img/blank-profile.png"
+                                alt="user"
+                              />
+                            )}
+                          </div>
+                          <div>
+                            <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
+                              {order.cultivator_first_name}
+                            </span>
+                            <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+                              {order.cultivator_last_name}
+                            </span>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        {
+                          order?.cultivator_adress?.zone_code?.commune_code
+                            ?.province_code?.province_name
+                        }
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        {
+                          order?.cultivator_adress?.zone_code?.commune_code
+                            ?.commune_name
+                        }
+                      </TableCell>
+                    </TableRow>
+                  ))}
             </TableBody>
           </Table>
         </div>

@@ -15,6 +15,7 @@ import Link from "next/link";
 import { useModal } from "../../../../hooks/useModal";
 import { MoreDotIcon } from "../../../../../icons";
 import { fetchData } from "../../../../../../_utils/api";
+import ViewImageModal from "../../../../modal/ViewImageModal";
 export default function TopCultivateurs() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
@@ -23,6 +24,8 @@ export default function TopCultivateurs() {
   const limit = 5; // nombre par page
   const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   useEffect(() => {
     async function getData() {
       try {
@@ -63,6 +66,15 @@ export default function TopCultivateurs() {
       ...prev,
       [rowId]: false,
     }));
+  }
+
+  function handleImageClick(url) {
+    setSelectedImage(url);
+    setModalOpen(true);
+  }
+  function handleCloseModal() {
+    setModalOpen(false);
+    setSelectedImage(null);
   }
 
   return (
@@ -135,7 +147,16 @@ export default function TopCultivateurs() {
                 <TableRow key={order?.cultivator?.id}>
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 overflow-hidden rounded-full">
+                      <div
+                        className="w-10 h-10 overflow-hidden rounded-full cursor-pointer"
+                        onClick={() =>
+                          handleImageClick(
+                            order?.cultivator?.cultivator_photo
+                              ? `${process.env.NEXT_PUBLIC_IMAGE_URL}${order?.cultivator?.cultivator_photo}`
+                              : "/img/blank-profile.png"
+                          )
+                        }
+                      >
                         {order?.cultivator?.cultivator_photo ? (
                           <Image
                             width={80}
@@ -236,6 +257,11 @@ export default function TopCultivateurs() {
           </Table>
         </div>
       </div>
+      <ViewImageModal
+        isOpen={modalOpen}
+        onClose={handleCloseModal}
+        imageUrl={selectedImage}
+      />
     </div>
   );
 }

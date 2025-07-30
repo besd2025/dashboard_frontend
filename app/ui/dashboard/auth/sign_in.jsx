@@ -83,7 +83,7 @@ export default function SignInForm() {
         setError("Vous n'avez pas d'accès.");
       }
     } catch (err) {
-      setError(err.message || "Une erreur est survenue.");
+      setError("Identifiants invalides. Veuillez réessayer.");
       console.error("Erreur de connexion :", err);
     } finally {
       setLoading(false);

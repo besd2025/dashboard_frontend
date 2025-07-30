@@ -5,6 +5,8 @@ import { fetchData } from "../../../_utils/api";
 function TotalHangarsCard() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     async function getData() {
       try {
@@ -23,6 +25,8 @@ function TotalHangarsCard() {
       } catch (error) {
         setError(error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
     getData();
@@ -33,7 +37,11 @@ function TotalHangarsCard() {
         {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
         <HangarBoldIcon className="size-6 text-gray-600 dark:text-white/70" />
         <h4 className="ml-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
-          {data.total_cultivators || 0}
+          {loading ? (
+            <SkeletonLoader width="80px" height="14px" borderRadius="4px" />
+          ) : (
+            data.total_cultivators || 0
+          )}
         </h4>
       </div>
 

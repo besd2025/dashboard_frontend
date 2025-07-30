@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { fetchData } from "../../../_utils/api";
+import SkeletonLoader from "../../ui_elements/loading/SkeletonLoader";
 export default function CardsOverview() {
   const [data, setData] = useState([]);
   const [quantite_vendu, setQuantiteVendu] = useState(0);
@@ -9,8 +10,10 @@ export default function CardsOverview() {
   const [total_quantite_vendu, setTotalVendu] = useState([]);
   const [gap_total_en_prix, setGapTotalPrix] = useState(0);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     async function getData() {
+      setLoading(true);
       try {
         const results = await fetchData("get", "stock_resume/", {
           params: {},
@@ -60,6 +63,8 @@ export default function CardsOverview() {
       } catch (error) {
         setError(error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
     getData();
@@ -91,10 +96,24 @@ export default function CardsOverview() {
           <div className="flex items-end justify-between mt-2">
             <div>
               <span className="text-sm text-gray-500 dark:text-gray-400">
-                Qté Collectée
+                {loading ? (
+                  <SkeletonLoader
+                    width="80px"
+                    height="14px"
+                    borderRadius="4px"
+                  />
+                ) : (
+                  "Qté Collectée"
+                )}
               </span>
               <h4 className="mt-2 font-semibold text-gray-800 text-xl dark:text-white/90">
-                {quantite_total_achat >= 1000 ? (
+                {loading ? (
+                  <SkeletonLoader
+                    width="120px"
+                    height="24px"
+                    borderRadius="4px"
+                  />
+                ) : quantite_total_achat >= 1000 ? (
                   <>
                     {(quantite_total_achat / 1000).toLocaleString("de-DE", {
                       minimumFractionDigits: 2,
@@ -140,7 +159,13 @@ export default function CardsOverview() {
               </div>
 
               <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
-                {data?.achats?.achats_blanc >= 1000 ? (
+                {loading ? (
+                  <SkeletonLoader
+                    width="80px"
+                    height="20px"
+                    borderRadius="4px"
+                  />
+                ) : data?.achats?.achats_blanc >= 1000 ? (
                   <>
                     {(data?.achats?.achats_blanc / 1000).toLocaleString(
                       "de-DE",
@@ -181,7 +206,13 @@ export default function CardsOverview() {
               </div>
 
               <h4 className=" font-semibold text-yellow-600 text-lg dark:text-white/90">
-                {data?.achats?.achats_jaune >= 1000 ? (
+                {loading ? (
+                  <SkeletonLoader
+                    width="80px"
+                    height="20px"
+                    borderRadius="4px"
+                  />
+                ) : data?.achats?.achats_jaune >= 1000 ? (
                   <>
                     {(data?.achats?.achats_jaune / 1000).toLocaleString(
                       "de-DE",
@@ -203,6 +234,7 @@ export default function CardsOverview() {
           </div>
         </div>
       </div>
+
       {/* <!-- Metric Item End --> */}
 
       {/* <!-- Metric Item Start --> quantity bought */}
@@ -229,10 +261,24 @@ export default function CardsOverview() {
           <div className="flex items-end justify-between mt-2">
             <div>
               <span className="text-sm text-gray-500 dark:text-gray-400">
-                Qté Vendue
+                {loading ? (
+                  <SkeletonLoader
+                    width="80px"
+                    height="14px"
+                    borderRadius="4px"
+                  />
+                ) : (
+                  "Qté Vendue"
+                )}
               </span>
               <h4 className="mt-2 font-bold text-gray-800 text-xl dark:text-white/90">
-                {quantite_vendu >= 1000 ? (
+                {loading ? (
+                  <SkeletonLoader
+                    width="120px"
+                    height="24px"
+                    borderRadius="4px"
+                  />
+                ) : quantite_vendu >= 1000 ? (
                   <>
                     {(quantite_vendu / 1000).toLocaleString("de-DE", {
                       minimumFractionDigits: 2,
@@ -274,7 +320,13 @@ export default function CardsOverview() {
               </div>
 
               <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
-                {data?.sorties?.sorties_blanc >= 1000 ? (
+                {loading ? (
+                  <SkeletonLoader
+                    width="80px"
+                    height="20px"
+                    borderRadius="4px"
+                  />
+                ) : data?.sorties?.sorties_blanc >= 1000 ? (
                   <>
                     {(data?.sorties?.sorties_blanc / 1000).toLocaleString(
                       "de-DE",
@@ -315,7 +367,13 @@ export default function CardsOverview() {
               </div>
 
               <h4 className=" font-semibold text-yellow-600 text-lg dark:text-white/90">
-                {data?.sorties?.sorties_jaune >= 1000 ? (
+                {loading ? (
+                  <SkeletonLoader
+                    width="80px"
+                    height="20px"
+                    borderRadius="4px"
+                  />
+                ) : data?.sorties?.sorties_jaune >= 1000 ? (
                   <>
                     {(data?.sorties?.sorties_jaune / 1000).toLocaleString(
                       "de-DE",
@@ -362,18 +420,26 @@ export default function CardsOverview() {
             </span>
 
             <h4 className="mt-2 font-bold text-gray-800 text-xl dark:text-white/90">
-              {total_quantite_vendu?.somme_total_price > 1000000
-                ? (
-                    total_quantite_vendu.somme_total_price / 1000000
-                  ).toLocaleString("de-DE") + " M"
-                : total_quantite_vendu?.somme_total_price?.toLocaleString(
-                    "de-DE",
-                    {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    }
-                  )}
-              <span className="text-sm"> FBU</span>
+              {loading ? (
+                <SkeletonLoader
+                  width="120px"
+                  height="24px"
+                  borderRadius="4px"
+                />
+              ) : total_quantite_vendu?.somme_total_price > 1000000 ? (
+                (
+                  total_quantite_vendu.somme_total_price / 1000000
+                ).toLocaleString("de-DE") + " M"
+              ) : (
+                total_quantite_vendu?.somme_total_price?.toLocaleString(
+                  "de-DE",
+                  {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }
+                )
+              )}
+              {!loading && <span className="text-sm"> FBU</span>}
             </h4>
           </div>
         </div>
@@ -404,27 +470,44 @@ export default function CardsOverview() {
             <span className="text-sm text-red-500">GAP</span>
             <div className="flex flex-row  gap-x-2">
               <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
-                {gaptotal?.pertes_totales} <span className="text-sm">KG</span>
+                {loading ? (
+                  <SkeletonLoader
+                    width="80px"
+                    height="28px"
+                    borderRadius="4px"
+                  />
+                ) : (
+                  <>
+                    {gaptotal?.pertes_totales}{" "}
+                    <span className="text-sm">KG</span>
+                  </>
+                )}
               </h4>
 
               <div className="w-px bg-gray-200 h-7 dark:bg-gray-800"></div>
 
               <h4 className="mt-2 font-bold text-gray-500 text-md dark:text-white/90">
-                {gap_total_en_prix > 1000000
-                  ? (gap_total_en_prix / 1000000).toLocaleString("de-DE") + " M"
-                  : gap_total_en_prix?.somme_total_price?.toLocaleString(
-                      "de-DE"
-                    )}
-                {0}
-                <span className="text-sm"> Fbu</span>
+                {loading ? (
+                  <SkeletonLoader
+                    width="100px"
+                    height="20px"
+                    borderRadius="4px"
+                  />
+                ) : (
+                  <>
+                    {gap_total_en_prix > 1000000
+                      ? (gap_total_en_prix / 1000000).toLocaleString("de-DE") +
+                        " M"
+                      : gap_total_en_prix?.somme_total_price?.toLocaleString(
+                          "de-DE"
+                        )}
+                    {0}
+                    <span className="text-sm"> Fbu</span>
+                  </>
+                )}
               </h4>
             </div>
           </div>
-
-          {/* <Badge color="error">
-            <ArrowDownIcon className="text-error-500" />
-            9.05%
-          </Badge> */}
         </div>
       </div>
       {/* <!-- Metric Item End --> */}

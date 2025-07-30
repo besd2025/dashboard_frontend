@@ -1,12 +1,16 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { fetchData } from "../../../_utils/api";
+import SkeletonLoader from "../../ui_elements/loading/SkeletonLoader";
 function TotalHangars() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [hangar_en_activite, setHangarEnActivite] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     async function getData() {
+      setLoading(true);
       try {
         const results = await fetchData("get", "hangars/total/", {
           params: {},
@@ -25,6 +29,8 @@ function TotalHangars() {
       } catch (error) {
         setError(error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
     getData();
@@ -81,7 +87,11 @@ function TotalHangars() {
             </svg>
             <h4 className="ml-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
               {" "}
-              {hangar_en_activite?.hangars_avec_collecteur}
+              {loading ? (
+                <SkeletonLoader width="80px" height="14px" borderRadius="4px" />
+              ) : (
+                hangar_en_activite?.hangars_avec_collecteur
+              )}
             </h4>
             <span
               className={`absolute -left-1 -top-1 z-10 h-4 w-4 rounded-full bg-green-600 `}
