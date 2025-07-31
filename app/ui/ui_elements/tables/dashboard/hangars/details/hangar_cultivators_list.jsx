@@ -24,6 +24,7 @@ import { saveAs } from "file-saver";
 import { fetchData } from "../../../../../../_utils/api";
 import { UserContext } from "../../../../../context/UserContext";
 import dynamic from "next/dynamic";
+import ViewImageModal from "../../../../modal/ViewImageModal";
 //import { useSearchParams } from "next/navigation";
 function HangarCultivatorsList({ hangar_id }) {
   const [openDropdowns, setOpenDropdowns] = useState({});
@@ -34,6 +35,8 @@ function HangarCultivatorsList({ hangar_id }) {
   const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
   const user = useContext(UserContext);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [modalImageUrl, setModalImageUrl] = useState("");
   //const searchParams = useSearchParams();
   //const hangar_id = searchParams.get("hangar_id");
   //const hangar_id = 5;
@@ -81,10 +84,12 @@ function HangarCultivatorsList({ hangar_id }) {
     closeModal: closeModalFilter,
   } = useModal();
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     async function getData() {
       if (hangar_id) {
-        // Vérifier si hangar_id est défini avant de faire la requête
+        setLoading(true);
         try {
           const results = await fetchData(
             "get",
@@ -103,6 +108,8 @@ function HangarCultivatorsList({ hangar_id }) {
         } catch (error) {
           setError(error);
           console.error(error);
+        } finally {
+          setLoading(false);
         }
       }
     }
@@ -223,7 +230,11 @@ function HangarCultivatorsList({ hangar_id }) {
       console.error("Erreur exportation Excel :", error);
     }
   };
-
+  const handleImageClick = (url) => {
+    console.log("Image clicked:", url);
+    setModalImageUrl(url);
+    setIsImageModalOpen(true);
+  };
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
@@ -421,7 +432,11 @@ function HangarCultivatorsList({ hangar_id }) {
             </TableHeader>
 
             {/* Table Body */}
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+            <TableBody
+              loading={loading}
+              columns={7}
+              className="divide-y divide-gray-100 dark:divide-white/[0.05]"
+            >
               {data?.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
@@ -462,7 +477,15 @@ function HangarCultivatorsList({ hangar_id }) {
 
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 overflow-hidden rounded-full">
+                      <div
+                        className="w-10 h-10 overflow-hidden rounded-full cursor-pointer"
+                        onClick={() =>
+                          handleImageClick(
+                            process.env.NEXT_PUBLIC_IMAGE_URL +
+                              order?.cultivator_photo || "/img/no-image.png"
+                          )
+                        }
+                      >
                         {order?.cultivator_photo ? (
                           <Image
                             width={80}
@@ -577,6 +600,11 @@ function HangarCultivatorsList({ hangar_id }) {
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
         <EditUserProfile />
       </Modal>
+      <ViewImageModal
+        isOpen={isImageModalOpen}
+        onClose={() => setIsImageModalOpen(false)}
+        imageUrl={modalImageUrl}
+      />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const ViewImageModal = ({ isOpen, onClose, imageUrl, alt }) => {
   const [zoom, setZoom] = useState(1);
+  const [imageError, setImageError] = useState(false);
 
   if (!isOpen) return null;
 
@@ -9,14 +10,18 @@ const ViewImageModal = ({ isOpen, onClose, imageUrl, alt }) => {
   const handleZoomOut = () => setZoom((z) => Math.max(z - 0.25, 0.5));
   const handleReset = () => setZoom(1);
 
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
   return (
-    <div className="fixed inset-0  flex items-center justify-center  bg-opac/ity-80 bg-gray-500/50 z-999999 ">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/80 z-999999">
       <div className="relative max-w-full max-h-full p-4">
         {/* Zoom controls */}
         <div className="absolute top-2 left-2 flex gap-2 z-10">
           <button
             onClick={handleZoomOut}
-            className="bg-gray-100 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-opacity-80 focus:outline-none"
+            className="bg-white/20 backdrop-blur-sm text-white transition-colors hover:bg-white/30 rounded-full w-8 h-8 flex items-center justify-center focus:outline-none"
             aria-label="Zoom out"
             type="button"
           >
@@ -24,7 +29,7 @@ const ViewImageModal = ({ isOpen, onClose, imageUrl, alt }) => {
           </button>
           <button
             onClick={handleReset}
-            className=" text-white transition-colors  hover:text-gray-700  dark:text-gray-400  dark:hover:text-white  w-8 h-8 flex items-center justify-center hover:bg-opacity-80 focus:outline-none"
+            className="bg-white/20 backdrop-blur-sm text-white transition-colors hover:bg-white/30 rounded-full w-8 h-8 flex items-center justify-center focus:outline-none"
             aria-label="Reset zoom"
             type="button"
           >
@@ -32,7 +37,7 @@ const ViewImageModal = ({ isOpen, onClose, imageUrl, alt }) => {
           </button>
           <button
             onClick={handleZoomIn}
-            className="bg-gray-100 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-opacity-80 focus:outline-none"
+            className="bg-white/20 backdrop-blur-sm text-white transition-colors hover:bg-white/30 rounded-full w-8 h-8 flex items-center justify-center focus:outline-none"
             aria-label="Zoom in"
             type="button"
           >
@@ -41,7 +46,7 @@ const ViewImageModal = ({ isOpen, onClose, imageUrl, alt }) => {
         </div>
         <button
           onClick={onClose}
-          className="absolute right-2 top-2 z-9999 flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white  sm:h-8 sm:w-8"
+          className="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm text-white transition-colors hover:bg-white/30 focus:outline-none"
           aria-label="Close"
         >
           <svg
@@ -59,10 +64,15 @@ const ViewImageModal = ({ isOpen, onClose, imageUrl, alt }) => {
             />
           </svg>
         </button>
+
         <img
           src={imageUrl}
           alt={alt || "Image"}
-          style={{ transform: `scale(${zoom})`, transition: "transform 0.2s" }}
+          onError={handleImageError}
+          style={{
+            transform: `scale(${zoom})`,
+            transition: "transform 0.2s",
+          }}
           className="max-w-[90vw] max-h-[80vh] w-auto h-auto rounded shadow-lg object-contain mx-auto"
         />
       </div>

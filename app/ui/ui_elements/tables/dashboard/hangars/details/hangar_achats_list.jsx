@@ -22,6 +22,8 @@ import { fetchData } from "../../../../../../_utils/api";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { UserContext } from "../../../../../context/UserContext";
+import ViewImageModal from "../../../../modal/ViewImageModal";
+
 function HangarAchatList() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -31,6 +33,9 @@ function HangarAchatList() {
   const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
   const user = useContext(UserContext);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [modalImageUrl, setModalImageUrl] = useState("");
+
   //const searchParams = useSearchParams();
   let hangar_id = 0;
   if (typeof window !== "undefined") {
@@ -80,9 +85,10 @@ function HangarAchatList() {
     openModal: openModalFilter,
     closeModal: closeModalFilter,
   } = useModal();
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     async function getData() {
+      setLoading(true);
       if (hangar_id) {
         try {
           const response = await fetchData(
@@ -96,11 +102,15 @@ function HangarAchatList() {
             }
           );
           const results = response.results.items;
+          console.log(results);
+
           setData(results);
           setTotalCount(response.count); // si l'API retourne un `count` total
         } catch (error) {
           setError(error);
           console.error(error);
+        } finally {
+          setLoading(false);
         }
       }
     }
@@ -190,6 +200,11 @@ function HangarAchatList() {
     } catch (error) {
       console.error("Erreur exportation Excel :", error);
     }
+  };
+  const handleImageClick = (url) => {
+    console.log("Image clicked:", url);
+    setModalImageUrl(url);
+    setIsImageModalOpen(true);
   };
 
   return (
@@ -359,14 +374,9 @@ function HangarAchatList() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Province
+                  Localite
                 </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
-                  Commmune
-                </TableCell>
+
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
@@ -378,6 +388,18 @@ function HangarAchatList() {
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
                   quantité Jaune
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  N0 Recus
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Recus
                 </TableCell>
                 <TableCell
                   isHeader
@@ -395,7 +417,11 @@ function HangarAchatList() {
             </TableHeader>
 
             {/* Table Body */}
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+            <TableBody
+              loading={loading}
+              columns={8}
+              className="divide-y divide-gray-100 dark:divide-white/[0.05]"
+            >
               {data.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
@@ -436,7 +462,16 @@ function HangarAchatList() {
 
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 overflow-hidden rounded-full">
+                      <div
+                        className="w-10 h-10 overflow-hidden rounded-full cursor-pointer"
+                        onClick={() =>
+                          handleImageClick(
+                            process.env.NEXT_PUBLIC_IMAGE_URL +
+                              order?.cultivator?.cultivator_photo ||
+                              "/img/no-image.png"
+                          )
+                        }
+                      >
                         {order?.cultivator?.cultivator_photo ? (
                           <Image
                             width={80}
@@ -467,17 +502,51 @@ function HangarAchatList() {
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.collector?.hangar.province}
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400 flex flex-col">
+                    <span>{order?.collector?.hangar.province}</span>
+                    <span className="text-xs">
+                      /{order?.collector?.hangar?.commune}
+                    </span>
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.collector?.hangar?.commune}
-                  </TableCell>
+
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     {order?.quantity_blanc}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     {order?.quantity_jaune}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order?.receipt_number}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    <div
+                      className="w-10 h-10 overflow-hidden rounded-md cursor-pointer"
+                      onClick={() =>
+                        handleImageClick(
+                          process.env.NEXT_PUBLIC_IMAGE_URL +
+                            order?.receipt_photo || "/img/no-image.png"
+                        )
+                      }
+                    >
+                      {order?.receipt_photo ? (
+                        <Image
+                          width={80}
+                          height={80}
+                          src={
+                            process.env.NEXT_PUBLIC_IMAGE_URL +
+                            order?.receipt_photo
+                          }
+                          alt="recus"
+                        />
+                      ) : (
+                        <Image
+                          width={80}
+                          height={80}
+                          src="/img/blank-profile.png"
+                          alt="user"
+                        />
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     {order?.total_price > 1000000
@@ -533,6 +602,11 @@ function HangarAchatList() {
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
         <EditUserProfile />
       </Modal>
+      <ViewImageModal
+        isOpen={isImageModalOpen}
+        onClose={() => setIsImageModalOpen(false)}
+        imageUrl={modalImageUrl}
+      />
     </div>
   );
 }

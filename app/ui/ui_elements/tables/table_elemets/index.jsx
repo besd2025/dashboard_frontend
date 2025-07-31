@@ -1,4 +1,5 @@
 import React from "react";
+import SkeletonLoader from "../../loading/SkeletonLoader";
 
 // Table Component
 const Table = ({ children, className }) => {
@@ -11,7 +12,31 @@ const TableHeader = ({ children, className }) => {
 };
 
 // TableBody Component
-const TableBody = ({ children, className }) => {
+const TableBody = ({
+  children,
+  className,
+  loading,
+  columns = 1,
+  skeletonRows = 2,
+}) => {
+  if (loading) {
+    return (
+      <tbody className={className}>
+        {Array.from({ length: skeletonRows }).map((_, rowIdx) => (
+          <tr key={rowIdx}>
+            {Array.from({ length: columns }).map((_, colIdx) => (
+              <td
+                key={colIdx}
+                className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400"
+              >
+                <SkeletonLoader width="100%" height="15px" borderRadius="4px" />
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    );
+  }
   return <tbody className={className}>{children}</tbody>;
 };
 

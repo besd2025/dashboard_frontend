@@ -2,6 +2,7 @@
 import { ArrowUpIcon, HangarBoldIcon, HangarIcon } from "../../icons";
 import React, { useState, useEffect } from "react";
 import { fetchData } from "../../../_utils/api";
+import SkeletonLoader from "../../ui_elements/loading/SkeletonLoader";
 function TotalHangarsCard() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);

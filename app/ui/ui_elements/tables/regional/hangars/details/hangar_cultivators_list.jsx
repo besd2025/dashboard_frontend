@@ -157,8 +157,11 @@ function HangarCultivatorsList({ hangar_id }) {
     closeModal: closeModalFilter,
   } = useModal();
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     async function getData() {
+      setLoading(true);
       try {
         const results = await fetchData("get", "hangars/", {
           params: {},
@@ -170,6 +173,8 @@ function HangarCultivatorsList({ hangar_id }) {
       } catch (error) {
         setError(error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
     getData();
@@ -338,7 +343,10 @@ function HangarCultivatorsList({ hangar_id }) {
             </TableHeader>
 
             {/* Table Body */}
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+            <TableBody
+              loading={loading}
+              className="divide-y divide-gray-100 dark:divide-white/[0.05]"
+            >
               {tableData.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">

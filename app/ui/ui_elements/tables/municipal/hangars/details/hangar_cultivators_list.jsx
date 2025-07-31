@@ -88,8 +88,11 @@ function HangarCultivatorsList() {
     closeModal: closeModalFilter,
   } = useModal();
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     async function getData() {
+      setLoading(true);
       try {
         const results = await fetchData(
           "get",
@@ -108,6 +111,8 @@ function HangarCultivatorsList() {
       } catch (error) {
         setError(error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -379,7 +384,10 @@ function HangarCultivatorsList() {
             </TableHeader>
 
             {/* Table Body */}
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+            <TableBody
+              loading={loading}
+              className="divide-y divide-gray-100 dark:divide-white/[0.05]"
+            >
               {data &&
                 data?.map((order) =>
                   order?.is_communal_appouved === false ? (

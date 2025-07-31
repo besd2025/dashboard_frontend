@@ -26,6 +26,8 @@ function HangarTranfersList({ hangar_id }) {
   const limit = 5; // nombre par page
   const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+
   //const hangar_id = localStorage.getItem("hangarId");
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
@@ -73,6 +75,7 @@ function HangarTranfersList({ hangar_id }) {
   useEffect(() => {
     async function getData() {
       if (hangar_id) {
+        setLoading(true);
         try {
           const results = await fetchData("get", "/hangars/", {
             params: {
@@ -87,6 +90,8 @@ function HangarTranfersList({ hangar_id }) {
         } catch (error) {
           setError(error);
           console.error(error);
+        } finally {
+          setLoading(false);
         }
       }
     }
@@ -289,7 +294,11 @@ function HangarTranfersList({ hangar_id }) {
             </TableHeader>
 
             {/* Table Body */}
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+            <TableBody
+              className="divide-y divide-gray-100 dark:divide-white/[0.05]"
+              loading={loading}
+              columns={7}
+            >
               {data.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">

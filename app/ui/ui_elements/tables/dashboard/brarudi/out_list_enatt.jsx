@@ -31,6 +31,7 @@ function OutListEnatt() {
   const [idSortie, setIdSortie] = useState(0);
   const [filterData, setFilterData] = useState({});
   const [searchdata, setSearchData] = useState("");
+  const [loading, setLoading] = useState(false);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -82,6 +83,7 @@ function OutListEnatt() {
 
   useEffect(() => {
     async function getData() {
+      setLoading(true);
       try {
         let results;
 
@@ -125,6 +127,8 @@ function OutListEnatt() {
       } catch (error) {
         setError(error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
     getData();
@@ -393,7 +397,11 @@ function OutListEnatt() {
             </TableHeader>
 
             {/* Table Body */}
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+            <TableBody
+              loading={loading}
+              columns={7}
+              className="divide-y divide-gray-100 dark:divide-white/[0.05]"
+            >
               {data.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">

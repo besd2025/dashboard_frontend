@@ -56,16 +56,33 @@ export default function UserMetaCard({ hangar_id }) {
                 {data?.hangar_name}
               </h4>
               <div className="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
-                <p className="text-sm text-gray-500 dark:text-gray-400 font-semibold">
-                  {data?.responsable_name}
-                </p>
-                <p className="text-sm text-green-500 dark:text-gray-400">
-                  {data?.hangar_code}
-                </p>
-                <div className="hidden h-3.5 w-px bg-gray-300 dark:bg-gray-700 xl:block"></div>
+                <p className="text-sm text-green-500 ">{data?.hangar_code}</p>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {data?.province} | {data?.commune} | {data?.zone}
                 </p>
+                <div className="hidden h-3.5 w-px bg-gray-300 dark:bg-gray-700 xl:block"></div>
+                <div className="flex flex-col bg-gray-100 dark:bg-gray-700 px-3 py-2 rounded-lg">
+                  <p className="text-md flex flex-row gap-x-2 mb-2 text-green-800 dark:text-white/90 font-semibold">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.5 3.75a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V6.75a3 3 0 0 0-3-3h-15Zm4.125 3a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Zm-3.873 8.703a4.126 4.126 0 0 1 7.746 0 .75.75 0 0 1-.351.92 7.47 7.47 0 0 1-3.522.877 7.47 7.47 0 0 1-3.522-.877.75.75 0 0 1-.351-.92ZM15 8.25a.75.75 0 0 0 0 1.5h3.75a.75.75 0 0 0 0-1.5H15ZM14.25 12a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H15a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5h3.75a.75.75 0 0 0 0-1.5H15Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+
+                    {data?.responsable_name}
+                  </p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 ">
+                    CNI: {data?.responsable_cni} | Tel: +257{" "}
+                    {data?.responsable_phone}
+                  </p>
+                </div>
               </div>
             </div>
           </div>

@@ -150,9 +150,10 @@ function HangarAchatList() {
     openModal: openModalFilter,
     closeModal: closeModalFilter,
   } = useModal();
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     async function getData() {
+      setLoading(true);
       try {
         const results = await fetchData("get", "hangars/cinq_recents/", {
           params: {},
@@ -164,6 +165,8 @@ function HangarAchatList() {
       } catch (error) {
         setError(error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
     getData();
@@ -333,13 +336,19 @@ function HangarAchatList() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Province
+                  Localite
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Commmune
+                  N0 Recus
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Recus
                 </TableCell>
                 <TableCell
                   isHeader
@@ -351,7 +360,10 @@ function HangarAchatList() {
             </TableHeader>
 
             {/* Table Body */}
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+            <TableBody
+              loading={loading}
+              className="divide-y divide-gray-100 dark:divide-white/[0.05]"
+            >
               {tableData.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
@@ -412,7 +424,29 @@ function HangarAchatList() {
                     {order.Province}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order.Commune}
+                    {order?.receipt_number}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    <div className="w-10 h-10 overflow-hidden rounded-md">
+                      {order?.receipt_photo ? (
+                        <Image
+                          width={80}
+                          height={80}
+                          src={
+                            process.env.NEXT_PUBLIC_IMAGE_URL +
+                            order?.receipt_photo
+                          }
+                          alt="recus"
+                        />
+                      ) : (
+                        <Image
+                          width={80}
+                          height={80}
+                          src="/img/blank-profile.png"
+                          alt="user"
+                        />
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <Badge

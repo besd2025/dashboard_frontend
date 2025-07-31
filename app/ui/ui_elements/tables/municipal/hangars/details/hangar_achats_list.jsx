@@ -79,9 +79,10 @@ function HangarAchatList() {
     openModal: openModalFilter,
     closeModal: closeModalFilter,
   } = useModal();
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     async function getData() {
+      setLoading(true);
       try {
         const response = await fetchData(
           "get",
@@ -99,6 +100,8 @@ function HangarAchatList() {
       } catch (error) {
         setError(error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -359,13 +362,7 @@ function HangarAchatList() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Province
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
-                  Commmune
+                  Localite
                 </TableCell>
                 <TableCell
                   isHeader
@@ -383,6 +380,18 @@ function HangarAchatList() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
+                  N0 Recus
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Recus
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
                   Prix
                 </TableCell>
                 <TableCell
@@ -395,7 +404,10 @@ function HangarAchatList() {
             </TableHeader>
 
             {/* Table Body */}
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+            <TableBody
+              loading={loading}
+              className="divide-y divide-gray-100 dark:divide-white/[0.05]"
+            >
               {data.map((order) =>
                 order?.is_communal_appouved === false ? (
                   <TableRow key={order.id}>

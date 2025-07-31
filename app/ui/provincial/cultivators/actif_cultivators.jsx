@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { fetchData } from "../../../_utils/api";
-import SkeletonLoader from "@/ui_elements/loading/SkeletonLoader";
+import SkeletonLoader from "../../ui_elements/loading/SkeletonLoader";
 function ActifCultivators() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);

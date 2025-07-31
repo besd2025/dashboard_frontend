@@ -1,5 +1,6 @@
 import { fetchData } from "../../../_utils/api";
 import React, { useEffect, useState } from "react";
+import SkeletonLoader from "../../ui_elements/loading/SkeletonLoader";
 
 function Stocks() {
   const [data, setData] = useState([]);

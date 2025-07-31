@@ -52,6 +52,8 @@ function HangarReceiptlist({ hangar_id }) {
     }));
   }
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const inputRef = useRef(null);
 
   const handleToggle = () => {
@@ -88,6 +90,8 @@ function HangarReceiptlist({ hangar_id }) {
   useEffect(() => {
     async function getData() {
       if (hangar_id) {
+        setLoading(true);
+
         try {
           const results = await fetchData("get", "/hangars/", {
             params: {
@@ -101,6 +105,8 @@ function HangarReceiptlist({ hangar_id }) {
         } catch (error) {
           setError(error);
           console.error(error);
+        } finally {
+          setLoading(false);
         }
       }
     }
