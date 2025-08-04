@@ -14,7 +14,15 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
   const [name, setName] = useState("");
   const [firstName, setFirstName] = useState("");
   const [cullivator_cni, setCNI] = useState("");
-
+  const [date_naissance, setDateNaissance] = useState("");
+  const [mode_payment, setPaymentMode] = useState("");
+  const [bank_name, setBankName] = useState("");
+  const [bank_acount, setBankAcount] = useState("");
+  const [payment_phone, setPaymentPhone] = useState("");
+  const [proprietaire, setProprietaire] = useState("");
+  const [genre, setGenre] = useState("");
+  const [address_code, setAdressCode] = useState("");
+  const [collector_code, setCollectorCode] = useState("");
   const handleRadioChangeStatus = (value) => {
     setSelectedStatus(value);
   };
@@ -22,10 +30,19 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
   const handleSave = async (e) => {
     e.preventDefault();
     const formData = {
-      // cultivator_code: code,
+      cultivator_code: code,
       cultivator_first_name: firstName,
       cultivator_last_name: name,
       cultivator_cni: cullivator_cni,
+      cultivator_gender: genre,
+      date_naissance: date_naissance,
+      cultivator_mobile_payment_name: mode_payment,
+      cultivator_bank_name: bank_name,
+      cultivator_bank_account: bank_acount,
+      cultivator_mobile_payment: payment_phone,
+      cultivator_mobile_payment_user_name: proprietaire,
+      cultivator_adress_code: address_code,
+      collector_code: collector_code,
     };
 
     try {
@@ -38,9 +55,8 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
           body: formData,
         }
       );
-
+      console.log(results);
       if (results == 200) {
-        closeModal();
         window.location.reload();
       } else {
         console.log("error");
@@ -64,6 +80,20 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
           }
         );
         setData(results);
+        const data = results;
+        setCode(data?.cultivator_code || "");
+        setName(data?.cultivator_last_name || "");
+        setFirstName(data?.cultivator_first_name || "");
+        setCNI(data?.cultivator_cni || "");
+        setGenre(data?.cultivator_gender);
+        setDateNaissance(data?.date_naissance);
+        setPaymentMode(data?.cultivator_mobile_payment_name);
+        setBankName(data?.cultivator_bank_name);
+        setBankAcount(data?.cultivator_bank_account);
+        setPaymentPhone(data?.cultivator_mobile_payment);
+        setProprietaire(data?.cultivator_mobile_payment_user_name);
+        setAdressCode(data?.cultivator_adress?.colline_code);
+        setCollectorCode(data?.collector?.unique_code);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -71,14 +101,6 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
     }
     getData();
   }, [cultivateur_id]);
-
-  // Met à jour les champs quand data change
-  useEffect(() => {
-    setCode(data?.cultivator_code || "");
-    setName(data?.cultivator_last_name || "");
-    setFirstName(data?.cultivator_first_name || "");
-    setCNI(data?.cultivator_cni || "");
-  }, [data]);
 
   return (
     <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
@@ -134,12 +156,32 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
                 />
               </div>
               <div className="col-span-2 lg:col-span-1">
-                <Label>Phone</Label>
-                <Input
-                  type="text"
-                  value={data?.cultivator_phone || ""}
-                  readOnly
-                />
+                <Label>Date de naissance</Label>
+                <Input type="date" defaultValue={date_naissance} />
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <Label>Sexe</Label>
+                <Input type="text" defaultValue={genre} />
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <Label>Mode de payement</Label>
+                <Input type="text" defaultValue={mode_payment} />
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <Label>Nom de Banque</Label>
+                <Input type="text" defaultValue={bank_name} />
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <Label>Numéro de compte Bancaire</Label>
+                <Input type="text" defaultValue={bank_acount} />
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <Label>Numéro de telephone de paiement</Label>
+                <Input type="text" defaultValue={payment_phone || ""} />
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <Label>propriétaire</Label>
+                <Input type="text" defaultValue={proprietaire || ""} />
               </div>
             </div>
           </div>
