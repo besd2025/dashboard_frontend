@@ -2,8 +2,9 @@ import EditAchat from "../../../../../../ui/ui_elements/tables/dashboard/stocks/
 
 import React from "react";
 
-function page() {
-  return <EditAchat />;
+function page(searchParams) {
+  const achat_id = searchParams?.achat_id;
+  return <EditAchat achat_id={achat_id} />;
 }
 
 export default page;

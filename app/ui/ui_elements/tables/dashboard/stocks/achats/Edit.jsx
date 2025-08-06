@@ -1,60 +1,42 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Input from "../../../ui_elements/form/input/InputField";
-import Label from "../../../ui_elements/form/Label";
-import Button from "../../../ui_elements/button/Button";
-import Radio from "../../../ui_elements/form/input/Radio";
-import { fetchData } from "../../../../_utils/api";
+import Input from "../../../../../ui_elements/form/input/InputField";
+import Label from "../../../../../ui_elements/form/Label";
+import Button from "../../../../../ui_elements/button/Button";
+import Radio from "../../../../../ui_elements/form/input/Radio";
+import { fetchData } from "../../../../../../_utils/api";
 
-function EditAchat({ closeModal, cultivateur_id }) {
+function EditAchat({ closeModal, achat_id }) {
   const [selectedStatus, setSelectedStatus] = useState("option2");
   const [data, setData] = useState({});
   const [error, setError] = useState("");
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
   const [firstName, setFirstName] = useState("");
-  const [cullivator_cni, setCNI] = useState("");
-  const [date_naissance, setDateNaissance] = useState("");
-  const [mode_payment, setPaymentMode] = useState("");
-  const [bank_name, setBankName] = useState("");
-  const [bank_acount, setBankAcount] = useState("");
-  const [payment_phone, setPaymentPhone] = useState("");
-  const [proprietaire, setProprietaire] = useState("");
-  const [genre, setGenre] = useState("");
-  const [address_code, setAdressCode] = useState("");
+  const [quantite_blanc, setQuantiteBlanc] = useState("");
+  const [quantite_jaune, setQuantiteJaune] = useState("");
+  const [date_achat, setDateAchat] = useState("");
   const [collector_code, setCollectorCode] = useState("");
   const handleRadioChangeStatus = (value) => {
     setSelectedStatus(value);
   };
-
   const handleSave = async (e) => {
     e.preventDefault();
     const formData = {
       cultivator_code: code,
-      cultivator_first_name: firstName,
-      cultivator_last_name: name,
-      cultivator_cni: cullivator_cni,
-      cultivator_gender: genre,
-      date_naissance: date_naissance,
-      cultivator_mobile_payment_name: mode_payment,
-      cultivator_bank_name: bank_name,
-      cultivator_bank_account: bank_acount,
-      cultivator_mobile_payment: payment_phone,
-      cultivator_mobile_payment_user_name: proprietaire,
-      cultivator_adress_code: address_code,
       collector_code: collector_code,
+      id: achat_id,
+      date_achat: date_achat,
+      quantity_blanc: quantite_blanc,
+      quantity_jaune: quantite_jaune,
     };
 
     try {
-      const results = await fetchData(
-        "patch",
-        `/cultivators/${cultivateur_id}/`,
-        {
-          params: {},
-          additionalHeaders: {},
-          body: formData,
-        }
-      );
+      const results = await fetchData("patch", `/achats/${achat_id}/`, {
+        params: {},
+        additionalHeaders: {},
+        body: formData,
+      });
       console.log(results);
       if (results == 200) {
         window.location.reload();
@@ -69,39 +51,29 @@ function EditAchat({ closeModal, cultivateur_id }) {
 
   useEffect(() => {
     async function getData() {
-      console.log("code:", cultivateur_id);
       try {
-        const results = await fetchData(
-          "get",
-          `/cultivators/${cultivateur_id}/`,
-          {
-            params: {},
-            additionalHeaders: {},
-            body: {},
-          }
-        );
+        const results = await fetchData("get", `/achats/${achat_id}/`, {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
         setData(results);
+        console.log("Fetched Data:", results);
         const data = results;
-        setCode(data?.cultivator_code || "");
-        setName(data?.cultivator_last_name || "");
-        setFirstName(data?.cultivator_first_name || "");
-        setCNI(data?.cultivator_cni || "");
-        setGenre(data?.cultivator_gender);
-        setDateNaissance(data?.date_naissance);
-        setPaymentMode(data?.cultivator_mobile_payment_name);
-        setBankName(data?.cultivator_bank_name);
-        setBankAcount(data?.cultivator_bank_account);
-        setPaymentPhone(data?.cultivator_mobile_payment);
-        setProprietaire(data?.cultivator_mobile_payment_user_name);
-        setAdressCode(data?.cultivator_adress?.colline_code);
-        setCollectorCode(data?.collector?.unique_code);
+        setCode(data?.cultivator?.cultivator_code || "");
+        setName(data?.cultivator?.cultivator_last_name || "");
+        setFirstName(data?.cultivator?.cultivator_first_name || "");
+        setQuantiteBlanc(data?.quantity_blanc || "");
+        setQuantiteJaune(data?.quantity_jaune);
+        setDateAchat(data?.date_achat);
+        setCollectorCode(data?.collector?.unique_code || "");
       } catch (error) {
         setError(error);
         console.error(error);
       }
     }
     getData();
-  }, [cultivateur_id]);
+  }, [achat_id]);
 
   return (
     <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
@@ -110,7 +82,7 @@ function EditAchat({ closeModal, cultivateur_id }) {
           Modifier
         </h4>
         <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
-          Modifier les informations personnelles
+          Modifier les informations DE l'achat
         </p>
       </div>
       <form className="flex flex-col">
@@ -149,40 +121,28 @@ function EditAchat({ closeModal, cultivateur_id }) {
                 />
               </div>
               <div className="col-span-2 lg:col-span-1">
-                <Label>CNI</Label>
+                <Label>Quantité blanc</Label>
                 <Input
                   type="text"
-                  defaultValue={cullivator_cni}
-                  onChange={(e) => setCNI(e.target.value)}
+                  defaultValue={quantite_blanc}
+                  onChange={(e) => setQuantiteBlanc(e.target.value)}
                 />
               </div>
               <div className="col-span-2 lg:col-span-1">
-                <Label>Date de naissance</Label>
-                <Input type="date" defaultValue={date_naissance} />
+                <Label>Quantité Jaune</Label>
+                <Input
+                  type="text"
+                  defaultValue={quantite_jaune}
+                  onChange={(e) => setQuantiteJaune(e.target.value)}
+                />
               </div>
               <div className="col-span-2 lg:col-span-1">
-                <Label>Sexe</Label>
-                <Input type="text" defaultValue={genre} />
-              </div>
-              <div className="col-span-2 lg:col-span-1">
-                <Label>Mode de payement</Label>
-                <Input type="text" defaultValue={mode_payment} />
-              </div>
-              <div className="col-span-2 lg:col-span-1">
-                <Label>Nom de Banque</Label>
-                <Input type="text" defaultValue={bank_name} />
-              </div>
-              <div className="col-span-2 lg:col-span-1">
-                <Label>Numéro de compte Bancaire</Label>
-                <Input type="text" defaultValue={bank_acount} />
-              </div>
-              <div className="col-span-2 lg:col-span-1">
-                <Label>Numéro de telephone de paiement</Label>
-                <Input type="text" defaultValue={payment_phone || ""} />
-              </div>
-              <div className="col-span-2 lg:col-span-1">
-                <Label>propriétaire</Label>
-                <Input type="text" defaultValue={proprietaire || ""} />
+                <Label>Date d'achat</Label>
+                <Input
+                  type="date"
+                  value={date_achat}
+                  onChange={(e) => setDateAchat(e.target.value)}
+                />
               </div>
             </div>
           </div>

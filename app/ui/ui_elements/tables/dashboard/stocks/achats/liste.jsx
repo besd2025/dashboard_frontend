@@ -7,11 +7,9 @@ import {
   TableHeader,
   TableRow,
 } from "../../../table_elemets";
-
+import EditAchat from "./Edit";
 import Image from "next/image";
-import { useSidebar } from "../../../../../context/SidebarContext";
 import FilterUserProfile from "../../../../../../ui/municipal/cultivators/profile/filter_user_profile";
-import EditUserProfile from "../../../../../../ui/municipal/cultivators/profile/edit_user_profile";
 import { fetchData } from "../../../../../../_utils/api";
 import Pagination from "../../../Pagination";
 import Modal from "../../../../modal";
@@ -53,7 +51,6 @@ function ListeAchat() {
     }));
   }
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
-  const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
   const inputRef = useRef(null);
 
   const toggleApplicationMenu = () => {
@@ -460,14 +457,14 @@ function ListeAchat() {
                         onClose={() => closeDropdown(order.id)}
                         className="w-40 p-2"
                       >
-                        <DropdownItem
+                        {/* <DropdownItem
                           onItemClick={() => closeDropdown(order.id)}
                           tag="a"
-                          href={`/dashboard/achats/edit?achat_id=${order?.id}`}
+                          href={`/dashboard/stocks/achats/edit?achat_id=${order?.id}`}
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
                           Profile
-                        </DropdownItem>
+                        </DropdownItem> */}
                         {user?.session?.category != "General" && (
                           <DropdownItem
                             onItemClick={() => {
@@ -607,7 +604,7 @@ function ListeAchat() {
       </Modal>
 
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <EditUserProfile cultivateur_id={id1} />
+        <EditAchat achat_id={id1} />
       </Modal>
     </div>
   );
