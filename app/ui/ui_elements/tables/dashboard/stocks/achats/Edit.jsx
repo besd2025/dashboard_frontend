@@ -17,19 +17,30 @@ function EditAchat({ closeModal, achat_id }) {
   const [quantite_jaune, setQuantiteJaune] = useState("");
   const [date_achat, setDateAchat] = useState("");
   const [collector_code, setCollectorCode] = useState("");
+  const [numero_recu, setNumeroRecu] = useState("");
+  const [photo_recu, setPhotoRecu] = useState([]);
+  const [degre_humiliteBranc, setDegreHumiliteBranc] = useState("");
+  const [degre_humiliteJaune, setDegreHumiliteJaune] = useState("");
   const handleRadioChangeStatus = (value) => {
     setSelectedStatus(value);
   };
   const handleSave = async (e) => {
     e.preventDefault();
-    const formData = {
-      cultivator_code: code,
-      collector_code: collector_code,
-      id: achat_id,
-      date_achat: date_achat,
-      quantity_blanc: quantite_blanc,
-      quantity_jaune: quantite_jaune,
-    };
+    const formData = new FormData();
+
+    formData.append("cultivator_code", code);
+    formData.append("collector_code", collector_code);
+    formData.append("id", achat_id);
+    formData.append("date_achat", date_achat);
+    formData.append("quantity_blanc", quantite_blanc);
+    formData.append("quantity_jaune", quantite_jaune);
+    formData.append("himidity_blanc", degre_humiliteBranc);
+    formData.append("himidity_jaune", degre_humiliteJaune);
+    formData.append("receipt_number", numero_recu);
+
+    if (photo_recu instanceof File) {
+      formData.append("receipt_photo", photo_recu);
+    }
 
     try {
       const results = await fetchData("patch", `/achats/${achat_id}/`, {
@@ -67,6 +78,10 @@ function EditAchat({ closeModal, achat_id }) {
         setQuantiteJaune(data?.quantity_jaune);
         setDateAchat(data?.date_achat);
         setCollectorCode(data?.collector?.unique_code || "");
+        setNumeroRecu(data?.receipt_number || "");
+        setPhotoRecu(data?.receipt_photo || []); // Assuming photo_recu is an array
+        setDegreHumiliteBranc(data?.himidity_blanc);
+        setDegreHumiliteJaune(data?.himidity_jaune);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -137,12 +152,64 @@ function EditAchat({ closeModal, achat_id }) {
                 />
               </div>
               <div className="col-span-2 lg:col-span-1">
+                <Label>Degle d'humilité Blanc</Label>
+                <Input
+                  type="text"
+                  defaultValue={degre_humiliteBranc}
+                  onChange={(e) => setDegreHumiliteBranc(e.target.value)}
+                />
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <Label>Degle d'humilité Jaune</Label>
+                <Input
+                  type="text"
+                  defaultValue={degre_humiliteJaune}
+                  onChange={(e) => setDegreHumiliteJaune(e.target.value)}
+                />
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <Label>Numéro de recu</Label>
+                <Input
+                  type="text"
+                  defaultValue={numero_recu}
+                  onChange={(e) => setNumeroRecu(e.target.value)}
+                />
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <Label>Photo de recu</Label>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      setPhotoRecu(file); // Stocke le fichier pour l'aperçu et l'envoi
+                    }
+                  }}
+                />
+              </div>
+              <div className="col-span-2 lg:col-span-1">
                 <Label>Date d'achat</Label>
                 <Input
                   type="date"
-                  value={date_achat}
+                  defaultValue={date_achat}
                   onChange={(e) => setDateAchat(e.target.value)}
                 />
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                {photo_recu && (
+                  <div className="mt-2 w-32 h-32 border border-gray-300 rounded overflow-hidden">
+                    <img
+                      src={
+                        photo_recu instanceof File
+                          ? URL.createObjectURL(photo_recu)
+                          : photo_recu // URL venant du backend
+                      }
+                      alt="Aperçu du reçu"
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>

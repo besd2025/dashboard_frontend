@@ -495,12 +495,12 @@ export default function CardsOverview() {
                   />
                 ) : (
                   <>
-                    {gap_total_en_prix > 1000000
+                    {/* {gap_total_en_prix > 1000000
                       ? (gap_total_en_prix / 1000000).toLocaleString("de-DE") +
                         " M"
                       : gap_total_en_prix?.somme_total_price?.toLocaleString(
                           "de-DE"
-                        )}
+                        )} */}
                     {0}
                     <span className="text-sm"> Fbu</span>
                   </>
