@@ -120,7 +120,7 @@ function AllCultivatorsList() {
     }
 
     getData();
-  }, [pointer, filterData, searchData]); // ← relance quand `pointer` change
+  }, [pointer, filterData, searchData]);
 
   const totalPages = Math.ceil(totalCount / limit);
 
@@ -128,37 +128,23 @@ function AllCultivatorsList() {
     setCurrentPage(pageNumber);
     setPointer((pageNumber - 1) * limit);
   };
-
   const exportToExcel = async () => {
-    const limit = 5;
-    let pointer = 0;
-    let allData = [];
-    let hasMore = true;
-
     try {
-      // Charger toutes les données par pagination
-      while (hasMore) {
-        const response = await fetchData("get", "/hangars/", {
-          params: {
-            offset: pointer,
-            limit: limit,
-          },
-        });
+      //  Étape 1 : Obtenir le nombre total de lignes
+      const initResponse = await fetchData("get", "/hangars/", {
+        params: { limit: 1 },
+      });
 
-        const currentData = response.results;
+      const totalCount = initResponse?.count || 0;
 
-        if (currentData.length === 0) break;
+      if (totalCount === 0) return;
 
-        allData = [...allData, ...currentData];
-        pointer += limit;
+      // Étape 2 : Récupérer toutes les lignes d’un seul coup
+      const fullResponse = await fetchData("get", "/hangars/", {
+        params: { limit: totalCount },
+      });
 
-        // S'arrêter si on a atteint toutes les données
-        if (pointer >= response.count) {
-          hasMore = false;
-        }
-      }
-
-      if (allData.length === 0) return;
+      const allData = fullResponse?.results || [];
 
       const formattedData = allData.map((item) => ({
         Hangar_name: item.hangar_name || "",
@@ -180,7 +166,7 @@ function AllCultivatorsList() {
         quantité_mais_jaune_recu: item?.quantite_jaune_recu || 0,
         created_at: item?.created_at || "",
       }));
-      console.log("Formatted data for Excel:", formattedData);
+
       const worksheet = XLSX.utils.json_to_sheet(formattedData);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "hangars");
@@ -199,6 +185,7 @@ function AllCultivatorsList() {
       console.error("Erreur exportation Excel :", error);
     }
   };
+
   const handleFilter = (filterData) => {
     setFilterData(filterData);
   };

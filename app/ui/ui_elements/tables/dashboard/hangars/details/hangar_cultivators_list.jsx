@@ -103,7 +103,7 @@ function HangarCultivatorsList({ hangar_id }) {
           );
 
           setData(results.results);
-          console.log(results);
+          console.log("resultat:", results);
           setTotalCount(results.count); // si l'API retourne un `count` total
         } catch (error) {
           setError(error);
@@ -125,43 +125,27 @@ function HangarCultivatorsList({ hangar_id }) {
   };
 
   const exportCultivatorsToExcel = async () => {
-    const limit = 5; // tu peux ajuster selon les performances
-    let pointer = 0;
-    let allData = [];
-    let hasMore = true;
-
     try {
-      // Charger toutes les données paginées
-      while (hasMore) {
-        const response = await fetchData(
-          "get",
-          `hangars/${hangar_id}/cultivateurs/`,
-          {
-            params: {
-              offset: pointer,
-              limit: limit,
-            },
-          }
-        );
+      const initResponse = await fetchData(
+        "get",
+        `hangars/${hangar_id}/cultivateurs/`,
+        { params: { limit: 1 } }
+      );
 
-        const currentData = response.results || [];
-        const totalCount = response?.count || 0;
+      const totalCount = initResponse?.count || 0;
+      if (totalCount === 0) return;
 
-        console.log("Fetched:", currentData.length, "| Total:", totalCount);
-
-        if (currentData.length === 0) break;
-
-        allData = [...allData, ...currentData];
-        pointer += currentData.length;
-
-        if (pointer >= totalCount) {
-          hasMore = false;
+      const response = await fetchData(
+        "get",
+        `hangars/${hangar_id}/cultivateurs/`,
+        {
+          params: {
+            limit: totalCount,
+          },
         }
-      }
+      );
 
-      if (allData.length === 0) return;
-
-      // Dé-duplication par ID (si disponible)
+      const allData = response.results || [];
       const uniqueData = Array.from(
         new Map(allData.map((item) => [item.id, item])).values()
       );
@@ -186,7 +170,7 @@ function HangarCultivatorsList({ hangar_id }) {
           quantité_mais_jaune: item?.total_jaune || 0,
         };
 
-        // Gestion du mode de paiement
+        // Mode de paiement
         if (item?.cultivator_bank_name) {
           formattedItem.mode_payement = "BANQUE OU MICROFINANCE";
           formattedItem.Banque_ou_microfinance = item?.cultivator_bank_name;
@@ -208,7 +192,7 @@ function HangarCultivatorsList({ hangar_id }) {
         return formattedItem;
       });
 
-      // Génération Excel
+      // Génération du fichier Excel
       const worksheet = XLSX.utils.json_to_sheet(formattedData);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Cultivateurs");
@@ -230,6 +214,7 @@ function HangarCultivatorsList({ hangar_id }) {
       console.error("Erreur exportation Excel :", error);
     }
   };
+
   const handleImageClick = (url) => {
     console.log("Image clicked:", url);
     setModalImageUrl(url);

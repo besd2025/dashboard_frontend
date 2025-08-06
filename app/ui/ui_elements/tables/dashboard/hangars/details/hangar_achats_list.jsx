@@ -116,7 +116,7 @@ function HangarAchatList() {
     }
 
     getData();
-  }, [pointer, hangar_id]); // ← relance quand `pointer` change
+  }, [pointer, hangar_id]);
 
   const totalPages = Math.ceil(totalCount / limit);
 
@@ -126,46 +126,24 @@ function HangarAchatList() {
   };
 
   const exportToExcel = async () => {
-    const limit = 5;
-    let pointer = 0;
-    let allData = [];
-    let hasMore = true;
-
     try {
-      // Charger toutes les données par pagination
-      while (hasMore) {
-        const response = await fetchData(
-          "get",
-          `hangars/${hangar_id}/achats/`,
-          {
-            params: {
-              offset: pointer,
-              limit: limit,
-            },
-          }
-        );
-
-        const currentData = response?.results?.items || [];
-
-        // Si aucune donnée n’est retournée, arrêter la boucle
-        if (currentData.length === 0) {
-          hasMore = false;
-          break;
+      const initResponse = await fetchData(
+        "get",
+        `hangars/${hangar_id}/achats/`,
+        {
+          params: { limit: 1 },
         }
+      );
 
-        allData = [...allData, ...currentData];
-        pointer += limit;
+      const totalCount = initResponse?.count || 0;
+      if (totalCount === 0) return;
 
-        // Vérifier si on a atteint ou dépassé le nombre total d’éléments
-        if (pointer >= (response?.count || 0)) {
-          hasMore = false;
-        }
-      }
+      const response = await fetchData("get", `hangars/${hangar_id}/achats/`, {
+        params: { limit: totalCount },
+      });
 
-      // Si aucune donnée, ne pas continuer
-      if (allData.length === 0) return;
+      const allData = response?.results?.items || [];
 
-      // Formater les données pour Excel
       const formattedData = allData.map((item) => ({
         Nom_cultivateur: item.cultivator?.cultivator_first_name || "",
         Prénom_cultivateur: item.cultivator?.cultivator_last_name || "",
@@ -180,18 +158,16 @@ function HangarAchatList() {
         created_at: item.created_at || "",
       }));
 
-      // Créer la feuille et le fichier Excel
+      // Générer le fichier Excel
       const worksheet = XLSX.utils.json_to_sheet(formattedData);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Achats_par_hangar");
 
-      // Générer le buffer Excel
       const excelBuffer = XLSX.write(workbook, {
         bookType: "xlsx",
         type: "array",
       });
 
-      // Créer le fichier et déclencher le téléchargement
       const blob = new Blob([excelBuffer], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
       });
@@ -201,6 +177,7 @@ function HangarAchatList() {
       console.error("Erreur exportation Excel :", error);
     }
   };
+
   const handleImageClick = (url) => {
     console.log("Image clicked:", url);
     setModalImageUrl(url);

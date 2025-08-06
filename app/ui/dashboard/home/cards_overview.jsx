@@ -115,7 +115,7 @@ export default function CardsOverview() {
                   />
                 ) : quantite_total_achat >= 1000 ? (
                   <>
-                    {(quantite_total_achat / 1000).toLocaleString("de-DE", {
+                    {(quantite_total_achat / 1000).toLocaleString("fr-FR", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}{" "}
@@ -168,7 +168,7 @@ export default function CardsOverview() {
                 ) : data?.achats?.achats_blanc >= 1000 ? (
                   <>
                     {(data?.achats?.achats_blanc / 1000).toLocaleString(
-                      "de-DE",
+                      "fr-FR",
                       {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
@@ -215,7 +215,7 @@ export default function CardsOverview() {
                 ) : data?.achats?.achats_jaune >= 1000 ? (
                   <>
                     {(data?.achats?.achats_jaune / 1000).toLocaleString(
-                      "de-DE",
+                      "fr-FR",
                       {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
@@ -280,7 +280,7 @@ export default function CardsOverview() {
                   />
                 ) : quantite_vendu >= 1000 ? (
                   <>
-                    {(quantite_vendu / 1000).toLocaleString("de-DE", {
+                    {(quantite_vendu / 1000).toLocaleString("fr-FR", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}{" "}
@@ -329,7 +329,7 @@ export default function CardsOverview() {
                 ) : data?.sorties?.sorties_blanc >= 1000 ? (
                   <>
                     {(data?.sorties?.sorties_blanc / 1000).toLocaleString(
-                      "de-DE",
+                      "fr-FR",
                       {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
@@ -376,7 +376,7 @@ export default function CardsOverview() {
                 ) : data?.sorties?.sorties_jaune >= 1000 ? (
                   <>
                     {(data?.sorties?.sorties_jaune / 1000).toLocaleString(
-                      "de-DE",
+                      "fr-FR",
                       {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
@@ -418,7 +418,6 @@ export default function CardsOverview() {
             <span className="text-sm text-gray-500 dark:text-gray-400">
               Revenue
             </span>
-
             <h4 className="mt-2 font-bold text-gray-800 text-xl dark:text-white/90">
               {loading ? (
                 <SkeletonLoader
@@ -426,18 +425,8 @@ export default function CardsOverview() {
                   height="24px"
                   borderRadius="4px"
                 />
-              ) : total_quantite_vendu?.somme_total_price > 1000000 ? (
-                (
-                  total_quantite_vendu.somme_total_price / 1000000
-                ).toLocaleString("de-DE") + " M"
               ) : (
-                total_quantite_vendu?.somme_total_price?.toLocaleString(
-                  "de-DE",
-                  {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }
-                )
+                total_quantite_vendu?.somme_total_price?.toLocaleString("fr-FR")
               )}
               {!loading && <span className="text-sm"> FBU</span>}
             </h4>
@@ -495,13 +484,9 @@ export default function CardsOverview() {
                   />
                 ) : (
                   <>
-                    {/* {gap_total_en_prix > 1000000
-                      ? (gap_total_en_prix / 1000000).toLocaleString("de-DE") +
-                        " M"
-                      : gap_total_en_prix?.somme_total_price?.toLocaleString(
-                          "de-DE"
-                        )} */}
-                    {0}
+                    {(gap_total_en_prix?.somme_total_price || 0).toLocaleString(
+                      "fr-FR"
+                    )}
                     <span className="text-sm"> Fbu</span>
                   </>
                 )}

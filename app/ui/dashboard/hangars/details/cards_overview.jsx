@@ -89,7 +89,7 @@ export default function CardsOverview({ hangar_id }) {
               <h4 className="mt-2 font-semibold text-gray-800 text-lg dark:text-white/90">
                 {data.total_achats >= 1000 ? (
                   <>
-                    {(data?.total_achats / 1000).toLocaleString("de-DE", {
+                    {(data?.total_achats / 1000).toLocaleString("fr-FR", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}{" "}
@@ -136,7 +136,7 @@ export default function CardsOverview({ hangar_id }) {
                 {data?.quantite_blanc_achete >= 1000 ? (
                   <>
                     {(data?.quantite_blanc_achete / 1000).toLocaleString(
-                      "de-DE",
+                      "fre-FR",
                       {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
@@ -177,7 +177,7 @@ export default function CardsOverview({ hangar_id }) {
                 {data?.quantite_jaune_achete >= 1000 ? (
                   <>
                     {(data?.quantite_jaune_achete / 1000).toLocaleString(
-                      "de-DE",
+                      "fr-FR",
                       {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
@@ -276,7 +276,7 @@ export default function CardsOverview({ hangar_id }) {
                 {data?.quantite_blanc_vendue >= 1000 ? (
                   <>
                     {(data?.quantite_blanc_vendue / 1000).toLocaleString(
-                      "de-DE",
+                      "fr-FR",
                       {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
@@ -317,7 +317,7 @@ export default function CardsOverview({ hangar_id }) {
                 {data?.quantite_jaune_vendue >= 1000 ? (
                   <>
                     {(data?.quantite_jaune_vendue / 1000).toLocaleString(
-                      "de-DE",
+                      "fr-FR",
                       {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
@@ -373,15 +373,8 @@ export default function CardsOverview({ hangar_id }) {
               />
             </svg>
           </div>
-
           <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
-            {data?.total_achats_price > 1000000
-              ? (data?.total_achats_price / 1000000).toLocaleString("de-DE") +
-                " M"
-              : data?.total_achats_price?.toLocaleString("de-DE", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                }) || 0}
+            {(data?.total_achats_price ?? 0).toLocaleString("fr-FR")}
             <span className="text-sm"> FBU</span>
           </h4>
         </div>
@@ -422,13 +415,7 @@ export default function CardsOverview({ hangar_id }) {
           </div>
 
           <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
-            {data?.total_ventes_price > 1000000
-              ? (data?.total_ventes_price / 1000000).toLocaleString("de-DE") +
-                " M"
-              : data?.total_ventes_price?.toLocaleString("de-DE", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                }) || 0}
+            {(data?.total_ventes_price ?? 0).toLocaleString("fr-FR")}
             <span className="text-sm"> FBU</span>
           </h4>
         </div>

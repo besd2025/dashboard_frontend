@@ -162,35 +162,21 @@ function AllCultivatorsList() {
     }
   };
   const exportCultivatorsToExcel = async () => {
-    const limit = 5;
-    let pointer = 0;
-    let allData = [];
-    let hasMore = true;
-
     try {
-      // Charger toutes les données par pagination
-      while (hasMore) {
-        const response = await fetchData("get", "/cultivators/", {
-          params: {
-            offset: pointer,
-            limit: limit,
-          },
-        });
+      // Étape 1 : Récupérer le nombre total d'enregistrements
+      const initResponse = await fetchData("get", "/cultivators/", {
+        params: { limit: 1 },
+      });
 
-        const currentData = response.results;
+      const totalCount = initResponse?.count || 0;
+      if (totalCount === 0) return;
 
-        if (currentData.length === 0) break;
+      // Étape 2 : Charger toutes les données en une seule fois
+      const fullResponse = await fetchData("get", "/cultivators/", {
+        params: { limit: totalCount },
+      });
 
-        allData = [...allData, ...currentData];
-        pointer += limit;
-
-        // S'arrêter si on a atteint toutes les données
-        if (pointer >= response.count) {
-          hasMore = false;
-        }
-      }
-
-      if (allData.length === 0) return;
+      const allData = fullResponse?.results || [];
 
       const formattedData = allData.map((item) => {
         const formattedItem = {
@@ -213,28 +199,24 @@ function AllCultivatorsList() {
         };
 
         if (item?.cultivator_bank_name) {
-          // Cas Banque ou Microfinance : on ignore mobile money
           formattedItem.mode_payement = "BANQUE OU MICROFINANCE";
           formattedItem.Banque_ou_microfinance = item?.cultivator_bank_name;
           formattedItem.Numero_compte = item?.cultivator_bank_account || "";
         } else if (item?.cultivator_mobile_payment) {
-          // Cas Mobile Money uniquement si pas de banque
           formattedItem.mode_payement = "MOBILE MONEY";
-          if (item?.cultivator_mobile_payment?.toString().slice(0, 1) == "6") {
+          if (item?.cultivator_mobile_payment?.toString().startsWith("6")) {
             formattedItem.nom_service = "LUMICASH";
           } else if (
-            item?.cultivator_mobile_payment?.toString().slice(0, 1) == "7"
+            item?.cultivator_mobile_payment?.toString().startsWith("7")
           ) {
             formattedItem.nom_service = "ECOCASH";
-            formattedItem.Numero_de_telephone_de_payement =
-              item?.cultivator_mobile_payment || "";
-            formattedItem.date_enregistrement = item.created_at || "";
           }
+          formattedItem.Numero_de_telephone_de_payement =
+            item?.cultivator_mobile_payment || "";
+          formattedItem.date_enregistrement = item.created_at || "";
         } else {
           formattedItem.mode_payement = "";
         }
-
-        // Date en dernier
 
         return formattedItem;
       });
