@@ -157,31 +157,59 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
               </div>
               <div className="col-span-2 lg:col-span-1">
                 <Label>Date de naissance</Label>
-                <Input type="date" defaultValue={date_naissance} />
+                <Input
+                  type="date"
+                  defaultValue={date_naissance}
+                  onChange={(e) => setDateNaissance(e.target.value)}
+                />
               </div>
               <div className="col-span-2 lg:col-span-1">
                 <Label>Sexe</Label>
-                <Input type="text" defaultValue={genre} />
+                <Input
+                  type="text"
+                  defaultValue={genre}
+                  onChange={(e) => setGenre(e.target.value)}
+                />
               </div>
               <div className="col-span-2 lg:col-span-1">
                 <Label>Mode de payement</Label>
-                <Input type="text" defaultValue={mode_payment} />
+                <Input
+                  type="text"
+                  defaultValue={mode_payment}
+                  onChange={(e) => setPaymentMode(e.target.value)}
+                />
               </div>
               <div className="col-span-2 lg:col-span-1">
                 <Label>Nom de Banque</Label>
-                <Input type="text" defaultValue={bank_name} />
+                <Input
+                  type="text"
+                  defaultValue={bank_name}
+                  onChange={(e) => setBankName(e.target.value)}
+                />
               </div>
               <div className="col-span-2 lg:col-span-1">
                 <Label>Numéro de compte Bancaire</Label>
-                <Input type="text" defaultValue={bank_acount} />
+                <Input
+                  type="text"
+                  defaultValue={bank_acount}
+                  onChange={(e) => setBankAcount(e.target.value)}
+                />
               </div>
               <div className="col-span-2 lg:col-span-1">
                 <Label>Numéro de telephone de paiement</Label>
-                <Input type="text" defaultValue={payment_phone || ""} />
+                <Input
+                  type="text"
+                  defaultValue={payment_phone || ""}
+                  onChange={(e) => setPaymentPhone(e.target.value)}
+                />
               </div>
               <div className="col-span-2 lg:col-span-1">
                 <Label>propriétaire</Label>
-                <Input type="text" defaultValue={proprietaire || ""} />
+                <Input
+                  type="text"
+                  defaultValue={proprietaire || ""}
+                  onChange={(e) => setProprietaire(e.target.value)}
+                />
               </div>
             </div>
           </div>
