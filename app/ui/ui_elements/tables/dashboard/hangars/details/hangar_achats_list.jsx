@@ -23,7 +23,7 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { UserContext } from "../../../../../context/UserContext";
 import ViewImageModal from "../../../../modal/ViewImageModal";
-
+import EditAchat from "../../../../../ui_elements/tables/dashboard/stocks/achats/Edit";
 function HangarAchatList() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -177,7 +177,8 @@ function HangarAchatList() {
       console.error("Erreur exportation Excel :", error);
     }
   };
-
+  const [id1, getId] = useState(undefined ? "default" : 0);
+  console.log(id1);
   const handleImageClick = (url) => {
     console.log("Image clicked:", url);
     setModalImageUrl(url);
@@ -427,6 +428,7 @@ function HangarAchatList() {
                             onItemClick={() => {
                               closeDropdown(order.id);
                               openModal();
+                              getId(order?.id);
                             }}
                             className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                           >
@@ -577,7 +579,7 @@ function HangarAchatList() {
       </Modal>
 
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <EditUserProfile />
+        <EditAchat achat_id={id1} />
       </Modal>
       <ViewImageModal
         isOpen={isImageModalOpen}

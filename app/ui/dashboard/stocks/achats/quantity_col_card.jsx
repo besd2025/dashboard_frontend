@@ -51,7 +51,7 @@ function QuantityColCard() {
           <h4 className="mt-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
             {data?.quantite_totale && data?.quantite_totale >= 1000 ? (
               <>
-                {(data?.quantite_totale / 1000)?.toLocaleString("de-DE", {
+                {(data?.quantite_totale / 1000)?.toLocaleString("fr-FR", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}{" "}

@@ -214,7 +214,7 @@ function HangarCultivatorsList({ hangar_id }) {
       console.error("Erreur exportation Excel :", error);
     }
   };
-
+  const [id1, getId] = useState(undefined ? "default" : 0);
   const handleImageClick = (url) => {
     console.log("Image clicked:", url);
     setModalImageUrl(url);
@@ -450,6 +450,7 @@ function HangarCultivatorsList({ hangar_id }) {
                             onItemClick={() => {
                               closeDropdown(order.id);
                               openModal();
+                              getId(order?.id);
                             }}
                             className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                           >
@@ -583,7 +584,7 @@ function HangarCultivatorsList({ hangar_id }) {
       </Modal>
 
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <EditUserProfile />
+        <EditUserProfile cultivateur_id={id1} />
       </Modal>
       <ViewImageModal
         isOpen={isImageModalOpen}

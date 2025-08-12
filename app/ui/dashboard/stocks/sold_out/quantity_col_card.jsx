@@ -53,7 +53,7 @@ function QuantitySolCard() {
           <h4 className="mt-2 font-semibold text-gray-800 text-2xl dark:text-white/90">
             {data?.somme_quantity && data?.somme_quantity >= 1000 ? (
               <>
-                {(data?.somme_quantity / 1000)?.toLocaleString("de-DE", {
+                {(data?.somme_quantity / 1000)?.toLocaleString("fr-FR", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 }) || 0}{" "}

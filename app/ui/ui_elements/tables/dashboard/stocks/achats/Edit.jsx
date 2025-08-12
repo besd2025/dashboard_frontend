@@ -5,7 +5,7 @@ import Label from "../../../../../ui_elements/form/Label";
 import Button from "../../../../../ui_elements/button/Button";
 import Radio from "../../../../../ui_elements/form/input/Radio";
 import { fetchData } from "../../../../../../_utils/api";
-
+import ViewImageModal from "../../../../modal/ViewImageModal";
 function EditAchat({ closeModal, achat_id }) {
   const [selectedStatus, setSelectedStatus] = useState("option2");
   const [data, setData] = useState({});
@@ -21,6 +21,8 @@ function EditAchat({ closeModal, achat_id }) {
   const [photo_recu, setPhotoRecu] = useState([]);
   const [degre_humiliteBranc, setDegreHumiliteBranc] = useState("");
   const [degre_humiliteJaune, setDegreHumiliteJaune] = useState("");
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [modalImageUrl, setModalImageUrl] = useState("");
   const handleRadioChangeStatus = (value) => {
     setSelectedStatus(value);
   };
@@ -89,7 +91,11 @@ function EditAchat({ closeModal, achat_id }) {
     }
     getData();
   }, [achat_id]);
-
+  const handleImageClick = (url) => {
+    console.log("Image clicked:", url);
+    setModalImageUrl(url);
+    setIsImageModalOpen(true);
+  };
   return (
     <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
       <div className="px-2 pr-14">
@@ -196,7 +202,16 @@ function EditAchat({ closeModal, achat_id }) {
                   onChange={(e) => setDateAchat(e.target.value)}
                 />
               </div>
-              <div className="col-span-2 lg:col-span-1">
+              <div
+                className="col-span-2 lg:col-span-1"
+                onClick={() =>
+                  handleImageClick(
+                    photo_recu instanceof File
+                      ? URL.createObjectURL(photo_recu)
+                      : photo_recu // URL venant du backend
+                  )
+                }
+              >
                 {photo_recu && (
                   <div className="mt-2 w-32 h-32 border border-gray-300 rounded overflow-hidden">
                     <img
@@ -242,6 +257,11 @@ function EditAchat({ closeModal, achat_id }) {
           </Button>
         </div>
       </form>
+      <ViewImageModal
+        isOpen={isImageModalOpen}
+        onClose={() => setIsImageModalOpen(false)}
+        imageUrl={modalImageUrl}
+      />
     </div>
   );
 }

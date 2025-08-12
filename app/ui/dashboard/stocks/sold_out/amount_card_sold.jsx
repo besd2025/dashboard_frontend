@@ -52,13 +52,9 @@ function AmountCardSold() {
             Montant total des ventes
           </span>
           <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
-            {data?.somme_total_price > 1000000
-              ? (data?.somme_total_price / 1000000).toLocaleString("de-DE") +
-                " M"
-              : data?.somme_total_price?.toLocaleString("de-DE", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
+            {data?.somme_total_price
+              ? data?.somme_total_price?.toLocaleString("fr-FR")
+              : "0"}
             <span className="text-sm"> FBU</span>
           </h4>
         </div>

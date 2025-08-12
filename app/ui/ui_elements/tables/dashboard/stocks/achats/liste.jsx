@@ -20,6 +20,7 @@ import { MoreDotIcon } from "../../../../../icons";
 import { UserContext } from "../../../../../context/UserContext";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import ViewImageModal from "../../../../modal/ViewImageModal";
 function ListeAchat() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
@@ -31,6 +32,8 @@ function ListeAchat() {
   const user = useContext(UserContext);
   const [filterData, setFilterData] = useState({});
   const [searchdata, setSearchData] = useState("");
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [modalImageUrl, setModalImageUrl] = useState("");
   console.log(user?.session?.category);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
@@ -243,6 +246,11 @@ function ListeAchat() {
   const handleFilter = (filterData) => {
     setFilterData(filterData);
   };
+  const handleImageClick = (url) => {
+    console.log("Image clicked:", url);
+    setModalImageUrl(url);
+    setIsImageModalOpen(true);
+  };
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
@@ -429,6 +437,18 @@ function ListeAchat() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
+                  N0 Recus
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Recus
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
                   Hangar
                 </TableCell>
                 <TableCell
@@ -494,7 +514,15 @@ function ListeAchat() {
 
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 overflow-hidden rounded-full">
+                      <div
+                        className="w-10 h-10 overflow-hidden rounded-full"
+                        onClick={() =>
+                          handleImageClick(
+                            order?.cultivator?.cultivator_photo ||
+                              "/img/no-image.png"
+                          )
+                        }
+                      >
                         {order?.cultivator?.cultivator_photo ? (
                           <Image
                             width={80}
@@ -567,6 +595,35 @@ function ListeAchat() {
                     )}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order?.receipt_number}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    <div
+                      className="w-10 h-10 overflow-hidden rounded-md cursor-pointer"
+                      onClick={() =>
+                        handleImageClick(
+                          order?.receipt_photo || "/img/no-image.png"
+                        )
+                      }
+                    >
+                      {order?.receipt_photo ? (
+                        <Image
+                          width={80}
+                          height={80}
+                          src={order?.receipt_photo}
+                          alt="recus"
+                        />
+                      ) : (
+                        <Image
+                          width={80}
+                          height={80}
+                          src="/img/blank-profile.png"
+                          alt="user"
+                        />
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     {order?.collector?.hangar?.hangar_name}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
@@ -606,6 +663,11 @@ function ListeAchat() {
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
         <EditAchat achat_id={id1} />
       </Modal>
+      <ViewImageModal
+        isOpen={isImageModalOpen}
+        onClose={() => setIsImageModalOpen(false)}
+        imageUrl={modalImageUrl}
+      />
     </div>
   );
 }

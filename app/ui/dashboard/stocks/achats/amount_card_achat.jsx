@@ -47,12 +47,7 @@ function AmountCard() {
             Montant total des achats
           </span>
           <h4 className="mt-2 font-bold text-gray-800 text-2xl dark:text-white/90">
-            {data?.prix_achat > 1000000
-              ? (data?.prix_achat / 1000000).toLocaleString("de-DE") + " M"
-              : data?.prix_achat?.toLocaleString("de-DE", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
+            {data?.prix_achat ? data?.prix_achat.toLocaleString("fr-FR") : "0"}
             <span className="text-sm"> FBU</span>
           </h4>
         </div>
