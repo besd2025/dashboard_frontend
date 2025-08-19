@@ -58,7 +58,7 @@ function TotalStocks() {
               <SkeletonLoader width="80px" height="14px" borderRadius="4px" />
             ) : data?.total >= 1000 ? (
               <>
-                {(data?.total / 1000).toLocaleString("de-DE", {
+                {(data?.total / 1000).toLocaleString("fr-FR", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}{" "}

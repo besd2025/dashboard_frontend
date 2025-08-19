@@ -112,7 +112,7 @@ export default function UserMetaCard({ hangar_id }) {
         </div>
       </div>
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <EditHangarProfile closeModal={closeModal} />
+        <EditHangarProfile closeModal={closeModal} hangar_id={hangar_id} />
       </Modal>
     </>
   );

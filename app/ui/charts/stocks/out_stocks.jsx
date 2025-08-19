@@ -53,7 +53,7 @@ function OutStocks() {
             {data.somme_quantite_sortie &&
             data?.somme_quantite_sortie >= 1000 ? (
               <>
-                {(data?.somme_quantite_sortie / 1000)?.toLocaleString("de-DE", {
+                {(data?.somme_quantite_sortie / 1000)?.toLocaleString("fr-FR", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}{" "}
