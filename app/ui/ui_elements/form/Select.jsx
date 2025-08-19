@@ -1,13 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
+import LoadingDots from "../loading/loading_dots";
 
 const Select = ({
-  options,
+  options = [],
   placeholder = "Select an option",
   onChange,
   className = "",
   defaultValue = "",
+  isLoading = false,
+  loadingText = "Chargement...",
 }) => {
   // Manage the selected value
   const [selectedValue, setSelectedValue] = useState(defaultValue);
@@ -24,9 +27,11 @@ const Select = ({
         selectedValue
           ? "text-gray-800 dark:text-white/90"
           : "text-gray-400 dark:text-gray-400"
-      } ${className}`}
+      } ${isLoading ? "opacity-60 cursor-not-allowed" : ""} ${className}`}
       value={selectedValue}
       onChange={handleChange}
+      disabled={isLoading}
+      aria-busy={isLoading}
     >
       {/* Placeholder option */}
       <option
@@ -36,16 +41,26 @@ const Select = ({
       >
         {placeholder}
       </option>
-      {/* Map over options */}
-      {options.map((option) => (
+      {/* Options or Loading */}
+      {!isLoading ? (
         <option
-          key={option?.value}
-          value={option?.value}
-          className="text-gray-700 dark:bg-gray-900 dark:text-gray-400"
+          value=""
+          disabled
+          className="text-gray-700 dark:bg-gray-900 dark:text-gray-400 "
         >
-          {option.label}
+          {loadingText}
         </option>
-      ))}
+      ) : (
+        options.map((option) => (
+          <option
+            key={option?.value}
+            value={option?.value}
+            className="text-gray-700 dark:bg-gray-900 dark:text-gray-400"
+          >
+            {option.label}
+          </option>
+        ))
+      )}
     </select>
   );
 };
