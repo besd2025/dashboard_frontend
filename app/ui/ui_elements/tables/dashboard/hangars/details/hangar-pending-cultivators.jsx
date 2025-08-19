@@ -23,8 +23,8 @@ import { saveAs } from "file-saver";
 import { fetchData } from "../../../../../../_utils/api";
 import { UserContext } from "../../../../../context/UserContext";
 import ViewImageModal from "../../../../modal/ViewImageModal";
-//import { useSearchParams } from "next/navigation";
-function HangarCultivatorsList({ hangar_id }) {
+
+function HangarPendingCultivators() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -36,8 +36,11 @@ function HangarCultivatorsList({ hangar_id }) {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState("");
   //const searchParams = useSearchParams();
-  //const hangar_id = searchParams.get("hangar_id");
-  //const hangar_id = 5;
+  let hangar_id = 0;
+  if (typeof window !== "undefined") {
+    hangar_id = localStorage.getItem("hangarId");
+    // ...
+  }
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -222,7 +225,7 @@ function HangarCultivatorsList({ hangar_id }) {
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-          Cultivateurs enregistrés
+          Cultivateurs en attente de paiment
         </h3>
         {/* search */}
         <div className="hidden lg:block">
@@ -253,49 +256,6 @@ function HangarCultivatorsList({ hangar_id }) {
           </form>
         </div>
 
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => openModalFilter()}
-            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
-          >
-            <svg
-              className="stroke-current fill-white dark:fill-gray-800"
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M2.29004 5.90393H17.7067"
-                stroke=""
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M17.7075 14.0961H2.29085"
-                stroke=""
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M12.0826 3.33331C13.5024 3.33331 14.6534 4.48431 14.6534 5.90414C14.6534 7.32398 13.5024 8.47498 12.0826 8.47498C10.6627 8.47498 9.51172 7.32398 9.51172 5.90415C9.51172 4.48432 10.6627 3.33331 12.0826 3.33331Z"
-                fill=""
-                stroke=""
-                strokeWidth="1.5"
-              />
-              <path
-                d="M7.91745 11.525C6.49762 11.525 5.34662 12.676 5.34662 14.0959C5.34661 15.5157 6.49762 16.6667 7.91745 16.6667C9.33728 16.6667 10.4883 15.5157 10.4883 14.0959C10.4883 12.676 9.33728 11.525 7.91745 11.525Z"
-                fill=""
-                stroke=""
-                strokeWidth="1.5"
-              />
-            </svg>
-            Filtrage
-          </button>
-        </div>
         <div className="flex items-center gap-3">
           <button
             className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
@@ -369,7 +329,7 @@ function HangarCultivatorsList({ hangar_id }) {
       </div>
 
       <div className="max-w-full overflow-x-auto ">
-        <div className="min-w-[1102px] ">
+        <div className="min-w-max ">
           <Table>
             {/* Table Header */}
             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]  shadow-theme-xs ">
@@ -385,31 +345,13 @@ function HangarCultivatorsList({ hangar_id }) {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Province
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
-                  Commmune
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
-                  Zone
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
-                  Colline
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
                   Quantite
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Montant
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -443,18 +385,6 @@ function HangarCultivatorsList({ hangar_id }) {
                         >
                           Profile
                         </DropdownItem>
-                        {user?.session?.category != "General" && (
-                          <DropdownItem
-                            onItemClick={() => {
-                              closeDropdown(order.id);
-                              openModal();
-                              getId(order?.id);
-                            }}
-                            className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                          >
-                            Modifier
-                          </DropdownItem>
-                        )}
                       </Dropdown>
                     </div>
                   </TableCell>
@@ -512,47 +442,6 @@ function HangarCultivatorsList({ hangar_id }) {
                         ?.commune_name
                     }
                   </TableCell>
-                  {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <Badge
-                      size="sm"
-                      color={
-                        order.status === "Active"
-                          ? "success"
-                          : order.status === "Pending"
-                          ? "warning"
-                          : "error"
-                      }
-                    >
-                      {order.status}
-                    </Badge>
-                  </TableCell> */}
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.cultivator_adress?.zone_code?.zone_name}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.cultivator_adress?.colline_name}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.total_quantite && order.total_quantite >= 1000 ? (
-                      <>
-                        {(order.total_quantite / 1000)?.toLocaleString(
-                          "de-DE",
-                          {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          }
-                        )}{" "}
-                        <span className="text-sm">T</span>
-                      </>
-                    ) : (
-                      <>
-                        {(order.total_quantite &&
-                          order.total_quantite?.toLocaleString("fr-FR")) ||
-                          0}{" "}
-                        <span className="text-sm">Kg</span>
-                      </>
-                    )}
-                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -571,19 +460,6 @@ function HangarCultivatorsList({ hangar_id }) {
         limit={limit}
       />
 
-      {/* filtres */}
-
-      <Modal
-        isOpen={isOpenFilter}
-        onClose={closeModalFilter}
-        className="max-w-[700px] m-4"
-      >
-        <FilterUserProfile />
-      </Modal>
-
-      <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <EditUserProfile cultivateur_id={id1} />
-      </Modal>
       <ViewImageModal
         isOpen={isImageModalOpen}
         onClose={() => setIsImageModalOpen(false)}
@@ -593,4 +469,4 @@ function HangarCultivatorsList({ hangar_id }) {
   );
 }
 
-export default HangarCultivatorsList;
+export default HangarPendingCultivators;

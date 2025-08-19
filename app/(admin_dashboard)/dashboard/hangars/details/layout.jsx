@@ -25,7 +25,7 @@ function Layout({ children }) {
       setActiveTab("transfers");
     } else if (pathname.includes("/receptions")) {
       setActiveTab("receptions");
-    } else if (pathname.includes("/payment")) {
+    } else if (pathname.includes("payment")) {
       setActiveTab("paiement");
     }
   }, [pathname]);
@@ -104,7 +104,7 @@ function Layout({ children }) {
                 <span className="ml-1">Localisation</span>
               </Link>
               <Link
-                href={`/dashboard/hangars/details/payment?hangar_id=${hangarId}`}
+                href={`/dashboard/hangars/details/payment/cultivators-paid?hangar_id=${hangarId}`}
                 className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold ${
                   activeTab === "paiement"
                     ? "border-yellow-500 text-yellow-500"
