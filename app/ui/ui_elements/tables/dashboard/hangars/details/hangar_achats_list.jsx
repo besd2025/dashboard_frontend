@@ -398,6 +398,7 @@ function HangarAchatList() {
             <TableBody
               loading={loading}
               columns={8}
+              skeletonRows={totalCount < 5 ? totalCount : 5}
               className="divide-y divide-gray-100 dark:divide-white/[0.05]"
             >
               {data.map((order) => (

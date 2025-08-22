@@ -26,7 +26,7 @@ export const Dropdown = ({ isOpen, onClose, children, className = "" }) => {
   return (
     <div
       ref={dropdownRef}
-      className={`absolute z-40 left-0 mt-2 rounded-xl border border-gray-200 bg-white shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark ${className}`}
+      className={`absolute z-9999 left-0 mt-2 rounded-xl border border-gray-200 bg-white shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark ${className}`}
     >
       {children}
     </div>

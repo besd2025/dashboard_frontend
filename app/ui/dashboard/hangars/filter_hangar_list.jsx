@@ -8,6 +8,7 @@ import Select from "../../../ui/ui_elements/form/Select";
 import { ChevronDownIcon } from "../../../ui/icons";
 import DatePicker from "../../ui_elements/form/date-picker";
 import { fetchData } from "../../../_utils/api";
+import LoadingDots from "../../ui_elements/loading/loading_dots";
 function FilterHangarList({ handleDatahangarsFilter, closeModalFilter }) {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [province, setProvince] = useState([]);
@@ -21,6 +22,7 @@ function FilterHangarList({ handleDatahangarsFilter, closeModalFilter }) {
   const [quantiteMaxAchetee, setQuantiteMaxAchetee] = useState("");
   const [quantiteMinVendue, setQuantiteMinVendue] = useState("");
   const [quantiteMaxVendue, setQuantiteMaxVendue] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSelectProvinceChange = async (value) => {
     //console.log("Selected value:", value);
@@ -88,6 +90,7 @@ function FilterHangarList({ handleDatahangarsFilter, closeModalFilter }) {
 
   const handleFilters = (e) => {
     e.preventDefault();
+    setLoading(true);
     const filterData = {
       province: selectedProvince,
       commune: selectedCommune,
@@ -250,8 +253,12 @@ function FilterHangarList({ handleDatahangarsFilter, closeModalFilter }) {
           <Button size="sm" variant="outline" onClick={closeModalFilter}>
             Fermer
           </Button>
-          <Button size="sm" onClick={handleFilters}>
-            rechercher
+          <Button
+            size="sm"
+            onClick={handleFilters}
+            className=" bg-yellow-500 disabled:bg-yellow-500"
+          >
+            {loading ? <LoadingDots /> : "Rechercher"}
           </Button>
         </div>
       </form>

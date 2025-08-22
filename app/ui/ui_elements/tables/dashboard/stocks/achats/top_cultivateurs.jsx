@@ -26,8 +26,12 @@ export default function TopCultivateurs() {
   const [currentPage, setCurrentPage] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     async function getData() {
+      setLoading(true);
+
       try {
         const results = await fetchData(
           "get",
@@ -44,6 +48,8 @@ export default function TopCultivateurs() {
       } catch (error) {
         setError(error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
     getData();
@@ -142,7 +148,13 @@ export default function TopCultivateurs() {
             </TableHeader>
 
             {/* Table Body */}
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+            <TableBody
+              loading={loading}
+              columns={7}
+              skeletonRows={5}
+              menu={false}
+              className="divide-y divide-gray-100 dark:divide-white/[0.05]"
+            >
               {data.map((order) => (
                 <TableRow key={order?.cultivator?.id}>
                   <TableCell className="px-5 py-4 sm:px-6 text-start">

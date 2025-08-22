@@ -13,8 +13,11 @@ export default function TopAchat() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     async function getData() {
+      setLoading(true);
       try {
         const results = await fetchData("get", "achats/cinq_recents/", {
           params: {},
@@ -27,6 +30,8 @@ export default function TopAchat() {
       } catch (error) {
         setError(error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
     getData();
@@ -109,7 +114,13 @@ export default function TopAchat() {
             </TableHeader>
 
             {/* Table Body */}
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+            <TableBody
+              loading={loading}
+              columns={5}
+              skeletonRows={5}
+              menu={false}
+              className="divide-y divide-gray-100 dark:divide-white/[0.05]"
+            >
               {data.map((order, index = 0) => (
                 <TableRow key={order?.cultivator?.id || index + 1}>
                   <TableCell className="px-5 py-4 sm:px-6 text-start">

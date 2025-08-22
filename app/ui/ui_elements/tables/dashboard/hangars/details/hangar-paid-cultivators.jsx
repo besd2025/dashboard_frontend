@@ -359,7 +359,8 @@ function HangarPaidCultivators() {
             {/* Table Body */}
             <TableBody
               loading={loading}
-              columns={7}
+              columns={4}
+              skeletonRows={totalCount < 5 ? totalCount : 5}
               className="divide-y divide-gray-100 dark:divide-white/[0.05]"
             >
               {data?.map((order) => (

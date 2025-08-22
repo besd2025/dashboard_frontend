@@ -17,21 +17,46 @@ const TableBody = ({
   className,
   loading,
   columns = 1,
-  skeletonRows = 2,
+  skeletonRows = 5,
+  menu = true,
 }) => {
   if (loading) {
     return (
       <tbody className={className}>
         {Array.from({ length: skeletonRows }).map((_, rowIdx) => (
           <tr key={rowIdx}>
-            {Array.from({ length: columns }).map((_, colIdx) => (
-              <td
-                key={colIdx}
-                className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400"
-              >
-                <SkeletonLoader width="100%" height="15px" borderRadius="4px" />
-              </td>
-            ))}
+            {Array.from({ length: columns }).map((_, colIdx) =>
+              menu ? (
+                colIdx === 0 ? (
+                  <td
+                    key={colIdx}
+                    className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400 w-[10px]"
+                  />
+                ) : (
+                  <td
+                    key={colIdx}
+                    className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400"
+                  >
+                    <SkeletonLoader
+                      width="100%"
+                      height="15px"
+                      borderRadius="4px"
+                    />
+                  </td>
+                )
+              ) : (
+                <td
+                  key={colIdx}
+                  className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400"
+                >
+                  <SkeletonLoader
+                    width="100%"
+                    height="15px"
+                    borderRadius="4px"
+                  />
+                </td>
+              )
+            )}
           </tr>
         ))}
       </tbody>

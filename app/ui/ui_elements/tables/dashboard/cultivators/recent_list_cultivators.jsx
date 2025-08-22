@@ -22,8 +22,11 @@ export default function RecentCultivatorsList() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const user = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     async function getData() {
+      setLoading(true);
       try {
         const results = await fetchData("get", "cultivators/cinq_recents/", {
           params: {},
@@ -36,6 +39,8 @@ export default function RecentCultivatorsList() {
       } catch (error) {
         setError(error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
     getData();
@@ -110,7 +115,12 @@ export default function RecentCultivatorsList() {
             </TableHeader>
 
             {/* Table Body */}
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+            <TableBody
+              loading={loading}
+              columns={5}
+              skeletonRows={5}
+              className="divide-y divide-gray-100 dark:divide-white/[0.05]"
+            >
               {data.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">

@@ -42,7 +42,7 @@ const Select = ({
         {placeholder}
       </option>
       {/* Options or Loading */}
-      {!isLoading ? (
+      {isLoading ? (
         <option
           value=""
           disabled

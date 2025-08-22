@@ -34,6 +34,8 @@ function ListeAchat() {
   const [searchdata, setSearchData] = useState("");
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState("");
+  const [loading, setLoading] = useState(false);
+
   console.log(user?.session?.category);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
@@ -86,6 +88,8 @@ function ListeAchat() {
   };
   useEffect(() => {
     async function getData() {
+      setLoading(true);
+
       try {
         let results;
 
@@ -123,6 +127,8 @@ function ListeAchat() {
       } catch (error) {
         setError(error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
     getData();
@@ -431,7 +437,7 @@ function ListeAchat() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  quantité Maïs blanc
+                  quantité Maïs Jaune
                 </TableCell>
                 <TableCell
                   isHeader
@@ -461,7 +467,12 @@ function ListeAchat() {
             </TableHeader>
 
             {/* Table Body */}
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+            <TableBody
+              loading={loading}
+              columns={9}
+              skeletonRows={totalCount < 5 ? totalCount : 5}
+              className="divide-y divide-gray-100 dark:divide-white/[0.05]"
+            >
               {data.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">

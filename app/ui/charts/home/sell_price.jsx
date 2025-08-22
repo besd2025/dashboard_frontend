@@ -72,7 +72,12 @@ function SellPrice() {
 
           <h4 className="ml-2 font-semibold  text-2xl dark:text-white/90">
             {loading ? (
-              <SkeletonLoader width="80px" height="14px" borderRadius="4px" />
+              <SkeletonLoader
+                width="80px"
+                height="24px"
+                borderRadius="4px"
+                className="mr-2"
+              />
             ) : (
               data?.prix_achat
             )}{" "}

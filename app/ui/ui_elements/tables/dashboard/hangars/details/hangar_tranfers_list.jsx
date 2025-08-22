@@ -295,9 +295,10 @@ function HangarTranfersList({ hangar_id }) {
 
             {/* Table Body */}
             <TableBody
-              className="divide-y divide-gray-100 dark:divide-white/[0.05]"
               loading={loading}
-              columns={7}
+              columns={6}
+              skeletonRows={totalCount < 5 ? totalCount : 5}
+              className="divide-y divide-gray-100 dark:divide-white/[0.05]"
             >
               {data.map((order) => (
                 <TableRow key={order.id}>
