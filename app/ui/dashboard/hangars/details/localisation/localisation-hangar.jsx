@@ -35,8 +35,8 @@ export default function LocalisationHangar() {
                     <h3 className=" text-gray-600 text-sm dark:text-white/90">
                       Information du Hangar
                     </h3>
-                    <h3 className="mt-1 font-bold text-gray-900 dark:text-white/90">
-                      {selectedHangar?.name || "-"}
+                    <h3 className="mt-1 font-bold text-gray-900 dark:text-white/90 line-clamp-2">
+                      {selectedHangar?.name || ""}
                     </h3>
                     <h3 className="mt-1 font-medium text-gray-900 dark:text-white/90">
                       Adresse

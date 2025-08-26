@@ -385,12 +385,12 @@ function HangarAchatList() {
                 >
                   Prix
                 </TableCell>
-                {/* <TableCell
+                <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Status
-                </TableCell> */}
+                  Date d'achat
+                </TableCell>
               </TableRow>
             </TableHeader>
 
@@ -537,20 +537,9 @@ function HangarAchatList() {
                           maximumFractionDigits: 2,
                         }) || 0}
                   </TableCell>
-                  {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <Badge
-                      size="sm"
-                      color={
-                        order.status === "Active"
-                          ? "success"
-                          : order.status === "Pending"
-                          ? "warning"
-                          : "error"
-                      }
-                    >
-                      {order.status}
-                    </Badge>
-                  </TableCell> */}
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order?.date_achat}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
