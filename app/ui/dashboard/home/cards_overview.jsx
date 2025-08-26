@@ -582,7 +582,7 @@ export default function CardsOverview() {
                   />
                 ) : (
                   <div>
-                    <span className="block text-lg font-semibold">
+                    <span className="block text-lg font-semibold text-gray-800">
                       Stock Initial
                     </span>
                     <span className="text-xs">(Avant campagne)</span>
