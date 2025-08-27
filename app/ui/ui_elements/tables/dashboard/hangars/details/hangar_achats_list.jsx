@@ -18,7 +18,7 @@ import { useModal } from "../../../../hooks/useModal";
 import Pagination from "../../../Pagination";
 import EditUserProfile from "../../../../../dashboard/cultivators/profile/edit_user_profile";
 //import FilterUserProfile from "../../../../../dashboard/cultivators/profile/filter_user_profile";
-import FilterHangarDetails from "/../../../../dashboard/hangars/details/filtrer_hangar_details";
+import FilterHangarDetails from "../../../../../ui_elements/tables/dashboard/hangars/details/filtrer_hangar_details";
 import { fetchData } from "../../../../../../_utils/api";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";

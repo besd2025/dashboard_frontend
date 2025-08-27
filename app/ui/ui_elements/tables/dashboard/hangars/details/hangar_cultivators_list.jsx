@@ -17,7 +17,8 @@ import Modal from "../../../../modal";
 import { useModal } from "../../../../hooks/useModal";
 import Pagination from "../../../Pagination";
 import EditUserProfile from "../../../../../dashboard/cultivators/profile/edit_user_profile";
-import FilterUserProfile from "../../../../../dashboard/cultivators/profile/filter_user_profile";
+// import FilterUserProfile from "../../../../../dashboard/cultivators/profile/filter_user_profile";
+import FilterHangarDetails from "./filtrer_hangar_details";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { fetchData } from "../../../../../../_utils/api";
@@ -579,7 +580,7 @@ function HangarCultivatorsList({ hangar_id }) {
         onClose={closeModalFilter}
         className="max-w-[700px] m-4"
       >
-        <FilterUserProfile />
+        <FilterHangarDetails />
       </Modal>
 
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">

@@ -11,6 +11,7 @@ export default function CardsOverview() {
   const [montant_total_achat, setmontantTotalAchete] = useState(0);
   const [total_quantite_vendu, setTotalVendu] = useState([]);
   const [gap_total_en_prix, setGapTotalPrix] = useState(0);
+  const [stock_initial, setStockInitial] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -59,11 +60,17 @@ export default function CardsOverview() {
             body: {},
           }
         );
+        const stock_initial = await fetchData("get", "stock_resume_initial/", {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
 
         setGapTotalPrix(prix_achat?.prix_achat * pertetotal?.pertes_totales);
         setTotalVendu(quantite_vendu_jaune_blanc);
         setGapTotat(pertetotal);
         setData(results);
+        setStockInitial(stock_initial);
         setQuantiteVendu(
           results?.sorties?.sorties_blanc + results?.sorties?.sorties_jaune
         );
@@ -596,9 +603,9 @@ export default function CardsOverview() {
                     height="24px"
                     borderRadius="4px"
                   />
-                ) : quantite_total_achat >= 1000 ? (
+                ) : stock_initial?.total >= 1000 ? (
                   <>
-                    {(quantite_total_achat / 1000).toLocaleString("fr-FR", {
+                    {(stock_initial?.total / 1000).toLocaleString("fr-FR", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}{" "}
@@ -606,7 +613,7 @@ export default function CardsOverview() {
                   </>
                 ) : (
                   <>
-                    {quantite_total_achat?.toLocaleString("fr-FR") || 0}{" "}
+                    {stock_initial?.total?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
@@ -648,20 +655,17 @@ export default function CardsOverview() {
                     height="20px"
                     borderRadius="4px"
                   />
-                ) : data?.achats?.achats_blanc >= 1000 ? (
+                ) : stock_initial?.blanc >= 1000 ? (
                   <>
-                    {(data?.achats?.achats_blanc / 1000).toLocaleString(
-                      "fr-FR",
-                      {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      }
-                    )}{" "}
+                    {(stock_initial?.blanc / 1000).toLocaleString("fr-FR", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
-                    {data?.achats?.achats_blanc?.toLocaleString("fr-FR") || 0}{" "}
+                    {stock_initial?.blanc?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
@@ -695,20 +699,17 @@ export default function CardsOverview() {
                     height="20px"
                     borderRadius="4px"
                   />
-                ) : data?.achats?.achats_jaune >= 1000 ? (
+                ) : stock_initial?.jaune >= 1000 ? (
                   <>
-                    {(data?.achats?.achats_jaune / 1000).toLocaleString(
-                      "fr-FR",
-                      {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      }
-                    )}{" "}
+                    {(stock_initial?.jaune / 1000).toLocaleString("fr-FR", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
-                    {data?.achats?.achats_jaune?.toLocaleString("fr-FR") || 0}{" "}
+                    {stock_initial?.jaune?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
@@ -748,8 +749,8 @@ export default function CardsOverview() {
                     height="24px"
                     borderRadius="4px"
                   />
-                ) : montant_total_achat?.prix_achat ? (
-                  montant_total_achat?.prix_achat.toLocaleString("fr-FR")
+                ) : stock_initial?.montant_total ? (
+                  stock_initial?.montant_total?.toLocaleString("fr-FR")
                 ) : (
                   "0"
                 )}
