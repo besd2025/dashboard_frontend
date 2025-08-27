@@ -16,7 +16,8 @@ import Badge from "../../../../badge/Badge";
 import Modal from "../../../../modal";
 import { useModal } from "../../../../hooks/useModal";
 import Pagination from "../../../Pagination";
-import FilterUserProfile from "../../../../../municipal/cultivators/profile/filter_user_profile";
+// import FilterUserProfile from "../../../../../municipal/cultivators/profile/filter_user_profile";
+import FilterHangarDetails from "./filtrer_hangar_details";
 import { fetchData } from "../../../../../../_utils/api";
 import EditHangarVentes from "../../../../../municipal/hangars/details/edit_hangar_ventes";
 import { useSearchParams } from "next/navigation";
@@ -405,7 +406,7 @@ function HangarReceiptlist({ hangar_id }) {
         onClose={closeModalFilter}
         className="max-w-[700px] m-4"
       >
-        <FilterUserProfile />
+        <FilterHangarDetails />
       </Modal>
 
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">

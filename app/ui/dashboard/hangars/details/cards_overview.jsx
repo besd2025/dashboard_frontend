@@ -455,8 +455,20 @@ export default function CardsOverview({ hangar_id }) {
           </div>
 
           <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
-            {(data?.total_ventes_price ?? 0).toLocaleString("fr-FR")}
-            <span className="text-sm"> FBU</span>
+            {data?.quantite_initial >= 1000 ? (
+              <>
+                {(data?.quantite_initial / 1000).toLocaleString("fr-FR", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}{" "}
+                <span className="text-sm">T</span>
+              </>
+            ) : (
+              <>
+                {data?.quantite_initial?.toLocaleString("fr-FR") || 0}{" "}
+                <span className="text-sm">Kg</span>
+              </>
+            )}
           </h4>
         </div>
       </div>

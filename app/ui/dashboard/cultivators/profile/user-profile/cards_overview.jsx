@@ -303,7 +303,7 @@ export default function CardsOverview({ cultivateur_id }) {
                   No
                 </p>
                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                  68456125
+                  {data.cultivator_mobile_payment} : ---
                 </p>
               </div>
             ) : (

@@ -16,8 +16,9 @@ import { Dropdown } from "../../../../dropdown/dropdown_cultvators";
 import Modal from "../../../../modal";
 import { useModal } from "../../../../hooks/useModal";
 import Pagination from "../../../Pagination";
-import EditUserProfile from "../../../../../dashboard/cultivators/profile/edit_user_profile";
-import FilterUserProfile from "../../../../../dashboard/cultivators/profile/filter_user_profile";
+// import EditUserProfile from "../../../../../dashboard/cultivators/profile/edit_user_profile";
+// import FilterUserProfile from "../../../../../dashboard/cultivators/profile/filter_user_profile";
+import FilterHangarDetails from "../../../../../ui_elements/tables/dashboard/hangars/details/filtrer_hangar_details";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { fetchData } from "../../../../../../_utils/api";
@@ -94,7 +95,7 @@ function HangarPendingCultivators() {
         try {
           const results = await fetchData(
             "get",
-            `hangars/${hangar_id}/cultivateurs/`,
+            `hangars/${hangar_id}/achats_paid_or_pending/?is_paid=false/`,
             {
               params: {
                 offset: pointer,
@@ -103,8 +104,8 @@ function HangarPendingCultivators() {
             }
           );
 
-          setData(results.results);
-          console.log("resultat:", results);
+          setData(results.results.items);
+          console.log("resultat_payed:", results.results.items);
           setTotalCount(results.count); // si l'API retourne un `count` total
         } catch (error) {
           setError(error);
@@ -125,96 +126,96 @@ function HangarPendingCultivators() {
     setPointer((pageNumber - 1) * limit);
   };
 
-  const exportCultivatorsToExcel = async () => {
-    try {
-      const initResponse = await fetchData(
-        "get",
-        `hangars/${hangar_id}/cultivateurs/`,
-        { params: { limit: 1 } }
-      );
+  // const exportCultivatorsToExcel = async () => {
+  //   try {
+  //     const initResponse = await fetchData(
+  //       "get",
+  //       `hangars/${hangar_id}/achats_paid_or_pending/?is_paid=true`,
+  //       { params: { limit: 1 } }
+  //     );
 
-      const totalCount = initResponse?.count || 0;
-      if (totalCount === 0) return;
+  //     const totalCount = initResponse?.count || 0;
+  //     if (totalCount === 0) return;
 
-      const response = await fetchData(
-        "get",
-        `hangars/${hangar_id}/cultivateurs/`,
-        {
-          params: {
-            limit: totalCount,
-          },
-        }
-      );
+  //     const response = await fetchData(
+  //       "get",
+  //       `hangars/${hangar_id}/achats_paid_or_pending/?is_paid=true`,
+  //       {
+  //         params: {
+  //           limit: totalCount,
+  //         },
+  //       }
+  //     );
 
-      const allData = response.results || [];
-      const uniqueData = Array.from(
-        new Map(allData.map((item) => [item.id, item])).values()
-      );
+  //     const allData = response.results || [];
+  //     const uniqueData = Array.from(
+  //       new Map(allData.map((item) => [item.id, item])).values()
+  //     );
 
-      const formattedData = uniqueData.map((item) => {
-        const formattedItem = {
-          Nom: item.cultivator_first_name || "",
-          Prénom: item.cultivator_last_name || "",
-          Genre: item.cultivator_gender || "",
-          CNI: item.cultivator_cni || "",
-          Code: item.cultivator_code || "",
-          Province:
-            item.cultivator_adress?.zone_code?.commune_code?.province_code
-              ?.province_name || "",
-          Commune:
-            item.cultivator_adress?.zone_code?.commune_code?.commune_name || "",
-          Zone: item.cultivator_adress?.zone_code?.zone_name || "",
-          Colline: item.cultivator_adress?.colline_name || "",
-          Hangar: item?.collector?.hangar?.hangar_name || "",
-          quantité_total: item?.total_quantite || 0,
-          quantité_mais_blanc: item?.total_blanc || 0,
-          quantité_mais_jaune: item?.total_jaune || 0,
-        };
+  //     const formattedData = uniqueData.map((item) => {
+  //       const formattedItem = {
+  //         Nom: item.cultivator_first_name || "",
+  //         Prénom: item.cultivator_last_name || "",
+  //         Genre: item.cultivator_gender || "",
+  //         CNI: item.cultivator_cni || "",
+  //         Code: item.cultivator_code || "",
+  //         Province:
+  //           item.cultivator_adress?.zone_code?.commune_code?.province_code
+  //             ?.province_name || "",
+  //         Commune:
+  //           item.cultivator_adress?.zone_code?.commune_code?.commune_name || "",
+  //         Zone: item.cultivator_adress?.zone_code?.zone_name || "",
+  //         Colline: item.cultivator_adress?.colline_name || "",
+  //         Hangar: item?.collector?.hangar?.hangar_name || "",
+  //         quantité_total: item?.total_quantite || 0,
+  //         quantité_mais_blanc: item?.total_blanc || 0,
+  //         quantité_mais_jaune: item?.total_jaune || 0,
+  //       };
 
-        // Mode de paiement
-        if (item?.cultivator_bank_name) {
-          formattedItem.mode_payement = "BANQUE OU MICROFINANCE";
-          formattedItem.Banque_ou_microfinance = item?.cultivator_bank_name;
-          formattedItem.Numero_compte = item?.cultivator_bank_account || "";
-        } else if (item?.cultivator_mobile_payment) {
-          formattedItem.mode_payement = "MOBILE MONEY";
-          const phone = item.cultivator_mobile_payment.toString();
-          if (phone.startsWith("6")) {
-            formattedItem.nom_service = "LUMICASH";
-          } else if (phone.startsWith("7")) {
-            formattedItem.nom_service = "ECOCASH";
-          }
-          formattedItem.Numero_de_telephone_de_payement = phone;
-          formattedItem.date_enregistrement = item.created_at || "";
-        } else {
-          formattedItem.mode_payement = "";
-        }
+  //       // Mode de paiement
+  //       if (item?.cultivator_bank_name) {
+  //         formattedItem.mode_payement = "BANQUE OU MICROFINANCE";
+  //         formattedItem.Banque_ou_microfinance = item?.cultivator_bank_name;
+  //         formattedItem.Numero_compte = item?.cultivator_bank_account || "";
+  //       } else if (item?.cultivator_mobile_payment) {
+  //         formattedItem.mode_payement = "MOBILE MONEY";
+  //         const phone = item.cultivator_mobile_payment.toString();
+  //         if (phone.startsWith("6")) {
+  //           formattedItem.nom_service = "LUMICASH";
+  //         } else if (phone.startsWith("7")) {
+  //           formattedItem.nom_service = "ECOCASH";
+  //         }
+  //         formattedItem.Numero_de_telephone_de_payement = phone;
+  //         formattedItem.date_enregistrement = item.created_at || "";
+  //       } else {
+  //         formattedItem.mode_payement = "";
+  //       }
 
-        return formattedItem;
-      });
+  //       return formattedItem;
+  //     });
 
-      // Génération du fichier Excel
-      const worksheet = XLSX.utils.json_to_sheet(formattedData);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Cultivateurs");
+  //     // Génération du fichier Excel
+  //     const worksheet = XLSX.utils.json_to_sheet(formattedData);
+  //     const workbook = XLSX.utils.book_new();
+  //     XLSX.utils.book_append_sheet(workbook, worksheet, "Cultivateurs");
 
-      const excelBuffer = XLSX.write(workbook, {
-        bookType: "xlsx",
-        type: "array",
-      });
+  //     const excelBuffer = XLSX.write(workbook, {
+  //       bookType: "xlsx",
+  //       type: "array",
+  //     });
 
-      const blob = new Blob([excelBuffer], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
-      });
+  //     const blob = new Blob([excelBuffer], {
+  //       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+  //     });
 
-      saveAs(
-        blob,
-        `cultivateurs_${new Date().toISOString().split("T")[0]}.xlsx`
-      );
-    } catch (error) {
-      console.error("Erreur exportation Excel :", error);
-    }
-  };
+  //     saveAs(
+  //       blob,
+  //       `cultivateurs_${new Date().toISOString().split("T")[0]}.xlsx`
+  //     );
+  //   } catch (error) {
+  //     console.error("Erreur exportation Excel :", error);
+  //   }
+  // };
   const [id1, getId] = useState(undefined ? "default" : 0);
   const handleImageClick = (url) => {
     console.log("Image clicked:", url);
@@ -225,7 +226,7 @@ function HangarPendingCultivators() {
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-          Cultivateurs en attente de paiment
+          Cultivateurs payés
         </h3>
         {/* search */}
         <div className="hidden lg:block">
@@ -256,7 +257,7 @@ function HangarPendingCultivators() {
           </form>
         </div>
 
-        <div className="flex items-center gap-3">
+        {/* <div className="flex items-center gap-3">
           <button
             className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
             onClick={exportCultivatorsToExcel}
@@ -276,6 +277,49 @@ function HangarPendingCultivators() {
               />
             </svg>
             Export
+          </button>
+        </div> */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => openModalFilter()}
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+          >
+            <svg
+              className="stroke-current fill-white dark:fill-gray-800"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M2.29004 5.90393H17.7067"
+                stroke=""
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M17.7075 14.0961H2.29085"
+                stroke=""
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M12.0826 3.33331C13.5024 3.33331 14.6534 4.48431 14.6534 5.90414C14.6534 7.32398 13.5024 8.47498 12.0826 8.47498C10.6627 8.47498 9.51172 7.32398 9.51172 5.90415C9.51172 4.48432 10.6627 3.33331 12.0826 3.33331Z"
+                fill=""
+                stroke=""
+                strokeWidth="1.5"
+              />
+              <path
+                d="M7.91745 11.525C6.49762 11.525 5.34662 12.676 5.34662 14.0959C5.34661 15.5157 6.49762 16.6667 7.91745 16.6667C9.33728 16.6667 10.4883 15.5157 10.4883 14.0959C10.4883 12.676 9.33728 11.525 7.91745 11.525Z"
+                fill=""
+                stroke=""
+                strokeWidth="1.5"
+              />
+            </svg>
+            Filtrage
           </button>
         </div>
 
@@ -345,6 +389,18 @@ function HangarPendingCultivators() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
+                  CNI
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Mode de payement
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
                   Quantite
                 </TableCell>
                 <TableCell
@@ -397,17 +453,18 @@ function HangarPendingCultivators() {
                         onClick={() =>
                           handleImageClick(
                             process.env.NEXT_PUBLIC_IMAGE_URL +
-                              order?.cultivator_photo || "/img/no-image.png"
+                              order?.purchase?.cultivator?.cultivator_photo ||
+                              "/img/no-image.png"
                           )
                         }
                       >
-                        {order?.cultivator_photo ? (
+                        {order?.purchase?.cultivator?.cultivator_photo ? (
                           <Image
                             width={80}
                             height={80}
                             src={
                               process.env.NEXT_PUBLIC_IMAGE_URL +
-                              order?.cultivator_photo
+                              order?.purchase?.cultivator?.cultivator_photo
                             }
                             alt="user"
                           />
@@ -422,26 +479,48 @@ function HangarPendingCultivators() {
                       </div>
                       <div>
                         <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order?.cultivator_last_name}{" "}
-                          {order?.cultivator_first_name}
+                          {order?.purchase?.cultivator?.cultivator_last_name}{" "}
+                          {order?.purchase?.cultivator?.cultivator_first_name}
                         </span>
                         <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order?.cultivator_code}
+                          {order?.purchase?.cultivator?.cultivator_code}
                         </span>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {
-                      order?.cultivator_adress?.zone_code?.commune_code
-                        ?.province_code?.province_name
-                    }
+                    {order?.purchase?.cultivator?.cultivator_cni}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {
-                      order?.cultivator_adress?.zone_code?.commune_code
-                        ?.commune_name
-                    }
+                    {order?.purchase?.cultivator?.cultivator_mobile_payment ? (
+                      order?.purchase?.cultivator?.cultivator_mobile_payment.slice(
+                        0,
+                        2
+                      ) === "7" ? (
+                        <p className="text-sm text-gray-800 dark:text-white/90 font-semibold">
+                          ECOCASH
+                        </p>
+                      ) : (
+                        <p className="text-sm text-gray-800 dark:text-white/90 font-semibold">
+                          LUMICASH
+                        </p>
+                      )
+                    ) : order?.purchase?.cultivator?.cultivator_bank_name ? (
+                      <p className="text-sm text-gray-800 dark:text-white/90 font-semibold">
+                        {" "}
+                        {order?.purchase?.cultivator?.cultivator_bank_name}
+                      </p>
+                    ) : (
+                      ""
+                    )}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {order?.purchase?.quantity_blanc +
+                      order?.purchase?.quantity_jaune}{" "}
+                    Kg
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {order?.purchase?.total_price} Fbu
                   </TableCell>
                 </TableRow>
               ))}
@@ -460,7 +539,13 @@ function HangarPendingCultivators() {
         pointer={pointer}
         limit={limit}
       />
-
+      <Modal
+        isOpen={isOpenFilter}
+        onClose={closeModalFilter}
+        className="max-w-[700px] m-4"
+      >
+        <FilterHangarDetails />
+      </Modal>
       <ViewImageModal
         isOpen={isImageModalOpen}
         onClose={() => setIsImageModalOpen(false)}
