@@ -11,6 +11,7 @@ export default function CardsOverview() {
   const [montant_total_achat, setmontantTotalAchete] = useState(0);
   const [total_quantite_vendu, setTotalVendu] = useState([]);
   const [gap_total_en_prix, setGapTotalPrix] = useState(0);
+  const [stock_initial, setStockInitial] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -59,11 +60,17 @@ export default function CardsOverview() {
             body: {},
           }
         );
+        const stock_initial = await fetchData("get", "stock_resume_initial/", {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
 
         setGapTotalPrix(prix_achat?.prix_achat * pertetotal?.pertes_totales);
         setTotalVendu(quantite_vendu_jaune_blanc);
         setGapTotat(pertetotal);
         setData(results);
+        setStockInitial(stock_initial);
         setQuantiteVendu(
           results?.sorties?.sorties_blanc + results?.sorties?.sorties_jaune
         );
