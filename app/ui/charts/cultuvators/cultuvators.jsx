@@ -124,7 +124,7 @@ function Cultuvators() {
               ...prev.options.xaxis,
               categories: categories,
               min: 0,
-              max: Math.max(...values) * 2, // ou une valeur fixe si tu préfères
+              max: Math.max(...values) * 1.5, // ou une valeur fixe si tu préfères
               tickAmount: 5, // ou le nombre de graduations que tu veux
               labels: {
                 formatter: function (val) {

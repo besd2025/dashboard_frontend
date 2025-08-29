@@ -23,10 +23,13 @@ function EditAchat({ closeModal, achat_id }) {
   const [degre_humiliteJaune, setDegreHumiliteJaune] = useState("");
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState("");
+  const [loadingSearch, setLoadingSearch] = useState(false);
+
   const handleRadioChangeStatus = (value) => {
     setSelectedStatus(value);
   };
   const handleSave = async (e) => {
+    setLoadingSearch(true);
     e.preventDefault();
     const formData = new FormData();
 
@@ -252,7 +255,12 @@ function EditAchat({ closeModal, achat_id }) {
           <Button size="sm" variant="outline" onClick={closeModal}>
             Fermer
           </Button>
-          <Button size="sm" onClick={handleSave} className=" bg-yellow-500">
+          <Button
+            size="sm"
+            onClick={handleSave}
+            className=" bg-yellow-500"
+            loading={loadingSearch}
+          >
             Enregistrer
           </Button>
         </div>

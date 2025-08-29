@@ -22,6 +22,8 @@ function FilterUserProfile({ handleDataSortieFilter, closeModalFilter }) {
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [dateSortie, setDateSortie] = useState("");
+  const [loadingSearch, setLoadingSearch] = useState(false);
+
   const handleRadioChangeStatus = (value) => {
     setSelectedStatus(value);
   };
@@ -91,6 +93,7 @@ function FilterUserProfile({ handleDataSortieFilter, closeModalFilter }) {
 
   const handleFilters = (e) => {
     e.preventDefault();
+    setLoadingSearch(true);
     const filterData = {
       province: selectedProvince,
       commune: selectedCommune,
@@ -286,7 +289,7 @@ function FilterUserProfile({ handleDataSortieFilter, closeModalFilter }) {
           <Button size="sm" variant="outline" onClick={closeModalFilter}>
             Fermer
           </Button>
-          <Button size="sm" onClick={handleFilters}>
+          <Button size="sm" onClick={handleFilters} loading={loadingSearch}>
             rechercher
           </Button>
         </div>

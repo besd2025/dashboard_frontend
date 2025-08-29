@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import LoadingDots from "../loading/loading_dots";
 
 const Select = ({
   options = [],
@@ -27,11 +26,11 @@ const Select = ({
         selectedValue
           ? "text-gray-800 dark:text-white/90"
           : "text-gray-400 dark:text-gray-400"
-      } ${isLoading ? "opacity-60 cursor-not-allowed" : ""} ${className}`}
+      }  ${className}`}
       value={selectedValue}
       onChange={handleChange}
-      disabled={isLoading}
-      aria-busy={isLoading}
+      // disabled={isLoading}
+      //  aria-busy={isLoading}
     >
       {/* Placeholder option */}
       <option

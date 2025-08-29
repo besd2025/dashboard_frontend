@@ -23,11 +23,14 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
   const [genre, setGenre] = useState("");
   const [address_code, setAdressCode] = useState("");
   const [collector_code, setCollectorCode] = useState("");
+  const [loadingSearch, setLoadingSearch] = useState(false);
+
   const handleRadioChangeStatus = (value) => {
     setSelectedStatus(value);
   };
 
   const handleSave = async (e) => {
+    setLoadingSearch(true);
     e.preventDefault();
     const formData = {
       cultivator_code: code,
@@ -237,7 +240,12 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
           <Button size="sm" variant="outline" onClick={closeModal}>
             Fermer
           </Button>
-          <Button size="sm" onClick={handleSave} className=" bg-yellow-500">
+          <Button
+            size="sm"
+            onClick={handleSave}
+            className=" bg-yellow-500 "
+            loading={loadingSearch}
+          >
             Enregistrer
           </Button>
         </div>

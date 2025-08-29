@@ -22,7 +22,7 @@ function FilterHangarList({ handleDatahangarsFilter, closeModalFilter }) {
   const [quantiteMaxAchetee, setQuantiteMaxAchetee] = useState("");
   const [quantiteMinVendue, setQuantiteMinVendue] = useState("");
   const [quantiteMaxVendue, setQuantiteMaxVendue] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loadingSearch, setLoadingSearch] = useState(false);
 
   const handleSelectProvinceChange = async (value) => {
     //console.log("Selected value:", value);
@@ -90,7 +90,7 @@ function FilterHangarList({ handleDatahangarsFilter, closeModalFilter }) {
 
   const handleFilters = (e) => {
     e.preventDefault();
-    setLoading(true);
+    setLoadingSearch(true);
     const filterData = {
       province: selectedProvince,
       commune: selectedCommune,
@@ -125,6 +125,7 @@ function FilterHangarList({ handleDatahangarsFilter, closeModalFilter }) {
                         placeholder="Selectionner province"
                         onChange={handleSelectProvinceChange}
                         className="dark:bg-dark-900"
+                        isLoading={loading}
                       />
                       <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
                         <ChevronDownIcon />
@@ -144,6 +145,7 @@ function FilterHangarList({ handleDatahangarsFilter, closeModalFilter }) {
                         placeholder="Selectionner Commune"
                         onChange={handleSelectCommuneChange}
                         className="dark:bg-dark-900"
+                        isLoading={loading}
                       />
                       <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
                         <ChevronDownIcon />
@@ -162,6 +164,7 @@ function FilterHangarList({ handleDatahangarsFilter, closeModalFilter }) {
                         placeholder="Selectionner zone"
                         onChange={handleSelectZoneChange}
                         className="dark:bg-dark-900"
+                        isLoading={loading}
                       />
                       <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
                         <ChevronDownIcon />
@@ -182,9 +185,6 @@ function FilterHangarList({ handleDatahangarsFilter, closeModalFilter }) {
                         onChange={(e) => setQuantiteMinAchetee(e.target.value)}
                         className="dark:bg-dark-900"
                       />
-                      <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-                        <ChevronDownIcon />
-                      </span>
                     </div>
                   </div>
                 </div>
@@ -201,9 +201,6 @@ function FilterHangarList({ handleDatahangarsFilter, closeModalFilter }) {
                         onChange={(e) => setQuantiteMaxAchetee(e.target.value)}
                         className="dark:bg-dark-900"
                       />
-                      <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-                        <ChevronDownIcon />
-                      </span>
                     </div>
                   </div>
                 </div>
@@ -220,9 +217,6 @@ function FilterHangarList({ handleDatahangarsFilter, closeModalFilter }) {
                         onChange={(e) => setQuantiteMinVendue(e.target.value)}
                         className="dark:bg-dark-900"
                       />
-                      <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-                        <ChevronDownIcon />
-                      </span>
                     </div>
                   </div>
                 </div>
@@ -239,9 +233,6 @@ function FilterHangarList({ handleDatahangarsFilter, closeModalFilter }) {
                         onChange={(e) => setQuantiteMaxVendue(e.target.value)}
                         className="dark:bg-dark-900"
                       />
-                      <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-                        <ChevronDownIcon />
-                      </span>
                     </div>
                   </div>
                 </div>
@@ -257,8 +248,9 @@ function FilterHangarList({ handleDatahangarsFilter, closeModalFilter }) {
             size="sm"
             onClick={handleFilters}
             className=" bg-yellow-500 disabled:bg-yellow-500"
+            loading={loadingSearch}
           >
-            {loading ? <LoadingDots /> : "Rechercher"}
+            Rechercher
           </Button>
         </div>
       </form>
