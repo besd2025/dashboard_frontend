@@ -8,14 +8,17 @@ import { HangarProvider } from "../../../../ui/context/DetailContext";
 
 function Layout({ children }) {
   const pathname = usePathname();
-  const [activeTab, setActiveTab] = useState("achats");
+  const [activeTab, setActiveTab] = useState("cultivator");
   const [hangarId, setHangarId] = useState(null);
 
   useEffect(() => {
     const storedHangarId = localStorage.getItem("hangarId");
     setHangarId(storedHangarId);
-
-    if (pathname.includes("/cultivator")) {
+    if (pathname.includes("/cultivators-paid")) {
+      setActiveTab("payment");
+    } else if (pathname.includes("/cultivators-pending")) {
+      setActiveTab("payment");
+    } else if (pathname.includes("/cultivator")) {
       setActiveTab("cultivateurs");
     } else if (pathname.includes("/achats")) {
       setActiveTab("achats");
@@ -25,8 +28,6 @@ function Layout({ children }) {
       setActiveTab("transfers");
     } else if (pathname.includes("/receptions")) {
       setActiveTab("receptions");
-    } else if (pathname.includes("payment")) {
-      setActiveTab("paiement");
     }
   }, [pathname]);
 
@@ -105,8 +106,9 @@ function Layout({ children }) {
               </Link>
               <Link
                 href={`/dashboard/hangars/details/payment/cultivators-paid?hangar_id=${hangarId}`}
+                onClick={() => setActiveTab("payment")}
                 className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold ${
-                  activeTab === "paiement"
+                  activeTab === "payment"
                     ? "border-yellow-500 text-yellow-500"
                     : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
                 }`}
