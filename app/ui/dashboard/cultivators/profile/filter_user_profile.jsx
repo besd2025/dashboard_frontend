@@ -22,6 +22,7 @@ function FilterUserProfile({ handleFilter, closeModalFilter }) {
   const [selectedCommune, setSelectedCommune] = useState("");
   const [selectedZone, setSelectedZone] = useState("");
   const [selectedColline, setSelectedColline] = useState("");
+  const [loadingSearch, setLoadingSearch] = useState(false);
 
   const handleSelectProvinceChange = async (value) => {
     //console.log("Selected value:", value);
@@ -109,6 +110,7 @@ function FilterUserProfile({ handleFilter, closeModalFilter }) {
   }, []);
   const handleFilters = (e) => {
     e.preventDefault();
+    setLoadingSearch(true);
     const filterData = {
       province: selectedProvince,
       commune: selectedCommune,
@@ -299,7 +301,7 @@ function FilterUserProfile({ handleFilter, closeModalFilter }) {
           <Button size="sm" variant="outline" onClick={closeModalFilter}>
             Fermer
           </Button>
-          <Button size="sm" onClick={handleFilters}>
+          <Button size="sm" onClick={handleFilters} loading={loadingSearch}>
             rechercher
           </Button>
         </div>

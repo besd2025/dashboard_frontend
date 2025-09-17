@@ -1,4 +1,5 @@
 import React from "react";
+import LoadingDots from "../loading/loading_dots";
 
 const Button = ({
   children,
@@ -9,6 +10,7 @@ const Button = ({
   onClick,
   className = "",
   disabled = false,
+  loading = false,
 }) => {
   // Size Classes
   const sizeClasses = {
@@ -28,14 +30,20 @@ const Button = ({
       className={`inline-flex items-center justify-center font-medium gap-2 rounded-lg transition ${className} ${
         sizeClasses[size]
       } ${variantClasses[variant]} ${
-        disabled ? "cursor-not-allowed opacity-50" : ""
+        disabled || loading ? "cursor-not-allowed opacity-50" : ""
       }`}
       onClick={onClick}
-      disabled={disabled}
+      disabled={disabled || loading}
     >
-      {startIcon && <span className="flex items-center">{startIcon}</span>}
-      {children}
-      {endIcon && <span className="flex items-center">{endIcon}</span>}
+      {loading ? (
+        <LoadingDots />
+      ) : (
+        <>
+          {startIcon && <span className="flex items-center">{startIcon}</span>}
+          {children}
+          {endIcon && <span className="flex items-center">{endIcon}</span>}
+        </>
+      )}
     </button>
   );
 };

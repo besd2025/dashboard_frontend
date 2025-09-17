@@ -414,7 +414,7 @@ export default function CardsOverview() {
           </div>
         </div>
       </div>
-      <div className="rounded-2xl border col-span-4 border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+      <div className="rounded-2xl border col-span-5 lg:col-span-4 border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div className="">
           <div className="flex items-end justify-between   rounded-2xl">
             <div>
@@ -498,7 +498,7 @@ export default function CardsOverview() {
       {/* <!-- Metric Item End --> */}
 
       {/* <!-- Metric Item Start --> */}
-      <div className="rounded-2xl hi/dden col-span-4 border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+      <div className="rounded-2xl col-span-5 lg:col-span-4 border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
           {/* <BoxIconLine className="text-gray-800 dark:text-white/90" /> */}
           <svg
@@ -560,202 +560,206 @@ export default function CardsOverview() {
       {/* <!-- Metric Item End --> */}
       {/* <!-- Metric Item Start quantity collected --> */}
 
-      <div className="rounded-2xl col-span-18 flex flex-row justify-between border border-gray-200 bg-yellow-50 p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-        <div>
-          <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-xl dark:bg-gray-800">
-            {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="size-6 text-gray-800  dark:text-white/90"
-            >
-              <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
-              <path
-                fillRule="evenodd"
-                d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087ZM12 10.5a.75.75 0 0 1 .75.75v4.94l1.72-1.72a.75.75 0 1 1 1.06 1.06l-3 3a.75.75 0 0 1-1.06 0l-3-3a.75.75 0 1 1 1.06-1.06l1.72 1.72v-4.94a.75.75 0 0 1 .75-.75Z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </div>
-          <div className="flex items-end justify-between mt-2">
-            <div>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
-                {loading ? (
-                  <SkeletonLoader
-                    width="80px"
-                    height="14px"
-                    borderRadius="4px"
-                  />
-                ) : (
-                  <div>
-                    <span className="block text-lg font-semibold text-gray-800">
-                      Stock Initial
-                    </span>
-                    <span className="text-xs">(Avant campagne)</span>
-                  </div>
-                )}
-              </span>
-              <h4 className="mt-2 font-semibold text-gray-800 text-xl dark:text-white/90">
-                {loading ? (
-                  <SkeletonLoader
-                    width="120px"
-                    height="24px"
-                    borderRadius="4px"
-                  />
-                ) : stock_initial?.total >= 1000 ? (
-                  <>
-                    {(stock_initial?.total / 1000).toLocaleString("fr-FR", {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}{" "}
-                    <span className="text-sm">T</span>
-                  </>
-                ) : (
-                  <>
-                    {stock_initial?.total?.toLocaleString("fr-FR") || 0}{" "}
-                    <span className="text-sm">Kg</span>
-                  </>
-                )}
-              </h4>
+      <div className="rounded-2xl hid/den col-span-5 lg:col-span-18  border border-gray-200 bg-yellow-50 p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 md:gap-6  justify-betw/een">
+          <div className="col-span-5 lg:col-span-1">
+            <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-xl dark:bg-gray-800">
+              {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="size-6 text-gray-800  dark:text-white/90"
+              >
+                <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
+                <path
+                  fillRule="evenodd"
+                  d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087ZM12 10.5a.75.75 0 0 1 .75.75v4.94l1.72-1.72a.75.75 0 1 1 1.06 1.06l-3 3a.75.75 0 0 1-1.06 0l-3-3a.75.75 0 1 1 1.06-1.06l1.72 1.72v-4.94a.75.75 0 0 1 .75-.75Z"
+                  clipRule="evenodd"
+                />
+              </svg>
             </div>
-            {/* <Badge color="success">
+            <div className="flex items-end justify-between mt-2">
+              <div>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  {loading ? (
+                    <SkeletonLoader
+                      width="80px"
+                      height="14px"
+                      borderRadius="4px"
+                    />
+                  ) : (
+                    <div>
+                      <span className="block text-lg font-semibold text-gray-800 dark:text-white/90">
+                        Stock Initial
+                      </span>
+                      <span className="text-xs">(Avant campagne)</span>
+                    </div>
+                  )}
+                </span>
+                <h4 className="mt-2 font-semibold text-gray-800 text-xl dark:text-white/90">
+                  {loading ? (
+                    <SkeletonLoader
+                      width="120px"
+                      height="24px"
+                      borderRadius="4px"
+                    />
+                  ) : stock_initial?.total >= 1000 ? (
+                    <>
+                      {(stock_initial?.total / 1000).toLocaleString("fr-FR", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}{" "}
+                      <span className="text-sm">T</span>
+                    </>
+                  ) : (
+                    <>
+                      {stock_initial?.total?.toLocaleString("fr-FR") || 0}{" "}
+                      <span className="text-sm">Kg</span>
+                    </>
+                  )}
+                </h4>
+              </div>
+              {/* <Badge color="success">
             <ArrowUpIcon />
             2.0%
           </Badge> */}
-          </div>
-        </div>
-        <div className="w-px bg-gray-200 h-full dark:bg-gray-800"></div>
-
-        <div className="">
-          <div className="flex items-end justify-between   rounded-2xl">
-            <div>
-              <div className="flex flex-row items-center gap-x-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="size-8"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4.5 7.5a3 3 0 0 1 3-3h9a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-9Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  Maïs Blanc
-                </span>
-              </div>
-
-              <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
-                {loading ? (
-                  <SkeletonLoader
-                    width="80px"
-                    height="20px"
-                    borderRadius="4px"
-                  />
-                ) : stock_initial?.blanc >= 1000 ? (
-                  <>
-                    {(stock_initial?.blanc / 1000).toLocaleString("fr-FR", {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}{" "}
-                    <span className="text-sm">T</span>
-                  </>
-                ) : (
-                  <>
-                    {stock_initial?.blanc?.toLocaleString("fr-FR") || 0}{" "}
-                    <span className="text-sm">Kg</span>
-                  </>
-                )}
-              </h4>
             </div>
           </div>
-          <div className="flex items-end justify-between mt-2 rounded-2xl">
-            <div>
-              <div className="flex flex-row items-center gap-x-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="size-8 text-yellow-500 "
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4.5 7.5a3 3 0 0 1 3-3h9a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-9Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  Maïs Jaune
-                </span>
-              </div>
+          <div className="lg:w-px h-px bg-gray-200 w-full lg:h-full dark:bg-gray-800"></div>
 
-              <h4 className=" font-semibold text-yellow-600 text-lg dark:text-white/90">
-                {loading ? (
-                  <SkeletonLoader
-                    width="80px"
-                    height="20px"
-                    borderRadius="4px"
-                  />
-                ) : stock_initial?.jaune >= 1000 ? (
-                  <>
-                    {(stock_initial?.jaune / 1000).toLocaleString("fr-FR", {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}{" "}
-                    <span className="text-sm">T</span>
-                  </>
-                ) : (
-                  <>
-                    {stock_initial?.jaune?.toLocaleString("fr-FR") || 0}{" "}
-                    <span className="text-sm">Kg</span>
-                  </>
-                )}
-              </h4>
+          <div className="col-span-5 lg:col-span-1">
+            <div className="flex items-end justify-between   rounded-2xl">
+              <div>
+                <div className="flex flex-row items-center gap-x-1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="size-8"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4.5 7.5a3 3 0 0 1 3-3h9a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-9Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">
+                    Maïs Blanc
+                  </span>
+                </div>
+
+                <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
+                  {loading ? (
+                    <SkeletonLoader
+                      width="80px"
+                      height="20px"
+                      borderRadius="4px"
+                    />
+                  ) : stock_initial?.blanc >= 1000 ? (
+                    <>
+                      {(stock_initial?.blanc / 1000).toLocaleString("fr-FR", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}{" "}
+                      <span className="text-sm">T</span>
+                    </>
+                  ) : (
+                    <>
+                      {stock_initial?.blanc?.toLocaleString("fr-FR") || 0}{" "}
+                      <span className="text-sm">Kg</span>
+                    </>
+                  )}
+                </h4>
+              </div>
+            </div>
+            <div className="flex items-end justify-between mt-2 rounded-2xl">
+              <div>
+                <div className="flex flex-row items-center gap-x-1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="size-8 text-yellow-500 "
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4.5 7.5a3 3 0 0 1 3-3h9a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-9Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">
+                    Maïs Jaune
+                  </span>
+                </div>
+
+                <h4 className=" font-semibold text-yellow-600 text-lg dark:text-white/90">
+                  {loading ? (
+                    <SkeletonLoader
+                      width="80px"
+                      height="20px"
+                      borderRadius="4px"
+                    />
+                  ) : stock_initial?.jaune >= 1000 ? (
+                    <>
+                      {(stock_initial?.jaune / 1000).toLocaleString("fr-FR", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}{" "}
+                      <span className="text-sm">T</span>
+                    </>
+                  ) : (
+                    <>
+                      {stock_initial?.jaune?.toLocaleString("fr-FR") || 0}{" "}
+                      <span className="text-sm">Kg</span>
+                    </>
+                  )}
+                </h4>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="">
-          <div className="flex items-end justify-between   rounded-2xl">
-            <div>
-              <div className="flex flex-row items-center gap-x-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-8 text-yellow-400  dark:text-white/90"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                  />
-                </svg>
+          <div className="col-span-5 lg:col-span-1">
+            <div className="flex items-end justify-between   rounded-2xl">
+              <div>
+                <div className="flex flex-row items-center gap-x-1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-8 text-yellow-400  dark:text-white/90"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
 
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  Montant stock initial
-                </span>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">
+                    Montant stock initial
+                  </span>
+                </div>
+
+                <h4 className=" font-bold text-gray-800 text-xl dark:text-white/90">
+                  {loading ? (
+                    <SkeletonLoader
+                      width="120px"
+                      height="24px"
+                      borderRadius="4px"
+                    />
+                  ) : stock_initial?.montant_total ? (
+                    stock_initial?.montant_total?.prix_achat.toLocaleString(
+                      "fr-FR"
+                    )
+                  ) : (
+                    "0"
+                  )}
+                  {!loading && <span className="text-sm"> FBU</span>}
+                </h4>
               </div>
-
-              <h4 className=" font-bold text-gray-800 text-xl dark:text-white/90">
-                {loading ? (
-                  <SkeletonLoader
-                    width="120px"
-                    height="24px"
-                    borderRadius="4px"
-                  />
-                ) : stock_initial?.montant_total ? (
-                  stock_initial?.montant_total?.toLocaleString("fr-FR")
-                ) : (
-                  "0"
-                )}
-                {!loading && <span className="text-sm"> FBU</span>}
-              </h4>
             </div>
           </div>
         </div>
