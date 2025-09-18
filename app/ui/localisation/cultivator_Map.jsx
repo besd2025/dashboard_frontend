@@ -35,11 +35,12 @@ function FlyToOnSelect({ position, zoom, onFlyEnd }) {
   return null;
 }
 
-function HangarMapComponent({ data = [], onMarkerClick, selectedHangar }) {
+function MapComponent({ data = [], onMarkerClick, onFilterClick }) {
   const [geoData, setGeoData] = useState(null);
   const [mounted, setMounted] = useState(false);
   const [search, setSearch] = useState("");
   const [filteredHangars, setFilteredHangars] = useState([]);
+  const [selectedHangar, setSelectedHangar] = useState(null);
   const [center, setCenter] = useState([-3.3896077, 29.9255829]);
   const [baseLayer, setBaseLayer] = useState("satellite"); // NEW
   const mapRef = useRef();
@@ -83,7 +84,8 @@ function HangarMapComponent({ data = [], onMarkerClick, selectedHangar }) {
         {selectedHangar && (
           <FlyToOnSelect
             position={[selectedHangar.latitude, selectedHangar.longitude]}
-            zoom={11} // ou le zoom que vous souhaitez
+            zoom={18} // ou le zoom que vous souhaitez
+            onFlyEnd={() => setSelectedHangar(null)}
           />
         )}
         <LayersControl position="topright">
@@ -143,4 +145,4 @@ function HangarMapComponent({ data = [], onMarkerClick, selectedHangar }) {
   );
 }
 
-export default HangarMapComponent;
+export default MapComponent;

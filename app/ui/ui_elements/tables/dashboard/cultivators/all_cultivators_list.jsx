@@ -24,13 +24,14 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import ViewImageModal from "../../../modal/ViewImageModal";
 import SkeletonLoader from "../../../loading/SkeletonLoader";
+import ExportButton from "../../../button/export_button";
 
 function AllCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
   const [pointer, setPointer] = useState(0); // index de départ
   const limit = 5; // nombre par page
-  const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
+  const [totalCount, setTotalCount] = useState(5); // pour savoir quand arrêter
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const user = useContext(UserContext);
@@ -40,6 +41,7 @@ function AllCultivatorsList() {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState("");
   const [loading, setLoading] = useState(true);
+  const [loadingEportBtn, setLoadingEportBtn] = useState(false);
 
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
@@ -162,6 +164,7 @@ function AllCultivatorsList() {
     }
   };
   const exportCultivatorsToExcel = async () => {
+    setLoadingEportBtn(true);
     try {
       // Étape 1 : Récupérer le nombre total d'enregistrements
       const initResponse = await fetchData("get", "/cultivators/", {
@@ -237,6 +240,8 @@ function AllCultivatorsList() {
       saveAs(blob, "cultivators.xlsx");
     } catch (error) {
       console.error("Erreur exportation Excel :", error);
+    } finally {
+      setLoadingEportBtn(false);
     }
   };
 
@@ -284,7 +289,6 @@ function AllCultivatorsList() {
             </div>
           </form>
         </div>
-
         <div className="flex items-center gap-3">
           <button
             onClick={() => openModalFilter()}
@@ -328,27 +332,11 @@ function AllCultivatorsList() {
             Filtrage
           </button>
         </div>
-        <div className="flex items-center gap-3">
-          <button
-            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+        <div className="flex items-center gap-3 text-gray-700">
+          <ExportButton
             onClick={exportCultivatorsToExcel}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
-              />
-            </svg>
-            Export
-          </button>
+            loading={loadingEportBtn}
+          />
         </div>
 
         <button

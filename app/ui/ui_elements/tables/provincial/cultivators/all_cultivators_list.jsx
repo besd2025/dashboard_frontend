@@ -26,7 +26,7 @@ function AllCultivatorsList() {
   const [data, setData] = useState([]);
   const [pointer, setPointer] = useState(0); // index de départ
   const limit = 5; // nombre par page
-  const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
+  const [totalCount, setTotalCount] = useState(5); // pour savoir quand arrêter
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);

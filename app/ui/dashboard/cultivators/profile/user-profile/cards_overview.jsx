@@ -44,7 +44,7 @@ export default function CardsOverview({ cultivateur_id }) {
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 md:gap-6">
       {/* <!-- Metric Item Start quantity collected --> */}
 
-      <div className="rounded-2xl col-span-2 flex flex-row justify-between border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+      <div className="rounded-2xl col-span-1 lg:col-span-2 flex flex-row justify-between border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div>
           <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
             {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
@@ -196,7 +196,7 @@ export default function CardsOverview({ cultivateur_id }) {
       {/* <!-- Metric Item End --> */}
       {/* <!-- Metric Item Start --> */}
 
-      <div className="rounded-2xl border border-gray-200 bg-white p-3 dark:border-gray-800 dark:bg-white/[0.03] ">
+      <div className="rounded-2xl col-span-1 lg:col-span-1 border border-gray-200 bg-white p-3 dark:border-gray-800 dark:bg-white/[0.03] ">
         <div className="flex items-end justify-between mb-2">
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -244,7 +244,7 @@ export default function CardsOverview({ cultivateur_id }) {
       {/* <!-- Metric Item End --> */}
       {/* <!-- Metric Item Start --> */}
 
-      <div className="rounded-2xl border border-gray-200 bg- p-3 dark:border-gray-800 dark:bg-white/[0.03] ">
+      <div className="rounded-2xl col-span-1 lg:col-span-1 border border-gray-200 bg- p-3 dark:border-gray-800 dark:bg-white/[0.03] ">
         <div className="flex items-end justify-between mb-2">
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
