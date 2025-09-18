@@ -751,9 +751,7 @@ export default function CardsOverview() {
                       borderRadius="4px"
                     />
                   ) : stock_initial?.montant_total ? (
-                    stock_initial?.montant_total?.prix_achat.toLocaleString(
-                      "fr-FR"
-                    )
+                    stock_initial?.montant_total?.toLocaleString("fr-FR")
                   ) : (
                     "0"
                   )}
