@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 
 import { ChevronRightIcon } from "../../../../icons";
 import { useState } from "react";
+import SkeletonLoader from "../../../../ui_elements/loading/SkeletonLoader";
 const MapWithNoSSR = dynamic(
   () => import("../../../../localisation/HangarMapComponent"),
   {
@@ -123,12 +124,19 @@ export default function LocalisationHangar() {
         </div>
       </div>
 
-      <div className="col-span-4 lg:col-span-3 space-y-6 overflow-x-auto rounded-2xl">
-        <MapWithNoSSR
-          data={data}
-          onMarkerClick={setSelectedHangar}
-          selectedHangar={selectedHangar}
-        />
+      <div className="col-span-4 lg:col-span-3 space-y-6 overflow-x-auto rounded-2xl overflow-hidden">
+        {data.length > 0 ? (
+          <MapWithNoSSR
+            data={data}
+            onMarkerClick={setSelectedHangar}
+            selectedHangar={selectedHangar}
+          />
+        ) : (
+          <SkeletonLoader
+            height="100%"
+            className="from-gray-300 via-gray-50 to-gray-300"
+          />
+        )}
       </div>
     </div>
   );

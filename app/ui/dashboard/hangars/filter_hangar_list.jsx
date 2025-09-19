@@ -23,6 +23,7 @@ function FilterHangarList({ handleDatahangarsFilter, closeModalFilter }) {
   const [quantiteMinVendue, setQuantiteMinVendue] = useState("");
   const [quantiteMaxVendue, setQuantiteMaxVendue] = useState("");
   const [loadingSearch, setLoadingSearch] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSelectProvinceChange = async (value) => {
     //console.log("Selected value:", value);

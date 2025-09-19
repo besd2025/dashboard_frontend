@@ -9,10 +9,16 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 
 function AgeRange() {
   const [state, setState] = React.useState({
+    values: [
+      {
+        data: [],
+      },
+    ],
     series: [
       {
         name: "",
-        data: [],
+        // data: [],
+        data: [200, 330, 548, 740, 880, 990, 1100],
       },
     ],
     options: {
@@ -20,7 +26,7 @@ function AgeRange() {
         type: "bar",
         height: 350,
         dropShadow: {
-          enabled: true,
+          enabled: false,
         },
       },
       plotOptions: {
@@ -57,7 +63,16 @@ function AgeRange() {
       },
 
       xaxis: {
-        categories: [],
+        categories: [
+          "Sweets",
+          "Processed Foods",
+          "Healthy Fats",
+          "Meat",
+          "Beans & Legumes",
+          "Dairy",
+          "Fruits & Vegetables",
+          "Grains",
+        ],
       },
       legend: {
         show: false,
@@ -77,13 +92,23 @@ function AgeRange() {
           }
         );
 
-        const categories = results?.map((item) => item.tranche_age);
-        const values = results?.map((item) => item.nombre);
+        // Trier les tranches d'âge par ordre croissant en se basant sur la borne inférieure
+        const getLowerBound = (label) => {
+          const match = String(label).match(/\d+/);
+          return match ? parseInt(match[0], 10) : Number.MAX_SAFE_INTEGER;
+        };
+
+        const sorted = (results ?? []).slice().sort((a, b) => {
+          return getLowerBound(a.tranche_age) - getLowerBound(b.tranche_age);
+        });
+
+        const categories = sorted.map((item) => item.tranche_age);
+        const values = sorted.map((item) => item.nombre);
 
         // Mettre à jour le graphique avec les vraies données
         setState((prev) => ({
           ...prev,
-          series: [{ data: values }],
+          values: [{ data: values }],
           options: {
             ...prev.options,
             xaxis: {

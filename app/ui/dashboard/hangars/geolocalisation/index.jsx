@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Button from "../../../ui_elements/button/Button";
 import { fetchData } from "../../../../_utils/api";
 import LoadingDots from "../../../ui_elements/loading/loading_dots";
+import SkeletonLoader from "../../../ui_elements/loading/SkeletonLoader";
 
 const MapWithNoSSR = dynamic(
   () => import("../../../localisation/MapComponent"),
@@ -161,7 +162,7 @@ function GlobalMap() {
         </div>
       </div>
 
-      <div className="col-span-4 lg:col-span-3 h-[80vh] space-y-6 overflow-x-auto rounded">
+      <div className="col-span-4 lg:col-span-3 h-[80vh] space-y-6 overflow-x-auto rounded overflow-hidden">
         {data.length > 0 ? (
           <MapWithNoSSR
             data={data}
@@ -169,7 +170,10 @@ function GlobalMap() {
             onFilterClick={setSelectedHangar}
           />
         ) : (
-          <LoadingDots />
+          <SkeletonLoader
+            height="100%"
+            className="from-gray-300 via-gray-50 to-gray-300"
+          />
         )}
       </div>
     </div>

@@ -29,7 +29,7 @@ function HangarVentesList() {
   const [isCheckedTwo, setIsCheckedTwo] = useState(true);
   const [pointer, setPointer] = useState(0); // index de départ
   const limit = 5; // nombre par page
-  const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
+  const [totalCount, setTotalCount] = useState(5); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
   const search_params = useSearchParams();
   let hangar_id = search_params?.get("hangar_id");

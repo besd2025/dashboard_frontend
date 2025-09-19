@@ -17,6 +17,7 @@ import FilterUserProfile from "../../../../../municipal/cultivators/profile/filt
 import { fetchData } from "../../../../../../_utils/api";
 import EditHangarVentes from "../../../../../municipal/hangars/details/edit_hangar_ventes";
 import dynamic from "next/dynamic";
+import ExportButton from "../../../../button/export_button";
 function HangarTranfersList({ hangar_id }) {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -24,9 +25,10 @@ function HangarTranfersList({ hangar_id }) {
   const [isCheckedTwo, setIsCheckedTwo] = useState(true);
   const [pointer, setPointer] = useState(0); // index de départ
   const limit = 5; // nombre par page
-  const [totalCount, setTotalCount] = useState(0); // pour savoir quand arrêter
+  const [totalCount, setTotalCount] = useState(5); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [loadingEportBtn, setLoadingEportBtn] = useState(false);
 
   //const hangar_id = localStorage.getItem("hangarId");
   function toggleDropdown(rowId) {
@@ -104,6 +106,7 @@ function HangarTranfersList({ hangar_id }) {
     setCurrentPage(pageNumber);
     setPointer((pageNumber - 1) * limit);
   };
+  const exportHangarTransferToExcel = async () => {};
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
@@ -198,23 +201,10 @@ function HangarTranfersList({ hangar_id }) {
           </svg>
         </button>
         <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
-              />
-            </svg>
-            Export
-          </button>
+          <ExportButton
+            onClick={exportHangarTransferToExcel}
+            loading={loadingEportBtn}
+          />
         </div>
       </div>
 
