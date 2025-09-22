@@ -15,10 +15,11 @@ const MapWithNoSSR = dynamic(
   }
 );
 
-function CultivatorAchatsLocalisation() {
+function CultivatorAchatsLocalisation({ cultivateur_id }) {
   const [error, setError] = useState("");
-  const [data, setData] = useState([]);
-  const [selectedHangar, setSelectedHangar] = useState(null);
+  const [AchatData, setAchatData] = useState([]);
+  const [CultivatorData, setCultivatorData] = useState();
+  const [selectedCultivator, setSelectedCultivator] = useState(null);
 
   useEffect(() => {
     async function getData() {
@@ -42,10 +43,33 @@ function CultivatorAchatsLocalisation() {
           latitude: item?.latitude,
           longitude: item?.longitude,
         }));
-        setData(options);
+        setAchatData(options);
         if (options.length > 0) {
-          setSelectedHangar(options[0]); // Set the first item as selected
+          setSelectedCultivator(options[0]); // Set the first item as selected
         }
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
+
+  useEffect(() => {
+    async function getData() {
+      try {
+        const response = await fetchData(
+          "get",
+          `cultivators/${cultivateur_id}`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
+        console.log(response);
+        const options = response;
+        setCultivatorData(options);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -57,15 +81,16 @@ function CultivatorAchatsLocalisation() {
   return (
     <div
       className={`${
-        !data.length > 0 ? "bg-bla/ck/50 opac/ity-50" : ""
+        !AchatData.length > 0 ? "bg-bla/ck/50 opac/ity-50" : ""
       } lg:p-4 relative space-y-4`}
     >
       <div className="col-span-4 lg:col-span-3 h-[80vh] space-y-6 overflow-x-auto rounded overflow-hidden">
-        {data.length > 0 ? (
+        {AchatData.length > 0 ? (
           <MapWithNoSSR
-            data={data}
-            onMarkerClick={setSelectedHangar}
-            onFilterClick={setSelectedHangar}
+            data={AchatData}
+            CultivatorData={CultivatorData}
+            onMarkerClick={setSelectedCultivator}
+            onFilterClick={setSelectedCultivator}
           />
         ) : (
           <SkeletonLoader height="100%" />

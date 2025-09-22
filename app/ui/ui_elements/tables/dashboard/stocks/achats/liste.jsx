@@ -259,8 +259,8 @@ function ListeAchat() {
   };
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
-      <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
+      <div className="flex flex-col lg:flex-row items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90 line-clamp-1 animate-sl">
           Liste des Achats
         </h3>
         {/* search */}
@@ -286,7 +286,7 @@ function ListeAchat() {
                 onChange={handleSearch}
                 ref={inputRef}
                 type="text"
-                placeholder="rechercher  ..."
+                placeholder="Rechercher  ..."
                 className="dark:bg-dark-900 h-11 w-[250px] rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[250px]"
               />
             </div>
@@ -400,7 +400,7 @@ function ListeAchat() {
               <input
                 ref={inputRef}
                 type="text"
-                placeholder="rechercher  ..."
+                placeholder="Rechercher  ..."
                 className="dark:bg-dark-900 h-11 w-full  rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[250px]"
               />
             </div>
@@ -462,6 +462,12 @@ function ListeAchat() {
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
                   Date d'achat
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Achat (Payé/non)
                 </TableCell>
               </TableRow>
             </TableHeader>

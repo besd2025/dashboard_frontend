@@ -1,3 +1,7 @@
+import { ChevronDownIcon } from "../../icons";
+import Label from "../form/Label";
+import Select from "../form/Select";
+
 const Pagination = ({
   currentPage,
   totalPages,
@@ -14,7 +18,13 @@ const Pagination = ({
   for (let i = startPage; i <= endPage; i++) {
     pagesToShow.push(i);
   }
-
+  const dataNumber = [
+    { value: "5", label: "5" },
+    { value: "10", label: "10" },
+    { value: "50", label: "50" },
+    { value: "100", label: "100" },
+  ];
+  const handleDataNumber = () => {};
   return (
     <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-800 sm:px-6">
       <div className="flex items-center justify-between flex-col sm:flex-row">
@@ -31,6 +41,23 @@ const Pagination = ({
             </span>{" "}
             sur <span className="font-medium">{totalCount}</span> résultats
           </p>
+        </div>
+
+        <div className="space-y-6 mb-4 sm:mb-0">
+          <div className="flex flex-row gap-x-3 items-center">
+            {/* <Label>Trier par</Label> */}
+            <div className="relative">
+              <Select
+                options={dataNumber}
+                placeholder="5"
+                onChange={handleDataNumber}
+                className="dark:bg-dark-900"
+              />
+              <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
+                <ChevronDownIcon className="size-4" />
+              </span>
+            </div>
+          </div>
         </div>
 
         {/* Navigation */}

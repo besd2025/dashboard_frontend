@@ -79,9 +79,15 @@ export default function NotificationDropdown() {
             </svg>
           </button>
         </div>
+        <div className="flex justify-center items-center h-full ">
+          <span className="mb-1.5 space-x-1 block text-theme-sm text-gray-500 dark:text-gray-400">
+            Pas de notification
+          </span>
+        </div>
         <ul className="flex flex-col h-auto overflow-y-auto custom-scrollbar">
           {/* Example notification items */}
           {/* error from user  */}
+
           {/* <li>
             <DropdownItem
               onItemClick={closeDropdown}
@@ -114,7 +120,7 @@ export default function NotificationDropdown() {
             </DropdownItem>
           </li> */}
           {/* alert notification */}
-          <li>
+          {/* <li>
             <DropdownItem
               onItemClick={closeDropdown}
               className="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
@@ -138,7 +144,7 @@ export default function NotificationDropdown() {
                 </span>
               </span>
             </DropdownItem>
-          </li>
+          </li> */}
 
           {/* <li>
             <DropdownItem

@@ -1,5 +1,6 @@
 import UserAddressCard from "../../../../ui/dashboard/cultivators/profile/user-profile/UserAddressCard";
 import CultivatorAchats from "../../../../ui/dashboard/cultivators/profile/user-profile/cultivator_achats";
+import CultivatorModifications from "../../../../ui/dashboard/cultivators/profile/user-profile/modifications/cultivator_modification";
 import UserInfoCard from "../../../../ui/dashboard/cultivators/profile/user-profile/UserInfoCard";
 import UserMetaCard from "../../../../ui/dashboard/cultivators/profile/user-profile/UserMetaCard";
 import React from "react";
@@ -17,6 +18,7 @@ function Page({ searchParams }) {
           <UserInfoCard cultivateur_id={cultId} />
           <UserAddressCard cultivateur_id={cultId} />
           <CultivatorAchats cultivateur_id={cultId} />
+          <CultivatorModifications cultivateur_id={cultId} />
         </div>
       </div>
     </div>

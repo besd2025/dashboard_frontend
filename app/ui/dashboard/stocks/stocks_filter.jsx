@@ -17,12 +17,9 @@ function StocksFilter() {
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState("");
   const [state, setState] = useState({
-    series: [
-      { name: "Stock", data: [] },
-      { name: "Perte", data: [] },
-    ],
+    series: [{ name: "Stock", data: [] }],
     options: {
-      colors: ["#16a34a", "#F44336"],
+      colors: ["#16a34a"],
       chart: {
         fontFamily: "Outfit, sans-serif",
         type: "bar",
@@ -121,10 +118,7 @@ function StocksFilter() {
 
         setState((prev) => ({
           ...prev,
-          series: [
-            { name: "Stock", data: stocks },
-            { name: "Perte", data: pertes },
-          ],
+          series: [{ name: "Stock", data: stocks }],
           options: {
             ...prev.options,
             xaxis: {

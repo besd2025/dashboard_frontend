@@ -44,7 +44,7 @@ const DatePicker = ({
     <div>
       {label && <Label htmlFor={id}>{label}</Label>}
 
-      <div className="relative z-[9999]">
+      <div className="relative z-40">
         <input
           id={id}
           ref={inputRef}

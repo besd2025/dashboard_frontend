@@ -35,9 +35,6 @@ function SecurityPage() {
           <div className="text-sm text-gray-500 dark:text-gray-400 px-3">
             <span>Dernière connexion : 2024-03-20 14:30:45</span>
           </div>
-          <div className="w-full">
-            <LoginHistory />
-          </div>
         </div>
       </div>
     </div>

@@ -91,7 +91,10 @@ const ViewImageModal = ({ isOpen, onClose, imageUrl, alt }) => {
           </button>
         </div>
         <button
-          onClick={onClose}
+          onClick={() => {
+            onClose();
+            handleReset();
+          }}
           className="absolute right-12 top-12 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm text-white transition-colors hover:bg-white/30 focus:outline-none"
           aria-label="Close"
         >

@@ -35,15 +35,29 @@ function FlyToOnSelect({ position, zoom, onFlyEnd }) {
   return null;
 }
 
-function MapComponent({ data = [], onMarkerClick, onFilterClick }) {
+function MapComponent({ data, CultivatorData, onMarkerClick, onFilterClick }) {
   const [geoData, setGeoData] = useState(null);
   const [mounted, setMounted] = useState(false);
   const [search, setSearch] = useState("");
   const [filteredHangars, setFilteredHangars] = useState([]);
-  const [selectedHangar, setSelectedHangar] = useState(null);
+  const [selectedCultivator, setSelectedCultivator] = useState(null);
+  const [selectedCultivatorAchats, setSelectedCultivatorAchats] =
+    useState(null);
   const [center, setCenter] = useState([-3.3896077, 29.9255829]);
   const [baseLayer, setBaseLayer] = useState("satellite"); // NEW
   const mapRef = useRef();
+
+  const yellowIcon = new L.Icon({
+    iconUrl:
+      "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png",
+    shadowUrl:
+      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    tooltipAnchor: [16, -28],
+    shadowSize: [41, 41],
+  });
 
   useEffect(() => {
     setMounted(true);
@@ -81,11 +95,24 @@ function MapComponent({ data = [], onMarkerClick, onFilterClick }) {
           mapRef.current = mapInstance;
         }}
       >
-        {selectedHangar && (
+        {selectedCultivator && (
           <FlyToOnSelect
-            position={[selectedHangar.latitude, selectedHangar.longitude]}
+            position={[
+              selectedCultivator.latitude,
+              selectedCultivator.longitude,
+            ]}
             zoom={18} // ou le zoom que vous souhaitez
-            onFlyEnd={() => setSelectedHangar(null)}
+            onFlyEnd={() => setSelectedCultivator(null)}
+          />
+        )}
+        {selectedCultivatorAchats && (
+          <FlyToOnSelect
+            position={[
+              selectedCultivatorAchats.latitude,
+              selectedCultivatorAchats.longitude,
+            ]}
+            zoom={18} // ou le zoom que vous souhaitez
+            onFlyEnd={() => setSelectedCultivator(null)}
           />
         )}
         <LayersControl position="topright">
@@ -99,36 +126,66 @@ function MapComponent({ data = [], onMarkerClick, onFilterClick }) {
             <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />
           </LayersControl.BaseLayer>
         </LayersControl>
-        {/* Markers for each hangar */}
-        {data.map((hangar, idx) => (
-          <Marker
-            key={idx}
-            position={[hangar.latitude, hangar.longitude]}
-            eventHandlers={{
-              mouseover: (e) => {
-                e.target.openPopup();
-              },
-              mouseout: (e) => {
-                e.target.closePopup();
-              },
-              click: () => {
-                if (onMarkerClick) {
-                  onMarkerClick(hangar);
-                }
-                setSelectedHangar(hangar);
-              },
-            }}
-          >
-            <Tooltip
-              direction="top"
-              offset={[0, -10]}
-              opacity={1}
-              permanent={false}
+        {/* Markers for each cultivator */}
+        {
+          !data.map((cultivatorAchats, idx) => (
+            <Marker
+              key={idx}
+              position={[cultivatorAchats.latitude, cultivatorAchats.longitude]}
+              eventHandlers={{
+                mouseover: (e) => {
+                  e.target.openPopup();
+                },
+                mouseout: (e) => {
+                  e.target.closePopup();
+                },
+                click: () => {
+                  if (onMarkerClick) {
+                    onMarkerClick(cultivatorAchats);
+                  }
+                  setSelectedCultivatorAchats(cultivatorAchats);
+                },
+              }}
             >
-              {hangar.name}
-            </Tooltip>
-          </Marker>
-        ))}
+              <Tooltip
+                direction="top"
+                offset={[0, -10]}
+                opacity={1}
+                permanent={false}
+              >
+                {cultivatorAchats.name}
+              </Tooltip>
+            </Marker>
+          ))
+        }
+        <Marker
+          position={[CultivatorData.latitude, CultivatorData.longitude]}
+          icon={yellowIcon}
+          eventHandlers={{
+            mouseover: (e) => {
+              e.target.openPopup();
+            },
+            mouseout: (e) => {
+              e.target.closePopup();
+            },
+            click: () => {
+              if (onMarkerClick) {
+                onMarkerClick(CultivatorData);
+              }
+              setSelectedCultivator(CultivatorData);
+            },
+          }}
+        >
+          <Tooltip
+            direction="top"
+            offset={[0, -10]}
+            opacity={1}
+            permanent={false}
+          >
+            {CultivatorData.cultivator_last_name}{" "}
+            {CultivatorData.cultivator_first_name}
+          </Tooltip>
+        </Marker>
         {geoData && (
           <GeoJSON
             data={geoData}
