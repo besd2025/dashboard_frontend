@@ -121,7 +121,7 @@ export default function CultivatorAchats({ cultivateur_id }) {
               </div>
             </div>
             <div className="h-[25rem] lg:h-full overflow-hidden col-span-8 lg:col-span-3  ">
-              <CultivatorAchatsLocalisation />
+              <CultivatorAchatsLocalisation cultivateur_id={cultivateur_id} />
             </div>
           </div>
         </div>

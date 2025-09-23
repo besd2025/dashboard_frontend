@@ -112,7 +112,7 @@ function FilterHangarList({ handleDatahangarsFilter, closeModalFilter }) {
           Filtrage
         </h4>
       </div>
-      <form className="flex flex-col">
+      <form className="flex flex-col max-h-[80vh]">
         <div className="custom-scrollbar h-max overflow-y-auto px-2 pb-3">
           <div className="mt-7">
             <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
