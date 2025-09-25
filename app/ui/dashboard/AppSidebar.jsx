@@ -12,6 +12,7 @@ import {
   HangarIcon,
   HorizontaLDots,
   MapIcon,
+  Payment,
   SettingsIcon,
 } from "../icons";
 
@@ -102,20 +103,12 @@ const navItems = [
     ],
     startWithUrl: "/dashboard/stocks/",
   },
-  // {
-  //   icon: (
-  //     <Image
-  //       className="rounded-xl"
-  //       src="/img/brarudi-logo.png"
-  //       alt="Brarudi"
-  //       width={32}
-  //       height={32}
-  //     />
-  //   ),
-  //   name: "BRARUDI",
-  //   path: "/dashboard/Brarudi/en_attente",
-  //   startWithUrl: "/dashboard/Brarudi/",
-  // },
+  {
+    icon: <Payment />,
+    name: "Paiement",
+    path: "/dashboard/payment",
+    startWithUrl: "/dashboard/payment/",
+  },
 
   {
     icon: (

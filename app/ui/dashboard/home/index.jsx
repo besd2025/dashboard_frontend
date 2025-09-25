@@ -15,7 +15,7 @@ import Synthese from "./synthese";
 
 function Home_dashboard() {
   return (
-    <div className="grid grid-cols-12 gap-4 md:gap-6">
+    <div className="grid grid-cols-12 gap-2">
       <div className="col-span-12 space-y-6 xl:col-spa/n-4">
         <CardsOverview />
       </div>
@@ -41,16 +41,16 @@ function Home_dashboard() {
       <div className=" col-span-12 space-y-6 lg:col-span-8">
         <Cultuvators />
       </div>
-      <div className=" col-span-12 lg:col-span-4 space-y-6">
+      <div className=" col-span-12 lg:col-span-4 space-y-2">
         <TotalCultivators />
         <GenderChart />
       </div>
-      <div className=" col-span-12 lg:col-span-3 space-y-6">
+      <div className=" col-span-12 lg:col-span-3 space-y-2">
         <TotalStocks />
         <TotalHangars />
         <Loss />
       </div>
-      <div className=" col-span-12 lg:col-span-9 space-y-6">
+      <div className=" col-span-12 lg:col-span-9 space-y-2">
         <StocksChart />
       </div>
     </div>

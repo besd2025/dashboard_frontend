@@ -8,7 +8,7 @@ import QteVendCategorie from "../../../charts/stocks/sold_out/qte_vend_categorie
 import QteVendSector from "../../../charts/stocks/sold_out/qte_vend_sector";
 function SoldOut() {
   return (
-    <div className="grid grid-cols-12 gap-4 md:gap-6">
+    <div className="grid grid-cols-12 gap-2">
       <div className=" col-span-12 space-y-6 lg:col-span-3">
         <QuantitySolCard />
       </div>
