@@ -8,10 +8,10 @@ function ExportPayment() {
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [showList, setShowList] = useState(false);
-  const [exportProcess, setExportProcess] = useState(false);
+  const [exportProcess, setExportProcess] = useState(true);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [processDone, setProcessDone] = useState(false);
+  const [processDone, setProcessDone] = useState(true);
 
   const exportPaymentListToExcel = () => {
     setExportProcess(true);
