@@ -32,7 +32,7 @@ function HangarCultivatorsList({ hangar_id }) {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [pointer, setPointer] = useState(0); // index de départ
-  const limit = 5; // nombre par page
+  const [limit, setLimit] = useState(5);
   const [totalCount, setTotalCount] = useState(5); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
   const user = useContext(UserContext);
@@ -104,7 +104,7 @@ function HangarCultivatorsList({ hangar_id }) {
               },
             }
           );
-
+          console.log("limit:", limit);
           setData(results.results);
           console.log("resultat:", results);
           setTotalCount(results.count); // si l'API retourne un `count` total
@@ -118,7 +118,7 @@ function HangarCultivatorsList({ hangar_id }) {
     }
 
     getData();
-  }, [pointer, hangar_id]); // ← relance quand `pointer` change
+  }, [pointer, hangar_id, limit]); // ← relance quand `pointer` change
 
   const totalPages = Math.ceil(totalCount / limit);
 
@@ -222,6 +222,11 @@ function HangarCultivatorsList({ hangar_id }) {
     console.log("Image clicked:", url);
     setModalImageUrl(url);
     setIsImageModalOpen(true);
+  };
+  const onLimitChange = (newLimit) => {
+    setLimit(newLimit);
+    setPointer(0);
+    setCurrentPage(1);
   };
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
@@ -533,7 +538,7 @@ function HangarCultivatorsList({ hangar_id }) {
         onPageChange={onPageChange}
         totalPages={totalPages}
         pointer={pointer}
-        limit={limit}
+        onLimitChange={onLimitChange}
       />
 
       {/* filtres */}

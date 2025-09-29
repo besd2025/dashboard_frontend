@@ -42,7 +42,7 @@ api.interceptors.request.use(
 export const fetchData = async (
   method,
   url,
-  { params = {}, body = null, additionalHeaders = {} } = {}
+  { params = {}, body = null, additionalHeaders = {}, isBlob = false } = {}
 ) => {
   try {
     const headers = { ...additionalHeaders };
@@ -61,9 +61,21 @@ export const fetchData = async (
       params,
       data: finalBody,
       headers,
+      responseType: isBlob ? "blob" : "json", // <-- ici
     });
 
-    return method.toLowerCase() === "get" ? response.data : response.status;
+    if (method.toLowerCase() === "get") {
+      if (isBlob) {
+        return { data: response.data, headers: response.headers };
+      } else {
+        return response.data;
+      }
+    } else {
+      return {
+        status: response.status,
+        data: response.data,
+      };
+    }
   } catch (error) {
     console.error("❌ API Request Error:", error);
     throw error;

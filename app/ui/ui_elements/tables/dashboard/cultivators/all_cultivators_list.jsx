@@ -30,19 +30,18 @@ function AllCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
   const [pointer, setPointer] = useState(0); // index de départ
-  const limit = 5; // nombre par page
+  const [limit, setLimit] = useState(5);
   const [totalCount, setTotalCount] = useState(5); // pour savoir quand arrêter
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const user = useContext(UserContext);
   const [filterData, setFilterData] = useState({});
   const [searchdata, setSearchData] = useState("");
-
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadingEportBtn, setLoadingEportBtn] = useState(false);
-
+  const [activedownloadBtn, setActivedownloadBtn] = useState(false);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -129,7 +128,6 @@ function AllCultivatorsList() {
 
         setData(results.results);
         setTotalCount(results.count);
-        console.log(results.results);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -138,7 +136,7 @@ function AllCultivatorsList() {
       }
     }
     getData();
-  }, [pointer, filterData, searchdata]);
+  }, [pointer, filterData, searchdata, limit]);
 
   const totalPages = Math.ceil(totalCount / limit);
   const onPageChange = (pageNumber) => {
@@ -167,79 +165,90 @@ function AllCultivatorsList() {
     setLoadingEportBtn(true);
     try {
       // Étape 1 : Récupérer le nombre total d'enregistrements
-      const initResponse = await fetchData("get", "/cultivators/", {
-        params: { limit: 1 },
-      });
-
-      const totalCount = initResponse?.count || 0;
-      if (totalCount === 0) return;
-
-      // Étape 2 : Charger toutes les données en une seule fois
-      const fullResponse = await fetchData("get", "/cultivators/", {
-        params: { limit: totalCount },
-      });
-
-      const allData = fullResponse?.results || [];
-
-      const formattedData = allData.map((item) => {
-        const formattedItem = {
-          Nom: item.cultivator_first_name || "",
-          Prénom: item.cultivator_last_name || "",
-          Genre: item.cultivator_gender || "",
-          CNI: item.cultivator_cni || "",
-          Code: item.cultivator_code || "",
-          Province:
-            item.cultivator_adress?.zone_code?.commune_code?.province_code
-              ?.province_name || "",
-          Commune:
-            item.cultivator_adress?.zone_code?.commune_code?.commune_name || "",
-          Zone: item.cultivator_adress?.zone_code?.zone_name || "",
-          Colline: item.cultivator_adress?.colline_name || "",
-          Hangar: item?.collector?.hangar?.hangar_name || "",
-          quantité_total: item?.total_quantite || 0,
-          quantité_mais_blanc: item?.total_blanc || 0,
-          quantité_mais_jaune: item?.total_jaune || 0,
-        };
-
-        if (item?.cultivator_bank_name) {
-          formattedItem.mode_payement = "BANQUE OU MICROFINANCE";
-          formattedItem.Banque_ou_microfinance = item?.cultivator_bank_name;
-          formattedItem.Numero_compte = item?.cultivator_bank_account || "";
-        } else if (item?.cultivator_mobile_payment) {
-          formattedItem.mode_payement = "MOBILE MONEY";
-          if (item?.cultivator_mobile_payment?.toString().startsWith("6")) {
-            formattedItem.nom_service = "LUMICASH";
-          } else if (
-            item?.cultivator_mobile_payment?.toString().startsWith("7")
-          ) {
-            formattedItem.nom_service = "ECOCASH";
-          }
-          formattedItem.Numero_de_telephone_de_payement =
-            item?.cultivator_mobile_payment || "";
-          formattedItem.date_enregistrement = item.created_at || "";
-        } else {
-          formattedItem.mode_payement = "";
+      const initial_export = await fetchData(
+        "post",
+        "/cultivators/export_excel/",
+        {
+          params: {},
+          additionalHeaders: {},
+          body: {},
         }
+      );
 
-        return formattedItem;
-      });
+      if (initial_export.status == 202) {
+        setLoadingEportBtn(true);
+        const task_id = initial_export?.data?.task_id;
+        const intervalId = setInterval(async () => {
+          const export_excel = await fetchData(
+            "get",
+            "/cultivators/check_task/",
+            {
+              params: { task_id: task_id },
+            }
+          );
 
-      const worksheet = XLSX.utils.json_to_sheet(formattedData);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Cultivateurs");
+          if (export_excel.status === "done") {
+            clearInterval(intervalId); // Arrêtez l'intervalle
+            setLoadingEportBtn(false);
+            setActivedownloadBtn(true);
+          }
+        }, 2000);
+      }
 
-      const excelBuffer = XLSX.write(workbook, {
-        bookType: "xlsx",
-        type: "array",
-      });
-
-      const blob = new Blob([excelBuffer], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
-      });
-
-      saveAs(blob, "cultivators.xlsx");
+      // Vérifier toutes les 6 secondes
     } catch (error) {
       console.error("Erreur exportation Excel :", error);
+    } finally {
+      //setLoadingEportBtn(false);
+    }
+  };
+  const DownloadCultivatorsToExcel = async () => {
+    setLoadingEportBtn(true);
+    try {
+      const response = await fetchData("get", "/cultivators/download_excel/", {
+        isBlob: true,
+      });
+
+      // Créer le blob avec le bon type MIME
+      const blob = new Blob([response.data], {
+        type:
+          response.headers["content-type"] ||
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      const url = window.URL.createObjectURL(blob);
+      const now = new Date();
+      const day = String(now.getDate()).padStart(2, "0");
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const year = now.getFullYear();
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      const seconds = String(now.getSeconds()).padStart(2, "0");
+
+      const timestamp = `${day}_${month}_${year}_${hours}_${minutes}_${seconds}`;
+      // Nom du fichier par défaut
+      let filename = `cultivator_list_${timestamp}.xlsx`;
+
+      const contentDisposition = response.headers["content-disposition"];
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="?(.+)"?/);
+        if (match && match[1]) filename = match[1];
+      }
+
+      // Création du <a> temporaire
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+
+      // Nettoyage
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+      setActivedownloadBtn(true);
+    } catch (error) {
+      console.error("Erreur lors de l'exportation Excel :", error);
     } finally {
       setLoadingEportBtn(false);
     }
@@ -253,6 +262,12 @@ function AllCultivatorsList() {
   const handleImageClick = (url) => {
     setModalImageUrl(url);
     setIsImageModalOpen(true);
+  };
+
+  const onLimitChange = (newLimit) => {
+    setLimit(newLimit);
+    setPointer(0);
+    setCurrentPage(1);
   };
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
@@ -335,8 +350,10 @@ function AllCultivatorsList() {
           </div>
           <div className="flex items-center gap-3 text-gray-700">
             <ExportButton
-              onClick={exportCultivatorsToExcel}
+              onClickExportButton={exportCultivatorsToExcel}
+              onClickDownloadButton={DownloadCultivatorsToExcel}
               loading={loadingEportBtn}
+              activedownloadBtn={activedownloadBtn}
             />
           </div>
           <button
@@ -564,7 +581,7 @@ function AllCultivatorsList() {
         onPageChange={onPageChange}
         totalPages={totalPages}
         pointer={pointer}
-        limit={limit}
+        onLimitChange={onLimitChange}
       />
       {/*<Pagination />*/}
 

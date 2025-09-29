@@ -26,12 +26,13 @@ function AllCultivatorsList() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [pointer, setPointer] = useState(0); // index de départ
-  const limit = 5; // nombre par page
+  const [limit, setLimit] = useState(5);
   const [totalCount, setTotalCount] = useState(5); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
   const [filterData, setFilterData] = useState({});
   const [loading, setLoading] = useState(true);
   const [loadingEportBtn, setLoadingEportBtn] = useState(false);
+  const [activedownloadBtn, setActivedownloadBtn] = useState(false);
 
   console.log(filterData);
   function toggleDropdown(rowId) {
@@ -122,7 +123,7 @@ function AllCultivatorsList() {
     }
 
     getData();
-  }, [pointer, filterData, searchData]);
+  }, [pointer, filterData, searchData, limit]);
 
   const totalPages = Math.ceil(totalCount / limit);
 
@@ -130,68 +131,96 @@ function AllCultivatorsList() {
     setCurrentPage(pageNumber);
     setPointer((pageNumber - 1) * limit);
   };
-  const exportToExcel = async () => {
+
+  const ExportHangarsToExcel = async () => {
+    setLoadingEportBtn(true);
     try {
-      //  Étape 1 : Obtenir le nombre total de lignes
-      const initResponse = await fetchData("get", "/hangars/", {
-        params: { limit: 1 },
+      const initial_export = await fetchData("post", "/hangars/export_excel/", {
+        params: {},
+        additionalHeaders: {},
+        body: {},
       });
 
-      const totalCount = initResponse?.count || 0;
+      if (initial_export.status == 202) {
+        setLoadingEportBtn(true);
+        const task_id = initial_export?.data?.task_id;
+        const intervalId = setInterval(async () => {
+          const export_excel = await fetchData("get", "/hangars/check_task/", {
+            params: { task_id: task_id },
+          });
+          if (export_excel.status === "done") {
+            clearInterval(intervalId); // Arrêtez l'intervalle
+            setLoadingEportBtn(false);
+            setActivedownloadBtn(true);
+          }
+        }, 2000);
+      }
 
-      if (totalCount === 0) return;
-
-      // Étape 2 : Récupérer toutes les lignes d’un seul coup
-      const fullResponse = await fetchData("get", "/hangars/", {
-        params: { limit: totalCount },
-      });
-
-      const allData = fullResponse?.results || [];
-
-      const formattedData = allData.map((item) => ({
-        Hangar_name: item.hangar_name || "",
-        code: item.hangar_code || "",
-        Province: item.province || "",
-        Commune: item.commune || "",
-        Zone: item.zone || "",
-        total_achats: item.total_achats || 0,
-        quantité_mais_blanc_achat: item?.quantite_blanc_achete || 0,
-        quantité_mais_jaune_achat: item?.quantite_jaune_achete || 0,
-        total_ventes: item.total_ventes || 0,
-        quantité_mais_blanc_vendu: item?.quantite_blanc_vendue || 0,
-        quantité_mais_jaune_vendu: item?.quantite_jaune_vendue || 0,
-        total_transferes: item?.total_transferes || 0,
-        quantité_mais_blanc_transfere: item?.quantite_blanc_transfere || 0,
-        quantité_mais_jaune_transfere: item?.quantite_jaune_transfere || 0,
-        total_recus: item?.total_recus || 0,
-        quantité_mais_blanc_recu: item?.quantite_blanc_recu || 0,
-        quantité_mais_jaune_recu: item?.quantite_jaune_recu || 0,
-        created_at: item?.created_at || "",
-      }));
-
-      const worksheet = XLSX.utils.json_to_sheet(formattedData);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "hangars");
-
-      const excelBuffer = XLSX.write(workbook, {
-        bookType: "xlsx",
-        type: "array",
-      });
-
-      const blob = new Blob([excelBuffer], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
-      });
-
-      saveAs(blob, "hangars.xlsx");
+      // Vérifier toutes les 6 secondes
     } catch (error) {
       console.error("Erreur exportation Excel :", error);
     } finally {
-      setLoadingEportBtn(true);
+      //setLoadingEportBtn(false);
     }
   };
-  const exportHangarToExcel = async () => {};
+  const DownloadHangarsToExcel = async () => {
+    setLoadingEportBtn(true);
+    try {
+      const response = await fetchData("get", "/hangars/download_excel/", {
+        isBlob: true,
+      });
+
+      // Créer le blob avec le bon type MIME
+      const blob = new Blob([response.data], {
+        type:
+          response.headers["content-type"] ||
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const now = new Date();
+      const day = String(now.getDate()).padStart(2, "0");
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const year = now.getFullYear();
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      const seconds = String(now.getSeconds()).padStart(2, "0");
+
+      const timestamp = `${day}_${month}_${year}_${hours}_${minutes}_${seconds}`;
+      // Nom du fichier par défaut
+      let filename = `hangars_list_${timestamp}.xlsx`;
+
+      const contentDisposition = response.headers["content-disposition"];
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="?(.+)"?/);
+        if (match && match[1]) filename = match[1];
+      }
+
+      // Création du <a> temporaire
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+
+      // Nettoyage
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+      setActivedownloadBtn(true);
+    } catch (error) {
+      console.error("Erreur lors de l'exportation Excel :", error);
+    } finally {
+      setLoadingEportBtn(false);
+    }
+  };
   const handleFilter = (filterData) => {
     setFilterData(filterData);
+  };
+  const onLimitChange = (newLimit) => {
+    setLimit(newLimit);
+    console.log("newLimit:", newLimit);
+    setPointer(0);
+    setCurrentPage(1);
   };
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
@@ -277,8 +306,10 @@ function AllCultivatorsList() {
           </div>
           <div className="flex items-center gap-3">
             <ExportButton
-              onClick={exportHangarToExcel}
+              onClickExportButton={ExportHangarsToExcel}
+              onClickDownloadButton={DownloadHangarsToExcel}
               loading={loadingEportBtn}
+              activedownloadBtn={activedownloadBtn}
             />
           </div>
           <button
@@ -466,7 +497,7 @@ function AllCultivatorsList() {
         onPageChange={onPageChange}
         totalPages={totalPages}
         pointer={pointer}
-        limit={limit}
+        onLimitChange={onLimitChange}
       />
 
       {/* filtres */}

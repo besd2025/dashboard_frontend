@@ -81,8 +81,7 @@ function EditHangarProfile({ closeModal, hangar_id }) {
           body: formData,
         }
       ).then((results) => {
-        console.log("Update successful:", results);
-        if (results === 200) {
+        if (results.status === 200) {
           window.location.reload();
         } else {
           console.log("Update failed");

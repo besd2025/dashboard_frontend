@@ -53,8 +53,7 @@ function EditAchat({ closeModal, achat_id }) {
         additionalHeaders: {},
         body: formData,
       });
-      console.log(results);
-      if (results == 200) {
+      if (results.status == 200) {
         window.location.reload();
       } else {
         console.log("error");
