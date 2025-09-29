@@ -29,7 +29,7 @@ export default function CardsOverview() {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-18 md:gap-6">
+    <div className="grid grid-cols-1 gap-2 lg:grid-cols-18">
       {/* <!-- Metric Item Start quantity collected --> */}
       <div className="rounded-2xl col-span-6 flex flex-row justify-between border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div>
