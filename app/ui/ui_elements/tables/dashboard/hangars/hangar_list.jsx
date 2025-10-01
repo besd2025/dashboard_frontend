@@ -34,7 +34,6 @@ function AllCultivatorsList() {
   const [loadingEportBtn, setLoadingEportBtn] = useState(false);
   const [activedownloadBtn, setActivedownloadBtn] = useState(false);
 
-  console.log(filterData);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -206,11 +205,12 @@ function AllCultivatorsList() {
       link.remove();
       window.URL.revokeObjectURL(url);
 
-      setActivedownloadBtn(true);
+      setActivedownloadBtn(false);
     } catch (error) {
       console.error("Erreur lors de l'exportation Excel :", error);
     } finally {
-      setLoadingEportBtn(false);
+      setLoadingEportBtn(true);
+      setActivedownloadBtn(false);
     }
   };
   const handleFilter = (filterData) => {

@@ -246,7 +246,7 @@ function AllCultivatorsList() {
       link.remove();
       window.URL.revokeObjectURL(url);
 
-      setActivedownloadBtn(true);
+      setActivedownloadBtn(false);
     } catch (error) {
       console.error("Erreur lors de l'exportation Excel :", error);
     } finally {
