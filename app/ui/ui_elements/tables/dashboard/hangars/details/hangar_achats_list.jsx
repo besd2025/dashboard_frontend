@@ -32,13 +32,13 @@ function HangarAchatList() {
   const [error, setError] = useState(null);
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [pointer, setPointer] = useState(0); // index de départ
-  const limit = 5; // nombre par page
   const [totalCount, setTotalCount] = useState(5); // pour savoir quand arrêter
   const [currentPage, setCurrentPage] = useState(1);
   const user = useContext(UserContext);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState("");
   const [loadingEportBtn, setLoadingEportBtn] = useState(false);
+  const [limit, setLimit] = useState(5);
   //const searchParams = useSearchParams();
   let hangar_id = 0;
   if (typeof window !== "undefined") {
@@ -119,7 +119,7 @@ function HangarAchatList() {
     }
 
     getData();
-  }, [pointer, hangar_id]);
+  }, [pointer, hangar_id, limit]);
 
   const totalPages = Math.ceil(totalCount / limit);
 
@@ -190,6 +190,12 @@ function HangarAchatList() {
     setIsImageModalOpen(true);
   };
   const exportAchatToExcel = async () => {};
+
+  const onLimitChange = (newLimit) => {
+    setLimit(newLimit);
+    setPointer(0);
+    setCurrentPage(1);
+  };
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex flex-col lg:flex-row items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
@@ -519,7 +525,7 @@ function HangarAchatList() {
         onPageChange={onPageChange}
         totalPages={totalPages}
         pointer={pointer}
-        limit={limit}
+        onLimitChange={onLimitChange}
       />
 
       {/* filtres */}

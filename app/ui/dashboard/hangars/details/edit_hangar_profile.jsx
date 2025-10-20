@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import Input from "../../../ui_elements/form/input/InputField";
 import Label from "../../../ui_elements/form/Label";
 import Button from "../../../ui_elements/button/Button";
-import Radio from "../../../ui_elements/form/input/Radio";
 import { fetchData } from "../../../../_utils/api";
 function EditHangarProfile({ closeModal, hangar_id }) {
   const [selectedStatus, setSelectedStatus] = useState("option2");
@@ -81,14 +80,17 @@ function EditHangarProfile({ closeModal, hangar_id }) {
           body: formData,
         }
       ).then((results) => {
-        console.log("Update successful:", results);
-        if (results === 200) {
+        if (results.status === 200) {
           window.location.reload();
         } else {
           console.log("Update failed");
         }
       });
     }
+  };
+  const [isHangarDes, setHangarDes] = useState(false);
+  const handleCheckBoxChange = (e) => {
+    setHangarDes(!isHangarDes);
   };
   return (
     <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">

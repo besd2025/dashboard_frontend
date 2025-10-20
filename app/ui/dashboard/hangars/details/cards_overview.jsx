@@ -2,7 +2,11 @@
 import React, { useState, useEffect } from "react";
 import { fetchData } from "../../../../_utils/api";
 export default function CardsOverview({ hangar_id }) {
-  const [data, setData] = useState({});
+  const [actats, setAchats] = useState({});
+  const [ventes, setVentes] = useState({});
+  const [transfers, setTransfers] = useState({});
+  const [stock_initial, setStockInitial] = useState({});
+  const [cultivateurs, setACultivateurs] = useState({});
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -10,13 +14,58 @@ export default function CardsOverview({ hangar_id }) {
 
     const getData = async () => {
       try {
-        const results = await fetchData("get", `hangars/${hangar_id}/`, {
-          params: {},
-          additionalHeaders: {},
-          body: {},
-        });
-        setData(results);
-        console.log(results);
+        const achats = await fetchData(
+          "get",
+          `hangars/${hangar_id}/get_total_achat_par_hangar`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
+        const ventes = await fetchData(
+          "get",
+          `hangars/${hangar_id}/get_total_vent_par_hangar`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
+        const transfert = await fetchData(
+          "get",
+          `hangars/${hangar_id}/get_quantity_transferer`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
+        const stock_initial = await fetchData(
+          "get",
+          `hangars/${hangar_id}/get_inital_stock_per_hangar`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
+        const cultivatuers = await fetchData(
+          "get",
+          `hangars/${hangar_id}/get_cultivator_number_per_hangar`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
+        setAchats(achats);
+        setVentes(ventes);
+        setTransfers(transfert);
+        setStockInitial(stock_initial);
+        setACultivateurs(cultivatuers);
+        console.log("stock:", stock_initial);
+        console.log("cultivateurs:", cultivatuers);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -55,7 +104,7 @@ export default function CardsOverview({ hangar_id }) {
           </div>
 
           <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
-            {data?.nb_cultivateurs || 0}
+            {cultivateurs?.nbr_cultivators || 0}
           </h4>
         </div>
       </div>
@@ -87,9 +136,12 @@ export default function CardsOverview({ hangar_id }) {
                 Qté Collectée
               </span>
               <h4 className="mt-2 font-semibold text-gray-800 text-lg dark:text-white/90">
-                {data.total_achats >= 1000 ? (
+                {actats?.total_blanc + actats?.total_jaune >= 1000 ? (
                   <>
-                    {(data?.total_achats / 1000).toLocaleString("fr-FR", {
+                    {(
+                      (actats?.total_blanc + actats?.total_jaune) /
+                      1000
+                    ).toLocaleString("fr-FR", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}{" "}
@@ -97,7 +149,9 @@ export default function CardsOverview({ hangar_id }) {
                   </>
                 ) : (
                   <>
-                    {data?.total_achats?.toLocaleString("fr-FR") || 0}{" "}
+                    {(
+                      actats?.total_blanc + actats?.total_jaune
+                    )?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
@@ -133,20 +187,17 @@ export default function CardsOverview({ hangar_id }) {
               </div>
 
               <h4 className=" font-semibold text-gray-800 text-xl dark:text-white/90">
-                {data?.quantite_blanc_achete >= 1000 ? (
+                {actats?.total_blanc >= 1000 ? (
                   <>
-                    {(data?.quantite_blanc_achete / 1000).toLocaleString(
-                      "fre-FR",
-                      {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      }
-                    )}{" "}
+                    {(actats?.total_blanc / 1000).toLocaleString("fre-FR", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
-                    {data?.quantite_blanc_achete?.toLocaleString("fr-FR") || 0}{" "}
+                    {actats?.total_blanc?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
@@ -174,20 +225,17 @@ export default function CardsOverview({ hangar_id }) {
               </div>
 
               <h4 className=" font-semibold text-yellow-600 text-xl dark:text-white/90">
-                {data?.quantite_jaune_achete >= 1000 ? (
+                {actats?.total_jaune >= 1000 ? (
                   <>
-                    {(data?.quantite_jaune_achete / 1000).toLocaleString(
-                      "fr-FR",
-                      {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      }
-                    )}{" "}
+                    {(actats?.total_jaune / 1000).toLocaleString("fr-FR", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
-                    {data?.quantite_jaune_achete?.toLocaleString("fr-FR") || 0}{" "}
+                    {actats?.total_jaune?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
@@ -227,9 +275,12 @@ export default function CardsOverview({ hangar_id }) {
               </span>
 
               <h4 className="ml-3  font-semibold text-gray-800 text-lg dark:text-white/90">
-                {data.total_achats >= 1000 ? (
+                {ventes.total_blanc + ventes?.total_jaune >= 1000 ? (
                   <>
-                    {(data?.total_ventes / 1000).toLocaleString("fr-FR", {
+                    {(
+                      (ventes.total_blanc + ventes?.total_jaune) /
+                      1000
+                    ).toLocaleString("fr-FR", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}{" "}
@@ -237,7 +288,9 @@ export default function CardsOverview({ hangar_id }) {
                   </>
                 ) : (
                   <>
-                    {data?.total_ventes?.toLocaleString("fr-FR") || 0}{" "}
+                    {(ventes.total_blanc + ventes?.total_jaune)?.toLocaleString(
+                      "fr-FR"
+                    ) || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
@@ -273,20 +326,17 @@ export default function CardsOverview({ hangar_id }) {
               </div>
 
               <h4 className=" font-semibold text-gray-800 text-xl dark:text-white/90">
-                {data?.quantite_blanc_vendue >= 1000 ? (
+                {ventes?.total_blanc >= 1000 ? (
                   <>
-                    {(data?.quantite_blanc_vendue / 1000).toLocaleString(
-                      "fr-FR",
-                      {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      }
-                    )}{" "}
+                    {(ventes?.total_blanc / 1000).toLocaleString("fr-FR", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
-                    {data?.quantite_blanc_vendue?.toLocaleString("fr-FR") || 0}{" "}
+                    {ventes?.total_blanc?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
@@ -314,20 +364,17 @@ export default function CardsOverview({ hangar_id }) {
               </div>
 
               <h4 className=" font-semibold text-yellow-600 text-xl dark:text-white/90">
-                {data?.quantite_jaune_vendue >= 1000 ? (
+                {ventes?.total_jaune >= 1000 ? (
                   <>
-                    {(data?.quantite_jaune_vendue / 1000).toLocaleString(
-                      "fr-FR",
-                      {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      }
-                    )}{" "}
+                    {(ventes?.total_jaune / 1000)?.toLocaleString("fr-FR", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
                     <span className="text-sm">T</span>
                   </>
                 ) : (
                   <>
-                    {data?.quantite_jaune_vendue?.toLocaleString("fr-FR") || 0}{" "}
+                    {ventes?.total_jaune?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
@@ -374,7 +421,9 @@ export default function CardsOverview({ hangar_id }) {
             </svg>
           </div>
           <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
-            {(data?.total_achats_price ?? 0).toLocaleString("fr-FR")}
+            {((actats?.total_blanc + actats.total_jaune) * 1700).toLocaleString(
+              "fr-FR"
+            )}
             <span className="text-sm"> FBU</span>
           </h4>
         </div>
@@ -415,7 +464,9 @@ export default function CardsOverview({ hangar_id }) {
           </div>
 
           <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
-            {(data?.total_ventes_price ?? 0).toLocaleString("fr-FR")}
+            {(
+              (ventes.total_blanc + ventes.total_jaune) * 2000 ?? 0
+            ).toLocaleString("fr-FR")}
             <span className="text-sm"> FBU</span>
           </h4>
         </div>
@@ -455,17 +506,20 @@ export default function CardsOverview({ hangar_id }) {
           </div>
 
           <h4 className="ml-3 font-bold text-gray-800 text-lg dark:text-white/90">
-            {data?.quantite_initial >= 1000 ? (
+            {stock_initial?.quantite_initial >= 1000 ? (
               <>
-                {(data?.quantite_initial / 1000).toLocaleString("fr-FR", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}{" "}
+                {(stock_initial?.quantite_initial / 1000).toLocaleString(
+                  "fr-FR",
+                  {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }
+                )}{" "}
                 <span className="text-sm">T</span>
               </>
             ) : (
               <>
-                {data?.quantite_initial?.toLocaleString("fr-FR") || 0}{" "}
+                {stock_initial?.total_initial?.toLocaleString("fr-FR") || 0}{" "}
                 <span className="text-sm">Kg</span>
               </>
             )}

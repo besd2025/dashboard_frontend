@@ -1,5 +1,5 @@
+import { useState } from "react";
 import { ChevronDownIcon } from "../../icons";
-import Label from "../form/Label";
 import Select from "../form/Select";
 
 const Pagination = ({
@@ -7,37 +7,45 @@ const Pagination = ({
   totalPages,
   onPageChange,
   pointer,
-  limit,
   totalCount,
+  onLimitChange, // Nouvelle prop pour gérer le changement de limite
 }) => {
+  const [limit, setLimit] = useState(5); // Limite par défaut
+
   const pagesToShow = [];
-  // Génère les numéros de pages à afficher
   const startPage = Math.max(1, currentPage - 1);
   const endPage = Math.min(totalPages, startPage + 2);
-
   for (let i = startPage; i <= endPage; i++) {
     pagesToShow.push(i);
   }
+
   const dataNumber = [
     { value: "5", label: "5" },
     { value: "10", label: "10" },
     { value: "50", label: "50" },
     { value: "100", label: "100" },
   ];
-  const handleDataNumber = () => {};
+
+  const handleDataNumber = (selectedOption) => {
+    const newLimit = selectedOption;
+    setLimit(newLimit);
+    onLimitChange(newLimit);
+    onPageChange(1);
+  };
+  const actualPointer = Number(pointer);
+  const actualLimit = Number(limit);
   return (
     <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-800 sm:px-6">
       <div className="flex items-center justify-between flex-col sm:flex-row">
-        {/* Affichage du texte "X à Y sur Z" */}
         <div className="mb-4 sm:mb-0">
           <p className="text-sm text-gray-700 dark:text-gray-400">
             Affichage de{" "}
             <span className="font-medium">
-              {totalCount === 0 ? pointer : pointer + 1}
+              {totalCount === 0 ? 0 : pointer + 1}
             </span>{" "}
             à{" "}
             <span className="font-medium">
-              {Math.min(pointer + limit, totalCount)}
+              {Math.min(actualPointer + actualLimit, totalCount)}
             </span>{" "}
             sur <span className="font-medium">{totalCount}</span> résultats
           </p>
@@ -45,11 +53,10 @@ const Pagination = ({
 
         <div className="space-y-6 mb-4 sm:mb-0">
           <div className="flex flex-row gap-x-3 items-center">
-            {/* <Label>Trier par</Label> */}
             <div className="relative">
               <Select
                 options={dataNumber}
-                placeholder="5"
+                placeholder={limit.toString()} // Affiche la limite actuelle comme placeholder
                 onChange={handleDataNumber}
                 className="dark:bg-dark-900"
               />
@@ -60,18 +67,16 @@ const Pagination = ({
           </div>
         </div>
 
-        {/* Navigation */}
         <nav
           className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
           aria-label="Pagination"
         >
-          {/* Previous button */}
           <button
             onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
             className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 dark:bg-white/[0.03] dark:text-gray-400 disabled:opacity-50"
           >
-            <span className="sr-only">Previous</span>
+            <span className="sr-only">Précédent</span>
             <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
@@ -81,8 +86,7 @@ const Pagination = ({
             </svg>
           </button>
 
-          {/* Numéros de page */}
-          {pagesToShow?.map((page) => (
+          {pagesToShow.map((page) => (
             <button
               key={page}
               onClick={() => onPageChange(page)}
@@ -96,7 +100,6 @@ const Pagination = ({
             </button>
           ))}
 
-          {/* Next button */}
           <button
             onClick={() =>
               currentPage < totalPages && onPageChange(currentPage + 1)
@@ -104,7 +107,7 @@ const Pagination = ({
             disabled={currentPage === totalPages}
             className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 dark:bg-white/[0.03] dark:text-gray-400 disabled:opacity-50"
           >
-            <span className="sr-only">Next</span>
+            <span className="sr-only">Suivant</span>
             <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"

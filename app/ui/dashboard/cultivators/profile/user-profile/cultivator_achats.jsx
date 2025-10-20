@@ -13,24 +13,24 @@ import {
 
 export default function CultivatorAchats({ cultivateur_id }) {
   const { isOpen, openModal, closeModal } = useModal();
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!cultivateur_id) return; // ✅ Ne fait rien si l'ID est indéfini
+    if (!cultivateur_id) return;
 
     async function getData() {
       try {
-        const results = await fetchData(
+        const response = await fetchData(
           "get",
-          `/cultivators/${cultivateur_id}`,
+          `/cultivators/${cultivateur_id}/get_cultivators_purchases/`,
           {
             params: {},
             additionalHeaders: {},
             body: {},
           }
         );
-        setData(results);
+        setData(response.results);
       } catch (err) {
         console.error(err);
         setError("Erreur lors du chargement de l'adresse");
@@ -39,22 +39,6 @@ export default function CultivatorAchats({ cultivateur_id }) {
 
     getData();
   }, [cultivateur_id]);
-  const tableData = [
-    {
-      id: 1,
-      date: "2024-03-20 14:30:45",
-      qte: "102",
-      montant: "70526",
-      hangar: "CEM",
-    },
-    {
-      id: 2,
-      date: "2024-03-20 14:30:45",
-      qte: "192",
-      montant: "70526",
-      hangar: "CEM",
-    },
-  ];
 
   return (
     <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
@@ -81,7 +65,13 @@ export default function CultivatorAchats({ cultivateur_id }) {
                         isHeader
                         className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                       >
-                        Quantite
+                        Quantite Blanc
+                      </TableCell>
+                      <TableCell
+                        isHeader
+                        className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                      >
+                        Quantite Jaune
                       </TableCell>
                       <TableCell
                         isHeader
@@ -100,19 +90,22 @@ export default function CultivatorAchats({ cultivateur_id }) {
 
                   {/* Table Body */}
                   <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                    {tableData.map((order) => (
+                    {data.map((order) => (
                       <TableRow key={order.id}>
                         <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                          {order.date}
+                          {order?.date_achat}
                         </TableCell>
                         <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                          {order.qte}
+                          {order?.quantity_blanc}
                         </TableCell>
                         <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                          {order.montant}
+                          {order?.quantity_jaune}
                         </TableCell>
                         <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                          {order.hangar}
+                          {order?.total_price}
+                        </TableCell>
+                        <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                          {order?.collector?.hangar?.hangar_name}
                         </TableCell>
                       </TableRow>
                     ))}

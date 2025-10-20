@@ -18,6 +18,7 @@ import DropdownItem from "../../../../dropdown/DropdownItem";
 import { Dropdown } from "../../../../dropdown/dropdown_cultvators";
 import { MoreDotIcon } from "../../../../../icons";
 import { UserContext } from "../../../../../context/UserContext";
+import ExportButton from "../../../../button/export_button";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import ViewImageModal from "../../../../modal/ViewImageModal";
@@ -25,18 +26,18 @@ function ListeAchat() {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [data, setData] = useState([]);
   const [pointer, setPointer] = useState(0); // index de départ
-  const limit = 5; // nombre par page
   const [totalCount, setTotalCount] = useState(5); // pour savoir quand arrêter
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const user = useContext(UserContext);
   const [filterData, setFilterData] = useState({});
   const [searchdata, setSearchData] = useState("");
+  const [limit, setLimit] = useState(5);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
-
-  console.log(user?.session?.category);
+  const [loadingEportBtn, setLoadingEportBtn] = useState(false);
+  const [activedownloadBtn, setActivedownloadBtn] = useState(false);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -123,7 +124,6 @@ function ListeAchat() {
 
         setData(results.results);
         setTotalCount(results.count);
-        console.log(results.results);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -132,7 +132,7 @@ function ListeAchat() {
       }
     }
     getData();
-  }, [pointer, filterData, searchdata]);
+  }, [pointer, filterData, searchdata, limit]);
 
   const totalPages = Math.ceil(totalCount / limit);
   const onPageChange = (pageNumber) => {
@@ -247,6 +247,90 @@ function ListeAchat() {
     }
   };
 
+  const ExportAchatsToExcel = async () => {
+    setLoadingEportBtn(true);
+    try {
+      const initial_export = await fetchData("post", "/achats/export_excel/", {
+        params: {},
+        additionalHeaders: {},
+        body: {},
+      });
+
+      if (initial_export.status == 202) {
+        setLoadingEportBtn(true);
+        const task_id = initial_export?.data?.task_id;
+        const intervalId = setInterval(async () => {
+          const export_excel = await fetchData("get", "/achats/check_task/", {
+            params: { task_id: task_id },
+          });
+          console.log("eeeeeeeexp:", export_excel);
+          if (export_excel.status === "done") {
+            clearInterval(intervalId); // Arrêtez l'intervalle
+            setLoadingEportBtn(false);
+            setActivedownloadBtn(true);
+          }
+        }, 2000);
+      }
+
+      // Vérifier toutes les 6 secondes
+    } catch (error) {
+      console.error("Erreur exportation Excel :", error);
+    } finally {
+      //setLoadingEportBtn(false);
+    }
+  };
+  const DownloadAchatsToExcel = async () => {
+    setLoadingEportBtn(true);
+    try {
+      const response = await fetchData("get", "/achats/download_excel/", {
+        isBlob: true,
+      });
+
+      // Créer le blob avec le bon type MIME
+      const blob = new Blob([response.data], {
+        type:
+          response.headers["content-type"] ||
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      const url = window.URL.createObjectURL(blob);
+      const now = new Date();
+      const day = String(now.getDate()).padStart(2, "0");
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const year = now.getFullYear();
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      const seconds = String(now.getSeconds()).padStart(2, "0");
+
+      const timestamp = `${day}_${month}_${year}_${hours}_${minutes}_${seconds}`;
+      // Nom du fichier par défaut
+      let filename = `Purchases_list_${timestamp}.xlsx`;
+
+      const contentDisposition = response.headers["content-disposition"];
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="?(.+)"?/);
+        if (match && match[1]) filename = match[1];
+      }
+
+      // Création du <a> temporaire
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+
+      // Nettoyage
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+      setActivedownloadBtn(true);
+    } catch (error) {
+      console.error("Erreur lors de l'exportation Excel :", error);
+    } finally {
+      setLoadingEportBtn(false);
+    }
+  };
+
   const [id1, getId] = useState(undefined ? "default" : 0);
   console.log(id1);
   const handleFilter = (filterData) => {
@@ -256,6 +340,13 @@ function ListeAchat() {
     console.log("Image clicked:", url);
     setModalImageUrl(url);
     setIsImageModalOpen(true);
+  };
+
+  const onLimitChange = (newLimit) => {
+    setLimit(newLimit);
+    console.log("newLimit:", newLimit);
+    setPointer(0);
+    setCurrentPage(1);
   };
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
@@ -337,26 +428,14 @@ function ListeAchat() {
           </button>
         </div>
         <div className="flex items-center gap-3">
-          <button
-            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
-            onClick={exportCultivatorsToExcel}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
-              />
-            </svg>
-            Export
-          </button>
+          <div className="flex items-center gap-3 text-gray-700">
+            <ExportButton
+              onClickExportButton={ExportAchatsToExcel}
+              onClickDownloadButton={DownloadAchatsToExcel}
+              loading={loadingEportBtn}
+              activedownloadBtn={activedownloadBtn}
+            />
+          </div>
         </div>
 
         <button
@@ -660,8 +739,9 @@ function ListeAchat() {
         onPageChange={onPageChange}
         totalPages={totalPages}
         pointer={pointer}
-        limit={limit}
+        onLimitChange={onLimitChange}
       />
+
       {/*<Pagination />*/}
 
       {/* filtres */}

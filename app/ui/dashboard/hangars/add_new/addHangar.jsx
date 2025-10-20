@@ -5,7 +5,7 @@ import Label from "../../../ui_elements/form/Label";
 import React, { useEffect, useState } from "react";
 import Select from "../../../ui_elements/form/Select";
 import { fetchData } from "../../../../_utils/api";
-
+import Checkbox from "../../../ui_elements/form/input/Checkbox";
 function AddHangar() {
   const [formData, setFormData] = useState({
     name: "",
@@ -76,7 +76,6 @@ function AddHangar() {
         value: item.id,
         label: item.zone_name,
       }));
-      console.log(options);
       setZoneOptions(options);
     } catch (err) {
       setError(err);
@@ -109,19 +108,20 @@ function AddHangar() {
 
   const Create_Hangars = async () => {
     if (formData) {
-      console.log(formData);
       const formdata = {
         hangar_name: formData.name,
         hangar_adress: formData.zone,
         hangar_code: formData.code,
         initial_stock: formData.initialStock,
+        for_transfert: isHangarDes,
       };
       const response = await fetchData("post", `/hangars/`, {
         params: {},
         additionalHeaders: {},
         body: formdata,
       });
-      if (response == 201) {
+      console.log(response);
+      if (response.status == 201) {
         window.location.reload();
       } else {
         setError("erreur d'enregistrement");
@@ -129,6 +129,10 @@ function AddHangar() {
     } else {
       setError("complete d'abord tous les cases ");
     }
+  };
+  const [isHangarDes, setHangarDes] = useState(false);
+  const handleCheckBoxChange = (e) => {
+    setHangarDes(!isHangarDes);
   };
   return (
     <div className="max-w-3xl p-6 bg-white rounded-2xl">
@@ -194,6 +198,14 @@ function AddHangar() {
               options={zoneOptions}
               placeholder="Sélectionner la zone"
               onChange={handleSelectZoneChange}
+              className="dark:bg-dark-900"
+            />
+          </div>
+          <div>
+            <Label>Hangar de desangorgement ?</Label>
+            <Checkbox
+              placeholder="Sélectionner la zone"
+              onChange={handleCheckBoxChange}
               className="dark:bg-dark-900"
             />
           </div>

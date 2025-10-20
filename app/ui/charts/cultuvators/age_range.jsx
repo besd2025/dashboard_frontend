@@ -17,7 +17,6 @@ function AgeRange() {
     series: [
       {
         name: "",
-        // data: [],
         data: [200, 330, 548, 740, 880, 990, 1100],
       },
     ],
@@ -51,7 +50,7 @@ function AgeRange() {
       dataLabels: {
         enabled: true,
         formatter: function (val, opt) {
-          return opt.w.globals.labels[opt.dataPointIndex] + ":   " + val;
+          return opt.w.globals.labels[opt.dataPointIndex] + "";
         },
         style: {
           fontSize: "12px",
@@ -102,13 +101,15 @@ function AgeRange() {
           return getLowerBound(a.tranche_age) - getLowerBound(b.tranche_age);
         });
 
-        const categories = sorted.map((item) => item.tranche_age);
+        const categories = sorted.map(
+          (item) => item.tranche_age + " : " + item.nombre
+        );
         const values = sorted.map((item) => item.nombre);
 
         // Mettre à jour le graphique avec les vraies données
         setState((prev) => ({
           ...prev,
-          values: [{ data: values }],
+          values: [{ data: "" }],
           options: {
             ...prev.options,
             xaxis: {

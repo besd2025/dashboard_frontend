@@ -24,52 +24,31 @@ function CultivatorAchatsLocalisation({ cultivateur_id }) {
   useEffect(() => {
     async function getData() {
       try {
-        const response = await fetchData("get", `site_aggregates/`, {
-          params: {},
-          additionalHeaders: {},
-          body: {},
-        });
-        console.log(response);
-        const options = response?.map((item) => ({
-          name: item?.hangar?.hangar_name,
-          site: item?.site_name,
-          quantite_blanc: item?.quantity_total_blanc,
-          quantite_jaune: item?.quantity_total_jaune,
-          province:
-            item.hangar?.hangar_adress?.commune_code?.province_code
-              ?.province_name,
-          commune: item.hangar?.hangar_adress?.commune_code?.commune_name,
-          zone: item.hangar?.hangar_adress?.zone_name,
-          latitude: item?.latitude,
-          longitude: item?.longitude,
-        }));
-        setAchatData(options);
-        if (options.length > 0) {
-          setSelectedCultivator(options[0]); // Set the first item as selected
-        }
-      } catch (error) {
-        setError(error);
-        console.error(error);
-      }
-    }
-    getData();
-  }, []);
-
-  useEffect(() => {
-    async function getData() {
-      try {
         const response = await fetchData(
           "get",
-          `cultivators/${cultivateur_id}`,
+          `/cultivators/${cultivateur_id}/get_cultivators_purchases/`,
           {
             params: {},
             additionalHeaders: {},
             body: {},
           }
         );
-        console.log(response);
-        const options = response;
-        setCultivatorData(options);
+        const options = response?.results?.map((item) => ({
+          name: item?.collector?.hangar?.hangar_name,
+          site: "",
+          quantite_blanc: item?.quantity_blanc,
+          quantite_jaune: item?.quantity_jaune,
+          province: item.collector?.hangar?.province,
+          commune: item?.collector?.hangar?.commune,
+          zone: item.collector?.hangar?.zone,
+          latitude: item?.latitude,
+          longitude: item?.longitude,
+        }));
+
+        setAchatData(options);
+        if (options.length > 0) {
+          setSelectedCultivator(options[0]);
+        }
       } catch (error) {
         setError(error);
         console.error(error);
