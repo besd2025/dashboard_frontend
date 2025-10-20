@@ -27,7 +27,7 @@ export default function UserDropdown() {
     <div className="relative">
       <button
         onClick={toggleDropdown}
-        className="flex items-center text-gray-700 dark:text-gray-400 dropdown-toggle"
+        className="flex items-center text-white dropdown-toggle"
       >
         <span className="block mr-1 font-medium text-theme-sm">
           {user?.session?.first_name?.charAt(0)}
