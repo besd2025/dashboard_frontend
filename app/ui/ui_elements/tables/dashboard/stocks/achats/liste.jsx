@@ -280,7 +280,6 @@ function ListeAchat() {
     }
   };
   const DownloadAchatsToExcel = async () => {
-    setLoadingEportBtn(true);
     try {
       const response = await fetchData("get", "/achats/download_excel/", {
         isBlob: true,
@@ -323,7 +322,7 @@ function ListeAchat() {
       link.remove();
       window.URL.revokeObjectURL(url);
 
-      setActivedownloadBtn(true);
+      setActivedownloadBtn(false);
     } catch (error) {
       console.error("Erreur lors de l'exportation Excel :", error);
     } finally {

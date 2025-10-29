@@ -22,6 +22,8 @@ function CultivatorAchatsLocalisation({ cultivateur_id }) {
   const [selectedCultivator, setSelectedCultivator] = useState(null);
 
   useEffect(() => {
+    let isMounted = true; // Flag to track component's mounted state
+
     async function getData() {
       try {
         const response = await fetchData(
@@ -33,29 +35,38 @@ function CultivatorAchatsLocalisation({ cultivateur_id }) {
             body: {},
           }
         );
-        const options = response?.results?.map((item) => ({
-          name: item?.collector?.hangar?.hangar_name,
-          site: "",
-          quantite_blanc: item?.quantity_blanc,
-          quantite_jaune: item?.quantity_jaune,
-          province: item.collector?.hangar?.province,
-          commune: item?.collector?.hangar?.commune,
-          zone: item.collector?.hangar?.zone,
-          latitude: item?.latitude,
-          longitude: item?.longitude,
-        }));
+        if (isMounted) {
+          // Check if component is still mounted
+          const options = response?.results?.map((item) => ({
+            name: item?.collector?.hangar?.hangar_name,
+            site: "",
+            quantite_blanc: item?.quantity_blanc,
+            quantite_jaune: item?.quantity_jaune,
+            province: item.collector?.hangar?.province,
+            commune: item?.collector?.hangar?.commune,
+            zone: item.collector?.hangar?.zone,
+            latitude: item?.latitude,
+            longitude: item?.longitude,
+          }));
 
-        setAchatData(options);
-        if (options.length > 0) {
-          setSelectedCultivator(options[0]);
+          setAchatData(options);
+          console.log("AchatData:", options);
+          if (options.length > 0) {
+            setSelectedCultivator(options[0]);
+          }
         }
       } catch (error) {
         setError(error);
         console.error(error);
       }
     }
+
     getData();
-  }, []);
+
+    return () => {
+      isMounted = false; // Cleanup function to avoid setting state on unmounted component
+    };
+  }, [cultivateur_id]);
 
   return (
     <div
@@ -64,7 +75,7 @@ function CultivatorAchatsLocalisation({ cultivateur_id }) {
       } lg:p-4 relative space-y-4`}
     >
       <div className="col-span-4 lg:col-span-3 h-[80vh] space-y-6 overflow-x-auto rounded overflow-hidden">
-        {AchatData.length > 0 ? (
+        {AchatData?.length > 0 ? (
           <MapWithNoSSR
             data={AchatData}
             CultivatorData={CultivatorData}

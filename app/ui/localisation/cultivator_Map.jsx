@@ -127,63 +127,43 @@ function MapComponent({ data, onMarkerClick, onFilterClick }) {
           </LayersControl.BaseLayer>
         </LayersControl>
         {/* Markers for each cultivator */}
-        {data.map((cultivatorAchats, idx) => (
-          <Marker
-            key={idx}
-            position={[cultivatorAchats.latitude, cultivatorAchats.longitude]}
-            eventHandlers={{
-              mouseover: (e) => {
-                e.target.openPopup();
-              },
-              mouseout: (e) => {
-                e.target.closePopup();
-              },
-              click: () => {
-                if (onMarkerClick) {
-                  onMarkerClick(cultivatorAchats);
-                }
-                setSelectedCultivatorAchats(cultivatorAchats);
-              },
-            }}
-          >
-            <Tooltip
-              direction="top"
-              offset={[0, -10]}
-              opacity={1}
-              permanent={false}
-            >
-              {cultivatorAchats.name}
-            </Tooltip>
-          </Marker>
-        ))}
-        {/* <Marker
-          position={[CultivatorData.latitude, CultivatorData.longitude]}
-          icon={yellowIcon}
-          eventHandlers={{
-            mouseover: (e) => {
-              e.target.openPopup();
-            },
-            mouseout: (e) => {
-              e.target.closePopup();
-            },
-            click: () => {
-              if (onMarkerClick) {
-                onMarkerClick(CultivatorData);
-              }
-              setSelectedCultivator(CultivatorData);
-            },
-          }}
-        >
-          <Tooltip
-            direction="top"
-            offset={[0, -10]}
-            opacity={1}
-            permanent={false}
-          >
-            {CultivatorData.cultivator_last_name}{" "}
-            {CultivatorData.cultivator_first_name}
-          </Tooltip>
-        </Marker> */}
+        {data.map((cultivatorAchats, idx = 0) => {
+          if (cultivatorAchats?.latitude && cultivatorAchats?.longitude) {
+            return (
+              <Marker
+                key={idx + 1}
+                position={[
+                  cultivatorAchats?.latitude,
+                  cultivatorAchats?.longitude,
+                ]}
+                eventHandlers={{
+                  mouseover: (e) => {
+                    e.target.openPopup();
+                  },
+                  mouseout: (e) => {
+                    e.target.closePopup();
+                  },
+                  click: () => {
+                    if (onMarkerClick) {
+                      onMarkerClick(cultivatorAchats);
+                    }
+                    setSelectedCultivatorAchats(cultivatorAchats);
+                  },
+                }}
+              >
+                <Tooltip
+                  direction="top"
+                  offset={[0, -10]}
+                  opacity={1}
+                  permanent={false}
+                >
+                  {cultivatorAchats.name}
+                </Tooltip>
+              </Marker>
+            );
+          }
+        })}
+
         {geoData && (
           <GeoJSON
             data={geoData}

@@ -112,13 +112,13 @@ export default function Synthese() {
           <p className="mb-1 text-center text-gray-500 text-theme-xs dark:text-gray-400 sm:text-sm">
             HANGAR ciblés
           </p>
-          <p className="flex items-center justify-center gap-1 text-base font-semibold text-gray-800 dark:text-white/90 sm:text-lg">
+          <div className="flex items-center justify-center gap-1 text-base font-semibold text-gray-800 dark:text-white/90 sm:text-lg">
             {loading ? (
               <SkeletonLoader width="80px" height="20px" borderRadius="4px" />
             ) : (
               data?.total_hangars || 0
             )}
-          </p>
+          </div>
         </div>
 
         <div className="w-px bg-gray-200 h-7 dark:bg-gray-800"></div>
@@ -127,13 +127,13 @@ export default function Synthese() {
           <p className="mb-1 text-center text-gray-500 text-theme-xs dark:text-gray-400 sm:text-sm">
             HANGAR en activités
           </p>
-          <p className="flex items-center justify-center gap-1 text-base font-semibold text-gray-800 dark:text-white/90 sm:text-lg">
+          <div className="flex items-center justify-center gap-1 text-base font-semibold text-gray-800 dark:text-white/90 sm:text-lg">
             {loading ? (
               <SkeletonLoader width="80px" height="20px" borderRadius="4px" />
             ) : (
               data?.hangars_avec_collecteur || 0
             )}
-          </p>
+          </div>
         </div>
 
         <div className="relative inline-block">
