@@ -21,34 +21,29 @@ function Sidebar() {
       <div className="w-full  mb-4">
         <nav
           aria-label="Tabs"
-          className="flex items-center space-x-1 rounded-xl bg-gray-50 p-1 dark:bg-gray-800/50"
+          className="flex items-center space-x-1 rounded-xl border bg-gray-50 p-1 dark:bg-gray-800"
         >
-          <Link
-            href="/dashboard/stocks/achats/achats_analytics"
-            onClick={() => setActiveTab("details")}
-            className={`relative flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-bold transition-all duration-200 ease-in-out ${
-              activeTab === "details"
-                ? "bg-yellow-500 text-white shadow-sm dark:bg-gray-900 dark:text-green-500"
-                : "text-gray-600 hover:bg-white/50 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-gray-900/50 dark:hover:text-gray-300"
-            }`}
-          >
-            <span className="relative z-10">Details</span>
-          </Link>
           <Link
             href="/dashboard/stocks/achats/liste"
             onClick={() => setActiveTab("liste")}
             className={`relative flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-bold transition-all duration-200 ease-in-out ${
               activeTab === "liste"
-                ? "bg-yellow-500 text-white shadow-sm dark:bg-gray-900 dark:text-green-500"
+                ? "bg-yellow-500 text-white shadow-sm  "
                 : "text-gray-600 hover:bg-white/50 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-gray-900/50 dark:hover:text-gray-300"
             }`}
           >
-            <p className="relative z-10">
-              Liste{" "}
-              <span className={activeTab === "liste" ? "inline" : "hidden"}>
-                des achats
-              </span>
-            </p>
+            <p className="relative z-10">Liste des achats</p>
+          </Link>
+          <Link
+            href="/dashboard/stocks/achats/achats_analytics"
+            onClick={() => setActiveTab("details")}
+            className={`relative flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-bold transition-all duration-200 ease-in-out ${
+              activeTab === "details"
+                ? "bg-yellow-500 text-white shadow-sm "
+                : "text-gray-600 hover:bg-white/50 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-gray-900/50 dark:hover:text-gray-300"
+            }`}
+          >
+            <span className="relative z-10">Details</span>
           </Link>
         </nav>
       </div>

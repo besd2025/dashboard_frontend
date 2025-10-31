@@ -161,7 +161,7 @@ const AppSidebar = () => {
             </svg>
           ),
           name: "Achats",
-          path: "/dashboard/stocks/achats/achats_analytics",
+          path: "/dashboard/stocks/achats/liste",
           startWithUrl: "/dashboard/stocks/achats/",
         },
         {
@@ -182,7 +182,7 @@ const AppSidebar = () => {
             </svg>
           ),
           name: "Ventes",
-          path: "/dashboard/stocks/sold_out/vente_analytics",
+          path: "/dashboard/stocks/sold_out/liste",
           startWithUrl: "/dashboard/stocks/sold_out/",
         },
         {

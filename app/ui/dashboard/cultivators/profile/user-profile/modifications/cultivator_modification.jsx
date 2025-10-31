@@ -60,35 +60,7 @@ export default function CultivatorModifications({ cultivateur_id }) {
             Modifications effectués
           </h4>
           <div className="bg-white dark:bg-white/[0.03] mt-2 rounded-2xl mb-1">
-            <div className="mx-auto max-w-7xl mb-4 ">
-              <ul className="-mb-px flex items-end gap-x-8">
-                <li
-                  onClick={() => setActiveTab("identification")}
-                  className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold ${
-                    activeTab === "identification"
-                      ? "border-yellow-500 text-yellow-500"
-                      : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                  }`}
-                >
-                  Identification
-                </li>
-                <li
-                  onClick={() => setActiveTab("achats")}
-                  className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold ${
-                    activeTab === "achats"
-                      ? "border-yellow-500 text-yellow-500"
-                      : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                  }`}
-                >
-                  Achats
-                </li>
-              </ul>
-            </div>
-            {activeTab === "identification" ? (
-              <Identification tableData={tableData} />
-            ) : (
-              <ModificationAchat tableData={tableData} />
-            )}
+            <Identification tableData={tableData} />
           </div>
         </div>
       </div>
