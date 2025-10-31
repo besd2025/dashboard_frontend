@@ -58,18 +58,18 @@ function ModificationAchat({ tableData }) {
               className="divide-y divide-gray-100 dark:divide-white/[0.05]"
             >
               {tableData.map((order) => (
-                <TableRow key={order.id}>
+                <TableRow key={order?.id}>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.date}
+                    {order?.date}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order.qte}
+                    {order?.qte}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order.montant}
+                    {order?.montant}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order.hangar}
+                    {order?.hangar}
                   </TableCell>
                 </TableRow>
               ))}

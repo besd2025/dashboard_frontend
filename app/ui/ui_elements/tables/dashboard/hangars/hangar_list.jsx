@@ -163,7 +163,6 @@ function AllCultivatorsList() {
     }
   };
   const DownloadHangarsToExcel = async () => {
-    setLoadingEportBtn(true);
     try {
       const response = await fetchData("get", "/hangars/download_excel/", {
         isBlob: true,
@@ -209,7 +208,6 @@ function AllCultivatorsList() {
     } catch (error) {
       console.error("Erreur lors de l'exportation Excel :", error);
     } finally {
-      setLoadingEportBtn(true);
       setActivedownloadBtn(false);
     }
   };
@@ -218,7 +216,6 @@ function AllCultivatorsList() {
   };
   const onLimitChange = (newLimit) => {
     setLimit(newLimit);
-    console.log("newLimit:", newLimit);
     setPointer(0);
     setCurrentPage(1);
   };

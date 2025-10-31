@@ -203,7 +203,6 @@ function AllCultivatorsList() {
     }
   };
   const DownloadCultivatorsToExcel = async () => {
-    setLoadingEportBtn(true);
     try {
       const response = await fetchData("get", "/cultivators/download_excel/", {
         isBlob: true,
