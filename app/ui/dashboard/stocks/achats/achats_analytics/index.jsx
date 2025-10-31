@@ -1,10 +1,10 @@
 import React from "react";
-import AmountCard from "./amount_card_achat";
-import QuantityColCard from "./quantity_col_card";
-import QtyColChart from "../../../charts/stocks/achat/qty_col_chart";
-import TopAchat from "../../../ui_elements/tables/dashboard/stocks/achats/top_achats";
-import TopCultivateurs from "../../../ui_elements/tables/dashboard/stocks/achats/top_cultivateurs";
-import QteAchatProv from "../../../charts/stocks/achat/qte_achat_prov";
+import AmountCard from "../amount_card_achat";
+import QuantityColCard from "../quantity_col_card";
+import QtyColChart from "../../../../charts/stocks/achat/qty_col_chart";
+import TopAchat from "../../../../ui_elements/tables/dashboard/stocks/achats/top_achats";
+import TopCultivateurs from "../../../../ui_elements/tables/dashboard/stocks/achats/top_cultivateurs";
+import QteAchatProv from "../../../../charts/stocks/achat/qte_achat_prov";
 function Achats() {
   return (
     <div className="grid grid-cols-12 gap-2">

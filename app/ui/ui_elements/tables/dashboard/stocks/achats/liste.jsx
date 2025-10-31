@@ -553,7 +553,7 @@ function ListeAchat() {
             {/* Table Body */}
             <TableBody
               loading={loading}
-              columns={9}
+              columns={10}
               skeletonRows={totalCount < 5 ? totalCount : 5}
               className="divide-y divide-gray-100 dark:divide-white/[0.05]"
             >

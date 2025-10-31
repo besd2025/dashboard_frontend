@@ -1,11 +1,11 @@
 import React from "react";
-import QuantitySolCard from "./quantity_col_card";
-import AmountCardSold from "./amount_card_sold";
-import QtyVendChart from "../../../charts/stocks/sold_out/qty_vend_chart";
-import TopSoldOut from "../../../ui_elements/tables/dashboard/stocks/sold_out/top_soldout";
-import QteVendProv from "../../../charts/stocks/sold_out/qte_vend_prov";
-import QteVendCategorie from "../../../charts/stocks/sold_out/qte_vend_categorie";
-import QteVendSector from "../../../charts/stocks/sold_out/qte_vend_sector";
+import QuantitySolCard from "../quantity_col_card";
+import AmountCardSold from "../amount_card_sold";
+import QtyVendChart from "../../../../charts/stocks/sold_out/qty_vend_chart";
+import TopSoldOut from "../../../../ui_elements/tables/dashboard/stocks/sold_out/top_soldout";
+import QteVendProv from "../../../../charts/stocks/sold_out/qte_vend_prov";
+import QteVendCategorie from "../../../../charts/stocks/sold_out/qte_vend_categorie";
+import QteVendSector from "../../../../charts/stocks/sold_out/qte_vend_sector";
 function SoldOut() {
   return (
     <div className="grid grid-cols-12 gap-2">

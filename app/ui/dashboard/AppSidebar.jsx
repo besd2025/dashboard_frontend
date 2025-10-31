@@ -161,7 +161,8 @@ const AppSidebar = () => {
             </svg>
           ),
           name: "Achats",
-          path: "/dashboard/stocks/achats",
+          path: "/dashboard/stocks/achats/achats_analytics",
+          startWithUrl: "/dashboard/stocks/achats/",
         },
         {
           icon: (
@@ -181,7 +182,8 @@ const AppSidebar = () => {
             </svg>
           ),
           name: "Ventes",
-          path: "/dashboard/stocks/sold_out",
+          path: "/dashboard/stocks/sold_out/vente_analytics",
+          startWithUrl: "/dashboard/stocks/sold_out/",
         },
         {
           icon: (
@@ -200,7 +202,7 @@ const AppSidebar = () => {
               />
             </svg>
           ),
-          name: "Sorties",
+          name: "Transferts",
           path: "/dashboard/stocks/out/en_attente",
         },
         {
