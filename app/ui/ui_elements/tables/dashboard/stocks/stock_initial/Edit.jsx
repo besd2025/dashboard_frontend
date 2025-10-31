@@ -24,6 +24,7 @@ function EditAchat({ closeModal, achat_id }) {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState("");
   const [loadingSearch, setLoadingSearch] = useState(false);
+  console.log("the id " + achat_id);
 
   const handleRadioChangeStatus = (value) => {
     setSelectedStatus(value);
@@ -48,11 +49,15 @@ function EditAchat({ closeModal, achat_id }) {
     }
 
     try {
-      const results = await fetchData("patch", `/achats/${achat_id}/`, {
-        params: {},
-        additionalHeaders: {},
-        body: formData,
-      });
+      const results = await fetchData(
+        "patch",
+        `/achats/${achat_id}/?is_nitial=true`,
+        {
+          params: {},
+          additionalHeaders: {},
+          body: formData,
+        }
+      );
       if (results.status == 200) {
         window.location.reload();
       } else {
@@ -67,13 +72,17 @@ function EditAchat({ closeModal, achat_id }) {
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData("get", `/achats/${achat_id}/`, {
-          params: {},
-          additionalHeaders: {},
-          body: {},
-        });
+        const results = await fetchData(
+          "get",
+          `/achats/${achat_id}/?is_nitial=true/`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
         setData(results);
-        console.log("Fetched Data:", results);
+        console.log("Fetched Data:", results.results);
         const data = results;
         setCode(data?.cultivator?.cultivator_code || "");
         setName(data?.cultivator?.cultivator_last_name || "");

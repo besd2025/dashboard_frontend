@@ -19,6 +19,7 @@ export default function UserInfoCard({ cultivateur_id }) {
           }
         );
         setData(results);
+        console.log(results);
       } catch (error) {
         setError(error);
         console.error(error);

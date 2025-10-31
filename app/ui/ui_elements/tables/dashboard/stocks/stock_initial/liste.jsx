@@ -96,7 +96,7 @@ function ListeStockInitial() {
 
         if (filterData && Object.keys(filterData).length > 0) {
           // Si des filtres sont appliqués, construire dynamiquement les paramètres
-          results = await fetchData("get", "/achats/?is_nitial=true", {
+          results = await fetchData("get", "/achats/?is_nitial=true/", {
             params: {
               province: filterData.province,
               commune: filterData.commune,
@@ -121,7 +121,7 @@ function ListeStockInitial() {
             },
           });
         }
-
+        console.log("Fetched Data:", results.results);
         setData(results.results);
         setTotalCount(results.count);
       } catch (error) {
@@ -331,8 +331,8 @@ function ListeStockInitial() {
     }
   };
 
-  const [id1, getId] = useState(undefined ? "default" : 0);
-  console.log(id1);
+  const [id1, getId] = useState(null);
+  console.log("id1 value:", id1);
   const handleFilter = (filterData) => {
     setFilterData(filterData);
   };
@@ -579,9 +579,10 @@ function ListeStockInitial() {
                         {user?.session?.category != "General" && (
                           <DropdownItem
                             onItemClick={() => {
+                              console.log("Setting id1 to:", order?.id);
+                              getId(order?.id);
                               closeDropdown(order.id);
                               openModal();
-                              getId(order?.id);
                             }}
                             className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                           >
@@ -746,7 +747,7 @@ function ListeStockInitial() {
       </Modal>
 
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <EditAchat achat_id={id1} />
+        {id1 && <EditAchat achat_id={id1} closeModal={closeModal} />}
       </Modal>
       <ViewImageModal
         isOpen={isImageModalOpen}
