@@ -8,6 +8,7 @@ import {
 } from "../../../../../ui_elements/tables/table_elemets";
 
 function ModificationAchat({ tableData }) {
+  console.log("table achat: ", tableData);
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-8  w-full">
       <div className="max-w-full overflow-x-auto col-span-8  ">
@@ -33,7 +34,7 @@ function ModificationAchat({ tableData }) {
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
                   Quantité blanc
-                </TableCell>{" "}
+                </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
@@ -57,7 +58,7 @@ function ModificationAchat({ tableData }) {
               menu={false}
               className="divide-y divide-gray-100 dark:divide-white/[0.05]"
             >
-              {tableData.map((order) => (
+              {tableData?.map((order) => (
                 <TableRow key={order?.id}>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {order?.date}

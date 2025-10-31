@@ -7,7 +7,8 @@ import ModificationAchat from "./achat";
 
 export default function CultivatorModifications({ cultivateur_id }) {
   const { isOpen, openModal, closeModal } = useModal();
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
+  const [dataAchat, setDataAchat] = useState([]);
   const [error, setError] = useState("");
 
   const [activeTab, setActiveTab] = useState("identification");
@@ -19,14 +20,25 @@ export default function CultivatorModifications({ cultivateur_id }) {
       try {
         const results = await fetchData(
           "get",
-          `/cultivators/${cultivateur_id}`,
+          `/cultivators/${cultivateur_id}/get_cultivator_history/`,
           {
             params: {},
             additionalHeaders: {},
             body: {},
           }
         );
-        setData(results);
+        const resultAchat = await fetchData(
+          "get",
+          `/achats/${cultivateur_id}/get_purchase_history/`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
+        setData(results.results);
+        console.log("modification data: ", resultAchat);
+        setDataAchat(resultAchat.results);
       } catch (err) {
         console.error(err);
         setError("Erreur lors du chargement de l'adresse");
@@ -35,22 +47,6 @@ export default function CultivatorModifications({ cultivateur_id }) {
 
     getData();
   }, [cultivateur_id]);
-  const tableData = [
-    {
-      id: 1,
-      date: "2024-03-20 14:30:45",
-      qte: "102",
-      montant: "70526",
-      hangar: "CEM",
-    },
-    {
-      id: 2,
-      date: "2024-03-20 14:30:45",
-      qte: "192",
-      montant: "70526",
-      hangar: "CEM",
-    },
-  ];
 
   return (
     <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
@@ -85,9 +81,9 @@ export default function CultivatorModifications({ cultivateur_id }) {
               </ul>
             </div>
             {activeTab === "identification" ? (
-              <Identification tableData={tableData} />
+              <Identification tableData={data} />
             ) : (
-              <ModificationAchat tableData={tableData} />
+              <ModificationAchat tableData={dataAchat} />
             )}
           </div>
         </div>

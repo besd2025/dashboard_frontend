@@ -17,7 +17,7 @@ import FilterUserProfile from "../../../../../municipal/cultivators/profile/filt
 import { fetchData } from "../../../../../../_utils/api";
 import OutDetails from "../../../../../dashboard/stocks/out/en_attente/out_details";
 import ConfirmationForm from "../../../../../dashboard/stocks/out/en_attente/confirmation_form";
-
+import FilterOutProfile from "./filtrage/filtrage";
 function OutListEnatt() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -84,16 +84,19 @@ function OutListEnatt() {
         let results;
 
         if (filterData && Object.keys(filterData).length > 0) {
-          results = await fetchData("get", "/hangars/", {
+          results = await fetchData("get", "/transfert/", {
             params: {
-              province: filterData.province,
-              commune: filterData.commune,
-              zone: filterData.zone,
+              province_provenance: filterData.province,
+              commune_provenance: filterData.commune,
+              zone_provenance: filterData.zone,
+              province_destination: filterData.province_destination,
+              commune_destination: filterData.commune_destination,
+              zone_destination: filterData.zone_destination,
               quantite_min: filterData.QtMin,
               quantite_max: filterData.QtMax,
-              date_achat: filterData.dateSortie,
-              date_achat_min: filterData.dateFrom,
-              date_achat_max: filterData.dateTo,
+              date_transfert: filterData.dateSortie,
+              date_transfert_min: filterData.dateFrom,
+              date_transfert_max: filterData.dateTo,
               search: searchdata, // ← recherche
               offset: pointer,
               limit: limit,
@@ -101,7 +104,7 @@ function OutListEnatt() {
           });
         } else {
           // Si aucun filtre, on récupère les données de base
-          results = await fetchData("get", "/hangars/", {
+          results = await fetchData("get", "/transfert/", {
             params: {
               search: searchdata, // ← recherche
               offset: pointer,
@@ -110,6 +113,7 @@ function OutListEnatt() {
           });
         }
         setData(results.results);
+        console.log("transfert en attente: ", results);
         setTotalCount(results.count); // si l'API retourne un `count` total
       } catch (error) {
         setError(error);
@@ -288,6 +292,25 @@ function OutListEnatt() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase "
                 >
+                  Province
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase "
+                >
+                  Commune
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase "
+                >
+                  zone
+                </TableCell>
+
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase "
+                >
                   Hangar provenance
                 </TableCell>
 
@@ -295,20 +318,32 @@ function OutListEnatt() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Qte sorties
+                  Qte transférée
                 </TableCell>
 
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Responsable Anagessa
+                  accompagnateur
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Date
+                  chauffeur
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  dATE TRANSFERT
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Hangar de reception
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -343,48 +378,48 @@ function OutListEnatt() {
                       </Dropdown>
                     </div>
                   </TableCell>
-
-                  <TableCell className="px-5 py-4 sm:px-6 text-start">
-                    <div className="flex items-center gap-3">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="size-6 text-gray-600  dark:text-white/90"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M4.5 2.25a.75.75 0 0 0 0 1.5v16.5h-.75a.75.75 0 0 0 0 1.5h16.5a.75.75 0 0 0 0-1.5h-.75V3.75a.75.75 0 0 0 0-1.5h-15ZM9 6a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5H9Zm-.75 3.75A.75.75 0 0 1 9 9h1.5a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75ZM9 12a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5H9Zm3.75-5.25A.75.75 0 0 1 13.5 6H15a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75ZM13.5 9a.75.75 0 0 0 0 1.5H15A.75.75 0 0 0 15 9h-1.5Zm-.75 3.75a.75.75 0 0 1 .75-.75H15a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75ZM9 19.5v-2.25a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 9 19.5Z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <div>
-                        <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order.hangar_name}
-                        </span>
-                        <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order.hangar_code}
-                        </span>
-                      </div>
-                    </div>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {order?.collector?.hangar?.province}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Qte}
+                    {order?.collector?.hangar?.commune}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.Prix}
+                    {order?.collector?.hangar?.zone}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {
-                      order?.hangar_adress?.zone_code?.commune_code
-                        ?.province_code?.province_name
-                    }
+                    {order?.collector?.hangar?.hangar_name}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {order?.quantity_blanc + order?.quantity_jaune >= 1000 ? (
+                      <>
+                        {(
+                          (order?.quantity_blanc + order?.quantity_jaune) /
+                          1000
+                        ).toLocaleString("de-DE")}{" "}
+                        <span className="text-sm">T</span>
+                      </>
+                    ) : (
+                      <>
+                        {(
+                          order?.quantity_blanc + order?.quantity_jaune
+                        )?.toLocaleString("fr-FR") || 0}{" "}
+                        <span className="text-sm">Kg</span>
+                      </>
+                    )}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {
-                      order?.hangar_adress?.zone_code?.commune_code
-                        ?.commune_name
-                    }
+                    {order?.accompagnateur_nom} {order?.accompagnateur_prenom}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order?.chauffeur_nom} {order?.chauffeur_prenom}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {new Date(order?.transfer_date).toLocaleDateString("fr-FR")}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order?.to_hangar?.province}/{order?.to_hangar?.commune}/
+                    {order?.to_hangar?.zone}/{order?.to_hangar?.hangar_name}
                   </TableCell>
                 </TableRow>
               ))}
@@ -410,7 +445,7 @@ function OutListEnatt() {
         onClose={closeModalFilter}
         className="max-w-[700px] m-4"
       >
-        <FilterUserProfile
+        <FilterOutProfile
           handleDataSortieFilter={handleFilter}
           closeModalFilter={closeModalFilter}
         />
