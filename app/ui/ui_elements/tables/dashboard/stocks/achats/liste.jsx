@@ -778,7 +778,7 @@ function ListeAchat() {
         <h1 className="text-gray-800 text-theme-sm dark:text-white/90 font-bold">
           Historique des modifications
         </h1>
-        <ModificationAchat tableData={tableData} />
+        <ModificationAchat achat_id={id1} />
       </Modal>
       <ViewImageModal
         isOpen={isImageModalOpen}
