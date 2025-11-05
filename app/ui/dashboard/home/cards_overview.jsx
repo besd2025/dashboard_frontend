@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { fetchData } from "../../../_utils/api";
 import SkeletonLoader from "../../ui_elements/loading/SkeletonLoader";
 import Button from "../../ui_elements/button/Button";
+import { AlertIcon } from "../../icons";
 export default function CardsOverview() {
   const [data, setData] = useState([]);
   const [quantite_vendu, setQuantiteVendu] = useState(0);
@@ -757,6 +758,23 @@ export default function CardsOverview() {
                   )}
                   {!loading && <span className="text-sm"> FBU</span>}
                 </h4>
+                {/* alert information */}
+                <div className="mt-3 flex flex-row items-center gap-x-2">
+                  <span className="relative block h-10 rounded-full z-1 w-10 ">
+                    <AlertIcon className="tex/t-black size-full text-red-500" />
+                    <span
+                      className={`absolute right-0 top-0.5 z-10 h-2.5 w-2.5 rounded-full bg-red-400 flex`}
+                    >
+                      <span className="absolute inline-flex w-full h-full bg-red-400 rounded-full opacity-75 animate-ping"></span>
+                    </span>
+                  </span>
+
+                  <span>
+                    <span className="mb-1.5 block space-x-1  text-md text-red-700">
+                      <span>Stock Initial a être confirmé</span>
+                    </span>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
