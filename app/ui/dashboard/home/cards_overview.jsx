@@ -770,8 +770,8 @@ export default function CardsOverview() {
                   </span>
 
                   <span>
-                    <span className="mb-1.5 block space-x-1  text-md text-red-700">
-                      <span>Stock Initial a être confirmé</span>
+                    <span className="mb-1.5 block space-x-1  text-sm text-red-700">
+                      <span>Stock Initial a être confirmé par ANAGESSA</span>
                     </span>
                   </span>
                 </div>
