@@ -18,6 +18,7 @@ import { fetchData } from "../../../../../../_utils/api";
 import OutDetails from "../../../../../dashboard/stocks/out/en_attente/out_details";
 import ConfirmationForm from "../../../../../dashboard/stocks/out/en_attente/confirmation_form";
 import FilterOutProfile from "./filtrage/filtrage";
+import EditTransfertEn from "./Edit_en";
 function OutListEnatt() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -29,6 +30,7 @@ function OutListEnatt() {
   const [currentPage, setCurrentPage] = useState(1);
   const [filterData, setFilterData] = useState({});
   const [searchdata, setSearchData] = useState("");
+  const { isOpen, openModal, closeModal } = useModal();
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -375,6 +377,16 @@ function OutListEnatt() {
                         >
                           Details
                         </DropdownItem>
+                        <DropdownItem
+                          onItemClick={() => {
+                            closeDropdown(order.id);
+                            openModal();
+                            getId(order?.id);
+                          }}
+                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                        >
+                          Modifier
+                        </DropdownItem>
                       </Dropdown>
                     </div>
                   </TableCell>
@@ -449,6 +461,9 @@ function OutListEnatt() {
           handleDataSortieFilter={handleFilter}
           closeModalFilter={closeModalFilter}
         />
+      </Modal>
+      <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
+        <EditTransfertEn achat_id={1} />
       </Modal>
       <Modal
         isOpen={isOpenDetails}

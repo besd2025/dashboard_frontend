@@ -564,6 +564,25 @@ export default function CardsOverview() {
       <div className="rounded-2xl hid/den col-span-5 lg:col-span-18  border border-gray-200 bg-yellow-50 p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 md:gap-6  justify-betw/een">
           <div className="col-span-5 lg:col-span-1">
+            {/* alert information */}
+            <div className="mb-3 flex flex-row items-center gap-x-2 bo/rder-2 border-red-500/70  rounded-lg overflow-hidden bg-red-100/80 dark:bg-red-900/30 ">
+              <div className="bg-black/80  dark:border-gray-800 p-1">
+                <span className="relative block h-10 rounded-full z-1 w-10 ">
+                  <AlertIcon className="size-full text-yellow-500" />
+                  <span
+                    className={`absolute right-0 top-0.5 z-10 h-2.5 w-2.5 rounded-full bg-yellow-400 flex`}
+                  >
+                    <span className="absolute inline-flex w-full h-full bg-red-300 rounded-full opacity-75 animate-ping"></span>
+                  </span>
+                </span>
+              </div>
+
+              <span className="pr-2">
+                <span className="block space-x-1  text-sm text-red-600 dark:text-red-400 font-medium">
+                  <span>Stock Initial à être confirmé par ANAGESSA</span>
+                </span>
+              </span>
+            </div>
             <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-xl dark:bg-gray-800">
               {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
               <svg
@@ -621,23 +640,194 @@ export default function CardsOverview() {
                   )}
                 </h4>
               </div>
-              {/* <Badge color="success">
-            <ArrowUpIcon />
-            2.0%
-          </Badge> */}
             </div>
           </div>
-          <div className="lg:w-px h-px bg-gray-200 w-full lg:h-full dark:bg-gray-800"></div>
-
-          <div className="col-span-5 lg:col-span-1">
-            <div className="flex items-end justify-between   rounded-2xl">
+          <div className="lg:col-span-1 lg:w-px h-px bg-gray-200 w-full lg:h-full dark:bg-gray-800"></div>
+          <div className="col-span-5 lg:col-span-1 flex flex-col gap-y-4">
+            <div className="HZ flex items-end justify-between   rounded-2xl">
               <div>
-                <div className="flex flex-row items-center gap-x-1">
+                <div className="flex flex-row items-center gap-x-1 mb-2 ">
+                  <div className="flex items-center justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="size-6 text-gray-800  dark:text-white/90"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.5 2.25a.75.75 0 0 0 0 1.5v16.5h-.75a.75.75 0 0 0 0 1.5h16.5a.75.75 0 0 0 0-1.5h-.75V3.75a.75.75 0 0 0 0-1.5h-15ZM9 6a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5H9Zm-.75 3.75A.75.75 0 0 1 9 9h1.5a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75ZM9 12a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5H9Zm3.75-5.25A.75.75 0 0 1 13.5 6H15a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75ZM13.5 9a.75.75 0 0 0 0 1.5H15A.75.75 0 0 0 15 9h-1.5Zm-.75 3.75a.75.75 0 0 1 .75-.75H15a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75ZM9 19.5v-2.25a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 9 19.5Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+
+                  <span className="text-gray-800 text-sm dark:text-white/90 font-semibold">
+                    Hangar zonale
+                  </span>
+                </div>
+
+                <h4 className=" font-semibold text-gray-800 text-sm dark:text-white/90">
+                  {loading ? (
+                    <SkeletonLoader
+                      width="80px"
+                      height="20px"
+                      borderRadius="4px"
+                    />
+                  ) : (
+                    <>
+                      {" "}
+                      <div className="flex flex-row gap-x-3">
+                        <div>
+                          <span className=" text-gray-500 dark:text-gray-400">
+                            QB :{" "}
+                          </span>
+                          {stock_initial?.blanc >= 1000 ? (
+                            <>
+                              {(stock_initial?.blanc / 1000).toLocaleString(
+                                "fr-FR",
+                                {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }
+                              )}{" "}
+                              <span className="text-sm">T</span>
+                            </>
+                          ) : (
+                            <>
+                              {stock_initial?.blanc?.toLocaleString("fr-FR") ||
+                                0}{" "}
+                              <span className="text-sm">Kg</span>
+                            </>
+                          )}
+                        </div>
+                        <div className="w-px bg-yellow-600  h-6 dark:bg-gray-800"></div>
+                        <div>
+                          <span className=" text-gray-500 dark:text-gray-400">
+                            QJ :{" "}
+                          </span>
+                          {stock_initial?.blanc >= 1000 ? (
+                            <>
+                              {(stock_initial?.blanc / 1000).toLocaleString(
+                                "fr-FR",
+                                {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }
+                              )}{" "}
+                              <span className="text-sm">T</span>
+                            </>
+                          ) : (
+                            <>
+                              {stock_initial?.blanc?.toLocaleString("fr-FR") ||
+                                0}{" "}
+                              <span className="text-sm">Kg</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </h4>
+              </div>
+            </div>
+            <div className="HDZ flex items-end justify-between   rounded-2xl">
+              <div>
+                <div className="flex flex-row items-center gap-x-1 mb-2 ">
+                  <div className="flex items-center justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="size-6 text-gray-800  dark:text-white/90"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M3 2.25a.75.75 0 0 0 0 1.5v16.5h-.75a.75.75 0 0 0 0 1.5H15v-18a.75.75 0 0 0 0-1.5H3ZM6.75 19.5v-2.25a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-.75.75h-3a.75.75 0 0 1-.75-.75ZM6 6.75A.75.75 0 0 1 6.75 6h.75a.75.75 0 0 1 0 1.5h-.75A.75.75 0 0 1 6 6.75ZM6.75 9a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75ZM6 12.75a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 0 1.5h-.75a.75.75 0 0 1-.75-.75ZM10.5 6a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75Zm-.75 3.75A.75.75 0 0 1 10.5 9h.75a.75.75 0 0 1 0 1.5h-.75a.75.75 0 0 1-.75-.75ZM10.5 12a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75ZM16.5 6.75v15h5.25a.75.75 0 0 0 0-1.5H21v-12a.75.75 0 0 0 0-1.5h-4.5Zm1.5 4.5a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm.75 2.25a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75v-.008a.75.75 0 0 0-.75-.75h-.008ZM18 17.25a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+
+                  <span className="text-gray-800 text-sm dark:text-white/90 font-semibold">
+                    Hangar de desengorgement
+                  </span>
+                </div>
+
+                <h4 className=" font-semibold text-gray-800 text-sm dark:text-white/90">
+                  {loading ? (
+                    <SkeletonLoader
+                      width="80px"
+                      height="20px"
+                      borderRadius="4px"
+                    />
+                  ) : (
+                    <>
+                      {" "}
+                      <div className="flex flex-row gap-x-3">
+                        <div>
+                          <span className=" text-gray-500 dark:text-gray-400">
+                            QB :{" "}
+                          </span>
+                          {stock_initial?.blanc >= 1000 ? (
+                            <>
+                              {(stock_initial?.blanc / 1000).toLocaleString(
+                                "fr-FR",
+                                {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }
+                              )}{" "}
+                              <span className="text-sm">T</span>
+                            </>
+                          ) : (
+                            <>
+                              {stock_initial?.blanc?.toLocaleString("fr-FR") ||
+                                0}{" "}
+                              <span className="text-sm">Kg</span>
+                            </>
+                          )}
+                        </div>
+                        <div className="w-px bg-yellow-600  h-6 dark:bg-gray-800"></div>
+                        <div>
+                          <span className=" text-gray-500 dark:text-gray-400">
+                            QJ :{" "}
+                          </span>
+                          {stock_initial?.blanc >= 1000 ? (
+                            <>
+                              {(stock_initial?.blanc / 1000).toLocaleString(
+                                "fr-FR",
+                                {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }
+                              )}{" "}
+                              <span className="text-sm">T</span>
+                            </>
+                          ) : (
+                            <>
+                              {stock_initial?.blanc?.toLocaleString("fr-FR") ||
+                                0}{" "}
+                              <span className="text-sm">Kg</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </h4>
+              </div>
+            </div>
+          </div>
+          <div className="col-span-5 lg:col-span-1 ">
+            <div className="flex items-end justify-between rounded-2xl ">
+              <div>
+                <div className="flex flex-row items-center gap-x-1 mb-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    className="size-8"
+                    className="size-6 text-yellow-500"
                   >
                     <path
                       fillRule="evenodd"
@@ -645,30 +835,46 @@ export default function CardsOverview() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
-                    Maïs Blanc
+                  <span className="font-semibold text-gray-800 text-md dark:text-white/90">
+                    ANAGESSA
                   </span>
                 </div>
 
-                <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
+                <h4 className=" font-semibold text-gray-800 text-sm dark:text-white/90">
                   {loading ? (
                     <SkeletonLoader
                       width="80px"
                       height="20px"
                       borderRadius="4px"
                     />
-                  ) : stock_initial?.blanc >= 1000 ? (
-                    <>
-                      {(stock_initial?.blanc / 1000).toLocaleString("fr-FR", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}{" "}
-                      <span className="text-sm">T</span>
-                    </>
                   ) : (
                     <>
-                      {stock_initial?.blanc?.toLocaleString("fr-FR") || 0}{" "}
-                      <span className="text-sm">Kg</span>
+                      {" "}
+                      <div className="flex flex-row gap-x-3">
+                        <div>
+                          <span className=" text-gray-500 dark:text-gray-400">
+                            QT :{" "}
+                          </span>
+                          {stock_initial?.blanc >= 1000 ? (
+                            <>
+                              {(stock_initial?.blanc / 1000).toLocaleString(
+                                "fr-FR",
+                                {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }
+                              )}{" "}
+                              <span className="text-sm">T</span>
+                            </>
+                          ) : (
+                            <>
+                              {stock_initial?.blanc?.toLocaleString("fr-FR") ||
+                                0}{" "}
+                              <span className="text-sm">Kg</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
                     </>
                   )}
                 </h4>
@@ -676,12 +882,12 @@ export default function CardsOverview() {
             </div>
             <div className="flex items-end justify-between mt-2 rounded-2xl">
               <div>
-                <div className="flex flex-row items-center gap-x-1">
+                <div className="flex flex-row items-center gap-x-1 mb-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    className="size-8 text-yellow-500 "
+                    className="size-6 text-green-500 "
                   >
                     <path
                       fillRule="evenodd"
@@ -689,30 +895,46 @@ export default function CardsOverview() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
-                    Maïs Jaune
+                  <span className="font-semibold text-gray-800 text-md dark:text-white/90">
+                    CIAP
                   </span>
                 </div>
 
-                <h4 className=" font-semibold text-yellow-600 text-lg dark:text-white/90">
+                <h4 className=" font-semibold text-gray-800 text-sm dark:text-white/90">
                   {loading ? (
                     <SkeletonLoader
                       width="80px"
                       height="20px"
                       borderRadius="4px"
                     />
-                  ) : stock_initial?.jaune >= 1000 ? (
-                    <>
-                      {(stock_initial?.jaune / 1000).toLocaleString("fr-FR", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}{" "}
-                      <span className="text-sm">T</span>
-                    </>
                   ) : (
                     <>
-                      {stock_initial?.jaune?.toLocaleString("fr-FR") || 0}{" "}
-                      <span className="text-sm">Kg</span>
+                      {" "}
+                      <div className="flex flex-row gap-x-3">
+                        <div>
+                          <span className=" text-gray-500 dark:text-gray-400">
+                            QT :{" "}
+                          </span>
+                          {stock_initial?.blanc >= 1000 ? (
+                            <>
+                              {(stock_initial?.blanc / 1000).toLocaleString(
+                                "fr-FR",
+                                {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }
+                              )}{" "}
+                              <span className="text-sm">T</span>
+                            </>
+                          ) : (
+                            <>
+                              {stock_initial?.blanc?.toLocaleString("fr-FR") ||
+                                0}{" "}
+                              <span className="text-sm">Kg</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
                     </>
                   )}
                 </h4>
@@ -720,7 +942,7 @@ export default function CardsOverview() {
             </div>
           </div>
 
-          <div className="col-span-5 lg:col-span-1">
+          <div className="col-span-5 lg:col-span-1 hidden">
             <div className="flex items-end justify-between   rounded-2xl">
               <div>
                 <div className="flex flex-row items-center gap-x-1">
@@ -758,23 +980,6 @@ export default function CardsOverview() {
                   )}
                   {!loading && <span className="text-sm"> FBU</span>}
                 </h4>
-                {/* alert information */}
-                <div className="mt-3 flex flex-row items-center gap-x-2">
-                  <span className="relative block h-10 rounded-full z-1 w-10 ">
-                    <AlertIcon className="tex/t-black size-full text-red-500" />
-                    <span
-                      className={`absolute right-0 top-0.5 z-10 h-2.5 w-2.5 rounded-full bg-red-400 flex`}
-                    >
-                      <span className="absolute inline-flex w-full h-full bg-red-400 rounded-full opacity-75 animate-ping"></span>
-                    </span>
-                  </span>
-
-                  <span>
-                    <span className="mb-1.5 block space-x-1  text-sm text-red-700">
-                      <span>Stock Initial a être confirmé par ANAGESSA</span>
-                    </span>
-                  </span>
-                </div>
               </div>
             </div>
           </div>
