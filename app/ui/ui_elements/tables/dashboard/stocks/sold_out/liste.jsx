@@ -121,16 +121,16 @@ function ListeVente() {
 
         if (filterData && Object.keys(filterData).length > 0) {
           // Si des filtres sont appliqués, construire dynamiquement les paramètres
-          results = await fetchData("get", "/sorties/", {
+          results = await fetchData("get", "/achats/", {
             params: {
               province: filterData.province,
               commune: filterData.commune,
               zone: filterData.zone,
               quantite_min: filterData.QtMin,
               quantite_max: filterData.QtMax,
-              // date_achat: filterData.dateSortie,
-              // date_achat_min: filterData.dateFrom,
-              // date_achat_max: filterData.dateTo,
+              date_achat: filterData.dateSortie,
+              date_achat_min: filterData.dateFrom,
+              date_achat_max: filterData.dateTo,
               search: searchdata, // ← recherche
               offset: pointer,
               limit: limit,
@@ -138,7 +138,7 @@ function ListeVente() {
           });
         } else {
           // Sinon, récupération simple sans filtres
-          results = await fetchData("get", "/sorties/", {
+          results = await fetchData("get", "/achats/", {
             params: {
               search: searchdata || "",
               offset: pointer,
@@ -148,7 +148,6 @@ function ListeVente() {
         }
 
         setData(results.results);
-        console.log("vente results:", results);
         setTotalCount(results.count);
       } catch (error) {
         setError(error);
@@ -497,7 +496,7 @@ function ListeVente() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase "
                 >
-                  Acheteur
+                  Cultivateur
                 </TableCell>
                 <TableCell
                   isHeader
@@ -521,19 +520,13 @@ function ListeVente() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  cni Acheteur
+                  N0 Recus
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  No Facture
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
-                  Facture
+                  Recus
                 </TableCell>
                 <TableCell
                   isHeader
@@ -546,6 +539,12 @@ function ListeVente() {
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
                   Date d'achat
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Achat (Payé/non)
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -620,7 +619,42 @@ function ListeVente() {
                   </TableCell>
 
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
-                    {order?.nom_acheteur}
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-10 h-10 overflow-hidden rounded-full"
+                        onClick={() =>
+                          handleImageClick(
+                            order?.cultivator?.cultivator_photo ||
+                              "/img/no-image.png"
+                          )
+                        }
+                      >
+                        {order?.cultivator?.cultivator_photo ? (
+                          <Image
+                            width={80}
+                            height={80}
+                            src={order?.cultivator?.cultivator_photo}
+                            alt="user"
+                          />
+                        ) : (
+                          <Image
+                            width={80}
+                            height={80}
+                            src="/img/blank-profile.png"
+                            alt="user"
+                          />
+                        )}
+                      </div>
+                      <div>
+                        <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
+                          {order?.cultivator?.cultivator_last_name}{" "}
+                          {order?.cultivator?.cultivator_first_name}
+                        </span>
+                        <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+                          {order?.cultivator?.cultivator_code}
+                        </span>
+                      </div>
+                    </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {order?.quantity_blanc + order?.quantity_jaune >= 1000 ? (
@@ -667,25 +701,22 @@ function ListeVente() {
                     )}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.carte_identite_acheteur}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.numero_facture}
+                    {order?.receipt_number}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     <div
                       className="w-10 h-10 overflow-hidden rounded-md cursor-pointer"
                       onClick={() =>
                         handleImageClick(
-                          order?.photo_facture || "/img/no-image.png"
+                          order?.receipt_photo || "/img/no-image.png"
                         )
                       }
                     >
-                      {order?.photo_facture ? (
+                      {order?.receipt_photo ? (
                         <Image
                           width={80}
                           height={80}
-                          src={order?.photo_facture}
+                          src={order?.receipt_photo}
                           alt="recus"
                         />
                       ) : (
@@ -702,7 +733,7 @@ function ListeVente() {
                     {order?.collector?.hangar?.hangar_name}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {new Date(order?.date_sortie).toLocaleDateString("fr-FR")}
+                    {order?.date_achat}
                   </TableCell>
                 </TableRow>
               ))}
