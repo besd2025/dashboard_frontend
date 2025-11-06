@@ -13,8 +13,11 @@ export default function CardsOverview() {
   const [total_quantite_vendu, setTotalVendu] = useState([]);
   const [gap_total_en_prix, setGapTotalPrix] = useState(0);
   const [stock_initial, setStockInitial] = useState([]);
+  const [stock_initia_desang, setStockInitialDesang] = useState([]);
+  const [quantite_inicial_ciap, setQuantiteInicialCiap] = useState(28048650, 5);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     async function getData() {
       setLoading(true);
@@ -66,12 +69,22 @@ export default function CardsOverview() {
           additionalHeaders: {},
           body: {},
         });
-
+        const stock_initia_desang = await fetchData(
+          "get",
+          "stock_resume_initial/?detail=true",
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
+        console.log("stock initial desang: ", stock_initia_desang);
         setGapTotalPrix(prix_achat?.prix_achat * pertetotal?.pertes_totales);
         setTotalVendu(quantite_vendu_jaune_blanc);
         setGapTotat(pertetotal);
         setData(results);
         setStockInitial(stock_initial);
+        setStockInitialDesang(stock_initia_desang);
         setQuantiteVendu(
           results?.sorties?.sorties_blanc + results?.sorties?.sorties_jaune
         );
@@ -561,7 +574,7 @@ export default function CardsOverview() {
       {/* <!-- Metric Item End --> */}
       {/* <!-- Metric Item Start quantity collected --> */}
 
-      <div className="rounded-2xl hid/den col-span-5 lg:col-span-18  border border-gray-200 bg-yellow-50 p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+      <div className="rounded-2xl hid/den col-span-5 lg:col-span-18  border border-gray-200 bg-gray-50 p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 md:gap-6  justify-betw/een">
           <div className="col-span-5 lg:col-span-1">
             {/* alert information */}
@@ -624,9 +637,13 @@ export default function CardsOverview() {
                       height="24px"
                       borderRadius="4px"
                     />
-                  ) : stock_initial?.total >= 1000 ? (
+                  ) : stock_initial?.total + stock_initia_desang?.total >=
+                    1000 ? (
                     <>
-                      {(stock_initial?.total / 1000).toLocaleString("fr-FR", {
+                      {(
+                        (stock_initial?.total + stock_initia_desang?.total) /
+                        1000
+                      ).toLocaleString("fr-FR", {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                       })}{" "}
@@ -634,7 +651,9 @@ export default function CardsOverview() {
                     </>
                   ) : (
                     <>
-                      {stock_initial?.total?.toLocaleString("fr-FR") || 0}{" "}
+                      {(
+                        stock_initial?.total + stock_initia_desang?.total
+                      )?.toLocaleString("fr-FR") || 0}{" "}
                       <span className="text-sm">Kg</span>
                     </>
                   )}
@@ -643,7 +662,7 @@ export default function CardsOverview() {
             </div>
           </div>
           <div className="lg:col-span-1 lg:w-px h-px bg-gray-200 w-full lg:h-full dark:bg-gray-800"></div>
-          <div className="col-span-5 lg:col-span-1 flex flex-col gap-y-4">
+          <div className="col-span-5 lg:col-span-1 flex flex-col gap-y-8 w-max">
             <div className="HZ flex items-end justify-between   rounded-2xl">
               <div>
                 <div className="flex flex-row items-center gap-x-1 mb-2 ">
@@ -662,12 +681,12 @@ export default function CardsOverview() {
                     </svg>
                   </div>
 
-                  <span className="text-gray-800 text-sm dark:text-white/90 font-semibold">
+                  <span className="text-md font-semibold text-gray-800 dark:text-white/90 font-semibold">
                     Hangar zonale
                   </span>
                 </div>
 
-                <h4 className=" font-semibold text-gray-800 text-sm dark:text-white/90">
+                <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
                   {loading ? (
                     <SkeletonLoader
                       width="80px"
@@ -706,9 +725,9 @@ export default function CardsOverview() {
                           <span className=" text-gray-500 dark:text-gray-400">
                             QJ :{" "}
                           </span>
-                          {stock_initial?.blanc >= 1000 ? (
+                          {stock_initial?.jaune >= 1000 ? (
                             <>
-                              {(stock_initial?.blanc / 1000).toLocaleString(
+                              {(stock_initial?.jaune / 1000).toLocaleString(
                                 "fr-FR",
                                 {
                                   minimumFractionDigits: 2,
@@ -719,7 +738,7 @@ export default function CardsOverview() {
                             </>
                           ) : (
                             <>
-                              {stock_initial?.blanc?.toLocaleString("fr-FR") ||
+                              {stock_initial?.jaune?.toLocaleString("fr-FR") ||
                                 0}{" "}
                               <span className="text-sm">Kg</span>
                             </>
@@ -749,12 +768,12 @@ export default function CardsOverview() {
                     </svg>
                   </div>
 
-                  <span className="text-gray-800 text-sm dark:text-white/90 font-semibold">
+                  <span className="text-gray-800 text-md dark:text-white/90 font-semibold">
                     Hangar de desengorgement
                   </span>
                 </div>
 
-                <h4 className=" font-semibold text-gray-800 text-sm dark:text-white/90">
+                <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
                   {loading ? (
                     <SkeletonLoader
                       width="80px"
@@ -769,21 +788,21 @@ export default function CardsOverview() {
                           <span className=" text-gray-500 dark:text-gray-400">
                             QB :{" "}
                           </span>
-                          {stock_initial?.blanc >= 1000 ? (
+                          {stock_initia_desang?.blanc >= 1000 ? (
                             <>
-                              {(stock_initial?.blanc / 1000).toLocaleString(
-                                "fr-FR",
-                                {
-                                  minimumFractionDigits: 2,
-                                  maximumFractionDigits: 2,
-                                }
-                              )}{" "}
+                              {(
+                                stock_initia_desang?.blanc / 1000
+                              ).toLocaleString("fr-FR", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              })}{" "}
                               <span className="text-sm">T</span>
                             </>
                           ) : (
                             <>
-                              {stock_initial?.blanc?.toLocaleString("fr-FR") ||
-                                0}{" "}
+                              {stock_initia_desang?.blanc?.toLocaleString(
+                                "fr-FR"
+                              ) || 0}{" "}
                               <span className="text-sm">Kg</span>
                             </>
                           )}
@@ -793,9 +812,9 @@ export default function CardsOverview() {
                           <span className=" text-gray-500 dark:text-gray-400">
                             QJ :{" "}
                           </span>
-                          {stock_initial?.blanc >= 1000 ? (
+                          {stock_initia_desang?.jaune >= 1000 ? (
                             <>
-                              {(stock_initial?.blanc / 1000).toLocaleString(
+                              {(stock_initial?.jaune / 1000).toLocaleString(
                                 "fr-FR",
                                 {
                                   minimumFractionDigits: 2,
@@ -806,7 +825,7 @@ export default function CardsOverview() {
                             </>
                           ) : (
                             <>
-                              {stock_initial?.blanc?.toLocaleString("fr-FR") ||
+                              {stock_initial?.jaune?.toLocaleString("fr-FR") ||
                                 0}{" "}
                               <span className="text-sm">Kg</span>
                             </>
@@ -840,7 +859,7 @@ export default function CardsOverview() {
                   </span>
                 </div>
 
-                <h4 className=" font-semibold text-gray-800 text-sm dark:text-white/90">
+                <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
                   {loading ? (
                     <SkeletonLoader
                       width="80px"
@@ -855,24 +874,6 @@ export default function CardsOverview() {
                           <span className=" text-gray-500 dark:text-gray-400">
                             QT :{" "}
                           </span>
-                          {stock_initial?.blanc >= 1000 ? (
-                            <>
-                              {(stock_initial?.blanc / 1000).toLocaleString(
-                                "fr-FR",
-                                {
-                                  minimumFractionDigits: 2,
-                                  maximumFractionDigits: 2,
-                                }
-                              )}{" "}
-                              <span className="text-sm">T</span>
-                            </>
-                          ) : (
-                            <>
-                              {stock_initial?.blanc?.toLocaleString("fr-FR") ||
-                                0}{" "}
-                              <span className="text-sm">Kg</span>
-                            </>
-                          )}
                         </div>
                       </div>
                     </>
@@ -900,7 +901,7 @@ export default function CardsOverview() {
                   </span>
                 </div>
 
-                <h4 className=" font-semibold text-gray-800 text-sm dark:text-white/90">
+                <h4 className=" font-semibold text-gray-800 text-lg dark:text-white/90">
                   {loading ? (
                     <SkeletonLoader
                       width="80px"
@@ -915,9 +916,9 @@ export default function CardsOverview() {
                           <span className=" text-gray-500 dark:text-gray-400">
                             QT :{" "}
                           </span>
-                          {stock_initial?.blanc >= 1000 ? (
+                          {quantite_inicial_ciap >= 1000 ? (
                             <>
-                              {(stock_initial?.blanc / 1000).toLocaleString(
+                              {(quantite_inicial_ciap / 1000).toLocaleString(
                                 "fr-FR",
                                 {
                                   minimumFractionDigits: 2,
@@ -928,7 +929,7 @@ export default function CardsOverview() {
                             </>
                           ) : (
                             <>
-                              {stock_initial?.blanc?.toLocaleString("fr-FR") ||
+                              {quantite_inicial_ciap?.toLocaleString("fr-FR") ||
                                 0}{" "}
                               <span className="text-sm">Kg</span>
                             </>

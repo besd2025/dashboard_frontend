@@ -120,16 +120,16 @@ function ListeVente() {
 
         if (filterData && Object.keys(filterData).length > 0) {
           // Si des filtres sont appliqués, construire dynamiquement les paramètres
-          results = await fetchData("get", "/achats/", {
+          results = await fetchData("get", "/sorties/", {
             params: {
               province: filterData.province,
               commune: filterData.commune,
               zone: filterData.zone,
               quantite_min: filterData.QtMin,
               quantite_max: filterData.QtMax,
-              date_achat: filterData.dateSortie,
-              date_achat_min: filterData.dateFrom,
-              date_achat_max: filterData.dateTo,
+              // date_achat: filterData.dateSortie,
+              // date_achat_min: filterData.dateFrom,
+              // date_achat_max: filterData.dateTo,
               search: searchdata, // ← recherche
               offset: pointer,
               limit: limit,
@@ -137,7 +137,7 @@ function ListeVente() {
           });
         } else {
           // Sinon, récupération simple sans filtres
-          results = await fetchData("get", "/achats/", {
+          results = await fetchData("get", "/sorties/", {
             params: {
               search: searchdata || "",
               offset: pointer,
@@ -401,7 +401,7 @@ function ListeVente() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase "
                 >
-                  Cultivateur
+                  Acheteur
                 </TableCell>
                 <TableCell
                   isHeader
@@ -427,11 +427,18 @@ function ListeVente() {
                 >
                   quantité Maïs Jaune
                 </TableCell>
+
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Recus
+                  No Facture
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Facture
                 </TableCell>
                 <TableCell
                   isHeader
@@ -444,12 +451,6 @@ function ListeVente() {
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
                   Date de vente
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
-                  Achat (Payé/non)
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -516,42 +517,7 @@ function ListeVente() {
                   </TableCell>
 
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="w-10 h-10 overflow-hidden rounded-full"
-                        onClick={() =>
-                          handleImageClick(
-                            order?.cultivator?.cultivator_photo ||
-                              "/img/no-image.png"
-                          )
-                        }
-                      >
-                        {order?.cultivator?.cultivator_photo ? (
-                          <Image
-                            width={80}
-                            height={80}
-                            src={order?.cultivator?.cultivator_photo}
-                            alt="user"
-                          />
-                        ) : (
-                          <Image
-                            width={80}
-                            height={80}
-                            src="/img/blank-profile.png"
-                            alt="user"
-                          />
-                        )}
-                      </div>
-                      <div>
-                        <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
-                          {order?.cultivator?.cultivator_last_name}{" "}
-                          {order?.cultivator?.cultivator_first_name}
-                        </span>
-                        <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order?.cultivator?.cultivator_code}
-                        </span>
-                      </div>
-                    </div>
+                    {order?.nom_acheteur}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     {order?.carte_identite_acheteur}
@@ -609,15 +575,15 @@ function ListeVente() {
                       className="w-10 h-10 overflow-hidden rounded-md cursor-pointer"
                       onClick={() =>
                         handleImageClick(
-                          order?.receipt_photo || "/img/no-image.png"
+                          order?.photo_facture || "/img/no-image.png"
                         )
                       }
                     >
-                      {order?.receipt_photo ? (
+                      {order?.photo_facture ? (
                         <Image
                           width={80}
                           height={80}
-                          src={order?.receipt_photo}
+                          src={order?.photo_facture}
                           alt="recus"
                         />
                       ) : (
@@ -634,7 +600,7 @@ function ListeVente() {
                     {order?.collector?.hangar?.hangar_name}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.date_achat}
+                    {new Date(order?.date_sortie).toLocaleDateString("fr-FR")}
                   </TableCell>
                 </TableRow>
               ))}
