@@ -164,9 +164,9 @@ function ListeVente() {
     setPointer((pageNumber - 1) * limit);
   };
 
-  const supprimerCultivateur = async (cultivateurId) => {
+  const supprimerVente = async (id) => {
     try {
-      const response = await fetchData("delete", `/sorties/${cultivateurId}/`);
+      const response = await fetchData("delete", `/sorties/${id}/`);
 
       if (response?.status === 200 || response?.status === 204) {
         // 204 = No Content, souvent utilisé pour DELETE
@@ -194,7 +194,6 @@ function ListeVente() {
           const export_excel = await fetchData("get", "/achats/check_task/", {
             params: { task_id: task_id },
           });
-          console.log("eeeeeeeexp:", export_excel);
           if (export_excel.status === "done") {
             clearInterval(intervalId); // Arrêtez l'intervalle
             setLoadingEportBtn(false);
@@ -506,7 +505,7 @@ function ListeVente() {
                           <DropdownItem
                             onItemClick={() => {
                               closeDropdown(order.id);
-                              supprimerCultivateur(order?.id);
+                              supprimerVente(order?.id);
                             }}
                             className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                           >
