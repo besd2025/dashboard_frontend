@@ -51,7 +51,7 @@ function EditAchat({ closeModal, achat_id }) {
     try {
       const results = await fetchData(
         "patch",
-        `/achats/${achat_id}/?is_nitial=true`,
+        `/achats/${achat_id}/update_inital/`,
         {
           params: {},
           additionalHeaders: {},
@@ -74,17 +74,17 @@ function EditAchat({ closeModal, achat_id }) {
       try {
         const results = await fetchData(
           "get",
-          `/achats/${achat_id}/?is_nitial=true/`,
+          `achats/${achat_id}/?is_nitial=true`,
           {
             params: {},
             additionalHeaders: {},
             body: {},
           }
         );
-        setData(results);
+        setData(results?.results);
         console.log("Fetched Data:", results.results);
         const data = results;
-        setCode(data?.cultivator?.cultivator_code || "");
+        setCode(data?.collector?.hangar?.hangar_name || "");
         setName(data?.cultivator?.cultivator_last_name || "");
         setFirstName(data?.cultivator?.cultivator_first_name || "");
         setQuantiteBlanc(data?.quantity_blanc || "");
@@ -121,7 +121,7 @@ function EditAchat({ closeModal, achat_id }) {
         <div className="custom-scrollbar h-[450px] md:h-[350px] overflow-y-auto px-2 pb-3">
           <div>
             <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
-              ID
+              HANGAR
             </h5>
 
             <Input

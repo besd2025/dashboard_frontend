@@ -88,8 +88,8 @@ function ModificationAchat({ achat_id }) {
               {data.map((order) => (
                 <TableRow key={order?.id}>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.cultivator.cultivator_last_name}{" "}
-                    {order?.cultivator.cultivator_first_name}
+                    {order?.cultivator?.cultivator_last_name}{" "}
+                    {order?.cultivator?.cultivator_first_name}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {order?.date_achat}
