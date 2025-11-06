@@ -7,12 +7,13 @@ import Radio from "../../../../../ui_elements/form/input/Radio";
 import { fetchData } from "../../../../../../_utils/api";
 import ViewImageModal from "../../../../modal/ViewImageModal";
 function EditAchat({ closeModal, achat_id }) {
+  console.log("EditAchat achat_id:", achat_id);
   const [selectedStatus, setSelectedStatus] = useState("option2");
   const [data, setData] = useState({});
   const [error, setError] = useState("");
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
-  const [firstName, setFirstName] = useState("");
+  const [CNIAcheteur, setCNIAcheteur] = useState("");
   const [quantite_blanc, setQuantiteBlanc] = useState("");
   const [quantite_jaune, setQuantiteJaune] = useState("");
   const [date_achat, setDateAchat] = useState("");
@@ -33,22 +34,22 @@ function EditAchat({ closeModal, achat_id }) {
     e.preventDefault();
     const formData = new FormData();
 
-    formData.append("cultivator_code", code);
-    formData.append("collector_code", collector_code);
+    formData.append("nom_acheteur", name);
+    formData.append("carte_identite_acheteur", CNIAcheteur);
     formData.append("id", achat_id);
-    formData.append("date_achat", date_achat);
+    formData.append("date_sortie", date_achat);
     formData.append("quantity_blanc", quantite_blanc);
     formData.append("quantity_jaune", quantite_jaune);
     formData.append("himidity_blanc", degre_humiliteBranc);
     formData.append("himidity_jaune", degre_humiliteJaune);
-    formData.append("receipt_number", numero_recu);
-
+    formData.append("numero_facture", numero_recu);
+    formData.append("collector_code", collector_code);
     if (photo_recu instanceof File) {
-      formData.append("receipt_photo", photo_recu);
+      formData.append("photo_facture", photo_recu);
     }
 
     try {
-      const results = await fetchData("patch", `/achats/${achat_id}/`, {
+      const results = await fetchData("patch", `/sorties/${achat_id}/`, {
         params: {},
         additionalHeaders: {},
         body: formData,
@@ -67,23 +68,22 @@ function EditAchat({ closeModal, achat_id }) {
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData("get", `/achats/${achat_id}/`, {
+        const results = await fetchData("get", `/sorties/${achat_id}/`, {
           params: {},
           additionalHeaders: {},
           body: {},
         });
         setData(results);
-        console.log("Fetched Data:", results);
         const data = results;
-        setCode(data?.cultivator?.cultivator_code || "");
-        setName(data?.cultivator?.cultivator_last_name || "");
-        setFirstName(data?.cultivator?.cultivator_first_name || "");
+        setCode(data?.collector?.hangar?.hangar_code || "");
+        setName(data?.nom_acheteur || "");
+        setCNIAcheteur(data?.carte_identite_acheteur || "");
         setQuantiteBlanc(data?.quantity_blanc || "");
         setQuantiteJaune(data?.quantity_jaune);
-        setDateAchat(data?.date_achat);
+        setDateAchat(data?.date_sortie);
         setCollectorCode(data?.collector?.unique_code || "");
-        setNumeroRecu(data?.receipt_number || "");
-        setPhotoRecu(data?.receipt_photo || []); // Assuming photo_recu is an array
+        setNumeroRecu(data?.numero_facture || "");
+        setPhotoRecu(data?.photo_facture || []);
         setDegreHumiliteBranc(data?.himidity_blanc);
         setDegreHumiliteJaune(data?.himidity_jaune);
       } catch (error) {
@@ -105,30 +105,18 @@ function EditAchat({ closeModal, achat_id }) {
           Modifier
         </h4>
         <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
-          Modifier les informations DE l'achat
+          Modifier les informations DE la vente
         </p>
       </div>
       <form className="flex flex-col">
         <div className="custom-scrollbar h-[450px] md:h-[350px] overflow-y-auto px-2 pb-3">
-          <div>
-            <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
-              ID
-            </h5>
-
-            <Input
-              type="text"
-              defaultValue={code}
-              onChange={(e) => setCode(e.target.value)}
-              disabled
-            />
-          </div>
           <div className="mt-7">
             <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
-              Informations personnelles
+              Informations de l'Acheteur
             </h5>
             <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
               <div className="col-span-2 lg:col-span-1">
-                <Label>Nom</Label>
+                <Label>Acheteur</Label>
                 <Input
                   type="text"
                   defaultValue={name}
@@ -136,11 +124,11 @@ function EditAchat({ closeModal, achat_id }) {
                 />
               </div>
               <div className="col-span-2 lg:col-span-1">
-                <Label>Prenom</Label>
+                <Label>CNI Acheteur</Label>
                 <Input
                   type="text"
-                  defaultValue={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  defaultValue={CNIAcheteur}
+                  onChange={(e) => setCNIAcheteur(e.target.value)}
                 />
               </div>
               <div className="col-span-2 lg:col-span-1">
@@ -184,7 +172,7 @@ function EditAchat({ closeModal, achat_id }) {
                 />
               </div>
               <div className="col-span-2 lg:col-span-1">
-                <Label>Photo de recu</Label>
+                <Label>Photo de facture</Label>
                 <Input
                   type="file"
                   accept="image/*"
@@ -197,7 +185,7 @@ function EditAchat({ closeModal, achat_id }) {
                 />
               </div>
               <div className="col-span-2 lg:col-span-1">
-                <Label>Date d'achat</Label>
+                <Label>Date de vente</Label>
                 <Input
                   type="date"
                   defaultValue={date_achat}

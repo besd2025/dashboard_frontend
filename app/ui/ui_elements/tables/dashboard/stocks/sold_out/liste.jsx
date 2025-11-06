@@ -68,7 +68,6 @@ function ListeVente() {
       return newState;
     });
   }
-
   function closeDropdown(rowId) {
     setOpenDropdowns((prev) => ({
       ...prev,
@@ -167,10 +166,7 @@ function ListeVente() {
 
   const supprimerCultivateur = async (cultivateurId) => {
     try {
-      const response = await fetchData(
-        "delete",
-        `/cultivators/${cultivateurId}/`
-      );
+      const response = await fetchData("delete", `/sorties/${cultivateurId}/`);
 
       if (response?.status === 200 || response?.status === 204) {
         // 204 = No Content, souvent utilisé pour DELETE
@@ -182,96 +178,6 @@ function ListeVente() {
       console.error("Erreur lors de la suppression de l'achat:", error);
     }
   };
-  const exportCultivatorsToExcel = async () => {
-    const limit = 5;
-    let pointer = 0;
-    let allData = [];
-    let hasMore = true;
-
-    try {
-      // Charger toutes les données par pagination
-      while (hasMore) {
-        const response = await fetchData("get", "/achats/", {
-          params: {
-            offset: pointer,
-            limit: limit,
-          },
-        });
-
-        const currentData = response.results;
-
-        if (currentData.length === 0) break;
-
-        allData = [...allData, ...currentData];
-        pointer += limit;
-
-        // S'arrêter si on a atteint toutes les données
-        if (pointer >= response.count) {
-          hasMore = false;
-        }
-      }
-
-      if (allData.length === 0) return;
-
-      const formattedData = allData.map((item) => {
-        const formattedItem = {
-          Nom: item?.cultivator?.cultivator_first_name || "",
-          Prénom: item?.cultivator?.cultivator_last_name || "",
-          Code: item?.cultivator?.cultivator_code || "",
-          CNI: item?.cultivator?.cultivator_cni || "",
-          quantité_total: item?.quantity_blanc + item?.quantity_jaune || 0,
-          quantité_mais_blanc: item?.quantity_blanc || 0,
-          quantité_mais_jaune: item?.quantity_jaune || 0,
-          Hangar: item?.collector?.hangar?.hangar_name || "",
-          date_achat: item?.date_achat,
-        };
-
-        // if (item?.cultivator_bank_name) {
-        //   // Cas Banque ou Microfinance : on ignore mobile money
-        //   formattedItem.mode_payement = "BANQUE OU MICROFINANCE";
-        //   formattedItem.Banque_ou_microfinance = item?.cultivator_bank_name;
-        //   formattedItem.Numero_compte = item?.cultivator_bank_account || "";
-        // } else if (item?.cultivator_mobile_payment) {
-        //   // Cas Mobile Money uniquement si pas de banque
-        //   formattedItem.mode_payement = "MOBILE MONEY";
-        //   if (item?.cultivator_mobile_payment?.toString().slice(0, 1) == "6") {
-        //     formattedItem.nom_service = "LUMICASH";
-        //   } else if (
-        //     item?.cultivator_mobile_payment?.toString().slice(0, 1) == "7"
-        //   ) {
-        //     formattedItem.nom_service = "ECOCASH";
-        //     formattedItem.Numero_de_telephone_de_payement =
-        //       item?.cultivator_mobile_payment || "";
-        //     formattedItem.date_enregistrement = item.created_at || "";
-        //   }
-        // } else {
-        //   formattedItem.mode_payement = "";
-        // }
-
-        // Date en dernier
-
-        return formattedItem;
-      });
-
-      const worksheet = XLSX.utils.json_to_sheet(formattedData);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Cultivateurs");
-
-      const excelBuffer = XLSX.write(workbook, {
-        bookType: "xlsx",
-        type: "array",
-      });
-
-      const blob = new Blob([excelBuffer], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
-      });
-
-      saveAs(blob, "achats.xlsx");
-    } catch (error) {
-      console.error("Erreur exportation Excel :", error);
-    }
-  };
-
   const ExportAchatsToExcel = async () => {
     setLoadingEportBtn(true);
     try {
@@ -502,6 +408,12 @@ function ListeVente() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
+                  cni Acheteur
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
                   quantité totale
                 </TableCell>
                 <TableCell
@@ -520,12 +432,6 @@ function ListeVente() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  N0 Recus
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
                   Recus
                 </TableCell>
                 <TableCell
@@ -538,7 +444,7 @@ function ListeVente() {
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Date d'achat
+                  Date de vente
                 </TableCell>
                 <TableCell
                   isHeader
@@ -571,15 +477,7 @@ function ListeVente() {
                         onClose={() => closeDropdown(order.id)}
                         className="w-max p-2"
                       >
-                        {/* <DropdownItem
-                          onItemClick={() => closeDropdown(order.id)}
-                          tag="a"
-                          href={`/dashboard/stocks/achats/edit?achat_id=${order?.id}`}
-                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                        >
-                          Profile
-                        </DropdownItem> */}
-                        {user?.session?.category != "General" && (
+                        {user?.session?.category == "Admin" && (
                           <DropdownItem
                             onItemClick={() => {
                               closeDropdown(order.id);
@@ -603,7 +501,7 @@ function ListeVente() {
                             Historique des modifications
                           </DropdownItem>
                         )}
-                        {user?.session?.category == " Admin" && (
+                        {user?.session?.category === "Admin" && (
                           <DropdownItem
                             onItemClick={() => {
                               closeDropdown(order.id);
@@ -656,6 +554,9 @@ function ListeVente() {
                       </div>
                     </div>
                   </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order?.carte_identite_acheteur}
+                  </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {order?.quantity_blanc + order?.quantity_jaune >= 1000 ? (
                       <>
@@ -700,8 +601,9 @@ function ListeVente() {
                       </>
                     )}
                   </TableCell>
+
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.receipt_number}
+                    {order?.numero_facture}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     <div
