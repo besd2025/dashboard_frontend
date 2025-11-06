@@ -814,19 +814,19 @@ export default function CardsOverview() {
                           </span>
                           {stock_initia_desang?.jaune >= 1000 ? (
                             <>
-                              {(stock_initial?.jaune / 1000).toLocaleString(
-                                "fr-FR",
-                                {
-                                  minimumFractionDigits: 2,
-                                  maximumFractionDigits: 2,
-                                }
-                              )}{" "}
+                              {(
+                                stock_initia_desang?.jaune / 1000
+                              ).toLocaleString("fr-FR", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              })}{" "}
                               <span className="text-sm">T</span>
                             </>
                           ) : (
                             <>
-                              {stock_initial?.jaune?.toLocaleString("fr-FR") ||
-                                0}{" "}
+                              {stock_initia_desang?.jaune?.toLocaleString(
+                                "fr-FR"
+                              ) || 0}{" "}
                               <span className="text-sm">Kg</span>
                             </>
                           )}
