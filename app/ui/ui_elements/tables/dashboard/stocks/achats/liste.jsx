@@ -14,8 +14,14 @@ import { fetchData } from "../../../../../../_utils/api";
 import Pagination from "../../../Pagination";
 import Modal from "../../../../modal";
 import { useModal } from "../../../../hooks/useModal";
-import DropdownItem from "../../../../dropdown/DropdownItem";
-import { Dropdown } from "../../../../dropdown/dropdown_cultvators";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { MoreDotIcon } from "../../../../../icons";
 import { UserContext } from "../../../../../context/UserContext";
 import ExportButton from "../../../../button/export_button";
@@ -560,61 +566,50 @@ function ListeAchat() {
                 <TableRow key={order.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <div className="relative inline-block">
-                      <button
-                        onClick={() => toggleDropdown(order.id)}
-                        className="dropdown-toggle"
-                      >
-                        <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
-                      </button>
-                      <Dropdown
-                        isOpen={openDropdowns[order.id]}
-                        onClose={() => closeDropdown(order.id)}
-                        className="w-max p-2"
-                      >
-                        {/* <DropdownItem
-                          onItemClick={() => closeDropdown(order.id)}
-                          tag="a"
-                          href={`/dashboard/stocks/achats/edit?achat_id=${order?.id}`}
-                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                        >
-                          Profile
-                        </DropdownItem> */}
-                        {user?.session?.category != "General" && (
-                          <DropdownItem
-                            onItemClick={() => {
-                              closeDropdown(order.id);
-                              openModal();
-                              getId(order?.id);
-                            }}
-                            className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                      <DropdownMenu modal={false}>
+                        <DropdownMenuTrigger asChild>
+                          <button
+                            onClick={() => toggleDropdown(order.id)}
+                            className="dropdown-toggle"
                           >
-                            Modifier
-                          </DropdownItem>
-                        )}
-                        {user?.session?.category != "General" && (
-                          <DropdownItem
-                            onItemClick={() => {
-                              closeDropdown(order.id);
-                              openModalHistorique();
-                              getId(order?.id);
-                            }}
-                            className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                          >
-                            Historique des modifications
-                          </DropdownItem>
-                        )}
-                        {user?.session?.category == " Admin" && (
-                          <DropdownItem
-                            onItemClick={() => {
-                              closeDropdown(order.id);
-                              supprimerCultivateur(order?.id);
-                            }}
-                            className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                          >
-                            Supprimer
-                          </DropdownItem>
-                        )}
-                      </Dropdown>
+                            <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-40" align="start">
+                          <DropdownMenuLabel className="text-xs opacity-50 font-normal">
+                            Actions
+                          </DropdownMenuLabel>
+                          <DropdownMenuGroup>
+                            {user?.session?.category != "General" && (
+                              <DropdownMenuItem
+                                onSelect={() => {
+                                  openModal();
+                                  getId(order?.id);
+                                }}
+                              >
+                                Modifier
+                              </DropdownMenuItem>
+                            )}
+                            {user?.session?.category != "General" && (
+                              <DropdownMenuItem
+                                onSelect={() => {
+                                  openModalHistorique();
+                                  getId(order?.id);
+                                }}
+                              >
+                                Historique des modifications
+                              </DropdownMenuItem>
+                            )}
+                            {user?.session?.category == " Admin" && (
+                              <DropdownMenuItem
+                                onSelect={() => supprimerCultivateur(order?.id)}
+                              >
+                                Supprimer
+                              </DropdownMenuItem>
+                            )}
+                          </DropdownMenuGroup>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </TableCell>
 
