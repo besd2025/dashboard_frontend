@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import {
   Table,
   TableBody,
@@ -19,6 +19,7 @@ import OutDetails from "../../../../../dashboard/stocks/out/en_attente/out_detai
 import ConfirmationForm from "../../../../../dashboard/stocks/out/en_attente/confirmation_form";
 import FilterOutProfile from "./filtrage/filtrage";
 import EditTransfertEn from "./Edit_en";
+import { UserContext } from "../../../../../context/UserContext";
 function OutListEnatt() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -31,6 +32,7 @@ function OutListEnatt() {
   const [filterData, setFilterData] = useState({});
   const [searchdata, setSearchData] = useState("");
   const { isOpen, openModal, closeModal } = useModal();
+  const user = useContext(UserContext);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -135,6 +137,24 @@ function OutListEnatt() {
   const handleFilter = (filterData) => {
     setFilterData(filterData);
   };
+  const supprimerTransfert = async (id) => {
+    console.log("Supprimer le transfert avec l'ID :", id);
+
+    try {
+      // Correction de la syntaxe de la requête fetchData
+      const response = await fetchData("delete", `/transfert/${id}/`);
+
+      if (response?.status === 204) {
+        // 204 = No Content, suppression réussie
+        window.location.reload();
+      } else {
+        console.log("La suppression a échoué :", response);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la suppression du transfert :", error);
+    }
+  };
+  const [id1, getId] = useState(undefined ? "default" : 0);
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex flex-col lg:flex-row items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
@@ -367,16 +387,17 @@ function OutListEnatt() {
                         onClose={() => closeDropdown(order.id)}
                         className="w-40 p-2"
                       >
-                        <DropdownItem
+                        {/* <DropdownItem
                           onItemClick={() => {
                             closeDropdown(order.id);
+                            getId(order?.id);
                             openModalDetails();
                           }}
                           tag="a"
                           className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                         >
                           Details
-                        </DropdownItem>
+                        </DropdownItem> */}
                         <DropdownItem
                           onItemClick={() => {
                             closeDropdown(order.id);
@@ -387,6 +408,17 @@ function OutListEnatt() {
                         >
                           Modifier
                         </DropdownItem>
+                        {/* {user?.session?.category === "Admin" && (
+                          <DropdownItem
+                            onItemClick={() => {
+                              closeDropdown(order.id);
+                              supprimerTransfert(order?.id);
+                            }}
+                            className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                          >
+                            Supprimer
+                          </DropdownItem>
+                        )} */}
                       </Dropdown>
                     </div>
                   </TableCell>
@@ -463,7 +495,7 @@ function OutListEnatt() {
         />
       </Modal>
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <EditTransfertEn achat_id={1} />
+        <EditTransfertEn achat_id={id1} />
       </Modal>
       <Modal
         isOpen={isOpenDetails}
@@ -477,6 +509,7 @@ function OutListEnatt() {
         {modalStep === "details" && (
           <OutDetails
             closeModalDetails={closeModalDetails}
+            id={id1}
             onConfirm={() => setModalStep("confirmation")}
           />
         )}

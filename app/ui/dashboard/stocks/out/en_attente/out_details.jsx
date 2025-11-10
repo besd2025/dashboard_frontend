@@ -1,29 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Label from "../../../../ui_elements/form/Label";
 import Input from "../../../../ui_elements/form/input/InputField";
 import Button from "../../../../ui_elements/button/Button";
 import ViewImageModal from "../../../../ui_elements/modal/ViewImageModal";
-
-function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
-  const tableData = [
-    {
-      id: 1,
-      hangar: "Hangar1",
-      responsable: "Brave",
-      fonction: "DG",
-      phone: "6875425",
-      date: "8/8/2025",
-      categorie_mais: "jaune",
-      motif: "Desangorgement",
-      observation: "RAS observation",
-      prix: "564 556",
-      billet: "/img/billet_example.jpg",
-    },
-  ];
-
-  const data = tableData[0];
+import { fetchData } from "../../../../../_utils/api";
+function OutDetails({ closeModalDetails, id, onConfirm, validated = false }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [error, setError] = useState(null);
+  const [data, setData] = useState({});
+  useEffect(() => {
+    async function getData() {
+      try {
+        const results = await fetchData("get", `/transfert/${id}/`, {
+          params: {},
+          additionalHeaders: {},
+          body: {},
+        });
+        setData(results);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    }
+    getData();
+  }, [id]);
   return (
     <div className="no-scrollbar relative w-full max-w-[700px] max-h-[600px]  overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11 z-0">
       <div className="flex flex-col gap-6  lg:justify-between">
@@ -38,7 +38,7 @@ function OutDetails({ closeModalDetails, onConfirm, validated = false }) {
                 Hangar de provenance
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {data.hangar}
+                {data?.from_hangar?.hangar_name}
               </p>
             </div>
 
