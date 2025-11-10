@@ -49,9 +49,13 @@ export const fetchData = async (
     let finalBody = body;
 
     // ➜ Si ce n’est PAS du FormData → JSON
-    if (!(body instanceof FormData)) {
-      headers["Content-Type"] = "application/json";
-      finalBody = body ? JSON.stringify(body) : null;
+    if (body) {
+      if (!(body instanceof FormData)) {
+        headers["Content-Type"] = "application/json";
+        finalBody = JSON.stringify(body);
+      } else {
+        finalBody = body; // multipart géré par axios
+      }
     }
     // ➜ Sinon, on laisse Axios gérer le multipart/form‑data
 

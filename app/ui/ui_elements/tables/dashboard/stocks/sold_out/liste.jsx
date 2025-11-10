@@ -261,7 +261,6 @@ function ListeVente() {
   };
 
   const [id1, getId] = useState(undefined ? "default" : 0);
-  console.log(id1);
   const handleFilter = (filterData) => {
     setFilterData(filterData);
   };
@@ -273,7 +272,6 @@ function ListeVente() {
 
   const onLimitChange = (newLimit) => {
     setLimit(newLimit);
-    console.log("newLimit:", newLimit);
     setPointer(0);
     setCurrentPage(1);
   };

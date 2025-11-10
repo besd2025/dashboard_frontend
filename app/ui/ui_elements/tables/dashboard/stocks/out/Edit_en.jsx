@@ -11,20 +11,25 @@ function EditTransfertEn({ closeModal, achat_id }) {
   const [data, setData] = useState({});
   const [error, setError] = useState("");
   const [code, setCode] = useState("");
-  const [name, setName] = useState("");
-  const [firstName, setFirstName] = useState("");
+  const [nom_choffeur, setNomChoffeur] = useState("");
+  const [prenom_choffeur, setPreNomChoffeur] = useState("");
+  const [phone_choffeur, setPhoneChoffeur] = useState("");
+  const [nom_accompagn, setNomAccompagn] = useState("");
+  const [prenom_accompag, setPreNomAccompagn] = useState("");
+  const [phone_accompag, setPhoneAccompagn] = useState("");
+  const [plaque_voiture, setPlaqueVoiture] = useState("");
+  const [hangar_transfert, setHangarTransfert] = useState("");
   const [quantite_blanc, setQuantiteBlanc] = useState("");
   const [quantite_jaune, setQuantiteJaune] = useState("");
-  const [date_achat, setDateAchat] = useState("");
-  const [collector_code, setCollectorCode] = useState("");
+  const [date_transfert, setTransfertDate] = useState("");
   const [numero_recu, setNumeroRecu] = useState("");
+  const [collector_code, setCollectorCode] = useState("");
   const [photo_recu, setPhotoRecu] = useState([]);
   const [degre_humiliteBranc, setDegreHumiliteBranc] = useState("");
   const [degre_humiliteJaune, setDegreHumiliteJaune] = useState("");
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState("");
   const [loadingSearch, setLoadingSearch] = useState(false);
-
   const handleRadioChangeStatus = (value) => {
     setSelectedStatus(value);
   };
@@ -33,22 +38,28 @@ function EditTransfertEn({ closeModal, achat_id }) {
     e.preventDefault();
     const formData = new FormData();
 
-    formData.append("cultivator_code", code);
+    formData.append("chauffeur_nom", nom_choffeur);
+    formData.append("chauffeur_prenom", prenom_choffeur);
+    formData.append("chauffeur_telephone", phone_choffeur);
+    formData.append("accompagnateur_nom", nom_accompagn);
+    formData.append("accompagnateur_prenom", prenom_accompag);
+    formData.append("accompagnateur_telephone", phone_accompag);
+    formData.append("plaque_voiture", plaque_voiture);
     formData.append("collector_code", collector_code);
     formData.append("id", achat_id);
-    formData.append("date_achat", date_achat);
+    formData.append("transfer_date", date_transfert);
     formData.append("quantity_blanc", quantite_blanc);
     formData.append("quantity_jaune", quantite_jaune);
     formData.append("himidity_blanc", degre_humiliteBranc);
     formData.append("himidity_jaune", degre_humiliteJaune);
-    formData.append("receipt_number", numero_recu);
+    formData.append("transfer_number", numero_recu);
 
     if (photo_recu instanceof File) {
-      formData.append("receipt_photo", photo_recu);
+      formData.append("transfer_receipt", photo_recu);
     }
 
     try {
-      const results = await fetchData("patch", `/achats/${achat_id}/`, {
+      const results = await fetchData("patch", `/transfert/${achat_id}/`, {
         params: {},
         additionalHeaders: {},
         body: formData,
@@ -67,23 +78,28 @@ function EditTransfertEn({ closeModal, achat_id }) {
   useEffect(() => {
     async function getData() {
       try {
-        const results = await fetchData("get", `/achats/${achat_id}/`, {
+        const results = await fetchData("get", `/transfert/${achat_id}/`, {
           params: {},
           additionalHeaders: {},
           body: {},
         });
         setData(results);
-        console.log("Fetched Data:", results);
+        console.log("Fetched data:", results);
         const data = results;
-        setCode(data?.cultivator?.cultivator_code || "");
-        setName(data?.cultivator?.cultivator_last_name || "");
-        setFirstName(data?.cultivator?.cultivator_first_name || "");
+        setNomChoffeur(data?.chauffeur_nom || "");
+        setPreNomChoffeur(data?.chauffeur_prenom || "");
+        setPhoneChoffeur(data?.chauffeur_telephone || "");
+        setNomAccompagn(data?.accompagnateur_nom || "");
+        setPreNomAccompagn(data?.accompagnateur_prenom || "");
+        setPhoneAccompagn(data?.accompagnateur_telephone || "");
+        setHangarTransfert(data?.to_hangar?.hangar_name || "");
+        setPlaqueVoiture(data?.plaque_voiture || "");
         setQuantiteBlanc(data?.quantity_blanc || "");
         setQuantiteJaune(data?.quantity_jaune);
-        setDateAchat(data?.date_achat);
+        setTransfertDate(data?.transfer_date);
         setCollectorCode(data?.collector?.unique_code || "");
-        setNumeroRecu(data?.receipt_number || "");
-        setPhotoRecu(data?.receipt_photo || []); // Assuming photo_recu is an array
+        setNumeroRecu(data?.transfer_number || "");
+        setPhotoRecu(data?.transfer_receipt || []); // Assuming photo_recu is an array
         setDegreHumiliteBranc(data?.himidity_blanc);
         setDegreHumiliteJaune(data?.himidity_jaune);
       } catch (error) {
@@ -98,6 +114,7 @@ function EditTransfertEn({ closeModal, achat_id }) {
     setModalImageUrl(url);
     setIsImageModalOpen(true);
   };
+
   return (
     <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
       <div className="px-2 pr-14">
@@ -110,37 +127,70 @@ function EditTransfertEn({ closeModal, achat_id }) {
       </div>
       <form className="flex flex-col">
         <div className="custom-scrollbar h-[450px] md:h-[350px] overflow-y-auto px-2 pb-3">
-          <div>
-            <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
-              ID
-            </h5>
-
-            <Input
-              type="text"
-              defaultValue={code}
-              onChange={(e) => setCode(e.target.value)}
-              disabled
-            />
-          </div>
           <div className="mt-7">
-            <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
-              Informations personnelles
-            </h5>
             <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
               <div className="col-span-2 lg:col-span-1">
-                <Label>Nom</Label>
+                <Label>Hangar de destination </Label>
                 <Input
                   type="text"
-                  defaultValue={name}
-                  onChange={(e) => setName(e.target.value)}
+                  defaultValue={hangar_transfert}
+                  onChange={(e) => setHangarTransfert(e.target.value)}
                 />
               </div>
               <div className="col-span-2 lg:col-span-1">
-                <Label>Prenom</Label>
+                <Label> nom du chauffeur </Label>
                 <Input
                   type="text"
-                  defaultValue={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  defaultValue={nom_choffeur}
+                  onChange={(e) => setNomChoffeur(e.target.value)}
+                />
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <Label> prenom du chauffeur </Label>
+                <Input
+                  type="text"
+                  defaultValue={prenom_choffeur}
+                  onChange={(e) => setPreNomChoffeur(e.target.value)}
+                />
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <Label> telephone du chauffeur </Label>
+                <Input
+                  type="text"
+                  defaultValue={phone_choffeur}
+                  onChange={(e) => setPhoneChoffeur(e.target.value)}
+                />
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <Label> plaque du voiture </Label>
+                <Input
+                  type="text"
+                  defaultValue={plaque_voiture}
+                  onChange={(e) => setPlaqueVoiture(e.target.value)}
+                />
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <Label> nom d'accompagnateur </Label>
+                <Input
+                  type="text"
+                  defaultValue={nom_accompagn}
+                  onChange={(e) => setNomAccompagn(e.target.value)}
+                />
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <Label> prenom d'accompagnateur </Label>
+                <Input
+                  type="text"
+                  defaultValue={prenom_accompag}
+                  onChange={(e) => setPreNomAccompagn(e.target.value)}
+                />
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <Label> telephone d'accompagnateur </Label>
+                <Input
+                  type="text"
+                  defaultValue={phone_accompag}
+                  onChange={(e) => setPhoneAccompagn(e.target.value)}
                 />
               </div>
               <div className="col-span-2 lg:col-span-1">
@@ -197,11 +247,11 @@ function EditTransfertEn({ closeModal, achat_id }) {
                 />
               </div>
               <div className="col-span-2 lg:col-span-1">
-                <Label>Date d'achat</Label>
+                <Label>Date de transfert</Label>
                 <Input
                   type="date"
-                  defaultValue={date_achat}
-                  onChange={(e) => setDateAchat(e.target.value)}
+                  defaultValue={date_transfert}
+                  onChange={(e) => setTransfertDate(e.target.value)}
                 />
               </div>
               <div
