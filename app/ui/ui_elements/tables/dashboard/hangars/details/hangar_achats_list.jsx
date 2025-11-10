@@ -396,13 +396,6 @@ function HangarAchatList() {
                             Actions
                           </DropdownMenuLabel>
                           <DropdownMenuGroup>
-                            <DropdownMenuItem asChild>
-                              <Link
-                                href={`/dashboard/cultivators/profile?cult_id=${order?.id}`}
-                              >
-                                Profile
-                              </Link>
-                            </DropdownMenuItem>
                             {user?.session?.category != "General" && (
                               <DropdownMenuItem
                                 onSelect={() => {

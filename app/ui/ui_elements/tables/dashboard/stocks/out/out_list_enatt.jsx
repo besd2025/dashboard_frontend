@@ -8,8 +8,14 @@ import {
   TableRow,
 } from "../../../table_elemets";
 import { MoreDotIcon } from "../../../../../icons";
-import DropdownItem from "../../../../dropdown/DropdownItem";
-import { Dropdown } from "../../../../dropdown/dropdown_cultvators";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import Modal from "../../../../modal";
 import { useModal } from "../../../../hooks/useModal";
 import Pagination from "../../../Pagination";
@@ -376,50 +382,46 @@ function OutListEnatt() {
                 <TableRow key={order.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <div className="relative inline-block">
-                      <button
-                        onClick={() => toggleDropdown(order.id)}
-                        className="dropdown-toggle"
-                      >
-                        <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
-                      </button>
-                      <Dropdown
-                        isOpen={openDropdowns[order.id]}
-                        onClose={() => closeDropdown(order.id)}
-                        className="w-40 p-2"
-                      >
-                        {/* <DropdownItem
-                          onItemClick={() => {
-                            closeDropdown(order.id);
-                            getId(order?.id);
-                            openModalDetails();
-                          }}
-                          tag="a"
-                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                        >
-                          Details
-                        </DropdownItem> */}
-                        <DropdownItem
-                          onItemClick={() => {
-                            closeDropdown(order.id);
-                            openModal();
-                            getId(order?.id);
-                          }}
-                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                        >
-                          Modifier
-                        </DropdownItem>
-                        {/* {user?.session?.category === "Admin" && (
-                          <DropdownItem
-                            onItemClick={() => {
-                              closeDropdown(order.id);
-                              supprimerTransfert(order?.id);
-                            }}
-                            className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                      <DropdownMenu modal={false}>
+                        <DropdownMenuTrigger asChild>
+                          <button
+                            onClick={() => toggleDropdown(order.id)}
+                            className="dropdown-toggle"
                           >
-                            Supprimer
-                          </DropdownItem>
-                        )} */}
-                      </Dropdown>
+                            <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-40" align="start">
+                          <DropdownMenuLabel className="text-xs opacity-50 font-normal">
+                            Actions
+                          </DropdownMenuLabel>
+                          <DropdownMenuGroup>
+                            {/* <DropdownMenuItem
+                              onSelect={() => {
+                                getId(order?.id);
+                                openModalDetails();
+                              }}
+                            >
+                              Details
+                            </DropdownMenuItem> */}
+                            <DropdownMenuItem
+                              onSelect={() => {
+                                openModal();
+                                getId(order?.id);
+                              }}
+                            >
+                              Modifier
+                            </DropdownMenuItem>
+                            {/* <DropdownMenuItem
+                              onSelect={() => {
+                                supprimerTransfert(order?.id);
+                              }}
+                            >
+                              Supprimer
+                            </DropdownMenuItem> */}
+                          </DropdownMenuGroup>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">

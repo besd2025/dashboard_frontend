@@ -33,6 +33,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 function AllCultivatorsList() {
   const [openDropdowns, setOpenDropdowns] = useState({});
@@ -470,6 +471,43 @@ function AllCultivatorsList() {
                 <TableRow key={order.id}>
                   <TableCell className="px-0   py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <div className="relative inline-block">
+                      {/* <Dropdown
+                        isOpen={openDropdowns[order.id]}
+                        onClose={() => closeDropdown(order.id)}
+                        className="w-40 p-2"
+                      >
+                        <DropdownItem
+                          onItemClick={() => closeDropdown(order.id)}
+                          tag="a"
+                          href={`/dashboard/cultivators/profile?cult_id=${order?.id}`}
+                          className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                        >
+                          Profile
+                        </DropdownItem>
+                        {user?.session?.category != "General" && (
+                          <DropdownItem
+                            onItemClick={() => {
+                              closeDropdown(order.id);
+                              openModal();
+                              getId(order?.id);
+                            }}
+                            className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                          >
+                            Modifier
+                          </DropdownItem>
+                        )}
+                        {user?.session?.category == " Admin" && (
+                          <DropdownItem
+                            onItemClick={() => {
+                              closeDropdown(order.id);
+                              supprimerCultivateur(order?.id);
+                            }}
+                            className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                          >
+                            Supprimer
+                          </DropdownItem>
+                        )}
+                      </Dropdown> */}
                       <DropdownMenu modal={false}>
                         <DropdownMenuTrigger asChild>
                           <button
@@ -484,14 +522,24 @@ function AllCultivatorsList() {
                             Actions
                           </DropdownMenuLabel>
                           <DropdownMenuGroup>
-                            <DropdownMenuItem
-                              onSelect={() => {
-                                openModal();
-                                getId(order?.id);
-                              }}
-                            >
-                              Modifier
+                            <DropdownMenuItem>
+                              <Link
+                                href={`/dashboard/cultivators/profile?cult_id=${order?.id}`}
+                              >
+                                Profile
+                              </Link>
                             </DropdownMenuItem>
+                            {user?.session?.category != "General" && (
+                              <DropdownMenuItem
+                                onSelect={() => {
+                                  openModal();
+                                  getId(order?.id);
+                                }}
+                              >
+                                Modifier
+                              </DropdownMenuItem>
+                            )}
+
                             {user?.session?.category == " Admin" && (
                               <DropdownMenuItem
                                 onSelect={() => supprimerCultivateur(order?.id)}
