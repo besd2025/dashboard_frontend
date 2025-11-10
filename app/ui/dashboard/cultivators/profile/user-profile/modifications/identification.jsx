@@ -41,31 +41,41 @@ function Identification({ tableData }) {
                 >
                   Date de naissance
                 </TableCell>
-
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
-                  Nom de Banque
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
-                  Numéro de compte Bancaire
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
-                  Numéro de telephone de paiement
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
-                  propriétaire
-                </TableCell>
+                {tableData?.map((order, index) => (
+                  <React.Fragment key={order?.id || index}>
+                    {order?.cultivator_bank_name ? (
+                      <>
+                        <TableCell
+                          isHeader
+                          className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                        >
+                          Nom de Banque
+                        </TableCell>
+                        <TableCell
+                          isHeader
+                          className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                        >
+                          Numéro de compte Bancaire
+                        </TableCell>
+                      </>
+                    ) : order?.cultivator_mobile_payment ? (
+                      <>
+                        <TableCell
+                          isHeader
+                          className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                        >
+                          Numéro de telephone de paiement
+                        </TableCell>
+                        <TableCell
+                          isHeader
+                          className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                        >
+                          propriétaire
+                        </TableCell>
+                      </>
+                    ) : null}
+                  </React.Fragment>
+                ))}
               </TableRow>
             </TableHeader>
 
@@ -91,18 +101,28 @@ function Identification({ tableData }) {
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     {order?.date_naissance}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.cultivator_bank_name}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.cultivator_bank_account}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.cultivator_mobile_payment}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.cultivator_mobile_payment_user_name}
-                  </TableCell>
+                  {order?.cultivator_bank_name ? (
+                    <>
+                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        {order?.cultivator_bank_name}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        {order?.cultivator_bank_account}
+                      </TableCell>
+                    </>
+                  ) : order?.cultivator_mobile_payment ? (
+                    <>
+                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        {order?.cultivator_mobile_payment}
+                      </TableCell>
+
+                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        {order?.cultivator_mobile_payment_user_name}
+                      </TableCell>
+                    </>
+                  ) : (
+                    ""
+                  )}
                 </TableRow>
               ))}
             </TableBody>
