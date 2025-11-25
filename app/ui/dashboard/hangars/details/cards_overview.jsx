@@ -8,7 +8,8 @@ export default function CardsOverview({ hangar_id }) {
   const [stock_initial, setStockInitial] = useState({});
   const [cultivateurs, setACultivateurs] = useState({});
   const [error, setError] = useState(null);
-
+  const [qte_blanc_restante, setBlancRestante] = useState(0);
+  const [qte_jaune_restante, setJauneRestante] = useState(0);
   useEffect(() => {
     if (!hangar_id) return; // Ne rien faire si l'ID est invalide
 
@@ -59,13 +60,18 @@ export default function CardsOverview({ hangar_id }) {
             body: {},
           }
         );
+
         setAchats(achats);
         setVentes(ventes);
         setTransfers(transfert);
         setStockInitial(stock_initial);
         setACultivateurs(cultivatuers);
-        console.log("stock:", stock_initial);
-        console.log("cultivateurs:", cultivatuers);
+        const qte_blanc_restante =
+          achats?.total_blanc - (ventes?.total_blanc + transfert?.total_blanc);
+        const qte_jaune_restante =
+          achats?.total_jaune - (ventes?.total_jaune + transfert?.total_jaune);
+        setBlancRestante(qte_blanc_restante);
+        setJauneRestante(qte_jaune_restante);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -274,10 +280,10 @@ export default function CardsOverview({ hangar_id }) {
               </span>
 
               <h4 className="ml-3  font-semibold text-gray-800 text-lg dark:text-white/90">
-                {ventes.total_blanc + ventes?.total_jaune >= 1000 ? (
+                {qte_blanc_restante + qte_jaune_restante >= 1000 ? (
                   <>
                     {(
-                      (ventes.total_blanc + ventes?.total_jaune) /
+                      (qte_blanc_restante + qte_jaune_restante) /
                       1000
                     ).toLocaleString("fr-FR", {
                       minimumFractionDigits: 2,
@@ -287,7 +293,7 @@ export default function CardsOverview({ hangar_id }) {
                   </>
                 ) : (
                   <>
-                    {(ventes.total_blanc + ventes?.total_jaune)?.toLocaleString(
+                    {(qte_blanc_restante + qte_jaune_restante)?.toLocaleString(
                       "fr-FR"
                     ) || 0}{" "}
                     <span className="text-sm">Kg</span>
@@ -325,9 +331,9 @@ export default function CardsOverview({ hangar_id }) {
               </div>
 
               <h4 className=" font-semibold text-gray-800 text-xl dark:text-white/90">
-                {ventes?.total_blanc >= 1000 ? (
+                {qte_blanc_restante >= 1000 ? (
                   <>
-                    {(ventes?.total_blanc / 1000).toLocaleString("fr-FR", {
+                    {(qte_blanc_restante / 1000).toLocaleString("fr-FR", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}{" "}
@@ -335,7 +341,7 @@ export default function CardsOverview({ hangar_id }) {
                   </>
                 ) : (
                   <>
-                    {ventes?.total_blanc?.toLocaleString("fr-FR") || 0}{" "}
+                    {qte_blanc_restante?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
@@ -363,9 +369,9 @@ export default function CardsOverview({ hangar_id }) {
               </div>
 
               <h4 className=" font-semibold text-yellow-600 text-xl dark:text-white/90">
-                {ventes?.total_jaune >= 1000 ? (
+                {qte_jaune_restante >= 1000 ? (
                   <>
-                    {(ventes?.total_jaune / 1000)?.toLocaleString("fr-FR", {
+                    {(qte_jaune_restante / 1000)?.toLocaleString("fr-FR", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}{" "}
@@ -373,7 +379,7 @@ export default function CardsOverview({ hangar_id }) {
                   </>
                 ) : (
                   <>
-                    {ventes?.total_jaune?.toLocaleString("fr-FR") || 0}{" "}
+                    {qte_jaune_restante?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
@@ -411,10 +417,10 @@ export default function CardsOverview({ hangar_id }) {
               </span>
 
               <h4 className="ml-3  font-semibold text-gray-800 text-lg dark:text-white/90">
-                {ventes.total_blanc + ventes?.total_jaune >= 1000 ? (
+                {transfers.total_blanc + transfers?.total_jaune >= 1000 ? (
                   <>
                     {(
-                      (ventes.total_blanc + ventes?.total_jaune) /
+                      (transfers.total_blanc + transfers?.total_jaune) /
                       1000
                     ).toLocaleString("fr-FR", {
                       minimumFractionDigits: 2,
@@ -424,9 +430,9 @@ export default function CardsOverview({ hangar_id }) {
                   </>
                 ) : (
                   <>
-                    {(ventes.total_blanc + ventes?.total_jaune)?.toLocaleString(
-                      "fr-FR"
-                    ) || 0}{" "}
+                    {(
+                      transfers.total_blanc + transfers?.total_jaune
+                    )?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
@@ -462,9 +468,9 @@ export default function CardsOverview({ hangar_id }) {
               </div>
 
               <h4 className=" font-semibold text-gray-800 text-xl dark:text-white/90">
-                {ventes?.total_blanc >= 1000 ? (
+                {transfers?.total_blanc >= 1000 ? (
                   <>
-                    {(ventes?.total_blanc / 1000).toLocaleString("fr-FR", {
+                    {(transfers?.total_blanc / 1000).toLocaleString("fr-FR", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}{" "}
@@ -472,7 +478,7 @@ export default function CardsOverview({ hangar_id }) {
                   </>
                 ) : (
                   <>
-                    {ventes?.total_blanc?.toLocaleString("fr-FR") || 0}{" "}
+                    {transfers?.total_blanc?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
@@ -500,9 +506,9 @@ export default function CardsOverview({ hangar_id }) {
               </div>
 
               <h4 className=" font-semibold text-yellow-600 text-xl dark:text-white/90">
-                {ventes?.total_jaune >= 1000 ? (
+                {transfers?.total_jaune >= 1000 ? (
                   <>
-                    {(ventes?.total_jaune / 1000)?.toLocaleString("fr-FR", {
+                    {(transfers?.total_jaune / 1000)?.toLocaleString("fr-FR", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}{" "}
@@ -510,7 +516,7 @@ export default function CardsOverview({ hangar_id }) {
                   </>
                 ) : (
                   <>
-                    {ventes?.total_jaune?.toLocaleString("fr-FR") || 0}{" "}
+                    {transfers?.total_jaune?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
