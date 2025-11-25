@@ -10,6 +10,7 @@ export default function CardsOverview({ hangar_id }) {
   const [error, setError] = useState(null);
   const [qte_blanc_restante, setBlancRestante] = useState(0);
   const [qte_jaune_restante, setJauneRestante] = useState(0);
+  const [qte_recues, setQteRecues] = useState({});
   useEffect(() => {
     if (!hangar_id) return; // Ne rien faire si l'ID est invalide
 
@@ -60,18 +61,31 @@ export default function CardsOverview({ hangar_id }) {
             body: {},
           }
         );
-
+        const Qte_recues = await fetchData(
+          "get",
+          `hangars/${hangar_id}/get_quantity_transferer_received`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          }
+        );
         setAchats(achats);
         setVentes(ventes);
         setTransfers(transfert);
         setStockInitial(stock_initial);
         setACultivateurs(cultivatuers);
         const qte_blanc_restante =
-          achats?.total_blanc - (ventes?.total_blanc + transfert?.total_blanc);
+          achats?.total_blanc +
+          Qte_recues?.total_blanc -
+          (ventes?.total_blanc + transfert?.total_blanc);
         const qte_jaune_restante =
-          achats?.total_jaune - (ventes?.total_jaune + transfert?.total_jaune);
+          achats?.total_jaune +
+          Qte_recues?.total_jaune -
+          (ventes?.total_jaune + transfert?.total_jaune);
         setBlancRestante(qte_blanc_restante);
         setJauneRestante(qte_jaune_restante);
+        setQteRecues(Qte_recues);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -526,17 +540,26 @@ export default function CardsOverview({ hangar_id }) {
         </div>
       </div>
       {/* <!-- Metric Item End --> */}
-            {/* <!-- Metric Item Start --> */}
+      {/* <!-- Metric Item Start --> */}
       <div className="rounded-2xl col-span-6 flex flex-row justify-between border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-4">
         <div>
           <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
             {/* <GroupIcon className="text-gray-800 size-6 dark:text-white/90" /> */}
 
-          
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"  className="size-6 text-gray-800  dark:text-white/90">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-</svg>
-
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6 text-gray-800  dark:text-white/90"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+              />
+            </svg>
           </div>
           <div className="flex items-end justify-between mt-2">
             <div>
@@ -545,10 +568,10 @@ export default function CardsOverview({ hangar_id }) {
               </span>
 
               <h4 className="ml-3  font-semibold text-gray-800 text-lg dark:text-white/90">
-                {ventes.total_blanc + ventes?.total_jaune >= 1000 ? (
+                {qte_recues?.total_blanc + qte_recues?.total_jaune >= 1000 ? (
                   <>
                     {(
-                      (ventes.total_blanc + ventes?.total_jaune) /
+                      (qte_recues.total_blanc + qte_recues?.total_jaune) /
                       1000
                     ).toLocaleString("fr-FR", {
                       minimumFractionDigits: 2,
@@ -558,9 +581,9 @@ export default function CardsOverview({ hangar_id }) {
                   </>
                 ) : (
                   <>
-                    {(ventes.total_blanc + ventes?.total_jaune)?.toLocaleString(
-                      "fr-FR"
-                    ) || 0}{" "}
+                    {(
+                      qte_recues.total_blanc + qte_recues?.total_jaune
+                    )?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
@@ -596,9 +619,9 @@ export default function CardsOverview({ hangar_id }) {
               </div>
 
               <h4 className=" font-semibold text-gray-800 text-xl dark:text-white/90">
-                {ventes?.total_blanc >= 1000 ? (
+                {qte_recues?.total_blanc >= 1000 ? (
                   <>
-                    {(ventes?.total_blanc / 1000).toLocaleString("fr-FR", {
+                    {(qte_recues?.total_blanc / 1000).toLocaleString("fr-FR", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}{" "}
@@ -606,7 +629,7 @@ export default function CardsOverview({ hangar_id }) {
                   </>
                 ) : (
                   <>
-                    {ventes?.total_blanc?.toLocaleString("fr-FR") || 0}{" "}
+                    {qte_recues?.total_blanc?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
@@ -634,9 +657,9 @@ export default function CardsOverview({ hangar_id }) {
               </div>
 
               <h4 className=" font-semibold text-yellow-600 text-xl dark:text-white/90">
-                {ventes?.total_jaune >= 1000 ? (
+                {qte_recues?.total_jaune >= 1000 ? (
                   <>
-                    {(ventes?.total_jaune / 1000)?.toLocaleString("fr-FR", {
+                    {(qte_recues?.total_jaune / 1000)?.toLocaleString("fr-FR", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}{" "}
@@ -644,7 +667,7 @@ export default function CardsOverview({ hangar_id }) {
                   </>
                 ) : (
                   <>
-                    {ventes?.total_jaune?.toLocaleString("fr-FR") || 0}{" "}
+                    {qte_recues?.total_jaune?.toLocaleString("fr-FR") || 0}{" "}
                     <span className="text-sm">Kg</span>
                   </>
                 )}
