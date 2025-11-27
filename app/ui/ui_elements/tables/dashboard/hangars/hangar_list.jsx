@@ -439,7 +439,7 @@ function AllCultivatorsList() {
                           <DropdownMenuGroup>
                             <DropdownMenuItem asChild>
                               <Link
-                                href={`/dashboard/hangars/details/cultivator?hangar_id=${order.id}`}
+                                href={`/dashboard/hangars/details?hangar_id=${order.id}`}
                               >
                                 Details
                               </Link>

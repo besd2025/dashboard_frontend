@@ -8,7 +8,7 @@ import { HangarProvider } from "../../../../ui/context/DetailContext";
 
 function Layout({ children }) {
   const pathname = usePathname();
-  const [activeTab, setActiveTab] = useState("cultivator");
+  const [activeTab, setActiveTab] = useState("details");
   const [hangarId, setHangarId] = useState(null);
 
   useEffect(() => {
@@ -28,16 +28,28 @@ function Layout({ children }) {
       setActiveTab("transfers");
     } else if (pathname.includes("/receptions")) {
       setActiveTab("receptions");
+    } else if (pathname.includes("/details")) {
+      setActiveTab("details");
     }
   }, [pathname]);
 
   return (
     <HangarProvider hangar_id={hangarId}>
       <div>
-        <Profile hangar_id={hangarId} />
+        {/* <Profile hangar_id={hangarId} /> */}
         <div className="bg-white dark:bg-white/[0.03] mt-2 rounded-2xl mb-1">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <nav className="-mb-px flex items-end gap-x-8">
+              <Link
+                href={`/dashboard/hangars/details?hangar_id=${hangarId}`}
+                className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold ${
+                  activeTab === "details"
+                    ? "border-yellow-500 text-yellow-500"
+                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                }`}
+              >
+                Details Hangar
+              </Link>
               <Link
                 href={`/dashboard/hangars/details/cultivator?hangar_id=${hangarId}`}
                 className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold ${
