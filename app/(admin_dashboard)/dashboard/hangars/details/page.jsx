@@ -1,12 +1,6 @@
-"use client";
 import Profile from "../../../../ui/dashboard/hangars/details/profile";
-import React, { useEffect, useState } from "react";
-
+import React from "react";
+export const dynamic = "force-dynamic";
 export default function page() {
-  const [hangarId, setHangarId] = useState(null);
-  useEffect(() => {
-    const storedHangarId = localStorage.getItem("hangarId");
-    setHangarId(storedHangarId);
-  }, []);
-  return <Profile hangar_id={hangarId} />;
+  return <Profile />;
 }
