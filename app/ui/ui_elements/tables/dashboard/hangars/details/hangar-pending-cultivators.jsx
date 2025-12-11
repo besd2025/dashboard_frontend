@@ -133,103 +133,12 @@ function HangarPendingCultivators() {
     setCurrentPage(pageNumber);
     setPointer((pageNumber - 1) * limit);
   };
-
-  // const exportCultivatorsToExcel = async () => {
-  //   try {
-  //     const initResponse = await fetchData(
-  //       "get",
-  //       `hangars/${hangar_id}/achats_paid_or_pending/?is_paid=true`,
-  //       { params: { limit: 1 } }
-  //     );
-
-  //     const totalCount = initResponse?.count || 0;
-  //     if (totalCount === 0) return;
-
-  //     const response = await fetchData(
-  //       "get",
-  //       `hangars/${hangar_id}/achats_paid_or_pending/?is_paid=true`,
-  //       {
-  //         params: {
-  //           limit: totalCount,
-  //         },
-  //       }
-  //     );
-
-  //     const allData = response.results || [];
-  //     const uniqueData = Array.from(
-  //       new Map(allData.map((item) => [item.id, item])).values()
-  //     );
-
-  //     const formattedData = uniqueData.map((item) => {
-  //       const formattedItem = {
-  //         Nom: item.cultivator_first_name || "",
-  //         Prénom: item.cultivator_last_name || "",
-  //         Genre: item.cultivator_gender || "",
-  //         CNI: item.cultivator_cni || "",
-  //         Code: item.cultivator_code || "",
-  //         Province:
-  //           item.cultivator_adress?.zone_code?.commune_code?.province_code
-  //             ?.province_name || "",
-  //         Commune:
-  //           item.cultivator_adress?.zone_code?.commune_code?.commune_name || "",
-  //         Zone: item.cultivator_adress?.zone_code?.zone_name || "",
-  //         Colline: item.cultivator_adress?.colline_name || "",
-  //         Hangar: item?.collector?.hangar?.hangar_name || "",
-  //         quantité_total: item?.total_quantite || 0,
-  //         quantité_mais_blanc: item?.total_blanc || 0,
-  //         quantité_mais_jaune: item?.total_jaune || 0,
-  //       };
-
-  //       // Mode de paiement
-  //       if (item?.cultivator_bank_name) {
-  //         formattedItem.mode_payement = "BANQUE OU MICROFINANCE";
-  //         formattedItem.Banque_ou_microfinance = item?.cultivator_bank_name;
-  //         formattedItem.Numero_compte = item?.cultivator_bank_account || "";
-  //       } else if (item?.cultivator_mobile_payment) {
-  //         formattedItem.mode_payement = "MOBILE MONEY";
-  //         const phone = item.cultivator_mobile_payment.toString();
-  //         if (phone.startsWith("6")) {
-  //           formattedItem.nom_service = "LUMICASH";
-  //         } else if (phone.startsWith("7")) {
-  //           formattedItem.nom_service = "ECOCASH";
-  //         }
-  //         formattedItem.Numero_de_telephone_de_payement = phone;
-  //         formattedItem.date_enregistrement = item.created_at || "";
-  //       } else {
-  //         formattedItem.mode_payement = "";
-  //       }
-
-  //       return formattedItem;
-  //     });
-
-  //     // Génération du fichier Excel
-  //     const worksheet = XLSX.utils.json_to_sheet(formattedData);
-  //     const workbook = XLSX.utils.book_new();
-  //     XLSX.utils.book_append_sheet(workbook, worksheet, "Cultivateurs");
-
-  //     const excelBuffer = XLSX.write(workbook, {
-  //       bookType: "xlsx",
-  //       type: "array",
-  //     });
-
-  //     const blob = new Blob([excelBuffer], {
-  //       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
-  //     });
-
-  //     saveAs(
-  //       blob,
-  //       `cultivateurs_${new Date().toISOString().split("T")[0]}.xlsx`
-  //     );
-  //   } catch (error) {
-  //     console.error("Erreur exportation Excel :", error);
-  //   }
-  // };
-  const [id1, getId] = useState(undefined ? "default" : 0);
   const handleImageClick = (url) => {
     console.log("Image clicked:", url);
     setModalImageUrl(url);
     setIsImageModalOpen(true);
   };
+  const image_profile = "/img/user-profile.png";
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex flex-col lg:flex-row items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
@@ -448,10 +357,11 @@ function HangarPendingCultivators() {
                           <Image
                             width={80}
                             height={80}
-                            src={
-                              process.env.NEXT_PUBLIC_IMAGE_URL +
-                              order?.purchase?.cultivator?.cultivator_photo
-                            }
+                            // src={
+                            //   process.env.NEXT_PUBLIC_IMAGE_URL +
+                            //   order?.purchase?.cultivator?.cultivator_photo
+                            // }
+                            src={image_profile}
                             alt="user"
                           />
                         ) : (

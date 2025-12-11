@@ -31,12 +31,12 @@ function Payment() {
           <PaymentChart />
         </div>
         <div className=" col-span-2 space-y-4">
-          <div class="grid grid-cols-2 gap-10 ">
+          <div className="grid grid-cols-2 gap-10 ">
             <Link
               href="/dashboard/payment/export_payment"
-              class="col-span-2 md:col-span-2 flex gap-4 items-start border border-gray-200 rounded-2xl dark:border-gray-800 p-5 cursor-pointer hover:shadow-lg transition"
+              className="col-span-2 md:col-span-2 flex gap-4 items-start border border-gray-200 rounded-2xl dark:border-gray-800 p-5 cursor-pointer hover:shadow-lg transition"
             >
-              <span class="text-green-600 bg-green-500/10 p-3 rounded-full">
+              <span className="text-green-600 bg-green-500/10 p-3 rounded-full">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -56,10 +56,10 @@ function Payment() {
                 </svg>
               </span>
               <div>
-                <h3 class="font-semibold text-lg text-gray-500 dark:text-gray-200">
+                <h3 className="font-semibold text-lg text-gray-500 dark:text-gray-200">
                   Exporter une liste des paiements
                 </h3>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                   Exportez les données de paiement au format Excel pour le
                   paiement.
                 </p>
@@ -67,9 +67,9 @@ function Payment() {
             </Link>
             <div
               onClick={() => setViewList(!viewList)}
-              class="col-span-2 md:col-span-2 flex gap-4 items-start  border border-gray-200 rounded-2xl dark:border-gray-800 p-5 cursor-pointer hover:shadow-lg transition"
+              className="col-span-2 md:col-span-2 flex gap-4 items-start  border border-gray-200 rounded-2xl dark:border-gray-800 p-5 cursor-pointer hover:shadow-lg transition"
             >
-              <span class="text-green-600 bg-green-500/10 p-3 rounded-full">
+              <span className="text-green-600 bg-green-500/10 p-3 rounded-full">
                 {!viewList ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -98,10 +98,10 @@ function Payment() {
                 )}
               </span>
               <div>
-                <h3 class="font-semibold text-lg text-gray-500 dark:text-gray-200">
+                <h3 className="font-semibold text-lg text-gray-500 dark:text-gray-200">
                   Consulter les listes des paiements
                 </h3>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                   Afficher les listes des paiements déjà effectués par période.
                 </p>
               </div>
@@ -111,23 +111,23 @@ function Payment() {
 
         {viewList && (
           <div className=" col-span-6 space-y-4 mt-10 transition duration-300">
-            <div class="flex items-center justify-between  w-full px-6">
-              <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+            <div className="flex items-center justify-between  w-full px-6">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
                 Listes des paiements par periode
               </h3>
             </div>
-            <div class="flex flex-wrap gap-4 px-6 justify-center text-lg font-serif">
+            <div className="flex flex-wrap gap-4 px-6 justify-center text-lg font-serif">
               {liste.map((item, index) => (
                 <Link
                   key={index}
                   href="/dashboard/payment/payment_list"
-                  class="bg-gray-100 dark:bg-white/[0.03] flex-grow text-black border-l-8 border-green-500 rounded-md px-3 py-2 w-full md:w-5/12 lg:w-3/12 hover:shadow-lg transition"
+                  className="bg-gray-100 dark:bg-white/[0.03] flex-grow text-black border-l-8 border-green-500 rounded-md px-3 py-2 w-full md:w-5/12 lg:w-3/12 hover:shadow-lg transition"
                 >
                   <span className="font-semibold text-sm text-gray-700 dark:text-gray-200 ">
                     {item.title}
                   </span>
 
-                  <div class="text-gray-500 dark:text-gray-400  text-sm pt-1">
+                  <div className="text-gray-500 dark:text-gray-400  text-sm pt-1">
                     <span>{item.date}</span>
                   </div>
                 </Link>
