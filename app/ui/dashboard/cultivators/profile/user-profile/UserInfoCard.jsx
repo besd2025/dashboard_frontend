@@ -2,10 +2,13 @@
 import React, { useState, useEffect } from "react";
 import { useModal } from "../../../../ui_elements/hooks/useModal";
 import { fetchData } from "../../../../../_utils/api";
-export default function UserInfoCard({ cultivateur_id }) {
+import { useSearchParams } from "next/navigation";
+export default function UserInfoCard() {
   const { isOpen, openModal, closeModal } = useModal();
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
+  const searchParams = useSearchParams();
+  const cultivateur_id = searchParams.get("cult_id");
   useEffect(() => {
     async function getData() {
       try {
@@ -19,7 +22,6 @@ export default function UserInfoCard({ cultivateur_id }) {
           }
         );
         setData(results);
-        console.log(results);
       } catch (error) {
         setError(error);
         console.error(error);

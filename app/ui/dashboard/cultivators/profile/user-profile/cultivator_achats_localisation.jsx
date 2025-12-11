@@ -50,7 +50,6 @@ function CultivatorAchatsLocalisation({ cultivateur_id }) {
           }));
 
           setAchatData(options);
-          console.log("AchatData:", options);
           if (options.length > 0) {
             setSelectedCultivator(options[0]);
           }

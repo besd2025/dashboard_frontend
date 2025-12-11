@@ -8,7 +8,6 @@ import {
 } from "../../../../../ui_elements/tables/table_elemets";
 
 function Identification({ tableData }) {
-  console.log("table: ", tableData);
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-8  w-full">
       <div className="max-w-full overflow-x-auto col-span-8  ">

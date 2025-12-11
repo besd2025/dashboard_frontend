@@ -58,7 +58,6 @@ function EditUserProfile({ closeModal, cultivateur_id }) {
           body: formData,
         }
       );
-      console.log(results);
       if (results.status == 200) {
         window.location.reload();
       } else {
