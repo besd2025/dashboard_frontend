@@ -69,7 +69,7 @@ function FilterUserProfile({ handleFilter, closeModalFilter }) {
       return;
     }
     const collines = await fetchData("get", `adress/colline/`, {
-      params: {},
+      params: { zone: value },
       additionalHeaders: {},
       body: {},
     });

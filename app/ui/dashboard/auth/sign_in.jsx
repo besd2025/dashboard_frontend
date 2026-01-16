@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Button from "../../ui_elements/button/Button";
@@ -8,7 +8,7 @@ import Input from "../../ui_elements/form/input/InputField";
 import Label from "../../ui_elements/form/Label";
 import { EyeCloseIcon, EyeIcon } from "../../icons";
 import LoadingDots from "../../ui_elements/loading/loading_dots";
-
+// import { UserContext } from "@/context/UserContext";
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -17,11 +17,18 @@ export default function SignInForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
+  // const user = useContext(UserContext);
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
-      router.push("/dashboard/home");
+      const user = DecodeToJwt(accessToken);
+      const now = new Date();
+      if (now < new Date(user?.exp * 1000)) {
+        router.push("/dashboard/home");
+      } else {
+        localStorage.removeItem("accessToken");
+        router.push("/");
+      }
     } else {
       router.push("/");
     }
