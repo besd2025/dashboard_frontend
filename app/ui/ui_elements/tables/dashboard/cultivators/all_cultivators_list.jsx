@@ -136,7 +136,6 @@ function AllCultivatorsList() {
         }
 
         setData(results.results);
-        console.log(results.results);
         setTotalCount(results.count);
       } catch (error) {
         setError(error);
@@ -158,7 +157,7 @@ function AllCultivatorsList() {
     try {
       const response = await fetchData(
         "delete",
-        `/cultivators/${cultivateurId}/`
+        `/cultivators/${cultivateurId}/`,
       );
 
       if (response?.status === 200 || response?.status === 204) {
@@ -182,7 +181,7 @@ function AllCultivatorsList() {
           params: {},
           additionalHeaders: {},
           body: {},
-        }
+        },
       );
 
       if (initial_export.status == 202) {
@@ -194,7 +193,7 @@ function AllCultivatorsList() {
             "/cultivators/check_task/",
             {
               params: { task_id: task_id },
-            }
+            },
           );
 
           if (export_excel.status === "done") {
@@ -562,7 +561,7 @@ function AllCultivatorsList() {
                         className="w-10 h-10 overflow-hidden rounded-full cursor-pointer"
                         onClick={() =>
                           handleImageClick(
-                            order?.cultivator_photo || "/img/blank-profile.png"
+                            order?.cultivator_photo || "/img/blank-profile.png",
                           )
                         }
                       >

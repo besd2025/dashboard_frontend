@@ -48,7 +48,7 @@ function AddCollecor() {
           params: { province: value },
           additionalHeaders: {},
           body: {},
-        }
+        },
       );
       const options = communes?.map((item) => ({
         value: item.commune_name,
@@ -75,7 +75,7 @@ function AddCollecor() {
           params: { commune: value },
           additionalHeaders: {},
           body: {},
-        }
+        },
       );
       const options = zones?.map((item) => ({
         value: item.zone_name,
@@ -101,7 +101,7 @@ function AddCollecor() {
           params: { zone: value },
           additionalHeaders: {},
           body: {},
-        }
+        },
       );
       const options = collines?.map((item) => ({
         value: item.colline_code,
@@ -126,7 +126,7 @@ function AddCollecor() {
             params: { offset: 0, limit: 18 },
             additionalHeaders: {},
             body: {},
-          }
+          },
         );
         const options = hangars?.map((item) => ({
           value: item.hangar_code,

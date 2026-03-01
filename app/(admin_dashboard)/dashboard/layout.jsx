@@ -8,7 +8,6 @@ import Backdrop from "../../ui/dashboard/Backdrop";
 import AppHeader from "../../ui/dashboard/AppHeader";
 import { UserProvider } from "../../ui/context/UserContext";
 import { useRouter } from "next/navigation";
-
 function AdminLayoutContent({ children }) {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
   const [isAuthChecked, setIsAuthChecked] = useState(false);
@@ -21,7 +20,7 @@ function AdminLayoutContent({ children }) {
         atob(base64)
           .split("")
           .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-          .join("")
+          .join(""),
       );
       return JSON.parse(jsonPayload);
     } catch (error) {
@@ -52,8 +51,8 @@ function AdminLayoutContent({ children }) {
   const mainContentMargin = isMobileOpen
     ? "ml-0"
     : isExpanded || isHovered
-    ? "lg:ml-[290px]"
-    : "lg:ml-[90px]";
+      ? "lg:ml-[290px]"
+      : "lg:ml-[90px]";
 
   return (
     <UserProvider>

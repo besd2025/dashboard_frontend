@@ -153,6 +153,7 @@ function ListeVente() {
         }
 
         setData(results.results);
+        console.log("vente data : ", results.results);
         setTotalCount(results.count);
       } catch (error) {
         setError(error);
@@ -519,10 +520,24 @@ function ListeVente() {
                   </TableCell>
 
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
-                    {order?.nom_acheteur}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.carte_identite_acheteur}
+                    <div>
+                      <span className="block text-gray-800 text-theme-sm dark:text-white/90 font-bold">
+                        {order?.type_acheteur == "public"
+                          ? order?.nom_institution
+                          : order?.sous_type_acheteur == "brarudi"
+                            ? "BRARUDI"
+                            : order?.sous_type_acheteur == "entreprise"
+                              ? order?.raison_sociale
+                              : order?.nom_acheteur}
+                      </span>
+                      <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+                        {order?.carte_identite_acheteur == "null"
+                          ? order?.nif == "null"
+                            ? " "
+                            : order?.nif
+                          : order?.carte_identite_acheteur}
+                      </span>
+                    </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {order?.quantity_blanc + order?.quantity_jaune >= 1000 ? (
@@ -577,7 +592,7 @@ function ListeVente() {
                       className="w-10 h-10 overflow-hidden rounded-md cursor-pointer"
                       onClick={() =>
                         handleImageClick(
-                          order?.photo_facture || "/img/no-image.png"
+                          order?.photo_facture || "/img/no-image.png",
                         )
                       }
                     >
