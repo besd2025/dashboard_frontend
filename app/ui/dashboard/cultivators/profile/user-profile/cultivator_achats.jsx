@@ -10,12 +10,13 @@ import {
   TableHeader,
   TableRow,
 } from "../../../../ui_elements/tables/table_elemets";
-
-export default function CultivatorAchats({ cultivateur_id }) {
+import { useSearchParams } from "next/navigation";
+export default function CultivatorAchats() {
   const { isOpen, openModal, closeModal } = useModal();
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
-
+  const searchParams = useSearchParams();
+  const cultivateur_id = searchParams.get("cult_id");
   useEffect(() => {
     if (!cultivateur_id) return;
 

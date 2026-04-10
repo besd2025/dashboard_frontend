@@ -13,6 +13,7 @@ const AppHeader = () => {
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
   const inputRef = useRef(null);
   const user = useContext(UserContext);
+
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
       toggleSidebar();

@@ -4,15 +4,15 @@ import { useModal } from "../../../../../ui_elements/hooks/useModal";
 import { fetchData } from "../../../../../../_utils/api";
 import Identification from "./identification";
 import ModificationAchat from "./achat";
-
-export default function CultivatorModifications({ cultivateur_id }) {
+import { useSearchParams } from "next/navigation";
+export default function CultivatorModifications() {
   const { isOpen, openModal, closeModal } = useModal();
   const [data, setData] = useState([]);
   const [dataAchat, setDataAchat] = useState([]);
   const [error, setError] = useState("");
-
   const [activeTab, setActiveTab] = useState("identification");
-
+  const searchParams = useSearchParams();
+  const cultivateur_id = searchParams.get("cult_id");
   useEffect(() => {
     if (!cultivateur_id) return; // ✅ Ne fait rien si l'ID est indéfini
 
@@ -27,18 +27,7 @@ export default function CultivatorModifications({ cultivateur_id }) {
             body: {},
           }
         );
-        const resultAchat = await fetchData(
-          "get",
-          `/achats/${cultivateur_id}/get_purchase_history/`,
-          {
-            params: {},
-            additionalHeaders: {},
-            body: {},
-          }
-        );
         setData(results.results);
-        console.log("modification data: ", resultAchat);
-        setDataAchat(resultAchat.results);
       } catch (err) {
         console.error(err);
         setError("Erreur lors du chargement de l'adresse");
@@ -68,7 +57,7 @@ export default function CultivatorModifications({ cultivateur_id }) {
                 >
                   Identification
                 </li>
-                <li
+                {/* <li
                   onClick={() => setActiveTab("achats")}
                   className={`inline-flex border-b-2 px-1 py-3.5 text-sm font-semibold ${
                     activeTab === "achats"
@@ -77,14 +66,14 @@ export default function CultivatorModifications({ cultivateur_id }) {
                   }`}
                 >
                   Achats
-                </li>
+                </li> */}
               </ul>
             </div>
-            {activeTab === "identification" ? (
-              <Identification tableData={data} />
-            ) : (
-              <ModificationAchat tableData={dataAchat} />
-            )}
+            {/* {activeTab === "identification" ? ( */}
+            <Identification tableData={data} />
+            {/* // ) : (
+            //   <ModificationAchat tableData={dataAchat} />
+            // )} */}
           </div>
         </div>
       </div>

@@ -69,7 +69,7 @@ function FilterUserProfile({ handleFilter, closeModalFilter }) {
       return;
     }
     const collines = await fetchData("get", `adress/colline/`, {
-      params: {},
+      params: { zone: value },
       additionalHeaders: {},
       body: {},
     });
@@ -81,7 +81,6 @@ function FilterUserProfile({ handleFilter, closeModalFilter }) {
     setSelectedZone(value);
   };
   const handleSelectCollineChange = (value) => {
-    console.log("Selected value:", value);
     setSelectedColline(value);
   };
   useEffect(() => {
@@ -121,7 +120,6 @@ function FilterUserProfile({ handleFilter, closeModalFilter }) {
       dateFrom: dateFrom,
       dateTo: dateTo,
     };
-    console.log("Filter Data:", filterData);
     handleFilter(filterData);
     closeModalFilter();
   };

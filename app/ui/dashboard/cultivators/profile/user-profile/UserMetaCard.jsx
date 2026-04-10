@@ -11,12 +11,15 @@ import EditUserProfile from "../edit_user_profile";
 import CardsOverview from "./cards_overview";
 import { fetchData } from "../../../../../_utils/api";
 import { UserContext } from "../../../../context/UserContext";
-export default function UserMetaCard({ cultivateur_id }) {
+import { useSearchParams } from "next/navigation";
+export default function UserMetaCard() {
   const { isOpen, openModal, closeModal } = useModal();
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const user = useContext(UserContext);
   const [isImageModalOpen, setImageModalOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const cultivateur_id = searchParams.get("cult_id");
   useEffect(() => {
     async function getData() {
       try {
@@ -37,7 +40,7 @@ export default function UserMetaCard({ cultivateur_id }) {
     }
     getData();
   }, []);
-
+  const imag_profile = "/img/user-profile.png";
   return (
     <>
       <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
@@ -51,7 +54,8 @@ export default function UserMetaCard({ cultivateur_id }) {
                 <Image
                   width={80}
                   height={80}
-                  src={data?.cultivator_photo}
+                  //src={data?.cultivator_photo}
+                  src={imag_profile}
                   alt="user"
                 />
               ) : (

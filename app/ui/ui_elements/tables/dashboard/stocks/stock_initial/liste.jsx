@@ -257,6 +257,7 @@ function ListeStockInitial() {
     setPointer(0);
     setCurrentPage(1);
   };
+  const imag_recu = "/img/Recu.jpg";
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex flex-col lg:flex-row items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
@@ -433,7 +434,7 @@ function ListeStockInitial() {
                 >
                   quantité Maïs Jaune
                 </TableCell>
-                <TableCell
+                {/* <TableCell
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
@@ -444,7 +445,7 @@ function ListeStockInitial() {
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
                   Recus
-                </TableCell>
+                </TableCell> */}
 
                 <TableCell
                   isHeader
@@ -590,7 +591,7 @@ function ListeStockInitial() {
                       </>
                     )}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                  {/* <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     {order?.receipt_number}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
@@ -618,7 +619,7 @@ function ListeStockInitial() {
                         />
                       )}
                     </div>
-                  </TableCell>
+                  </TableCell> */}
 
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     {order?.date_achat}

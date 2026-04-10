@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchData } from "../../../../../_utils/api";
 export default function CardsOverview({ cultivateur_id }) {
-  console.log(cultivateur_id);
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
   const [prix_achat, setTotalPrixAchat] = useState([]);
@@ -30,7 +29,6 @@ export default function CardsOverview({ cultivateur_id }) {
           );
           setData(results);
           setTotalPrixAchat(prix_achat);
-          console.log("prix Achat", prix_achat);
         }
       } catch (error) {
         setError(error);

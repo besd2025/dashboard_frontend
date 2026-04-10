@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from "react";
 import { useModal } from "../../../../ui_elements/hooks/useModal";
 import { fetchData } from "../../../../../_utils/api";
-
-export default function UserAddressCard({ cultivateur_id }) {
+import { useSearchParams } from "next/navigation";
+export default function UserAddressCard() {
   const { isOpen, openModal, closeModal } = useModal();
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
-
+  const searchParams = useSearchParams();
+  const cultivateur_id = searchParams.get("cult_id");
   useEffect(() => {
     if (!cultivateur_id) return; // ✅ Ne fait rien si l'ID est indéfini
 

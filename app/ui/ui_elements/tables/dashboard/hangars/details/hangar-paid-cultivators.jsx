@@ -230,6 +230,7 @@ function HangarPaidCultivators() {
     setModalImageUrl(url);
     setIsImageModalOpen(true);
   };
+  const image_profile = "/img/user-profile.png";
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03]  sm:px-6 sm:pt-6 ">
       <div className="flex flex-col lg:flex-row items-center justify-between w-full gap-2 px-3 py-3 border-b  border-gray-200 dark:border-gray-800 sm:gap-4  lg:border-b-0 lg:px-0 lg:py-4">
@@ -448,10 +449,11 @@ function HangarPaidCultivators() {
                           <Image
                             width={80}
                             height={80}
-                            src={
-                              process.env.NEXT_PUBLIC_IMAGE_URL +
-                              order?.purchase?.cultivator?.cultivator_photo
-                            }
+                            // src={
+                            //   process.env.NEXT_PUBLIC_IMAGE_URL +
+                            //   order?.purchase?.cultivator?.cultivator_photo
+                            // }
+                            src={image_profile}
                             alt="user"
                           />
                         ) : (
