@@ -22,6 +22,7 @@ import {
   Payment,
   SettingsIcon,
 } from "../icons";
+import { FileSearchCorner, HatGlasses } from "lucide-react";
 
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
@@ -229,6 +230,12 @@ const AppSidebar = () => {
       startWithUrl: "/dashboard/stocks/",
     },
     {
+      icon: <FileSearchCorner />,
+      name: "Enquetes",
+      path: "/dashboard/enquetes",
+      startWithUrl: "/dashboard/enquetes/",
+    },
+    {
       icon: <Payment />,
       name: "Paiement",
       path: "/dashboard/payment",
@@ -287,14 +294,14 @@ const AppSidebar = () => {
         return true;
       return false;
     },
-    [isActive, pathname]
+    [isActive, pathname],
   );
 
   const handleSubmenuToggle = (index, menuType) => {
     setOpenSubmenu((prev) =>
       prev && prev.type === menuType && prev.index === index
         ? null
-        : { type: menuType, index }
+        : { type: menuType, index },
     );
   };
 
@@ -424,8 +431,8 @@ const AppSidebar = () => {
           isExpanded || isMobileOpen
             ? "w-[290px]"
             : isHovered
-            ? "w-[290px]"
-            : "w-[90px]"
+              ? "w-[290px]"
+              : "w-[90px]"
         }
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0`}
@@ -433,8 +440,8 @@ const AppSidebar = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
-        className={`py-8 flex ${
-          !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
+        className={`py-4 flex items-center justify-center ${
+          !isExpanded && !isHovered ? "lg:justify-center" : ""
         }`}
       >
         <Link href="/dashboard/home">
@@ -444,16 +451,16 @@ const AppSidebar = () => {
                 className="hidden lg:block dark:hidden rounded-2xl"
                 src="/img/ANAGESSA LOGO.jpg"
                 alt="Logo"
-                width={150}
-                height={40}
+                width={130}
+                height={30}
               />
               <Image
                 //for dark mode
                 className="hidden dark:lg:block"
                 src="/img/ANAGESSA LOGO.jpg"
                 alt="Logo"
-                width={150}
-                height={40}
+                width={130}
+                height={30}
               />
             </>
           ) : (
