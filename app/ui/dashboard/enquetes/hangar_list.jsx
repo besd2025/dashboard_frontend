@@ -40,7 +40,7 @@ function AllCultivatorsList() {
   const [loading, setLoading] = useState(true);
   const [loadingEportBtn, setLoadingEportBtn] = useState(false);
   const [activedownloadBtn, setActivedownloadBtn] = useState(false);
-
+const [exportCount, setExportCount] = useState(0);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -94,7 +94,7 @@ function AllCultivatorsList() {
         let results;
 
         if (filterData && Object.keys(filterData).length > 0) {
-          results = await fetchData("get", "/hangars/", {
+          results = await fetchData("get", "/tous_enquetes/anagessa/enquete/", {
             params: {
               province: filterData.province,
               commune: filterData.commune,
@@ -109,7 +109,7 @@ function AllCultivatorsList() {
             },
           });
         } else {
-          results = await fetchData("get", "/hangars/", {
+          results = await fetchData("get", "/tous_enquetes/anagessa/enquete/", {
             params: {
               search: searchData,
               offset: pointer,
@@ -141,81 +141,122 @@ function AllCultivatorsList() {
   const ExportHangarsToExcel = async () => {
     setLoadingEportBtn(true);
     try {
-      const initial_export = await fetchData("post", "/hangars/export_excel/", {
-        params: {},
-        additionalHeaders: {},
-        body: {},
+      const params = {
+        province: filterData.province,
+        commune: filterData.commune,
+        zone: filterData.zone,
+        min_quantity_achete: filterData.QtMinAchetee,
+        max_quantity_achete: filterData.QtMaxAchete,
+        min_quantity_vendu: filterData.QtMinVendue,
+        max_quantity_vendu: filterData.QtMaxVendue,
+        search: searchData,
+        limit: 1,
+      };
+
+      const initResponse = await fetchData("get", `/tous_enquetes/anagessa/enquete/`, {
+        params,
       });
-
-      if (initial_export.status == 202) {
-        setLoadingEportBtn(true);
-        const task_id = initial_export?.data?.task_id;
-        const intervalId = setInterval(async () => {
-          const export_excel = await fetchData("get", "/hangars/check_task/", {
-            params: { task_id: task_id },
-          });
-          if (export_excel.status === "done") {
-            clearInterval(intervalId); // Arrêtez l'intervalle
-            setLoadingEportBtn(false);
-            setActivedownloadBtn(true);
-          }
-        }, 2000);
+      const total = initResponse?.count || 0;
+      if (total === 0) {
+        setLoadingEportBtn(false);
+        return;
       }
+      else{
 
-      // Vérifier toutes les 6 secondes
+        setActivedownloadBtn(true);
+        setExportCount(total);
+      }
     } catch (error) {
       console.error("Erreur exportation Excel :", error);
     } finally {
-      //setLoadingEportBtn(false);
+      setLoadingEportBtn(false);
     }
+
   };
   const DownloadHangarsToExcel = async () => {
+
     try {
-      const response = await fetchData("get", "/hangars/download_excel/", {
-        isBlob: true,
-      });
-
-      // Créer le blob avec le bon type MIME
-      const blob = new Blob([response.data], {
-        type:
-          response.headers["content-type"] ||
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-      const url = window.URL.createObjectURL(blob);
-      const now = new Date();
-      const day = String(now.getDate()).padStart(2, "0");
-      const month = String(now.getMonth() + 1).padStart(2, "0");
-      const year = now.getFullYear();
-      const hours = String(now.getHours()).padStart(2, "0");
-      const minutes = String(now.getMinutes()).padStart(2, "0");
-      const seconds = String(now.getSeconds()).padStart(2, "0");
-
-      const timestamp = `${day}_${month}_${year}_${hours}_${minutes}_${seconds}`;
-      // Nom du fichier par défaut
-      let filename = `hangars_list_${timestamp}.xlsx`;
-
-      const contentDisposition = response.headers["content-disposition"];
-      if (contentDisposition) {
-        const match = contentDisposition.match(/filename="?(.+)"?/);
-        if (match && match[1]) filename = match[1];
+      if(exportCount === 0){
+        return;
       }
+      const params = {
+        province: filterData.province,
+        commune: filterData.commune,
+        zone: filterData.zone,
+        min_quantity_achete: filterData.QtMinAchetee,
+        max_quantity_achete: filterData.QtMaxAchete,
+        min_quantity_vendu: filterData.QtMinVendue,
+        max_quantity_vendu: filterData.QtMaxVendue,
+        search: searchData,
+        limit: exportCount,
+      };
 
-      // Création du <a> temporaire
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", filename);
-      document.body.appendChild(link);
-      link.click();
+      const response = await fetchData("get", `/tous_enquetes/anagessa/enquete/`, {
+        params,
+      });
 
-      // Nettoyage
-      link.remove();
-      window.URL.revokeObjectURL(url);
+      const allData = response.results || [];
+      const formattedData = allData.map((item) => ({
+        "Nom du Hangar": item.hangar?.hangar_name || "",
+        "Code du Hangar": item.hangar?.hangar_code || "",
+        "Province": item.hangar?.province || "",
+        "Commune": item.hangar?.commune || "",
+        "Zone": item.hangar?.zone || "",
+        "Autre_nom_hangar": item?.new_hangar_real_name || "",
+        "type_hangar": item?.hangar_level || "",
+        "Date_Enquete":item?.created_at
+          ? new Date(item.created_at).toLocaleString('fr-FR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+          })
+          : null,
+        "Quantite_initiale": item.total_quantity_initial_kg || "",
+        "Quantite_mais_blan_Achetée": item.quantity_collected_blanc_kg || "",
+        "Quantite_mais_jaune_Achetée": item.quantity_collected_jaune_kg || "",
+        "Quantite_totale_Achetée": item.total_quantity_collected_kg || "",
+        "Quantite_mais_blan_Vendue": item.quantity_sold_blanc_kg || "",
+        "Quantite_mais_jaune_Vendue": item.quantity_sold_jaune_kg || "",
+        "Quantite_totale_Vendue": (item?.quantity_sold_blanc_kg || 0) + (item?.quantity_sold_jaune_kg || 0),
+        "Quantite_mais_blan_transferee": item.quantity_transferred_blanc_kg || "",
+        "Quantite_mais_jaune_transferee": item?.quantity_transferred_jaune_kg || "",
+        "Quantite_totale_transferee": (item?.quantity_transferred_blanc_kg || 0) + (item?.quantity_transferred_jaune_kg || 0),
+        "Quantite_mais_blan_recue": item.quantity_received_blanc_kg || "",
+        "Quantite_mais_jaune_recue": item?.quantity_received_jaune_kg || "",
+        "Quantite_totale_recue": (item?.quantity_received_blanc_kg || 0) + (item?.quantity_received_jaune_kg || 0),
+        "Quantite_totale_Stock": item?.is_quantity_matching === true ? (item.quantity_remaining_kg || "") : (item.real_quantity_remaining_kg || ""),
+        "Quantite_attaque_par_charanson": item.weevils_qty_kg || "",
+        "Quantite_non_sechee": item.humid_qty_kg || "",
+        "hangar_est_il_aere": item.is_aerated===true ? "oui" : "non" || "",
+        "hangar_possede_palettes": item.has_pallets===true ? "oui" : "non" || "",
+        "hangar_possede_secs": item.has_pics_bags===true ? "oui" : "non" || "",
+        "Appreciation_hangar": item.appreciation || "",
+        "Nom_enqueteur": item.enqueteur?.last_name || "",
+        "Prenom_enqueteur": item.enqueteur?.first_name || "",
+        "Nom_gestionnaire": item.gestionnaire_nom || "",
+        "Prenom_gestionnaire": item.gestionnaire_prenom || "",
+      }));
 
-      setActivedownloadBtn(false);
+      const worksheet = XLSX.utils.json_to_sheet(formattedData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Data_Enquetes");
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+      const blob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+      });
+      saveAs(blob, "base_de_donnees_enquete_anagessa_du_19_au_24_avril_2026.xlsx");
     } catch (error) {
-      console.error("Erreur lors de l'exportation Excel :", error);
+      console.error("Erreur exportation Excel :", error);
     } finally {
+      setLoadingEportBtn(false);
       setActivedownloadBtn(false);
+      setExportCount(0);
     }
   };
   const handleFilter = (filterData) => {
@@ -409,6 +450,12 @@ function AllCultivatorsList() {
                 >
                   Zone
                 </TableCell>
+                                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
+                >
+                  Nom Du hangar
+                </TableCell>
               </TableRow>
             </TableHeader>
 
@@ -438,7 +485,7 @@ function AllCultivatorsList() {
                           </DropdownMenuLabel>
                           <DropdownMenuGroup>
                             <DropdownMenuItem asChild>
-                              <EnqueteHangarDetails />
+                              <EnqueteHangarDetails id={order.id}/>
                             </DropdownMenuItem>
                           </DropdownMenuGroup>
                         </DropdownMenuContent>
@@ -471,20 +518,23 @@ function AllCultivatorsList() {
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.responsable_name}
+                    {order?.gestionnaire_nom}  {order?.gestionnaire_prenom}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.responsable_phone}
+                    {order?.enqueteur?.last_name}  {order?.enqueteur?.first_name}
                   </TableCell>
 
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.province}
+                    {order?.hangar?.province}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.commune}
+                    {order?.hangar?.commune}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order?.zone}
+                    {order?.hangar?.zone}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {order?.hangar?.hangar_name}
                   </TableCell>
                 </TableRow>
               ))}

@@ -95,7 +95,7 @@ const DetailItem = ({ icon, label, total, blanc, jaune, unit = "Kg" }) => {
   );
 };
 
-export default function EnqueteHangarDetails({ hangar_id }) {
+export default function EnqueteHangarDetails({ id, ...props }) {
   const [actats, setAchats] = useState({});
   const [ventes, setVentes] = useState({});
   const [transfers, setTransfers] = useState({});
@@ -105,81 +105,22 @@ export default function EnqueteHangarDetails({ hangar_id }) {
   const [qte_blanc_restante, setBlancRestante] = useState(0);
   const [qte_jaune_restante, setJauneRestante] = useState(0);
   const [qte_recues, setQteRecues] = useState({});
+  const [data, setData] = useState([]);
   useEffect(() => {
-    if (!hangar_id) return; // Ne rien faire si l'ID est invalide
+    if (!id) return; // Ne rien faire si l'ID est invalide
 
     const getData = async () => {
       try {
-        const achats = await fetchData(
+        const values = await fetchData(
           "get",
-          `hangars/${hangar_id}/get_total_achat_par_hangar`,
+          `/tous_enquetes/anagessa/enquete/${id}/`,
           {
             params: {},
             additionalHeaders: {},
             body: {},
           },
         );
-        const ventes = await fetchData(
-          "get",
-          `hangars/${hangar_id}/get_total_vent_par_hangar`,
-          {
-            params: {},
-            additionalHeaders: {},
-            body: {},
-          },
-        );
-        const transfert = await fetchData(
-          "get",
-          `hangars/${hangar_id}/get_quantity_transferer`,
-          {
-            params: {},
-            additionalHeaders: {},
-            body: {},
-          },
-        );
-        const stock_initial = await fetchData(
-          "get",
-          `hangars/${hangar_id}/get_inital_stock_per_hangar`,
-          {
-            params: {},
-            additionalHeaders: {},
-            body: {},
-          },
-        );
-        const cultivatuers = await fetchData(
-          "get",
-          `hangars/${hangar_id}/get_cultivator_number_per_hangar`,
-          {
-            params: {},
-            additionalHeaders: {},
-            body: {},
-          },
-        );
-        const Qte_recues = await fetchData(
-          "get",
-          `hangars/${hangar_id}/get_quantity_transferer_received`,
-          {
-            params: {},
-            additionalHeaders: {},
-            body: {},
-          },
-        );
-        setAchats(achats);
-        setVentes(ventes);
-        setTransfers(transfert);
-        setStockInitial(stock_initial);
-        setACultivateurs(cultivatuers);
-        const qte_blanc_restante =
-          achats?.total_blanc +
-          Qte_recues?.total_blanc -
-          (ventes?.total_blanc + transfert?.total_blanc);
-        const qte_jaune_restante =
-          achats?.total_jaune +
-          Qte_recues?.total_jaune -
-          (ventes?.total_jaune + transfert?.total_jaune);
-        setBlancRestante(qte_blanc_restante);
-        setJauneRestante(qte_jaune_restante);
-        setQteRecues(Qte_recues);
+        setData(values);
       } catch (error) {
         setError(error);
         console.error(error);
@@ -187,12 +128,13 @@ export default function EnqueteHangarDetails({ hangar_id }) {
     };
 
     getData();
-  }, [hangar_id]);
+  }, [id]);
 
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button
+          {...props}
           variant="outline"
           className="cursor-pointer border-none shadow-none w-full"
         >
@@ -206,9 +148,9 @@ export default function EnqueteHangarDetails({ hangar_id }) {
         <div className="flex flex-col divide-y divide-gray-100 dark:divide-gray-800 max-h-[70vh] overflow-y-auto px-3">
           <DetailItem
             label="Qté Collectée"
-            total={actats?.total_blanc + actats?.total_jaune}
-            blanc={actats?.total_blanc}
-            jaune={actats?.total_jaune}
+            total={data?.total_quantity_collected_kg}
+            blanc={data?.quantity_collected_blanc_kg}
+            jaune={data?.quantity_collected_jaune_kg}
             icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -228,9 +170,9 @@ export default function EnqueteHangarDetails({ hangar_id }) {
 
           <DetailItem
             label="Qté Vendue"
-            total={ventes.total_blanc + ventes?.total_jaune}
-            blanc={ventes?.total_blanc}
-            jaune={ventes?.total_jaune}
+            total={data?.quantity_sold_blanc_kg + data?.quantity_sold_jaune_kg}
+            blanc={data?.quantity_sold_blanc_kg}
+            jaune={data?.quantity_sold_jaune_kg}
             icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -250,9 +192,9 @@ export default function EnqueteHangarDetails({ hangar_id }) {
 
           <DetailItem
             label="Qté Transférée"
-            total={transfers.total_blanc + transfers?.total_jaune}
-            blanc={transfers?.total_blanc}
-            jaune={transfers?.total_jaune}
+            total={data?.quantity_transferred_blanc_kg + data?.quantity_transferred_jaune_kg}
+            blanc={data?.quantity_transferred_blanc_kg}
+            jaune={data?.quantity_transferred_jaune_kg}
             icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -272,9 +214,9 @@ export default function EnqueteHangarDetails({ hangar_id }) {
 
           <DetailItem
             label="Qté Reçue"
-            total={qte_recues?.total_blanc + qte_recues?.total_jaune}
-            blanc={qte_recues?.total_blanc}
-            jaune={qte_recues?.total_jaune}
+            total={data?.quantity_received_blanc_kg + data?.quantity_received_jaune_kg}
+            blanc={data?.quantity_received_blanc_kg}
+            jaune={data?.quantity_received_jaune_kg}
             icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -293,7 +235,7 @@ export default function EnqueteHangarDetails({ hangar_id }) {
           />
           <DetailItem
             label="Stock Initial (2024)"
-            total={stock_initial?.quantite_initial}
+            total={data?.total_quantity_initial_kg}
             icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -333,21 +275,21 @@ export default function EnqueteHangarDetails({ hangar_id }) {
           />
 
           <DetailItem
-            label="Nombre de Cultivateurs"
-            total={cultivateurs?.nbr_cultivators}
-            unit="Cultivateurs"
+            label="QTE RESTANTE"
+            total={data?.quantity_remaining_kg}
             icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
+                fill="none"
                 viewBox="0 0 24 24"
-                fill="currentColor"
+                strokeWidth={1.5}
+                stroke="currentColor"
               >
                 <path
-                  fillRule="evenodd"
-                  d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z"
-                  clipRule="evenodd"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H6.911a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661Z"
                 />
-                <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
               </svg>
             }
           />
