@@ -17,7 +17,12 @@ import InfrastructureSection from "./summary_components/infrastructure_section";
 import LossesSection from "./summary_components/losses_section";
 
 // Logic & Data
-import { transformSurveyData, MOCK_ILLUSTRATION_DATA } from "./summary_components/utils";
+import {
+  transformSurveyData,
+  MOCK_ILLUSTRATION_DATA,
+} from "./summary_components/utils";
+import { VisitedHangarStats } from "./summary_components/visited-hangar-stats";
+import { ProvinceVisitedStats } from "./summary_components/province-visited";
 
 export default function SurveySummaryDashboard({ results }) {
   const isIllustration =
@@ -98,6 +103,10 @@ export default function SurveySummaryDashboard({ results }) {
 
         {/* Quality & Losses Column */}
         <LossesSection losses={summary.losses} totalLosses={totalLosses} />
+      </div>
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+        <VisitedHangarStats totalVisited={summary.total_enquetes} />
+        <ProvinceVisitedStats />
       </div>
     </div>
   );
