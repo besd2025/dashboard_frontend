@@ -95,7 +95,7 @@ const DetailItem = ({ icon, label, total, blanc, jaune, unit = "Kg" }) => {
   );
 };
 
-export default function EnqueteHangarDetails({ id, ...props }) {
+export default function EnqueteHangarDetails({ id }) {
   const [actats, setAchats] = useState({});
   const [ventes, setVentes] = useState({});
   const [transfers, setTransfers] = useState({});
@@ -132,9 +132,8 @@ export default function EnqueteHangarDetails({ id, ...props }) {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
+      <DialogTrigger>
         <Button
-          {...props}
           variant="outline"
           className="cursor-pointer border-none shadow-none w-full"
         >

@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SurveySummaryDashboard from "./survey_summary";
+import { fetchData } from "@/lib/api_requests";
 
 const mockData = {
     "count": 1,
@@ -117,7 +118,63 @@ const mockData = {
     ]
 };
 
+
+
 export default function TestSurveySummary() {
+
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    if (!id) return; // Ne rien faire si l'ID est invalide
+
+    const getData = async () => {
+      try {
+        const quantity_collected_stats = await fetchData(
+          "get",
+          `/tous_enquetes/anagessa/enquete/get_quantity_collected_stats/`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          },
+        );
+        const quantity_restante = await fetchData(
+          "get",
+          `/tous_enquetes/anagessa/enquete/get_quantity_restante_stats/`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          },
+        );
+        const quantity_transferred_stats = await fetchData(
+          "get",
+          `/tous_enquetes/anagessa/enquete/get_quantity_transferred_stats/`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          },
+        );
+        const quantity_remaining_stats = await fetchData(
+          "get",
+          `/tous_enquetes/anagessa/enquete/get_quantity_remaining_stats/`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          },
+        );
+        setData(values);
+      } catch (error) {
+        setError(error);
+        console.error(error);
+      }
+    };
+
+    getData();
+  }, [id]);
+
   return (
     <div className="p-8 bg-gray-50 dark:bg-black min-h-screen">
       <div className="max-w-7xl mx-auto">
