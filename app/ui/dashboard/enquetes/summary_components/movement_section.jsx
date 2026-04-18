@@ -4,6 +4,7 @@ import { Separator } from "../../../../../components/ui/separator";
 import BreakdownItem from "./breakdown_item";
 
 const MovementSection = ({ summary }) => {
+  console.log(summary);
   return (
     <div className="bg-white dark:bg-gray-900 rounded-3xl p-8 border border-gray-200 dark:border-gray-800">
       <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-3 mb-4">
@@ -29,7 +30,7 @@ const MovementSection = ({ summary }) => {
                     </span>
                   </div>
                   <span className="font-bold text-gray-900 dark:text-white">
-                    {summary.collected.blanc.toLocaleString()} Kg
+                    {summary.collected?.blanc?.toLocaleString()} Kg
                   </span>
                 </div>
               </div>
@@ -42,7 +43,7 @@ const MovementSection = ({ summary }) => {
                     </span>
                   </div>
                   <span className="font-bold text-gray-900 dark:text-white">
-                    {summary.collected.jaune.toLocaleString()} Kg
+                    {summary.collected?.jaune?.toLocaleString()} Kg
                   </span>
                 </div>
               </div>
@@ -55,21 +56,21 @@ const MovementSection = ({ summary }) => {
           <div className="space-y-6 w-full">
             <BreakdownItem
               label="Ventes"
-              total={summary.sold.total}
-              blanc={summary.sold.blanc}
-              jaune={summary.sold.jaune}
+              total={summary.sold?.total}
+              blanc={summary.sold?.blanc}
+              jaune={summary.sold?.jaune}
             />
             <BreakdownItem
               label="Transferts (Sorties)"
-              total={summary.transferred.total}
-              blanc={summary.transferred.blanc}
-              jaune={summary.transferred.jaune}
+              total={summary.transferred?.total}
+              blanc={summary.transferred?.blanc}
+              jaune={summary.transferred?.jaune}
             />
             <BreakdownItem
-              label="Transferts (Entrées)"
-              total={summary.received.total}
-              blanc={summary.received.blanc}
-              jaune={summary.received.jaune}
+              label="Transferts (reçus)"
+              total={summary.received?.total}
+              blanc={summary.received?.blanc}
+              jaune={summary.received?.jaune}
             />
           </div>
         </div>

@@ -14,27 +14,31 @@ const InfrastructureSection = ({ quality }) => {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <QualityBadge
           label="Non Aération"
-          rate={quality.aeration_rate}
+          rate={quality?.aeration_rate}
           icon={Droplets}
           color="text-cyan-500"
+          total={quality?.total_hangars}
         />
         <QualityBadge
           label="Non Palettes"
-          rate={quality.pallets_rate}
+          rate={quality?.pallets_rate}
           icon={PackageCheck}
           color="text-amber-600"
+          total={quality?.total_hangars}
         />
         <QualityBadge
           label="Non Sacs PICS"
-          rate={quality.pics_bags_rate}
+          rate={quality?.pics_bags_rate}
           icon={Scale}
           color="text-emerald-500"
+          total={quality?.total_hangars}
         />
         <QualityBadge
           label="Non Insecticide"
-          rate={quality.insecticide_rate}
+          rate={quality?.insecticide_rate}
           icon={Bug}
           color="text-purple-500"
+          total={quality?.total_hangars}
         />
       </div>
     </div>

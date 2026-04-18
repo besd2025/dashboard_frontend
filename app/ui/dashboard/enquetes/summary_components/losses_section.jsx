@@ -20,7 +20,7 @@ const LossesSection = ({ losses, totalLosses }) => {
             </span>
           </div>
           <span className="font-bold text-red-900 dark:text-red-200">
-            {losses.weevils.toLocaleString()} Kg
+            {losses?.weevils?.toLocaleString()} Kg
           </span>
         </div>
 
@@ -32,7 +32,7 @@ const LossesSection = ({ losses, totalLosses }) => {
             </span>
           </div>
           <span className="font-bold text-orange-900 dark:text-red-200">
-            {losses.foreign_bodies.toLocaleString()} Kg
+            {losses?.foreign_bodies?.toLocaleString()} Kg
           </span>
         </div>
 
@@ -44,7 +44,7 @@ const LossesSection = ({ losses, totalLosses }) => {
             </span>
           </div>
           <span className="font-bold text-blue-900 dark:text-blue-200">
-            {losses.humid.toLocaleString()} Kg
+            {losses?.humid?.toLocaleString()} Kg
           </span>
         </div>
 
@@ -55,7 +55,7 @@ const LossesSection = ({ losses, totalLosses }) => {
             </span>
             <div className="flex items-baseline gap-2">
               <h3 className="text-2xl font-bold">
-                {totalLosses.toLocaleString()}
+                {totalLosses?.toLocaleString()}
               </h3>
               <span className="text-sm text-gray-600">Kg</span>
             </div>

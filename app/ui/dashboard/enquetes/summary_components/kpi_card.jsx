@@ -11,7 +11,7 @@ const KPICard = ({ title, value, unit, icon: Icon, iconColor, bgColor }) => (
     </div>
     <div>
       <h4 className="mt-1 font-bold text-gray-800 text-2xl dark:text-white/90">
-        {value.toLocaleString("fr-FR")}
+        {value?.toLocaleString("fr-FR")}
         <span className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">
           {unit}
         </span>

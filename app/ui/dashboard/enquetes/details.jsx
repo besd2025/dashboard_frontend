@@ -6,94 +6,87 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import ViewImageModal from "../../ui_elements/modal/ViewImageModal";
 
-const DetailItem = ({ icon, label, total, blanc, jaune, unit = "Kg" }) => {
-  const formatValue = (val) => {
-    if (val >= 1000) {
-      return (
-        <>
-          {(val / 1000).toLocaleString("fr-FR", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}{" "}
-          <span className="text-sm">T</span>
-        </>
-      );
-    }
-    return (
-      <>
-        {val?.toLocaleString("fr-FR") || 0}{" "}
-        <span className="text-sm">{unit}</span>
-      </>
-    );
-  };
+// Sub-components
+import DetailsHeader from "./detail_components/DetailsHeader";
+import DetailsPersonnel from "./detail_components/DetailsPersonnel";
+import DetailsStocks from "./detail_components/DetailsStocks";
+import DetailsQuality from "./detail_components/DetailsQuality";
+import DetailsLosses from "./detail_components/DetailsLosses";
+import DetailsObservations from "./detail_components/DetailsObservations";
+import DetailsPhotos from "./detail_components/DetailsPhotos";
 
-  return (
-    <div className="py-1 first:pt-0 last:pb-0">
-      <div className="flex items-center justify-between group">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center justify-center w-11 h-11 bg-gray-50 rounded-xl dark:bg-gray-800 transition-all group-hover:scale-105 group-hover:bg-gray-100 dark:group-hover:bg-gray-700">
-            {React.cloneElement(icon, {
-              className: "size-6 text-gray-700 dark:text-gray-300",
-            })}
-          </div>
-          <span className="text-sm text-gray-700 dark:text-gray-300">
-            {label}
-          </span>
-        </div>
-        <div className="flex flex-col items-end">
-          <div className="text-md font-medium text-gray-900 dark:text-white">
-            {formatValue(total)}
-          </div>
-          {(blanc !== undefined || jaune !== undefined) && (
-            <div className="flex items-center gap-4 mt-1.5 transition-opacity group-hover:opacity-100">
-              <div className="flex items-center gap-2 px-2 py-0.5 rounded-md bg-green-50/50 dark:bg-green-900/10 border border-green-100/50 dark:border-green-800/20">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="size-6 text-gray-200"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4.5 7.5a3 3 0 0 1 3-3h9a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-9Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span className="text-[11px] font-medium text-green-600/80 dark:text-green-400/80">
-                  Blanc: {formatValue(blanc)}
-                </span>
-              </div>
-              <div className="flex items-center gap-2 px-2 py-0.5 rounded-md bg-yellow-50/50 dark:bg-yellow-900/10 border border-yellow-100/50 dark:border-yellow-800/20">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="size-6 text-yellow-500"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4.5 7.5a3 3 0 0 1 3-3h9a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-9Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span className="text-[11px] font-medium text-yellow-600/80 dark:text-yellow-400/80">
-                  Jaune: {formatValue(jaune)}
-                </span>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
+const MOCK_ENQUETE_DATA = {
+  results: [
+    {
+      id: 9,
+      enqueteur: {
+        first_name: "Jean Bertrand",
+        last_name: "BIBONIMANA",
+        phone: "61908349",
+        adress: {
+          province_code: { province_name: "KARUSI" },
+          commune_name: "GITARAMUKA",
+        },
+      },
+      hangar: {
+        hangar_name: "HANGAR COMMUNAL GIHARABUGA22",
+        hangar_code: "1050401",
+        province: "BUBANZA",
+        commune: "RUGAZI",
+        zone: "RUGAZI",
+        new_hangar_real_name: "HANGAR NOUVEL",
+      },
+      gestionnaire_nom: "Test",
+      gestionnaire_prenom: "Etwg",
+      gestionnaire_phone: "69880089",
+      total_cultivateurs: 12,
+      total_quantity_initial_kg: 3680.0,
+      quantity_collected_jaune_kg: 60.0,
+      quantity_collected_blanc_kg: 300.0,
+      total_quantity_collected_kg: 360.0,
+      quantity_transferred_blanc_kg: 90.0,
+      quantity_transferred_jaune_kg: 0.0,
+      quantity_sold_blanc_kg: 30.0,
+      quantity_sold_jaune_kg: 60.0,
+      quantity_received_blanc_kg: 6.0,
+      quantity_received_jaune_kg: 0.0,
+      quantity_remaining_kg: 3866.0,
+      is_quantity_matching: true,
+      is_aerated: true,
+      has_pallets: true,
+      has_pics_bags: true,
+      appreciation: "Moyen",
+      has_weevils: true,
+      weevils_qty_kg: 500.0,
+      weevils_photo: "/img/billet_example.jpg",
+      is_on_floor: false,
+      floor_qty_kg: 0.0,
+      floor_photo:
+        "http://192.168.1.198/media/enquetes/images/86aa45d1-ff46-42d3-a3e7-80284f24a1f8.jpeg",
+      is_humid: false,
+      humid_qty_kg: 0.0,
+      humid_photo:
+        "http://192.168.1.198/media/enquetes/images/86aa45d1-ff46-42d3-a3e7-80284f24a1f8.jpeg",
+      has_foreign_bodies: true,
+      foreign_bodies_nature: "Cailloux",
+      foreign_bodies_qty_kg: 300.0,
+      foreign_bodies_photo:
+        "http://192.168.1.198/media/enquetes/images/1ff61684-0642-4f99-9279-82de8d0c0ba7.jpeg",
+      has_insecticide: true,
+      insecticide_details: "Assu",
+      comment: "Observations sur le stockage et la qualité des produits.",
+      created_at: "2026-04-17T08:56:18.847933Z",
+    },
+  ],
 };
+
 
 export default function EnqueteHangarDetails({ id }) {
   const [actats, setAchats] = useState({});
@@ -106,11 +99,20 @@ export default function EnqueteHangarDetails({ id }) {
   const [qte_jaune_restante, setJauneRestante] = useState(0);
   const [qte_recues, setQteRecues] = useState({});
   const [data, setData] = useState([]);
-  useEffect(() => {
-    if (!id) return; // Ne rien faire si l'ID est invalide
 
+  const [loading, setLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const openImageModal = (url, label) => {
+    setSelectedImage({ url, label });
+    setIsImageModalOpen(true);
+  };
+
+  useEffect(() => {
     const getData = async () => {
+      setLoading(true);
       try {
+
         const values = await fetchData(
           "get",
           `/tous_enquetes/anagessa/enquete/${id}/`,
@@ -121,25 +123,45 @@ export default function EnqueteHangarDetails({ id }) {
           },
         );
         setData(values);
+
+        // if (!hangar_id || hangar_id === "mock") {
+        //   setTimeout(async () => {
+        //    // setData(MOCK_ENQUETE_DATA.results[0]);
+        //    const res = await fetchData(
+        //   "get",
+        //   `enquetes/get_latest_by_hangar/${hangar_id}`,
+        // ).catch(() => null);
+        // setData(res?.results);
+        //     setLoading(false);
+        //   }, 400);
+        //   return;
+        // }
+        
       } catch (error) {
-        setError(error);
         console.error(error);
+        //setData(MOCK_ENQUETE_DATA.results[0]);
+      } finally {
+        setLoading(false);
       }
     };
-
     getData();
   }, [id]);
 
+  if (!data && loading) return null;
+  const d = data;
+
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button
-          variant="outline"
-          className="cursor-pointer border-none shadow-none w-full"
+          variant="ghost"
+          size="sm"
+          className="h-8 text-xs font-bold text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 px-3 rounded-lg"
         >
-          Details
+          Voir détails
         </Button>
       </DialogTrigger>
+{/* 
       <DialogContent className="sm:max-w-[600px] ">
         <DialogHeader>
           <DialogTitle>Details</DialogTitle>
@@ -291,13 +313,51 @@ export default function EnqueteHangarDetails({ id }) {
                 />
               </svg>
             }
-          />
+          /> */}
+      <DialogContent
+        onInteractOutside={(e) => {
+          if (isImageModalOpen) e.preventDefault();
+        }}
+        onPointerDownOutside={(e) => {
+          if (isImageModalOpen) e.preventDefault();
+        }}
+        className="sm:max-w-[900px] h-[95vh] p-0 border border-gray-200 dark:border-gray-800 rounded-3xl bg-white dark:bg-gray-900"
+      >
+        <div className="w-full h-full overflow-hidden rounded-3xl flex flex-col">
+          <DialogHeader className="p-4 border-b border-gray-100 dark:border-gray-800">
+            <DialogTitle className="sr-only">Détails de l'enquête</DialogTitle>
+            <DetailsHeader data={d} />
+            <DetailsPersonnel data={d} />
+          </DialogHeader>
+
+          <div className="max-h-[60vh] overflow-y-auto px-8 py-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              <DetailsStocks data={d} />
+              <div className="space-y-6">
+                <DetailsQuality data={d} />
+                <DetailsLosses data={d} />
+                <DetailsObservations comment={d?.comment} />
+              </div>
+            </div>
+            <DetailsPhotos data={d} onImageClick={openImageModal} />
+          </div>
+
+          <DialogFooter className="p-4 border-t border-gray-100 dark:border-gray-800 lg:justify-end">
+            <DialogClose asChild>
+              <Button variant="outline" className="rounded-xl font-bold">
+                Fermer
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+
         </div>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">Fermer</Button>
-          </DialogClose>
-        </DialogFooter>
+
+        <ViewImageModal
+          isOpen={isImageModalOpen}
+          onClose={() => setIsImageModalOpen(false)}
+          imageUrl={selectedImage?.url}
+          alt={selectedImage?.label}
+        />
       </DialogContent>
     </Dialog>
   );

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import SurveySummaryDashboard from "./survey_summary";
-import { fetchData } from "@/lib/api_requests";
+import { fetchData } from "../../../_utils/api";
 
 const mockData = {
     "count": 1,
@@ -165,7 +165,12 @@ export default function TestSurveySummary() {
             body: {},
           },
         );
-        setData(values);
+        setData({
+          quantity_collected_stats,
+          quantity_restante,
+          quantity_transferred_stats,
+          quantity_remaining_stats,
+        });
       } catch (error) {
         setError(error);
         console.error(error);

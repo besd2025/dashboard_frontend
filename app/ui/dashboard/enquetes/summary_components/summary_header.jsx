@@ -1,8 +1,49 @@
-import React from "react";
+"use client"
+import React ,{useState,useEffect}from "react";
 import { List, Users } from "lucide-react";
 import { Button } from "../../../../../components/ui/button";
+import { fetchData } from "../../../../_utils/api";
 
 const SummaryHeader = ({ summary }) => {
+
+  const [data, setData] = useState({});
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const total_enquetes = await fetchData(
+          "get",
+          `/tous_enquetes/anagessa/enquete/`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          },
+        );       
+                const total_hangars = await fetchData(
+          "get",
+          `/hangars/`,
+          {
+            params: {},
+            additionalHeaders: {},
+            body: {},
+          },
+        ); 
+
+        setData({
+          total_enquetes:total_enquetes.count,
+          total_hangars:total_hangars.count
+        });
+      } catch (error) {
+        setError(error);
+        console.error(error)
+      }
+    };
+
+    getData();
+  }, []);
+
+
   return (
     <div className="flex flex-wrap items-center gap-6">
       <div className="flex items-center gap-2 bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-200 dark:border-gray-800/50 ">
@@ -10,11 +51,11 @@ const SummaryHeader = ({ summary }) => {
         <span className="text-sm font-medium text-gray-500">
           Total Enquêtes:{" "}
           <span className="text-gray-900 dark:text-white font-bold">
-            {summary.total_enquetes} / 395
+            {data.total_enquetes} / {data.total_hangars}
           </span>
         </span>
       </div>
-      <div className="flex items-center gap-2 bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-200 dark:border-gray-800/50 ">
+      {/* <div className="flex items-center gap-2 bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-200 dark:border-gray-800/50 ">
         <Users size={20} className="text-gray-700 dark:text-gray-300" />
         <span className="text-sm font-medium text-gray-500">
           Cultivateurs:{" "}
@@ -23,28 +64,7 @@ const SummaryHeader = ({ summary }) => {
           </span>
         </span>
       </div>
-      {/* <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-        <span className="text-[11px] font-bold text-gray-500 uppercase">
-          Appréciation:{" "}
-        </span>
-        <span
-          className={`text-[11px] font-black uppercase ${
-            summary.quality.appreciation === "Bon"
-              ? "text-emerald-500"
-              : summary.quality.appreciation === "Moyen"
-                ? "text-amber-500"
-                : "text-red-500"
-          }`}
-        >
-          {summary.quality.appreciation}
-        </span>
-      </div> */}
-      <Button className="flex items-center gap-2 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 p-4 rounded-2xl ">
-        <List size={20} className="text-gray-700 dark:text-gray-300" />
-        <span className="text-sm font-medium text-gray-500">
-          Listes des hangars
-        </span>
-      </Button>
+       */}
     </div>
   );
 };

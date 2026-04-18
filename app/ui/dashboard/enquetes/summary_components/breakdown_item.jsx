@@ -7,7 +7,7 @@ const BreakdownItem = ({ label, total, blanc, jaune }) => (
         {label}
       </span>
       <span className="text-sm font-bold text-gray-900 dark:text-white">
-        {total.toLocaleString()} Kg
+        {total?.toLocaleString()} Kg
       </span>
     </div>
     <div className="flex gap-4">
@@ -15,14 +15,14 @@ const BreakdownItem = ({ label, total, blanc, jaune }) => (
         <div className="size-2 rounded-full bg-gray-200 border border-gray-300"></div>
         Blanc:{" "}
         <span className="font-bold text-gray-900 dark:text-white">
-          {blanc.toLocaleString()} Kg
+          {blanc?.toLocaleString()} Kg
         </span>
       </div>
       <div className="flex items-center gap-2 text-[11px] font-medium text-gray-500">
         <div className="size-2 rounded-full bg-yellow-400"></div>
         Jaune:{" "}
         <span className="font-bold text-gray-900 dark:text-white">
-          {jaune.toLocaleString()} Kg
+          {jaune?.toLocaleString()} Kg
         </span>
       </div>
     </div>
