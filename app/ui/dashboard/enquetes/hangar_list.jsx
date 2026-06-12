@@ -117,8 +117,8 @@ const [exportCount, setExportCount] = useState(0);
             },
           });
         }
+        console.log('la liste des enquetes est:',results)
         setData(results.results);
-        console.log("Hangars data:", results.results);
         setTotalCount(results.count); // si l'API retourne un `count` total
       } catch (error) {
         setError(error);
@@ -194,7 +194,7 @@ const [exportCount, setExportCount] = useState(0);
       const response = await fetchData("get", `/tous_enquetes/anagessa/enquete/`, {
         params,
       });
-
+     console.log(response)
       const allData = response.results || [];
       const formattedData = allData.map((item) => ({
         "Nom du Hangar": item.hangar?.hangar_name || "",
@@ -202,42 +202,25 @@ const [exportCount, setExportCount] = useState(0);
         "Province": item.hangar?.province || "",
         "Commune": item.hangar?.commune || "",
         "Zone": item.hangar?.zone || "",
-        "Autre_nom_hangar": item?.new_hangar_real_name || "",
-        "type_hangar": item?.hangar_level || "",
-        "Date_Enquete":item?.created_at
-          ? new Date(item.created_at).toLocaleString('fr-FR', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-          })
-          : null,
-        "Quantite_initiale": item.total_quantity_initial_kg || "",
-        "Quantite_mais_blan_Achetée": item.quantity_collected_blanc_kg || "",
-        "Quantite_mais_jaune_Achetée": item.quantity_collected_jaune_kg || "",
-        "Quantite_totale_Achetée": item.total_quantity_collected_kg || "",
-        "Quantite_mais_blan_Vendue": item.quantity_sold_blanc_kg || "",
-        "Quantite_mais_jaune_Vendue": item.quantity_sold_jaune_kg || "",
-        "Quantite_totale_Vendue": (item?.quantity_sold_blanc_kg || 0) + (item?.quantity_sold_jaune_kg || 0),
-        "Quantite_mais_blan_transferee": item.quantity_transferred_blanc_kg || "",
-        "Quantite_mais_jaune_transferee": item?.quantity_transferred_jaune_kg || "",
-        "Quantite_totale_transferee": (item?.quantity_transferred_blanc_kg || 0) + (item?.quantity_transferred_jaune_kg || 0),
-        "Quantite_mais_blan_recue": item.quantity_received_blanc_kg || "",
-        "Quantite_mais_jaune_recue": item?.quantity_received_jaune_kg || "",
-        "Quantite_totale_recue": (item?.quantity_received_blanc_kg || 0) + (item?.quantity_received_jaune_kg || 0),
+        "Quantite_initiale": item.quantity_initial_kg || "",
+        "Quantite_totale_Achetée": item.quantity_collected_kg || "",
+        "Quantite_totale_Vendue": item?.quantity_sold_kg ,
+        "Quantite_totale_transferee": item?.quantity_transferred_kg || "",
+        "Quantite_totale_recue": item?.quantity_received_kg || "",
         "Quantite_totale_Stock": item?.is_quantity_matching === true ? (item.quantity_remaining_kg || "") : (item.real_quantity_remaining_kg || ""),
-        "Quantite_attaque_par_charanson": item.weevils_qty_kg || "",
-        "Quantite_non_sechee": item.humid_qty_kg || "",
-        "hangar_est_il_aere": item.is_aerated===true ? "oui" : "non" || "",
-        "hangar_possede_palettes": item.has_pallets===true ? "oui" : "non" || "",
-        "hangar_possede_secs": item.has_pics_bags===true ? "oui" : "non" || "",
-        "Appreciation_hangar": item.appreciation || "",
-        "Nom_enqueteur": item.enqueteur?.last_name || "",
-        "Prenom_enqueteur": item.enqueteur?.first_name || "",
-        "Nom_gestionnaire": item.gestionnaire_nom || "",
-        "Prenom_gestionnaire": item.gestionnaire_prenom || "",
+        "Quantite_attaque_par_charanson": item.quantity_weevils_kg || "",
+        "Quantite_non_sechee": item.quantity_humid_kg || "",
+        "hangar_est_il_aere": item.hangar_is_aerated===true ? "oui" : "non" || "",
+        "hangar_possede_palettes": item.hangar_has_pallets===true ? "oui" : "non" || "",
+        "hangar_possede_secs": item.hangar_has_pics_bags===true ? "oui" : "non" || "",
+        "Appreciation_hangar": item.hangar_appreciation || "",
+        "Nom_gestionnaire": item.nom_gestionnaire || "",
+        "Prenom_gestionnaire": item.prenom_gestionnaire || "",
+        "telephone_gestionnaire": item.tel_gestionnaire || "",
+        "observation_generale": item.observation || "",
+         "precision_gps": item.precision || "",
+        "longitude": item.longitude || "",
+        "latitude": item.latitude || "",
       }));
 
       const worksheet = XLSX.utils.json_to_sheet(formattedData);
@@ -430,12 +413,6 @@ const [exportCount, setExportCount] = useState(0);
                   isHeader
                   className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
                 >
-                  Enqueteur
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-semibold text-gray-500 text-start text-theme-xs dark:text-gray-400 uppercase"
-                >
                   Province
                 </TableCell>
                 <TableCell
@@ -517,13 +494,15 @@ const [exportCount, setExportCount] = useState(0);
                       </div>
                     </div>
                   </TableCell>
+                  {order?.nom_gestionnaire=="nan"?(
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    </TableCell>
+                  ):( 
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.gestionnaire_nom}  {order?.gestionnaire_prenom}
+                    {order?.nom_gestionnaire}  {order?.prenom_gestionnaire}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order?.enqueteur?.last_name}  {order?.enqueteur?.first_name}
-                  </TableCell>
-
+          )}
+          
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {order?.hangar?.province}
                   </TableCell>

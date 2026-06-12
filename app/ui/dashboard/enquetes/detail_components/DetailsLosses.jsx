@@ -14,7 +14,7 @@ const DetailsLosses = ({ data: d }) => {
             </span>
           </div>
           <span className="text-sm font-bold text-red-600 bg-red-50 dark:bg-red-900/20 px-2 py-0.5 rounded-lg">
-            {d.weevils_qty_kg} Kg
+            {d.quantity_weevils_kg} Kg
           </span>
         </div>
         <div className="flex items-center justify-between">
@@ -24,21 +24,21 @@ const DetailsLosses = ({ data: d }) => {
             </span>
             {d.foreign_bodies_nature && (
               <span className="text-[11px] text-amber-600">
-                Nature: {d.foreign_bodies_nature}
+                Nature: {d?.foreign_bodies_nature}
               </span>
             )}
           </div>
           <span className="text-sm font-bold text-amber-600 bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded-lg">
-            {d.foreign_bodies_qty_kg} Kg
+            {d?.quantity_humid_kg} Kg
           </span>
         </div>
-        {d.is_humid && (
+        {/* {d.is_humid && (
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
               Humidité (Perte)
             </span>
             <span className="text-sm font-bold text-blue-600 bg-blue-50 dark:bg-blue-900/20 px-2 py-0.5 rounded-lg">
-              {d.humid_qty_kg} Kg
+              {d?.quantity_humid_kg} Kg
             </span>
           </div>
         )}
@@ -51,7 +51,7 @@ const DetailsLosses = ({ data: d }) => {
               {d.floor_qty_kg} Kg
             </span>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

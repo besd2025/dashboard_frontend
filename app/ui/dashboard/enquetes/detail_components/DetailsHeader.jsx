@@ -2,6 +2,7 @@ import React from "react";
 import { Warehouse } from "lucide-react";
 
 const DetailsHeader = ({ data: d }) => {
+  console.log(d);
   return (
     <div className="flex items-center mb-6 gap-4">
       <div className="flex items-center gap-4">
@@ -28,14 +29,14 @@ const DetailsHeader = ({ data: d }) => {
       </div>
       <div
         className={`px-4 py-1.5 rounded-xl text-xs font-bold uppercase ${
-          d.appreciation === "Bon"
+          d.hangar_appreciation === "Bon"
             ? "bg-emerald-50 text-emerald-600"
-            : d.appreciation === "Moyen"
+            : d.hangar_appreciation === "Moyen"
               ? "bg-amber-50 text-amber-600"
               : "bg-red-50 text-red-600"
         }`}
       >
-        <span className="text-xs">Appreciation: {d.appreciation}</span>
+        <span className="text-xs">Appreciation: {d.hangar_appreciation}</span>
       </div>
     </div>
   );

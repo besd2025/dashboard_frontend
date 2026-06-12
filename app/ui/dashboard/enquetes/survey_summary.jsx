@@ -46,6 +46,7 @@ export default function SurveySummaryDashboard({ results }) {
             body: {},
           },
         );       
+     
                 const Qte_restante = await fetchData(
           "get",
           `/tous_enquetes/anagessa/enquete/get_quantity_remaining_stats/`,
@@ -64,6 +65,7 @@ export default function SurveySummaryDashboard({ results }) {
             body: {},
           },
         ); 
+           console.log("total_quantity_collected",Qte_initial);
      const Qte_vendue = await fetchData(
           "get",
           `/tous_enquetes/anagessa/enquete/get_total_sales/`,
@@ -100,6 +102,7 @@ export default function SurveySummaryDashboard({ results }) {
             body: {},
           },
         ); 
+        console.log("nombre_hangar_aeree",nombre_hangar_aeree);
         const total_visited = await fetchData(
           "get",
           `/tous_enquetes/anagessa/enquete/get_total_hangars_visited/`,
@@ -118,24 +121,7 @@ export default function SurveySummaryDashboard({ results }) {
             body: {},
           },
         ); 
-        const total_pics_bags= await fetchData(
-          "get",
-          `/tous_enquetes/anagessa/enquete/get_total_pics_bags/`,
-          {
-            params: {},
-            additionalHeaders: {},  
-            body: {},
-          },
-        ); 
-        const total_insertitudes= await fetchData(
-          "get",
-          `/tous_enquetes/anagessa/enquete/get_total_insecticide/`,
-          {
-            params: {},
-            additionalHeaders: {},  
-            body: {},
-          },
-        ); 
+   
         const Qte_himidite= await fetchData(
           "get",
           `/tous_enquetes/anagessa/enquete/get_total_humid/`,
@@ -154,15 +140,7 @@ export default function SurveySummaryDashboard({ results }) {
             body: {},
           },
         ); 
-        const Qte_foreign_bodies= await fetchData(
-          "get",
-          `/tous_enquetes/anagessa/enquete/get_total_foreign_bodies/`,
-          {
-            params: {},
-            additionalHeaders: {},  
-            body: {},
-          },
-        ); 
+        console.log("Qte_floor",Qte_floor);
         const Qte_weevils= await fetchData(
           "get",
           `/tous_enquetes/anagessa/enquete/get_total_weevils/`,
@@ -174,13 +152,14 @@ export default function SurveySummaryDashboard({ results }) {
         ); 
         const Enquetes= await fetchData(
           "get",
-          `/tous_enquetes/anagessa/enquete/stats_hangars_par_jour/`,
+          `/tous_enquetes/anagessa/enquete/`,
           {
             params: {},
             additionalHeaders: {},  
             body: {},
           },
         ); 
+        
         setData({
         total_quantity_collected_kg:total_quantity_collected.total_quantity_collected_kg,
         total_quantity_initial_kg:Qte_initial.total_quantity_initial_kg,
@@ -209,19 +188,16 @@ export default function SurveySummaryDashboard({ results }) {
         },
         quality:{
           total_hangars:total_visited.total_hangars_visited,
-          aeration_rate:nombre_hangar_aeree.total_hangar_no_aerated,
+          aeration_rate:Qte_floor?.quantity_hangars_no_on_floor,
           pallets_rate:total_parettes.total_hangar_no_pallets,
-          pics_bags_rate:total_pics_bags.total_hangars_no_pics_bags,
-          insecticide_rate:total_insertitudes.total_hangars_no_insecticide,   
         },
         losses:{
           weevils:Qte_weevils.total_weevils_qty_kg,
-          foreign_bodies:Qte_foreign_bodies.total_foreign_bodies_qty_kg,
           humid:Qte_himidite.total_humid_qty_kg,
           floor:Qte_floor.total_qty_on_floor_qty_kg,
-          totalLosses:Qte_weevils.total_weevils_qty_kg+Qte_foreign_bodies.total_foreign_bodies_qty_kg+Qte_himidite.total_humid_qty_kg,
+          totalLosses:Qte_weevils.total_weevils_qty_kg+Qte_himidite.total_humid_qty_kg+Qte_floor.total_qty_on_floor_qty_kg,
         },
-       total_enquetes:Enquetes,
+       total_enquetes:Enquetes?.count,
         });
 
       } catch (error) {
@@ -241,12 +217,6 @@ export default function SurveySummaryDashboard({ results }) {
         </p>
       </div>
     );
-
-  const totalLosses =
-    summary.losses.weevils +
-    summary.losses.foreign_bodies +
-    summary.losses.humid +
-    summary.losses.floor;
 
   return (
     <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -300,7 +270,7 @@ export default function SurveySummaryDashboard({ results }) {
       <div className="grid grid-cols-1 xl:grid-cols-5 gap-8">
         {/* Movements & Infrastructure Column */}
         <div className="xl:col-span-3 space-y-8">
-          <MovementSection summary={data} />
+          {/* <MovementSection summary={data} /> */}
           <InfrastructureSection quality={data?.quality} />
         </div>
 

@@ -24,7 +24,7 @@ const LossesSection = ({ losses, totalLosses }) => {
           </span>
         </div>
 
-        <div className="flex items-center justify-between p-4 rounded-2xl bg-orange-50/50 dark:bg-orange-900/10 border border-orange-100 dark:border-orange-800/20">
+        {/* <div className="flex items-center justify-between p-4 rounded-2xl bg-orange-50/50 dark:bg-orange-900/10 border border-orange-100 dark:border-orange-800/20">
           <div className="flex items-center gap-3">
             <Trash2 className="text-orange-500" size={20} />
             <span className="text-sm font-semibold text-orange-700 dark:text-orange-400">
@@ -34,7 +34,7 @@ const LossesSection = ({ losses, totalLosses }) => {
           <span className="font-bold text-orange-900 dark:text-red-200">
             {losses?.foreign_bodies?.toLocaleString()} Kg
           </span>
-        </div>
+        </div> */}
 
         <div className="flex items-center justify-between p-4 rounded-2xl bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800/20">
           <div className="flex items-center gap-3">
@@ -55,7 +55,7 @@ const LossesSection = ({ losses, totalLosses }) => {
             </span>
             <div className="flex items-baseline gap-2">
               <h3 className="text-2xl font-bold">
-                {totalLosses?.toLocaleString()}
+                {(losses?.weevils+losses?.humid)?.toLocaleString()}
               </h3>
               <span className="text-sm text-gray-600">Kg</span>
             </div>

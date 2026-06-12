@@ -29,6 +29,7 @@ const DetailRow = ({ icon: Icon, label, value, unit = "Kg", subValue }) => (
 );
 
 const DetailsStocks = ({ data: d }) => {
+  console.log("la valeur est dddd: ", d)
   return (
     <div className="space-y-2">
       <h3 className="text-sm font-bold text-gray-800 dark:text-white mb-4 uppercase tracking-wider">
@@ -38,69 +39,69 @@ const DetailsStocks = ({ data: d }) => {
       <DetailRow
         icon={Activity}
         label="Stock Initial"
-        value={d.total_quantity_initial_kg}
+        value={d.quantity_initial_kg}
       />
       <DetailRow
         icon={TrendingUp}
         label="Collecté"
-        value={d.total_quantity_collected_kg}
-        subValue={
-          <div className="flex gap-2 text-[11px] font-normal mt-2">
-            <span className="text-gray-400">
-              Blanc: {d.quantity_collected_blanc_kg} kg
-            </span>
-            <span className="text-amber-500">
-              Jaune: {d.quantity_collected_jaune_kg} kg
-            </span>
-          </div>
-        }
+        value={d.quantity_collected_kg}
+        // subValue={
+        //   <div className="flex gap-2 text-[11px] font-normal mt-2">
+        //     <span className="text-gray-400">
+        //       Blanc: {d.quantity_collected_blanc_kg} kg
+        //     </span>
+        //     <span className="text-amber-500">
+        //       Jaune: {d.quantity_collected_jaune_kg} kg
+        //     </span>
+        //   </div>
+        // }
       />
       <DetailRow
         icon={ShoppingCart}
         label="Ventes"
-        value={d.quantity_sold_blanc_kg + d.quantity_sold_jaune_kg}
-        subValue={
-          <div className="flex gap-2 text-[11px] font-normal mt-2">
-            <span className="text-gray-400">
-              Blanc: {d.quantity_sold_blanc_kg} kg
-            </span>
-            <span className="text-amber-500">
-              Jaune: {d.quantity_sold_jaune_kg} kg
-            </span>
-          </div>
-        }
+        value={d?.quantity_sold_kg}
+        // subValue={
+        //   <div className="flex gap-2 text-[11px] font-normal mt-2">
+        //     <span className="text-gray-400">
+        //       Blanc: {d.quantity_sold_blanc_kg} kg
+        //     </span>
+        //     <span className="text-amber-500">
+        //       Jaune: {d.quantity_sold_jaune_kg} kg
+        //     </span>
+        //   </div>
+        // }
       />
       <DetailRow
         icon={ArrowUpRight}
         label="Transferts(Sortie)"
         value={
-          d.quantity_transferred_blanc_kg + d.quantity_transferred_jaune_kg
+          d?.quantity_transferred_kg
         }
-        subValue={
-          <div className="flex gap-2 text-[11px] font-normal mt-2">
-            <span className="text-gray-400">
-              Blanc: {d.quantity_transferred_blanc_kg} kg
-            </span>
-            <span className="text-amber-500">
-              Jaune: {d.quantity_transferred_jaune_kg} kg
-            </span>
-          </div>
-        }
+        // subValue={
+        //   <div className="flex gap-2 text-[11px] font-normal mt-2">
+        //     <span className="text-gray-400">
+        //       Blanc: {d.quantity_transferred_blanc_kg} kg
+        //     </span>
+        //     <span className="text-amber-500">
+        //       Jaune: {d.quantity_transferred_jaune_kg} kg
+        //     </span>
+        //   </div>
+        // }
       />
       <DetailRow
         icon={ArrowUpRight}
         label="Transferts(Entree)"
-        value={d.quantity_received_blanc_kg + d.quantity_received_jaune_kg}
-        subValue={
-          <div className="flex gap-2 text-[11px] font-normal mt-2">
-            <span className="text-gray-400">
-              Blanc: {d.quantity_received_blanc_kg} kg
-            </span>
-            <span className="text-amber-500">
-              Jaune: {d.quantity_received_jaune_kg} kg
-            </span>
-          </div>
-        }
+        value={d?.quantity_received_kg}
+        // subValue={
+        //   <div className="flex gap-2 text-[11px] font-normal mt-2">
+        //     <span className="text-gray-400">
+        //       Blanc: {d.quantity_received_blanc_kg} kg
+        //     </span>
+        //     <span className="text-amber-500">
+        //       Jaune: {d.quantity_received_jaune_kg} kg
+        //     </span>
+        //   </div>
+        // }
       />
 
       <div className="mt-8 p-6 rounded-2xl bg-gray-900 text-white">
@@ -108,7 +109,7 @@ const DetailsStocks = ({ data: d }) => {
           Stock Disponible
         </span>
         <div className="text-2xl font-bold">
-          {d.quantity_remaining_kg.toLocaleString()}{" "}
+          {d?.quantity_remaining_kg?.toLocaleString()}{" "}
           <span className="text-sm font-normal opacity-60 text-white">Kg</span>
         </div>
       </div>

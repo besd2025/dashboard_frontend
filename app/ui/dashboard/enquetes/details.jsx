@@ -169,7 +169,7 @@ export default function EnqueteHangarDetails({ id }) {
               <div className="space-y-6">
                 <DetailsQuality data={d} />
                 <DetailsLosses data={d} />
-                <DetailsObservations comment={d?.comment} />
+                <DetailsObservations comment={d?.observations} />
               </div>
             </div>
             <DetailsPhotos data={d} onImageClick={openImageModal} />

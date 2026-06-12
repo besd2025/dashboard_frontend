@@ -40,7 +40,7 @@ function AllCultivatorsList() {
   const [loading, setLoading] = useState(true);
   const [loadingEportBtn, setLoadingEportBtn] = useState(false);
   const [activedownloadBtn, setActivedownloadBtn] = useState(false);
-
+  const [exportBlob, setExportBlob] = useState(null);
   function toggleDropdown(rowId) {
     setOpenDropdowns((prev) => {
       // Close all other dropdowns and toggle the clicked one
@@ -218,6 +218,78 @@ function AllCultivatorsList() {
       setActivedownloadBtn(false);
     }
   };
+
+
+
+  // const export_avec_code_barre= async()=>{
+  //   setLoadingEportBtn(true);
+  //   try {
+  //     const initResponse = await fetchData("get", `hangars/`, {
+  //       params: { limit: 1 },
+  //     });
+  //     const total = initResponse?.count || 0;
+  //     if (total === 0) {
+  //       setLoadingEportBtn(false);
+  //       return;
+  //     }
+
+  //     const response = await fetchData("get", `hangars/`, {
+  //       params: { limit: total },
+  //     });
+
+  //     const allData = response.results || [];
+  //     const formattedData = allData.map((item) => ({
+  //       Province:
+  //         item.province || "",
+  //       Commune: item.commune || "",
+  //       Zone: item.zone || "",
+  //       code_hangar: item?.hangar_code || "",
+  //       nom_hangar: item.hangar_name || "",
+  //       DATE_CREATION: item?.created_at
+  //         ? new Date(item.created_at).toLocaleString('fr-FR', {
+  //           year: 'numeric',
+  //           month: '2-digit',
+  //           day: '2-digit',
+  //           hour: '2-digit',
+  //           minute: '2-digit',
+  //           second: '2-digit',
+  //         })
+  //         : null
+
+  //     }));
+
+  //     const worksheet = XLSX.utils.json_to_sheet(formattedData);
+  //     const workbook = XLSX.utils.book_new();
+  //     XLSX.utils.book_append_sheet(workbook, worksheet, "hangars");
+  //     const excelBuffer = XLSX.write(workbook, {
+  //       bookType: "xlsx",
+  //       type: "array",
+  //     });
+  //     const blob = new Blob([excelBuffer], {
+  //       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+  //     });
+
+  //     setExportBlob(blob);
+  //     setActivedownloadBtn(true);
+  //   } catch (error) {
+  //     console.error("Erreur exportation Excel :", error);
+  //   } finally {
+  //     setLoadingEportBtn(false);
+  //   }
+  // };
+
+  // const DownloadSDLsToExcel = () => {
+  //   if (!exportBlob) return;
+  //   const now = new Date();
+  //   const date = now.toISOString().split("T")[0];
+  //   const hours = String(now.getHours()).padStart(2, "0");
+  //   const minutes = String(now.getMinutes()).padStart(2, "0");
+  //   const seconds = String(now.getSeconds()).padStart(2, "0");
+  //   const time = `${hours}_${minutes}_${seconds}`;
+  //   saveAs(exportBlob, `liste_hangars_${date}_${time}.xlsx`);
+  //   setActivedownloadBtn(false);
+  //   setExportBlob(null);
+  // };
   const handleFilter = (filterData) => {
     setFilterData(filterData);
   };

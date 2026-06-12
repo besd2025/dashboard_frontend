@@ -33,16 +33,16 @@ const DetailsQuality = ({ data: d }) => {
         Qualité & Conservation
       </h3>
       <div className="space-y-1">
-        <QualityBadge label="Aération" status={d.is_aerated} icon={Droplets} />
+        <QualityBadge label="Aération" status={d?.hangar_is_aerated} icon={Droplets} />
         <QualityBadge
           label="Palettes"
-          status={d.has_pallets}
+          status={d?.hangar_has_pallets}
           icon={PackageCheck}
         />
-        <QualityBadge label="Sacs PICS" status={d.has_pics_bags} icon={Scale} />
-        <QualityBadge
+        <QualityBadge label="Sacs PICS" status={d?.hangar_possed_secs} icon={Scale} />
+        {/* <QualityBadge
           label="Insecticide"
-          status={d.has_insecticide}
+          status={d?.has_insecticide}
           icon={Bug}
           detail={d.insecticide_details}
         />
@@ -51,7 +51,7 @@ const DetailsQuality = ({ data: d }) => {
           label="Stockage au sol"
           status={d.is_on_floor}
           icon={Warehouse}
-        />
+        /> */}
       </div>
     </div>
   );

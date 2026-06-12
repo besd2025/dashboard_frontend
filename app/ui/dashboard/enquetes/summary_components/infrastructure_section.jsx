@@ -33,13 +33,7 @@ const InfrastructureSection = ({ quality }) => {
           color="text-emerald-500"
           total={quality?.total_hangars}
         />
-        <QualityBadge
-          label="Non Insecticide"
-          rate={quality?.insecticide_rate}
-          icon={Bug}
-          color="text-purple-500"
-          total={quality?.total_hangars}
-        />
+
       </div>
     </div>
   );

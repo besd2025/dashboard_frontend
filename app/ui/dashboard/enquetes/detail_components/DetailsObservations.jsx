@@ -7,7 +7,7 @@ const DetailsObservations = ({ comment }) => {
         Observations
       </h3>
       <p className="text-sm text-gray-500 italic">
-        "{comment || "Aucune observation."}"
+        "{comment === "nan" || comment === "" ? "Aucune observation." : comment}"
       </p>
     </div>
   );

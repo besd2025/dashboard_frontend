@@ -19,7 +19,10 @@ const SummaryHeader = ({ summary }) => {
             additionalHeaders: {},
             body: {},
           },
-        );       
+
+        );      
+        
+       
                 const total_hangars = await fetchData(
           "get",
           `/hangars/`,
