@@ -203,7 +203,7 @@ const [exportCount, setExportCount] = useState(0);
         "Commune": item.hangar?.commune || "",
         "Zone": item.hangar?.zone || "",
         "Quantite_initiale": item.quantity_initial_kg || "",
-        "Quantite_totale_Achetée": item.quantity_collected_kg || "",
+        "Quantite_totale_Achetée": item.quantity_repported_kg || "",
         "Quantite_totale_Vendue": item?.quantity_sold_kg ,
         "Quantite_totale_transferee": item?.quantity_transferred_kg || "",
         "Quantite_totale_recue": item?.quantity_received_kg || "",
